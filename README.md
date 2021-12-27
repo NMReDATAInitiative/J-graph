@@ -9,8 +9,8 @@ Comparison of calculated (DFT/GIAO) and experimental coupling constants of [andr
 
 Note: This J-graph is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
 
-Presented in 
-[Cotte *et al. Angew Chem Int Ed Engl.* **2015**, p 6016. doi:(10.1002/anie.201500831)](https://onlinelibrary.wiley.com/doi/10.1002/anie.201500831).
+Presented in the supplementary information of the paper by 
+[Cotte *et al. Angew Chem Int Ed Engl.* **2015**, 6016](https://onlinelibrary.wiley.com/doi/10.1002/anie.201500831), doi:10.1002/anie.201500831.
 ### Matlab implementation
 
 <img style="border:1px solid black;" src="images/CouplingNetwork.png" width="400" alt="J-Graph." />
