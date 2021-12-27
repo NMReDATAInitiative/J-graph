@@ -9,7 +9,6 @@ Comparison of calculated (DFT/GIAO) and experimental coupling constants of [andr
 
 Note: This J-graph is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
 
-
 Presented in 
 [Cotte *et al. Angew Chem Int Ed Engl.* **2015**, p 6016. doi:(10.1002/anie.201500831)](https://onlinelibrary.wiley.com/doi/10.1002/anie.201500831).
 ### Matlab implementation
@@ -20,12 +19,8 @@ Presented in
 Note: This J-graph is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
 
 Used by J. Keller, Master thesis, University of Geneva, 2019.
-### NMRium implementation
 
-J-graphs are implemented in [NMRium](https://www.nmrium.org/).
-### Improved implementation
-
-An improved implementation is considered here.
+### Implementation
 
 For each spin, a pillar is positioned at the position of the chemical shift (or shifted horizontally to avoid overlap) shows the label of the spin (at the bottom) and the values of J's vertically. Ticks are drawn at 5, 10 ,15 and 20 Hz. Draw dots or crosses at the positions of level of all Jval(a,b) on the pillars of a and b. A better solution to a simple horizontla line between the pillars of a and b is proposed to improve the readability of the J-graphs when J coupling are similar (overlap of lines and lines over the dots).
 #### Improved implementation
@@ -40,7 +35,9 @@ Loop 1: Loop over increasing spaced pairs of pillars a and b. Start with abs(Pil
 Loop 2: Loop j over increasing values of coupling of pillar i betwen a and b. (Sort all J's found between a and b by increasing value.)
 
 If a value of Jmodif(a, b) is close to Jmodif(i, a) or J(i, a) : increment Jmodif(a, b). This will insure the horizontal line will not touch neither the dots nor the horizontal lines located between a and b.
+### NMRium implementation
 
+J-graphs are implemented in [NMRium](https://www.nmrium.org/).
 ### See also 
 
 Two-dimensional representation of coupling constants (D. Jeannerat, PhD thesis, Group G. Bodenhausen).
