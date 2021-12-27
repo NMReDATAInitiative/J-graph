@@ -22,17 +22,17 @@ Used by J. Keller, Master thesis, University of Geneva, 2019.
 
 ### Implementation
 
-For each spin, a pillar is positioned at the position of the chemical shift (or shifted horizontally to avoid overlap) shows the label of the spin (at the bottom) and the values of J's vertically. Ticks are drawn at 5, 10 ,15 and 20 Hz. Draw dots or crosses at the positions of level of all Jval(a,b) on the pillars of a and b. A better solution to a simple horizontla line between the pillars of a and b is proposed to improve the readability of the J-graphs when J coupling are similar (overlap of lines and lines over the dots).
+For each spin, a pillar is positioned at the position of the chemical shift (or shifted horizontally to avoid overlap) shows the label of the spin (at the bottom) and the values of J's vertically. Ticks are drawn at 5, 10 ,15 and 20 Hz. Draw dots or crosses at the positions of level of all Jval(a,b) on the pillars of a and b. A better solution to a simple horizontal line between the pillars of a and b is proposed in the next paragraph to improve the readability of the J-graphs when J coupling are similar (overlap of lines and lines over the dots).
 #### Improved implementation
 
-Instead of a straight horizontal lines between and b draw a three segments line or a [Bésier](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)curve. See Matlab implementation above to see examples of three-segment lines used to avoid overlap. Note the Matlab implementation is not implementing the algorithm presented in this paragraph.
+Instead of a straight horizontal lines between a and b, draw a three-segment line or a [Bésier](https://en.wikipedia.org/wiki/B%C3%A9zier_curve) curve. See Matlab implementation above to see examples of three-segment lines used to avoid overlap. Note the Matlab implementation is not implementing the algorithm presented in this paragraph.
 
 The middle segment should drawn at a level corresponding to Jmodif(a,b).
-The Jmodif(a,b) is initially set to J(a,b) and imbricated loops will increment their level according to the desired space. This space may be just the width of the horizontal lines plus some margin for readability or more if the value of the coupling or other text is added on the lines.
+The Jmodif(a,b) is initially set to J(a,b) and imbricated loops will increment Jmodif according to the desired space. This space may be just the width of the horizontal lines plus some margin for readability or more if the value of the coupling or other text is added on the lines.
 
 Loop 1: Loop over increasing spaced pairs of pillars a and b. Start with abs(PillarIndex(a) - PillarIndex(b)) == 2 (one pillar between a and b) and increment until abs(PillarIndex(a) - PillarIndex(b)) == PillarIndex.size() - 1. 
 
-Loop 2: Loop j over increasing values of coupling of pillar i betwen a and b. (Sort all J's found between a and b by increasing value.)
+Loop 2: Loop j over increasing values of coupling of pillar i between a and b. (Sort all J's found between a and b by increasing value.)
 
 If a value of Jmodif(a, b) is close to Jmodif(i, a) or J(i, a) : increment Jmodif(a, b). This will insure the horizontal line will not touch neither the dots nor the horizontal lines located between a and b.
 ### NMRium implementation
