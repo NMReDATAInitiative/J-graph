@@ -1,4 +1,4 @@
-# Assembly of coupling network
+## Application of J-graph to the assembly of coupling network
 
 Pairing dots with the same color (same level) is easier than compare numbers in tables. 
 
