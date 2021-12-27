@@ -7,7 +7,7 @@ Comparison of calculated (DFT/GIAO) and experimental coupling constants of [andr
 
 <img style="border:1px solid black;" src="images/annie.png" width="600" alt="J-Graph." />
 
-Note: This is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
+Note: This J-graph is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
 
 
 Presented in 
@@ -17,6 +17,8 @@ Presented in
 <img style="border:1px solid black;" src="images/CouplingNetwork.png" width="400" alt="J-Graph." />
 <img style="border:1px solid black;" src="images/JGraphMatlab.png" width="600" alt="J-Graph." />
 
+Note: This J-graph is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
+
 Used by J. Keller, Master thesis, University of Geneva, 2019.
 ### NMRium implementation
 
@@ -25,26 +27,19 @@ J-graphs are implemented in [NMRium](https://www.nmrium.org/).
 
 An improved implementation is considered here.
 
-For each spin, a pillar is positioned at the position of the chemical shift (or shifted horizontally to avoid overlap) shows the label of the spin (at the bottom) and the values of J's vertically. Ticks are drawn at 5, 10 ,15 and 20 Hz.
-
-The issue is the readability of the J-graphs when J coupling are similar.
+For each spin, a pillar is positioned at the position of the chemical shift (or shifted horizontally to avoid overlap) shows the label of the spin (at the bottom) and the values of J's vertically. Ticks are drawn at 5, 10 ,15 and 20 Hz. Draw dots or crosses at the positions of level of all Jval(a,b) on the pillars of a and b. A better solution to a simple horizontla line between the pillars of a and b is proposed to improve the readability of the J-graphs when J coupling are similar (overlap of lines and lines over the dots).
 #### Improved implementation
 
-Draw dots or crosses at the positions of level of all Jval(a,b) on the pillars of a and b.
-
-Instead of a straight horizontal lines between and b draw a three segments line or a [Bésier ](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)curve. See Matlab implementation above to see examples of three-segment lines used to avoid overlap.
+Instead of a straight horizontal lines between and b draw a three segments line or a [Bésier](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)curve. See Matlab implementation above to see examples of three-segment lines used to avoid overlap. Note the Matlab implementation is not implementing the algorithm presented in this paragraph.
 
 The middle segment should drawn at a level corresponding to Jmodif(a,b).
-The Jmodif(a,b) is initially set to J(a,b) and a set of imbricated loops will increment their level according to the desired space. This space may be just the width of the horizontal lines plus some margin for readability or more if the value of the coupling or other text is added on the lines.
-
+The Jmodif(a,b) is initially set to J(a,b) and imbricated loops will increment their level according to the desired space. This space may be just the width of the horizontal lines plus some margin for readability or more if the value of the coupling or other text is added on the lines.
 
 Loop 1: Loop over increasing spaced pairs of pillars a and b. Start with abs(PillarIndex(a) - PillarIndex(b)) == 2 (one pillar between a and b) and increment until abs(PillarIndex(a) - PillarIndex(b)) == PillarIndex.size() - 1. 
 
-Loop 2: Loop i over pillars between a and b. 
+Loop 2: Loop j over increasing values of coupling of pillar i betwen a and b. (Sort all J's found between a and b by increasing value.)
 
-Loop 3: Loop j over the coupling of i.
-
-If a value of Jmodif(i, a) is close to Jmodif(a, b) or J(a, b): increment Jmodif(a,b). This will insure the horizontal line will not touch neither the dots nor the horizontal lines located between a and b.
+If a value of Jmodif(a, b) is close to Jmodif(i, a) or J(i, a) : increment Jmodif(a, b). This will insure the horizontal line will not touch neither the dots nor the horizontal lines located between a and b.
 
 ### See also 
 
