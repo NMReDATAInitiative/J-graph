@@ -11,7 +11,7 @@ Note: This is not using the [proposed color map](https://nmredatainitiative.gith
 
 
 Presented in 
-Angew Chem Int Ed Engl. 2015 May 11;54(20):6016-8. doi: 10.1002/anie.201500831
+[Cotte *et al. Angew Chem Int Ed Engl.* **2015**, p 6016. doi:(10.1002/anie.201500831)](https://onlinelibrary.wiley.com/doi/10.1002/anie.201500831).
 ### Matlab implementation
 
 <img style="border:1px solid black;" src="images/CouplingNetwork.png" width="400" alt="J-Graph." />
