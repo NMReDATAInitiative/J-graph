@@ -37,7 +37,7 @@ Loop 2: Loop j over increasing values of coupling of pillar i between a and b. (
 If a value of Jmodif(a, b) is close to Jmodif(i, a) or J(i, a) : increment Jmodif(a, b). This will insure the horizontal line will not touch neither the dots nor the horizontal lines located between a and b.
 ### NMRium implementation
 
-J-graphs are implemented in [NMRium](https://www.nmrium.org/).
+J-graphs are used by [NMRium](https://www.nmrium.org/) as a guide to find coupling partners in NMR assignment - not to show the assigned J's.
 ### See also 
 
 Two-dimensional representation of coupling constants (D. Jeannerat, PhD thesis, Group G. Bodenhausen).
