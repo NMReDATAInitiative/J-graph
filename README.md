@@ -1,5 +1,5 @@
 
-J-graphs are graphical representations of NMR scalar coupling constants. They can be used to [facilitate the assignment of homonuclear J-coupling](assembleCouplingNetwork), *i.e.* make pairs protons by equal values of J's.
+J-graphs are graphical representations of NMR scalar coupling constants. They can be used to [facilitate the assignment of homonuclear J-coupling](assembleCouplingNetwork), *i.e.* make pairs of protons with equal values of J.
 
 A [color map was introduced specifically for J(H,H)](https://nmredatainitiative.github.io/color-map-J-coupling/).
 ### Example 
