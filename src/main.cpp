@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-  JGraph jGraph;
+  JGraph jGraph = JGraph();
   cout << "Hello World!" << endl;
   return 0;
 } 
