@@ -3,7 +3,7 @@ J-graphs are graphical representations of J-coupling. They can be used to [facil
 
 A [color map was introduced specifically for J(H,H)](https://nmredatainitiative.github.io/color-map-J-coupling/).
 ### Example 
-Comparison of calculated (DFT/GIAO) and experimental coupling constants of [androsten](androsten).
+Comparison of calculated (DFT/GIAO) and experimental coupling constants of [androsten](androsten). The abscissa corresponds to the chemical shifts.
 
 <img style="border:1px solid black;" src="images/annie.png" width="600" alt="J-Graph." />
 
