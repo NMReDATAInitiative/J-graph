@@ -11,11 +11,27 @@ int main() {
   Jvalues.clear();
   jGraph.addColumn(7.2, Jvalues, "H3");
   jGraph.addColumn(5.8, Jvalues, "H2");
+  jGraph.addColumn(8.1, Jvalues, "a");
+  jGraph.addColumn(8.2, Jvalues, "b");
+  jGraph.addColumn(8.3, Jvalues, "c");
+  jGraph.addColumn(8.4, Jvalues, "d");
+  jGraph.addColumn(8.5, Jvalues, "e");
+
   jGraph.sortColumnByChemicalShift(); // dont sortColumn after addAssignedCoupling because it will mess the indices
 
   jGraph.addAssignedCoupling("H1", "H2", 5.3);
   jGraph.addAssignedCoupling("H2", "H3", 7.3);
   jGraph.addAssignedCoupling("H1", "H3", 11.3);
+  jGraph.addAssignedCoupling("a", "b", 7.01);
+  jGraph.addAssignedCoupling("a", "c", 7.01);
+  jGraph.addAssignedCoupling("a", "d", 7.02);
+  jGraph.addAssignedCoupling("a", "e", 7.03);
+  jGraph.addAssignedCoupling("b", "c", 7.04);
+  jGraph.addAssignedCoupling("b", "d", 7.05);
+  jGraph.addAssignedCoupling("b", "e", 7.06);
+  jGraph.addAssignedCoupling("c", "d", 7.07);
+  jGraph.addAssignedCoupling("c", "e", 7.08);
+  jGraph.addAssignedCoupling("d", "e", 7.09);
   jGraph.updateShiftedPositions();
   
   cout << " I have " << jGraph.getSize() << " elements in jGraph" << endl;

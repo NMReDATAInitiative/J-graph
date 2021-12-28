@@ -9,7 +9,6 @@ using namespace std;
 class JGraph {
 public:
 	JGraph();
-	
 	struct ColumnMember {
 		double Jvalues;
 		double shiftedJvalues;
@@ -24,7 +23,7 @@ public:
 		string label;
 		vector <ColumnMember> columnMembers;
 	};
-	
+	bool hasJ(size_t first, size_t second, double &currentJ, double &currentShiftedJ); 
 	void sortColumnByChemicalShift();
 	void addColumn(double chemicalShift, const vector < double > &Jvalues, string aString = "no label");
 	bool addAssignedCoupling(string label1, string label2, double valueJ);
@@ -35,6 +34,7 @@ public:
 	size_t getSize() const {return fColumns.size();};
 public:
 	vector <Column> fColumns;
+	const double fDeltaDot = 1.5;
 };
 
 #endif // JGRAPH_H
