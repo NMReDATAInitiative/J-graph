@@ -6,6 +6,16 @@
 JGraph::JGraph() {
 }
 
+void JGraph::setShiftedJ(size_t first, size_t second, double currentShiftedJ) {
+for (size_t index = 0; index < fColumns[first].columnMembers.size(); index++) {
+	if (fColumns[first].columnMembers[index].hasPartnerIndex) {
+		if (fColumns[first].columnMembers[index].partnerIndex == second) {
+			fColumns[first].columnMembers[index].shiftedJvalues = currentShiftedJ;
+		}
+	}
+}
+}
+
 bool JGraph::hasJ(size_t first, size_t second, double &currentJ, double &currentShiftedJ) { 
 for (size_t index = 0; index < fColumns[first].columnMembers.size(); index++) {
 	if (fColumns[first].columnMembers[index].hasPartnerIndex) {
@@ -46,6 +56,9 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 	//	double currentShiftedJlast = 0.0;
 		double currentShiftedJ = 0.0;
 		double currentJ = 0.0;
+		size_t indexOther1 = 0;
+		size_t indexOther2 = 0;
+		
 		if (hasJ(first, second, currentJ, currentShiftedJ)) {
 		//	while (abs(currentShiftedJlast - currentShiftedJ) > 0.01) {
 		//		currentShiftedJlast = currentShiftedJ	;
@@ -53,8 +66,8 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 
 			vector < pair < double, double > > rangesToAvoid; 
 
-			// see if any top of dots is above currentJ 
-			for (size_t inside = first + 1; inside <= second - 1; inside ++) {
+			// list all ranges of dots for which top is above currentJ 
+			for (size_t inside = first + 1; inside <= second - 1; inside ++) { // exclude current
 				for (auto it : this->fColumns[inside].columnMembers) {
 					if (currentJ < (it.Jvalues + fDeltaDotAbove)) {
 						rangesToAvoid.push_back(make_pair(it.Jvalues + fDeltaDotAbove, it.Jvalues - fDeltaDotBelow));
@@ -62,8 +75,19 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 				}
 			}		
 
-			
-				
+			// list all ranges of lines for which top is above currentJ 
+			for (size_t inside1 = first; inside1 <= second; inside1 ++) { // includes current
+				for (size_t inside2 = inside1 + 1; inside2 <= second; inside2 ++) { // includes current
+					double currentShiftedJ2 = 0.0;
+					double currentJ2 = 0.0;
+					if (hasJ(inside1, inside2, currentJ2, currentShiftedJ2)) {
+						if (currentJ < (currentShiftedJ2 + fDeltaLineAbove)) {
+							rangesToAvoid.push_back(make_pair(currentShiftedJ2 + fDeltaLineAbove, currentShiftedJ2 - fDeltaLineBelow));
+						}
+					}
+				}
+			}
+
 			sort(rangesToAvoid.begin(), rangesToAvoid.end()); // sort by first element
 			bool test = false; // remove after tests
 			for (auto it : rangesToAvoid) {
@@ -81,7 +105,9 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 						//break; // put back after tests
 					}
 			}
-			if (abs(currentShiftedJ - currentJ)> 0.001) {
+			if (abs(currentShiftedJ - currentJ)> 0.00001) {
+				setShiftedJ(first, second, currentShiftedJ);
+				setShiftedJ(second, first, currentShiftedJ);
 				std::cout << "for (" << first << "," << second << ") shifted to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
 			} else{
 				std::cout << "for (" << first << "," << second << ") NOT to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;

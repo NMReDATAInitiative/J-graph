@@ -30,12 +30,15 @@ public:
 	void setAssignedCoupling(int index1, int index2, double valueJ);
 	void updateShiftedPositions();
 	void sortJ(size_t index);
+	void setShiftedJ(size_t first, size_t second, double currentShiftedJ);
 
 	size_t getSize() const {return fColumns.size();};
 public:
 	vector <Column> fColumns;
-	const double fDeltaDotAbove = 1.5;
-	const double fDeltaDotBelow = 1.5;
+	const double fDeltaDotAbove = 0.0;
+	const double fDeltaDotBelow = fDeltaDotAbove;
+	const double fDeltaLineAbove = 0.1;
+	const double fDeltaLineBelow = fDeltaLineAbove;
 };
 
 #endif // JGRAPH_H
