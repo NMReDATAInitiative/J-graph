@@ -1,4 +1,5 @@
 #include "jGraph.h"
+#include <algorithm>
 
 JGraph::JGraph() {
 }
@@ -8,11 +9,21 @@ void JGraph::updateShiftedPositions() {
 }
 
 void JGraph::setAssignedCoupling(int index1, int index2, double valueJ) {
-	fColumns[index1].Jvalues.push_back(valueJ);
-	fColumns[index1].shiftedJvalues.push_back(valueJ);
-	fColumns[index1].hasPartnerIndex.push_back(true);
-	fColumns[index1].partnerIndex.push_back(index2);
+	ColumnMember columnMember;
+columnMember.Jvalues = valueJ;
+columnMember.shiftedJvalues = valueJ;
+columnMember.hasPartnerIndex = true;
+columnMember.partnerIndex = index2;
+fColumns[index1].columnMembers.push_back(columnMember);
 }
+
+void JGraph::Column::sortJ() {
+	std::sort(this->columnMembers.begin(), this->columnMembers.end(),
+		[](const ColumnMember& lhs, const ColumnMember& rhs) {
+      		return lhs.Jvalues < rhs.Jvalues;
+	  	}
+	);	
+};
 
 bool JGraph::addAssignedCoupling(string label1, string label2, double valueJ) {
 	if (label1 == label2) return false;
@@ -29,23 +40,33 @@ bool JGraph::addAssignedCoupling(string label1, string label2, double valueJ) {
 	}
 	if (!found2) return false;
 	setAssignedCoupling(index1, index2, valueJ);
+	this->fColumns[index1].sortJ();
 	setAssignedCoupling(index2, index1, valueJ);
+	this->fColumns[index2].sortJ();
 	return true;
 };
+
+void JGraph::sortColumnByChemicalShift() {
+	std::sort(fColumns.begin(), fColumns.end(),
+		[](const Column& lhs, const Column& rhs) {
+      		return lhs.chemicalShift < rhs.chemicalShift;
+	  	}
+	);
+}
+
 void JGraph::addColumn(double chemicalShift, const vector < double > &aVectorJvalues, string aString) {
 	Column column;
 	column.chemicalShift = chemicalShift;
 	column.shiftedChemicalShift = chemicalShift;
 	column.label = aString;
 	for (size_t i = 0; i < aVectorJvalues.size(); i++) {
-		column.Jvalues.push_back(aVectorJvalues[i]);
-		column.shiftedJvalues.push_back(aVectorJvalues[i]);
-		column.partnerIndex.push_back(0);
-		column.hasPartnerIndex.push_back(false);
+		ColumnMember columnMember;
+		columnMember.Jvalues = aVectorJvalues[i];
+		columnMember.shiftedJvalues = aVectorJvalues[i];
+		columnMember.partnerIndex = 0;
+		columnMember.hasPartnerIndex = false;
+		column.columnMembers.push_back(columnMember);
 	}
-
+	column.sortJ();
 	fColumns.push_back(column);
-	std::sort(fColumns.begin(), fColumns.end(), [](const Column& lhs, const Column& rhs) {
-      return lhs.chemicalShift < rhs.chemicalShift;
-	  });
 }

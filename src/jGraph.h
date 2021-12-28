@@ -9,19 +9,28 @@ using namespace std;
 class JGraph {
 public:
 	JGraph();
-	struct Column {
+	
+	struct ColumnMember {
+		double Jvalues;
+		double shiftedJvalues;
+		bool hasPartnerIndex; // false when has no assigned partner
+		size_t partnerIndex;
+	};
+	class Column {
+		public:
+ 		void sortJ();
 		double chemicalShift;
 		double shiftedChemicalShift;
 		string label;
-		vector <double> Jvalues;
-		vector <double> shiftedJvalues;
-		vector <bool> hasPartnerIndex; // false when has no assigned partner
-		vector <size_t> partnerIndex;
+		vector <ColumnMember> columnMembers;
 	};
+	
+	void sortColumnByChemicalShift();
 	void addColumn(double chemicalShift, const vector < double > &Jvalues, string aString = "no label");
 	bool addAssignedCoupling(string label1, string label2, double valueJ);
 	void setAssignedCoupling(int index1, int index2, double valueJ);
 	void updateShiftedPositions();
+	void sortJ(size_t index);
 
 	size_t getSize() const {return fColumns.size();};
 public:
