@@ -7,7 +7,7 @@
 
 // check macros...
 // fail compilation if any of these macros is not defined
-/*
+
 #ifndef PATH_TO_ASSETS_DIRECTORY
     #error "ERROR: PATH_TO_ASSETS_DIRECTORY macro is not defined! Please make sure your build-system/generator (e.g. CMake) sets it properly."
 #endif
@@ -20,6 +20,6 @@
     #error "ERROR: PATH_TO_PROJECT_ROOT_DIRECTORY macro is not defined! Please make sure your build-system/generator (e.g. CMake) sets it properly."
 #endif
 #include <doctest/doctest.h>
-*/
+
 
 #endif // PROJECT_NAME_COMMON_TEST_H_
