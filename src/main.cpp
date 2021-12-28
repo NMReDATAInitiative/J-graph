@@ -2,7 +2,7 @@
 #include "jGraph.h"
 
 int main(int argc, char *argv[]) {
-  // will read files in folders listed as argument
+  // will read files in folders listed as argument 
   // if list is empty (argc == 1), will hard wired data below
   int numberOfFiles = argc - 1;
   if (argc == 1) numberOfFiles = 1; // even if no input file (argc == 1) will run the loop once
