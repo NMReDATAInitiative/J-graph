@@ -122,19 +122,22 @@ void JGraph::Column::sortJ() {
 };
 
 bool JGraph::addAssignedCoupling(string label1, string label2, double valueJ) {
-	if (label1 == label2) return false;
+	if (label1 == label2) 
+		return false;
 	bool found1 = false;
 	size_t index1 = 0;
 	for (size_t i = 0; i < getSize(); i++) {
 		if(label1 == fColumns[i].label) {index1 = i; found1 = true;}
 	}
-	if (!found1) return false;
+	if (!found1) 
+		return false;
 	bool found2 = false;
 	size_t index2 = 0;
 	for (size_t i = 0; i < getSize(); i++) {
 		if(label2 == fColumns[i].label) {index2 = i; found2 = true;}
 	}
-	if (!found2) return false;
+	if (!found2)
+		return false;
 	setAssignedCoupling(index1, index2, valueJ);
 	this->fColumns[index1].sortJ();
 	setAssignedCoupling(index2, index1, valueJ);

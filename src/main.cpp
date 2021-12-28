@@ -1,6 +1,7 @@
 #include <iostream>
 #include "jGraph.h"
-
+ // if edit data/androsten/Androsten_forMult_analysis1.sdf 
+ // cp data/androsten/Androsten_forMult_analysis1.sdf /Volumes/san256/users_for_mac_system_macPro/jeannerat/Dropbox/pourLucFull/androsten/
 int main(int argc, char *argv[]) {
   // will read files in folders listed as argument 
   // if list is empty (argc == 1), will hard wired data below
