@@ -34,7 +34,8 @@ public:
 	size_t getSize() const {return fColumns.size();};
 public:
 	vector <Column> fColumns;
-	const double fDeltaDot = 1.5;
+	const double fDeltaDotAbove = 1.5;
+	const double fDeltaDotBelow = 1.5;
 };
 
 #endif // JGRAPH_H

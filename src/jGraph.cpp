@@ -50,21 +50,35 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 		//	while (abs(currentShiftedJlast - currentShiftedJ) > 0.01) {
 		//		currentShiftedJlast = currentShiftedJ	;
 		//	}
-			// see if any dot is too close
-			vector < double > listJ; 
+
+			vector < pair < double, double > > rangesToAvoid; 
+
+			// see if any top of dots is above currentJ 
 			for (size_t inside = first + 1; inside <= second - 1; inside ++) {
 				for (auto it : this->fColumns[inside].columnMembers) {
-					if (it.Jvalues >  (currentJ - fDeltaDot)) {
-						listJ.push_back(it.Jvalues);
+					if (currentJ < (it.Jvalues + fDeltaDotAbove)) {
+						rangesToAvoid.push_back(make_pair(it.Jvalues + fDeltaDotAbove, it.Jvalues - fDeltaDotBelow));
 					}
 				}
-			}			
-			sort(listJ.begin(), listJ.end());
-			for (auto it : listJ) {
-				if ((currentShiftedJ < (it + fDeltaDot)) && (currentShiftedJ > (it - fDeltaDot))) {
-						currentShiftedJ = it + fDeltaDot;
+			}		
+
+			
+				
+			sort(rangesToAvoid.begin(), rangesToAvoid.end()); // sort by first element
+			bool test = false; // remove after tests
+			for (auto it : rangesToAvoid) {
+				if ((currentShiftedJ < (it.first + fDeltaDotAbove)) && (currentShiftedJ > (it.second - fDeltaDotBelow))) {
+						currentShiftedJ = it.first + fDeltaDotAbove;
+						if (test) {// remove after tests
+							std::cout << "*****************************" << std::endl;// remove after tests
+							std::cout << "Should never happen" << std::endl;// remove after tests
+							std::cout << "Should never happen" << std::endl;// remove after tests
+							std::cout << "Should never happen" << std::endl;// remove after tests
+							std::cout << "Should never happen" << std::endl;// remove after tests
+						}// remove after tests
 					} else {
-						break;
+						bool test = true; // remove after tests
+						//break; // put back after tests
 					}
 			}
 			if (abs(currentShiftedJ - currentJ)> 0.001) {
