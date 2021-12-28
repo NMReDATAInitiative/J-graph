@@ -29,24 +29,8 @@ for (size_t index = 0; index < fColumns[first].columnMembers.size(); index++) {
 return false;
 }
 
-void JGraph::updateShiftedPositions() {
-/*
-The middle segment should drawn at a level corresponding to Jmodif(a,b). The Jmodif(a,b) is 
-initially set to J(a,b) and imbricated loops will increment Jmodif according to the desired space. 
-This space may be just the width of the horizontal lines plus some margin for readability or more 
-if the value of the coupling or other text is added on the lines.
-Loop 1: Loop over increasing spaced pairs of pillars a and b. Start with 
-abs(PillarIndex(a) - PillarIndex(b)) == 2 (one pillar between a and b) and increment until 
-abs(PillarIndex(a) - PillarIndex(b)) == PillarIndex.size() - 1.
-
-Loop 2: Loop j over increasing values of coupling of pillar i between a and b. (Sort all J’s 
-found between a and b by increasing value.)
-
-If a value of Jmodif(a, b) is close to Jmodif(i, a) or J(i, a) : increment Jmodif(a, b). 
-This will ensure the horizontal line will touch neither the dots nor the horizontal lines 
-located between a and b.
-*/
-
+void JGraph::updateShiftedPositionsCouplings() {
+// Will shift up the lines to avoid crossing dots (at the position of the J's) and the lines (possibly shifted)
 const size_t lastColuNumber = fColumns.size() - 1;
 for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 	const size_t lastColGigenDiffIndex = lastColuNumber - diffIndex;

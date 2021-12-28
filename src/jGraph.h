@@ -28,7 +28,7 @@ public:
 	void addColumn(double chemicalShift, const vector < double > &Jvalues, string aString = "no label");
 	bool addAssignedCoupling(string label1, string label2, double valueJ);
 	void setAssignedCoupling(int index1, int index2, double valueJ);
-	void updateShiftedPositions();
+	void updateShiftedPositionsCouplings();
 	void sortJ(size_t index);
 	void setShiftedJ(size_t first, size_t second, double currentShiftedJ);
 

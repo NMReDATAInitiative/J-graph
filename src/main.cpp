@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
       jGraph.addAssignedCoupling("c", "d", 7.07);
       jGraph.addAssignedCoupling("c", "e", 7.08);
       jGraph.addAssignedCoupling("d", "e", 7.09);
-      jGraph.updateShiftedPositions();
+      jGraph.updateShiftedPositionsCouplings();
     } else { // read file...
 
     }
