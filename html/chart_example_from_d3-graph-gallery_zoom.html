@@ -32,7 +32,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
   // When reading the csv, I must format variables:
   function(d){
-    return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+    return { date : d.x, value : d.y }
   },
 
   // Now I can use this dataset:
