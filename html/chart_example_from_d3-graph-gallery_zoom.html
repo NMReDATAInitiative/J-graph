@@ -14,7 +14,7 @@
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 450 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -64,7 +64,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .extent( [ [0,0], [width,height] ] )  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
 
     // Create the line variable: where both the line and the brush take place
