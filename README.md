@@ -14,6 +14,7 @@ Presented in the [supplementary information](https://onlinelibrary.wiley.com/act
 ### Matlab implementation
 
 <img style="border:1px solid black;" src="images/CouplingNetwork.png" width="400" alt="J-Graph." />
+
 <img style="border:1px solid black;" src="images/JGraphMatlab.png" width="600" alt="J-Graph." />
 
 Note: This J-graph is not using the [proposed color map](https://nmredatainitiative.github.io/color-map-J-coupling/). 
@@ -41,3 +42,5 @@ J-graphs are used by [NMRium](https://www.nmrium.org/) as a guide to find coupli
 ### See also 
 
 Two-dimensional representation of coupling constants (D. Jeannerat, PhD thesis, Group G. Bodenhausen).
+
+[demo](./html/chart_example_from_d3-graph-gallery_zoom.html)
