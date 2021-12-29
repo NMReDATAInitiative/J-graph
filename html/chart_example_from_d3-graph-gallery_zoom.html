@@ -39,7 +39,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
   function(data) {
 
     // Add X axis --> it is a date format
-    var x = d3.scaleTime()
+    var x = d3.scaleLinear()
       .domain(d3.extent(data, function(d) { return d.date; }))
       .range([ 0, width ]);
     xAxis = svg.append("g")
