@@ -122,7 +122,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
     // If user double click, reinitialize the chart
     svg.on("dblclick",function(){
-      x.domain(d3.extent(data, function(d) { return d.date; }))
+      x.domain([d3.max(data, function(d) { return +d.date; }), d3.min(data, function(d) { return +d.date; })])
       xAxis.transition().call(d3.axisBottom(x))
       line
         .select('.line')
