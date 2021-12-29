@@ -40,7 +40,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
     // Add X axis --> it is a date format
     var x = d3.scaleLinear()
-      .domain(d3.extent(data, function(d) { return d.date; }))
+      .domain([d3.max(data, function(d) { return +d.date; }), d3.min(data, function(d) { return +d.date; })])
       .range([ 0, width ]);
     xAxis = svg.append("g")
       .attr("transform", "translate(0," + height + ")")

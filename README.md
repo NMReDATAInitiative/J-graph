@@ -45,4 +45,4 @@ Two-dimensional representation of coupling constants (D. Jeannerat, PhD thesis, 
 
 [demo](./html/chart_example_from_d3-graph-gallery_zoom.html)
 
-[demo1](./html/chart_example_from_d3-graph-gallery_zoom2.html)
+[demo select](./html/chart_example_from_d3-graph-gallery.html)
