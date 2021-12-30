@@ -99,7 +99,6 @@ var yn = {}
       .text(function(d) { return "J(@" + dimensions[d] + " ppm)"; })
       .style("fill", "black")
 
-
     // Add Y axis
     var y = d3.scaleLinear()
       .domain([0, d3.max(chemShift, function(d) { return +d.value; })])
@@ -129,9 +128,6 @@ var yn = {}
 
     // Create the line variable: where both the line and the brush take place
     var line = svg.append('g')
-      .attr("clip-path", "url(#clip)")
-
-var line2 = svg.append('g')
       .attr("clip-path", "url(#clip)")
 
     // Add the line
@@ -166,7 +162,7 @@ var line2 = svg.append('g')
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
       if(!extent){
         if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-        x.domain([ 4,8])
+        x.domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
       }else{
         x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
         line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
@@ -174,22 +170,41 @@ var line2 = svg.append('g')
 
       // Update axis and line position
       xAxis.transition().duration(1000).call(d3.axisBottom(x))
-      xAxis2.transition().duration(1000).call(d3.axisBottom(x))
+      //xAxis2.transition().duration(1000).call(d3.axisBottom(x))
       line
           .select('.line')
-          .transition()
-          .duration(1000)
+          .transition().duration(1000)
           .attr("d", d3.line()
             .x(function(d) { return x(d.chemShift) })
             .y(function(d) { return y(d.value) })
           )
+         
+ // yn[1]
+  //.selectAll('axis')
+ //svg
+ //.selectAll("axis")
+    // For each dimension of the dataset I add a 'g' element:
+    //.data(dimensions).enter()
+   // .append("g")
+//    // I translate this element to its right position on the x axis
+    //.attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+   // .attr("transform", function(d) { return "translate(4.4)"; })
+   // .attr("transform",  "translate(4.4)")
+
+     yAxisn
+     .transition().duration(1500)
+      // .call(d3.axisLeft(ynt)
+     //.attr("transform", function(d) { return "translate(" + x(6.5) + ")"; })
+     .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
+      //  );
+
     }
 
     // If user double click, reinitialize the chart
     svg.on("dblclick",function(){
       x.domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
       xAxis.transition().call(d3.axisBottom(x))
-      xAxis2.transition().call(d3.axisBottom(x))
+      //xAxis2.transition().call(d3.axisBottom(x))
       line
         .select('.line')
         .transition()
