@@ -24,6 +24,50 @@ var svg = d3.select("#my_dataviz")
     .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
+d3.csv("./iris.csv", function(dataLines) {
+  var color = d3.scaleOrdinal()
+    .domain(["setosa", "versicolor", "virginica" ])
+    .range([ "#440154ff", "#21908dff", "#fde725ff"])
+
+  // Here I set the list of dimension manually to control the order of axis:
+  //dimensionsIris = ["Petal_Length", "Petal_Width", "Sepal_Length", "Sepal_Width"]
+  dimensionsIris = [5.4, 5.3, 5.7, 5.8]
+
+  // For each dimension, I build a linear scale. I store all in a y object
+ /*var yZ = {}
+  for (i in dimensionsIris) {
+    name = dimensionsIris[i]
+    yZ[name] = d3.scaleLinear()
+      .domain( [0,8] ) // --> Same axis range for each group
+      // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
+      .range([height, 0])
+  }
+*/
+  // Highlight the specie that is hovered
+  var highlight = function(d){
+
+    selected_specie = d.Species
+
+    // first every group turns grey
+    d3.selectAll(".line")
+      .transition().duration(200)
+      .style("stroke", "lightgrey")
+      .style("opacity", "0.2")
+    // Second the hovered specie takes its color
+    d3.selectAll("." + selected_specie)
+      .transition().duration(200)
+      .style("stroke", color(selected_specie))
+      .style("opacity", "1")
+  }
+
+  // Unhighlight
+  var doNotHighlight = function(d){
+    d3.selectAll(".line")
+      .transition().duration(200).delay(1000)
+      .style("stroke", function(d){ return( color(d.Species))} )
+      .style("opacity", "1")
+  }
+
 
 //Read the data
 //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
@@ -47,11 +91,12 @@ d3.csv("./Androsten_forMult_analysis.csv",
       .call(d3.axisBottom(x));
 
  // Add Y axis2
-    var ynt = d3.scaleLinear()
+    var yJs = d3.scaleLinear()
       .domain([0, 22.0])
       .range([ height / 3.0, height / 6.0 ]);
-    yAxisn = svg.append("g").attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
-      .call(d3.axisLeft(ynt).ticks(3));
+    yAxisn = svg.append("g")
+   // .attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
+    .call(d3.axisLeft(yJs).ticks(3));
 
 /*
     var xJgraph = d3.scaleLinear()
@@ -77,7 +122,7 @@ var yn = {}
   }
 
 // Draw the axis:
-  multipleAxis = svg.selectAll("myAxis")
+ var multipleAxis = svg.selectAll("myAxis")
     .data(dimensions).enter()
     .append("g")
     .attr("class", "axis")
@@ -94,8 +139,7 @@ var yn = {}
     var y = d3.scaleLinear()
       .domain([0, d3.max(chemShift, function(d) { return +d.value; })])
       .range([ height, 0 ]);
-    yAxis = svg.append("g")
-      .call(d3.axisLeft(y));
+    //yAxis = svg.append("g") .call(d3.axisLeft(y));
 
     // Add a clipPath: everything out of this area won't be drawn.
     var clip = svg.append("defs").append("svg:clipPath")
@@ -108,9 +152,9 @@ var yn = {}
 
 
  // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-  function path(d) {
+ /*function path2(d) {
       return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
-  }
+  }*/
 
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
@@ -133,6 +177,71 @@ var yn = {}
         .x(function(d) { return x(d.chemShift) })
         .y(function(d) { return y(d.value) })
         )
+
+    var dataCircles = [
+      {chemShift: 5.5, Jvalue: 7.5},
+      {chemShift: 5.6, Jvalue: 7.4},
+      {chemShift: 5.62, Jvalue: 7.42},
+      ]
+    // Circles
+    var theDots = svg.selectAll("dots")
+    .data(dataCircles)
+    .enter()
+    .append("circle")
+      .attr("class", "circle")  
+      .attr("cx", function(d) { return x(d.chemShift); })
+      .attr("cy", function(d) { return yJs(d.Jvalue); } )
+      .attr("r", "7")
+      .style("fill", "#69b3a2")
+      .attr("stroke", "red")
+// Lines
+
+var data1 = [
+   {ser1: 5.5, ser2: 4},
+   {ser1: 5.45, ser2: 16},
+   {ser1: 5.4, ser2: 8}
+];
+// Create a update selection: bind to the new data
+  var utt = svg.selectAll(".lineTest")
+    .data([data1], function(d){ return d.ser1 });
+
+  // Updata the line
+  utt
+    .enter()
+    .append("path")
+    .attr("class","lineTest")
+    .merge(utt)
+    .transition()
+    .duration(3000)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.ser1); })
+      .y(function(d) { return yJs(d.ser2); }))
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 2.5)
+xSPP = d3.scalePoint()
+    .range([0, width])
+    .domain(dimensionsIris);
+
+function path(d) {
+     return d3.line()(dimensionsIris.map(function(p) { return [x(p), yJs(d[p])]; }));
+     //return d3.line()(dimensionsIris.map(function(p) { return [xSPP(p), yJs(d[p])]; }));
+     // return d3.line()(dimensionsIris.map(function(p) { return [x(p), yZ[p](d[p])]; }));
+}
+ // Draw the lines
+  svg
+    .selectAll("myPath222")
+    .data(dataLines)
+    .enter()
+    .append("path")
+      .attr("class", function (d) { return "line " + d.Species } ) // 2 class for each line: 'line' and the group name
+      .attr("d", path)
+      .style("fill", "none" )
+      .style("stroke", function(d){ return( color(d.Species))} )
+      .style("opacity", 0.5)
+     // .on("mouseover", highlight)
+     // .on("mouseleave", doNotHighlight )
+  
 
     // Add the brushing
     line
@@ -162,6 +271,7 @@ var yn = {}
       // Update axis and line position
       xAxis.transition().duration(1000).call(d3.axisBottom(x))
       //xAxis2.transition().duration(1000).call(d3.axisBottom(x))
+ 
       line
           .select('.line')
           .transition().duration(1000)
@@ -170,17 +280,26 @@ var yn = {}
             .y(function(d) { return y(d.value) })
           )
      // OK
+     /*
     yAxisn
      .transition().duration(1000)
      .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
-    }
+     */
+    theDots
+      .transition().duration(1000)
+      .attr("cx", function(d) { return x(d.chemShift); })
+     //.attr("cx", x(5.555))
+      
 
-    // Not OK
+/*
+       // Not OK
     for (toto in multipleAxis.myAxis) {
     toto.transition().duration(1000)
      .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
     }
-  
+*/
+    
+    }
     // If user double click, reinitialize the chart
     svg.on("dblclick",function(){
       x.domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
@@ -194,7 +313,7 @@ var yn = {}
           .y(function(d) { return y(d.value) })
       )
     });
-
+  
 })
-
+})
 </script>
