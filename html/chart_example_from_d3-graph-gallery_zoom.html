@@ -169,42 +169,18 @@ var yn = {}
             .x(function(d) { return x(d.chemShift) })
             .y(function(d) { return y(d.value) })
           )
-
-/*
-       for (i in dimensions) {
-    name = dimensions[i];
-   let toto = yn[name];
-   toto
-        .transition().duration(1500)
-.attr("transform",  "translate(4.4)");
-  //.selectAll('axis')
- //svg
- //.selectAll("axis")
-    // For each dimension of the dataset I add a 'g' element:
-    //.data(dimensions).enter()
-   // .append("g")
-//    // I translate this element to its right position on the x axis
-    //.attr("transform", function(d) { return "translate(" + x(d) + ")"; })
-   // .attr("transform", function(d) { return "translate(4.4)"; })
-   // .attr("transform",  "translate(4.4)")
-     //.attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
-       }
-*/
-    //name = dimensions[i]
-    for (toto in multipleAxis.myAxis) {
-    toto.transition().duration(1500)
-      // .call(d3.axisLeft(ynt)
-     //.attr("transform", function(d) { return "translate(" + x(6.5) + ")"; })
-    // .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
-     .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
-      //  );
-    }
-
+     // OK
     yAxisn
-     .transition().duration(1500)
+     .transition().duration(1000)
      .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
     }
 
+    // Not OK
+    for (toto in multipleAxis.myAxis) {
+    toto.transition().duration(1000)
+     .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
+    }
+  
     // If user double click, reinitialize the chart
     svg.on("dblclick",function(){
       x.domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
