@@ -51,7 +51,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
       .domain([0, 22.0])
       .range([ height / 3.0, height / 6.0 ]);
     yAxisn = svg.append("g").attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
-      .call(d3.axisLeft(ynt).ticks(5));
+      .call(d3.axisLeft(ynt).ticks(3));
 
 /*
     var xJgraph = d3.scaleLinear()
@@ -77,27 +77,18 @@ var yn = {}
   }
 
 // Draw the axis:
-  svg.selectAll("myAxis")
-    // For each dimension of the dataset I add a 'g' element:
+  multipleAxis = svg.selectAll("myAxis")
     .data(dimensions).enter()
     .append("g")
     .attr("class", "axis")
-    // I translate this element to its right position on the x axis
-    .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
-    //.attr("transform", function(d) { return "translate(" + posx(d) + ")"; })
-    //.attr("transform", "translate(" + posx(d) + "))
-    //.attr("transform", "translate(" + (50.0 / 0.1)  + " )")
-    // And I build the axis with the call function
-    .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(yn[d])); })
-    //.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(15.0)); })
-    // Add axis title
+    .attr("transform", function(d) { return "translate(" + (x(d)) + ")"; })
+    .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(yn[d] )); })
     .append("text")
       .style("text-anchor", "middle")
-      //.attr("y", -9)
       .attr("y", 20)
-      //.text(function(d) { return x(d); })
-      .text(function(d) { return "J(@" + dimensions[d] + " ppm)"; })
+      .text(function(d) { return "J(@" + d + " ppm)"; })
       .style("fill", "black")
+
 
     // Add Y axis
     var y = d3.scaleLinear()
@@ -178,8 +169,14 @@ var yn = {}
             .x(function(d) { return x(d.chemShift) })
             .y(function(d) { return y(d.value) })
           )
-         
- // yn[1]
+
+/*
+       for (i in dimensions) {
+    name = dimensions[i];
+   let toto = yn[name];
+   toto
+        .transition().duration(1500)
+.attr("transform",  "translate(4.4)");
   //.selectAll('axis')
  //svg
  //.selectAll("axis")
@@ -190,14 +187,22 @@ var yn = {}
     //.attr("transform", function(d) { return "translate(" + x(d) + ")"; })
    // .attr("transform", function(d) { return "translate(4.4)"; })
    // .attr("transform",  "translate(4.4)")
-
-     yAxisn
-     .transition().duration(1500)
+     //.attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
+       }
+*/
+    //name = dimensions[i]
+    for (toto in multipleAxis.myAxis) {
+    toto.transition().duration(1500)
       // .call(d3.axisLeft(ynt)
      //.attr("transform", function(d) { return "translate(" + x(6.5) + ")"; })
+    // .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
      .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
       //  );
+    }
 
+    yAxisn
+     .transition().duration(1500)
+     .attr("transform", function(d) { return "translate(" + x(4.5) + ")"; })
     }
 
     // If user double click, reinitialize the chart
