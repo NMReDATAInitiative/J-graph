@@ -24,13 +24,7 @@ var svg = d3.select("#my_dataviz")
     .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
-var svg2 = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height / 2 + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+
 //Read the data
 //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
 d3.csv("./Androsten_forMult_analysis.csv",
@@ -43,6 +37,15 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
   // Now I can use this dataset:
   function(chemShift) {
+/*
+    var xJgraph = d3.scaleLinear()
+      .domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
+      .range([ 0, width ]);
+
+    xAxis2 = svg.append("g")
+      .attr("transform", "translate(0," + height / 3.0 + ")") // position of J-graph
+      .call(d3.axisBottom(xJgraph));
+*/
 
     // Add X axis 
     var x = d3.scaleLinear()
@@ -51,6 +54,42 @@ d3.csv("./Androsten_forMult_analysis.csv",
     xAxis = svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
+
+
+let dimensions = [1, 1.2, 1.3 ,2, 3, 5];
+
+var yn = {}
+  for (i in dimensions) {
+    name = dimensions[i]
+    yn[name] = d3.scaleLinear()
+      .domain( [0.0, 22.0] ) // --> Same axis range for each group
+      // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
+      .range([ height / 3.0, height / 6.0 ]);
+  }
+
+// Draw the axis:
+  svg.selectAll("myAxis")
+    // For each dimension of the dataset I add a 'g' element:
+    .data(dimensions).enter()
+    .append("g")
+    .attr("class", "axis")
+    // I translate this element to its right position on the x axis
+    .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+    //.attr("transform", function(d) { return "translate(" + posx(d) + ")"; })
+    //.attr("transform", "translate(" + posx(d) + "))
+    //.attr("transform", "translate(" + (50.0 / 0.1)  + " )")
+    // And I build the axis with the call function
+    .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(yn[d])); })
+    //.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(15.0)); })
+    // Add axis title
+    .append("text")
+      .style("text-anchor", "middle")
+      //.attr("y", -9)
+      .attr("y", 20)
+      //.text(function(d) { return x(d); })
+      .text(function(d) { return "J(@" + dimensions[d] + " ppm)"; })
+      .style("fill", "black")
+
 
     // Add Y axis
     var y = d3.scaleLinear()
@@ -68,21 +107,22 @@ d3.csv("./Androsten_forMult_analysis.csv",
         .attr("x", 0)
         .attr("y", 0);
 
-    var xUp = d3.scaleLinear()
-      .domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
-      .range([ 0, width ]);
 
-    xAxis = svg2.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xUp));
+ // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+  function path(d) {
+      return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
+  }
 
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent( [ [0,0], [width,height] ] )  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .extent( [ [0,0], [width, height] ] )  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
 
     // Create the line variable: where both the line and the brush take place
     var line = svg.append('g')
+      .attr("clip-path", "url(#clip)")
+
+var line2 = svg.append('g')
       .attr("clip-path", "url(#clip)")
 
     // Add the line
@@ -125,6 +165,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
       // Update axis and line position
       xAxis.transition().duration(1000).call(d3.axisBottom(x))
+      xAxis2.transition().duration(1000).call(d3.axisBottom(x))
       line
           .select('.line')
           .transition()
@@ -139,6 +180,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
     svg.on("dblclick",function(){
       x.domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
       xAxis.transition().call(d3.axisBottom(x))
+      xAxis2.transition().call(d3.axisBottom(x))
       line
         .select('.line')
         .transition()
