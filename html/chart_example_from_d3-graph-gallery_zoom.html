@@ -196,32 +196,6 @@ var yn = {}
       .attr("stroke", "red")
 // Lines
 
-var data1 = [
-   {ser1: 5.5, ser2: 4},
-   {ser1: 5.45, ser2: 16},
-   {ser1: 5.4, ser2: 8}
-];
-// Create a update selection: bind to the new data
-  var utt = svg.selectAll(".lineTest")
-    .data([data1], function(d){ return d.ser1 });
-
-  // Updata the line
-  utt
-    .enter()
-    .append("path")
-    .attr("class","lineTest")
-    .merge(utt)
-    .transition()
-    .duration(3000)
-    .attr("d", d3.line()
-      .x(function(d) { return x(d.ser1); })
-      .y(function(d) { return yJs(d.ser2); }))
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2.5)
-xSPP = d3.scalePoint()
-    .range([0, width])
-    .domain(dimensionsIris);
 
 function path(d) {
      return d3.line()(dimensionsIris.map(function(p) { return [x(p), yJs(d[p])]; }));
@@ -239,8 +213,8 @@ function path(d) {
       .style("fill", "none" )
       .style("stroke", function(d){ return( color(d.Species))} )
       .style("opacity", 0.5)
-     // .on("mouseover", highlight)
-     // .on("mouseleave", doNotHighlight )
+      .on("mouseover", highlight)
+      .on("mouseleave", doNotHighlight )
   
 
     // Add the brushing
