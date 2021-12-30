@@ -21,10 +21,16 @@ var svg = d3.select("#my_dataviz")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
-
+var svg2 = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height / 2 + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
 //Read the data
 //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
 d3.csv("./Androsten_forMult_analysis.csv",
@@ -32,15 +38,15 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
   // When reading the csv, I must format variables:
   function(d){
-    return { date : d.x, value : d.y }
+    return { chemShift : d.x, value : d.y }
   },
 
   // Now I can use this dataset:
-  function(data) {
+  function(chemShift) {
 
-    // Add X axis --> it is a date format
+    // Add X axis 
     var x = d3.scaleLinear()
-      .domain([d3.max(data, function(d) { return +d.date; }), d3.min(data, function(d) { return +d.date; })])
+      .domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
       .range([ 0, width ]);
     xAxis = svg.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -48,7 +54,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
     // Add Y axis
     var y = d3.scaleLinear()
-      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .domain([0, d3.max(chemShift, function(d) { return +d.value; })])
       .range([ height, 0 ]);
     yAxis = svg.append("g")
       .call(d3.axisLeft(y));
@@ -62,6 +68,14 @@ d3.csv("./Androsten_forMult_analysis.csv",
         .attr("x", 0)
         .attr("y", 0);
 
+    var xUp = d3.scaleLinear()
+      .domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
+      .range([ 0, width ]);
+
+    xAxis = svg2.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xUp));
+
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
         .extent( [ [0,0], [width,height] ] )  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
@@ -73,13 +87,14 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
     // Add the line
     line.append("path")
-      .datum(data)
+      .datum(chemShift)
       .attr("class", "line")  // I add the class line to be able to modify this line later on.
       .attr("fill", "none")
       .attr("stroke", "steelblue")
+     // .attr("stroke", "red")
       .attr("stroke-width", 1.5)
       .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
+        .x(function(d) { return x(d.chemShift) })
         .y(function(d) { return y(d.value) })
         )
 
@@ -115,20 +130,20 @@ d3.csv("./Androsten_forMult_analysis.csv",
           .transition()
           .duration(1000)
           .attr("d", d3.line()
-            .x(function(d) { return x(d.date) })
+            .x(function(d) { return x(d.chemShift) })
             .y(function(d) { return y(d.value) })
           )
     }
 
     // If user double click, reinitialize the chart
     svg.on("dblclick",function(){
-      x.domain([d3.max(data, function(d) { return +d.date; }), d3.min(data, function(d) { return +d.date; })])
+      x.domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
       xAxis.transition().call(d3.axisBottom(x))
       line
         .select('.line')
         .transition()
         .attr("d", d3.line()
-          .x(function(d) { return x(d.date) })
+          .x(function(d) { return x(d.chemShift) })
           .y(function(d) { return y(d.value) })
       )
     });
