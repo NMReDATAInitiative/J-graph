@@ -87,6 +87,10 @@ d3.csv("./Androsten_forMult_analysis.csv",
    // .attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
     .call(d3.axisLeft(yJs).ticks(3));
   
+   yAxisn2 = svg.append("g")
+    .attr("transform", function(d) { return "translate(" + (width) + ")"; })
+    .call(d3.axisLeft(yJs).ticks(3));
+
 let dimensions = [1, 1.2, 1.3 ,2, 3, 5];
 
 var yn = {}
@@ -97,19 +101,6 @@ var yn = {}
       // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
       .range([ height / 3.0, height / 6.0 ]);
   }
-
-// Draw the axis:
- var multipleAxis = svg.selectAll("myAxis")
-    .data(dimensions).enter()
-    .append("g")
-    .attr("class", "axis")
-    .attr("transform", function(d) { return "translate(" + (x(d)) + ")"; })
-    .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(yn[d] )); })
-    .append("text")
-      .style("text-anchor", "middle")
-      .attr("y", 20)
-      .text(function(d) { return "J(@" + d + " ppm)"; })
-      .style("fill", "black")
 
     // Add Y axis
     var y = d3.scaleLinear()
