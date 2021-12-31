@@ -27,22 +27,28 @@ var svg = d3.select("#my_dataviz")
 d3.csv("./iris.csv", function(dataLines) {
   var color = d3.scaleOrdinal()
     .domain(["sefsdosa", "versifsdcolor", "vigdfginica","asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
-    .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
-  listOfChemicalShifts = []
+   // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
+    .range([ "orange", "green", "blue", "red"]) // fourth color
+  listOfChemicalShifts = ["x1","x2","x3","x4"]
+  listOfPosition = ["y1","y2","y3","y4"]
+/*
+  for (var key in dataLines[0]) {
+       listOfChemicalShifts.push(key)
+  }
   for (var key in dataLines[0]) {
        listOfChemicalShifts.push(key)
   }
   listOfChemicalShifts.pop()
-
+*/
   // Highlight the specie that is hovered
   var highlight = function(d){
 
-    selected_specie = d.Species
+    selected_specie = d.Label
 
     // first every group turns grey
     d3.selectAll(".line")
       .transition().duration(200)
-      .style("stroke", "lightgrey")
+      .style("stroke", "black")
       .style("opacity", "0.2")
     // Second the hovered specie takes its color
     d3.selectAll("." + selected_specie)
@@ -55,7 +61,7 @@ d3.csv("./iris.csv", function(dataLines) {
   var doNotHighlight = function(d){
     d3.selectAll(".line")
       .transition().duration(200).delay(1000)
-      .style("stroke", function(d){ return( color(d.Species))} )
+      .style("stroke", function(d){ return( color(d.Label))} )
       .style("opacity", "1")
   }
 
@@ -144,6 +150,8 @@ var yn = {}
       {chemShift: 5.6, Jvalue: 7.4},
       {chemShift: 5.62, Jvalue: 7.42},
       ]
+
+     //function funnn1(d) { return x(d.chemShift); }
     // Circles
     var theDots = svg.selectAll("dots")
     .data(dataCircles)
@@ -151,6 +159,7 @@ var yn = {}
     .append("circle")
       .attr("class", "circle")  
       .attr("cx", function(d) { return x(d.chemShift); })
+      //.attr("cx", funnn1 )
       .attr("cy", function(d) { return yJs(d.Jvalue); } )
       .attr("r", "7")
       .style("fill", "#69b3a2")
@@ -158,23 +167,70 @@ var yn = {}
 
 // Lines
 function path(d) {
-     return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; }));
+
+ // var pathOx = listOfChemicalShifts.map(function(p) { return x(d[p]); });
+  console.log(JSON.stringify(d))
+  const y1 = yJs(d.y1); 
+  const y2 = yJs(d.y2); 
+  const shiftX = 0.01;
+  var a = eval(shiftX);
+  if (d.x1 > d.x2) {
+   var a = eval(- shiftX);
+  } 
+
+  const x1 = x(eval(d.x1)); 
+  const x2 = x(eval(d.x2)); 
+  const x1p = x(eval(d.x1) + a); 
+  const x2p = x(eval(d.x2) - a); 
+
+  const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
+  var Gen = d3.line();
+  /*Gen.attr("d", d3.line()
+          .x(function(d) { return x(pathOx) })
+          .y(function(d) { return yJs(pathOy) })
+   )*/
+  return Gen(combine);
+}
+function pathx(d) {
+  console.log("pathx")
+  console.log(JSON.stringify(d))
+   console.log("pathxo")
+  console.log(JSON.stringify(listOfChemicalShifts.map(function(p) { return x(p); })))
+     return listOfChemicalShifts.map(function(p) { return x(p); });
+}
+function pathy(d) {
+  console.log("pathy")
+  console.log(JSON.stringify(d))
+  console.log("pathyo")
+  console.log(JSON.stringify(listOfChemicalShifts.map(function(p) { return yJs(d[p]); })))
+     return listOfChemicalShifts.map(function(p) { return yJs(d[p]); });
 }
  // Draw the lines
+   console.log("HERE")
+
   var theLinesW = svg
     .selectAll("myPath222")
     .attr("class","lineW")
     .data(dataLines)
     .enter()
     .append("path")
-      .attr("class", function (d) { return "line " + d.Species } ) // 2 class for each line: 'line' and the group name
+      .attr("class", function (d) { return "line " + d.Label } ) // 2 class for each line: 'line' and the group name
+      //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
       .attr("d", path)
-      .style("fill", "none" )
-      .style("stroke", function(d){ return( color(d.Species))} )
+      /*.attr("d", d3.line()
+        //.x(pathx)
+        .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
+        //.y(pathy)
+        .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
+      )*/
+       .style("fill", "none" )
+      .style("stroke", function(d){ return( color(d.Label))} )
       .style("opacity", 0.5)
       .on("mouseover", highlight)
       .on("mouseleave", doNotHighlight )
   
+     console.log("HERE=============")
+
     // Add the brushing
     line
       .append("g")
