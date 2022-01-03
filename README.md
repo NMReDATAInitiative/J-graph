@@ -40,6 +40,5 @@ J-graphs are used by [NMRium](https://www.nmrium.org/) as a guide to find coupli
 
 Two-dimensional representation of coupling constants (D. Jeannerat, PhD thesis, Group G. Bodenhausen).
 
-[demo](./html/chart_example_from_d3-graph-gallery_zoom.html)
+[d3 visualizer - Under development](./html/chart_example_from_d3-graph-gallery_zoom.html)
 
-[demo select](./html/chart_example_from_d3-graph-gallery.html)
