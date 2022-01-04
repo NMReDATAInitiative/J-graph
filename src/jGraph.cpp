@@ -94,7 +94,7 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 				setShiftedJ(first, second, currentShiftedJ);
 				setShiftedJ(second, first, currentShiftedJ);
 				std::cerr << "For (" << first << "," << second << ") shifted to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
-			} else{
+			} else {
 				std::cerr << "For (" << first << "," << second << ") NOT to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
 			}
 			//  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" 
