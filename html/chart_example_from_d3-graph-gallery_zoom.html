@@ -65,10 +65,7 @@ d3.csv("./iris.csv", function(dataLines) {
       .style("opacity", "1")
   }
 
-
-
 d3.csv("./Androsten_forMult_analysis.csv",
-
   // format variables:
   function(d){
     return { chemShift : d.x, value : d.y }
@@ -95,7 +92,8 @@ d3.csv("./Androsten_forMult_analysis.csv",
   
    yAxisn2 = svg.append("g")
     .attr("transform", function(d) { return "translate(" + (width) + ")"; })
-    .call(d3.axisLeft(yJs).ticks(3));
+    .call(d3.axisRight(yJs).ticks(3))
+   ;
 
 let dimensions = [1, 1.2, 1.3 ,2, 3, 5];
 
@@ -139,7 +137,7 @@ var yn = {}
       .attr("fill", "none")
       .attr("stroke", "steelblue")
      // .attr("stroke", "red")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 2.0)
       .attr("d", d3.line()
         .x(function(d) { return x(d.chemShift) })
         .y(function(d) { return y(d.value) })
@@ -164,6 +162,35 @@ var yn = {}
       .attr("r", "7")
       .style("fill", "#69b3a2")
       .attr("stroke", "red")
+      .style("stroke-width", 2)
+
+      var dataTicksLines = [
+      {Jval: 0},
+      {Jval: 5},
+      {Jval: 10},
+      {Jval: 15},
+      {Jval: 20},
+      ]
+
+     //function funnn1(d) { return x(d.chemShift); }
+    // Circles
+    var theTicksLines = svg.selectAll("tickLines")
+    .data(dataTicksLines)
+    .enter()
+    .append("line")
+      .attr("class", "line")  
+      .attr("x1", 0)
+      .attr("y1", function(d) { return yJs(d.Jval); })
+      .attr("x2",  width)
+      .attr("y2", function(d) { return yJs(d.Jval); })
+      //.attr("cx", funnn1 )
+      .attr("stroke", "#00000020")
+      .style("stroke-width", 2)
+
+      svg.append("line")
+  .attr("x1", x(0)).attr("y1", yJs(5))
+  .attr("x2", x(10)).attr("y2", yJs(5))
+  .style("stroke", "11223388");
 
 // Lines
 function path(d) {
@@ -217,6 +244,7 @@ function pathy(d) {
       .attr("class", function (d) { return "line " + d.Label } ) // 2 class for each line: 'line' and the group name
       //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
       .attr("d", path)
+      .style("stroke-width", 2)
       /*.attr("d", d3.line()
         //.x(pathx)
         .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
