@@ -19,11 +19,11 @@ int main(int argc, char *argv[]) {
       Jvalues.clear();
       jGraph.addColumn(7.2, Jvalues, "H3");
       jGraph.addColumn(5.8, Jvalues, "H2");
-      jGraph.addColumn(8.1, Jvalues, "a");
-      jGraph.addColumn(8.2, Jvalues, "b");
-      jGraph.addColumn(8.3, Jvalues, "c");
-      jGraph.addColumn(8.4, Jvalues, "d");
-      jGraph.addColumn(8.5, Jvalues, "e");
+      jGraph.addColumn(4.1, Jvalues, "a");
+      jGraph.addColumn(4.2, Jvalues, "b");
+      jGraph.addColumn(4.3, Jvalues, "c");
+      jGraph.addColumn(4.4, Jvalues, "d");
+      jGraph.addColumn(4.5, Jvalues, "e");
 
       jGraph.sortColumnByChemicalShift(); // don't sortColumn after addAssignedCoupling because it will mess the indices
 
