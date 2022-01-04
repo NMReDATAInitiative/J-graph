@@ -84,10 +84,11 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 							std::cerr << "Should never happen" << std::endl;// remove after tests
 							std::cerr << "Should never happen" << std::endl;// remove after tests
 						}// remove after tests
-					} else {
+				} else {
 						bool test = true; // remove after tests
 						//break; // put back after tests
-					}
+				}
+			
 			}
 			if (abs(currentShiftedJ - currentJ)> 0.00001) {
 				setShiftedJ(first, second, currentShiftedJ);
@@ -98,20 +99,20 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 			}
 			//  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" 
 
-		std::cout 
-			<< this->fColumns[first].chemicalShift << ","
-			<< this->fColumns[second].chemicalShift << ","
-			<< first << "," << second << ","
-			<< currentJ << "," <<  currentShiftedJ << ","
-			//<< "J_" << first << "_" << second
-			<< "notLabel_" << first
-			<< std::endl;
+			std::cout 
+				<< this->fColumns[first].chemicalShift << ","
+				<< this->fColumns[second].chemicalShift << ","
+				<< first << "," << second << ","
+				<< currentJ << "," <<  currentShiftedJ << ","
+				//<< "J_" << first << "_" << second
+				<< "notLabel_" << first
+				<< std::endl;
 
-		} //else{
-			//	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
-			//}
+			} //else{
+				//	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
+				//}
+		}
 	}
-}
 
 }
 

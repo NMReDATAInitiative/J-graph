@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
       Jvalues.push_back(5.0); // to test unassigned J
       jGraph.addColumn(5.3, Jvalues, "H1");
       Jvalues.clear();
-      jGraph.addColumn(7.2, Jvalues, "H3");
+      jGraph.addColumn(3.8, Jvalues, "H3");
       jGraph.addColumn(5.8, Jvalues, "H2");
       jGraph.addColumn(4.1, Jvalues, "a");
       jGraph.addColumn(4.2, Jvalues, "b");
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
       jGraph.addAssignedCoupling("H1", "H2", 5.3);
       jGraph.addAssignedCoupling("H2", "H3", 7.3);
       jGraph.addAssignedCoupling("H1", "H3", 11.3);
-      jGraph.addAssignedCoupling("a", "b", 7.01);
+      jGraph.addAssignedCoupling("a", "b", 7.00);
       jGraph.addAssignedCoupling("a", "c", 7.01);
       jGraph.addAssignedCoupling("a", "d", 7.02);
       jGraph.addAssignedCoupling("a", "e", 7.03);
