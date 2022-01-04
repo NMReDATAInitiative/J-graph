@@ -24,7 +24,7 @@ var svg = d3.select("#my_dataviz")
     .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
-d3.csv("./iris.csv", function(dataLines) {
+d3.csv("./andro.csv", function(dataLines) {
   var color = d3.scaleOrdinal()
     .domain(["sefsdosa", "versifsdcolor", "vigdfginica","asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
    // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
@@ -202,13 +202,13 @@ function path(d) {
   const horizontalShiftX = 0.01;
   var usedHorizontalShiftX = eval(horizontalShiftX);
   if (d.chemShift1 > d.chemShift2) {
-   var a = eval(- usedHorizontalShiftX);
+   var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
   } 
 
   const x1 = x(eval(d.chemShift1)); 
   const x2 = x(eval(d.chemShift2)); 
-  const x1p = x(eval(d.chemShift1) + a); 
-  const x2p = x(eval(d.chemShift2) - a); 
+  const x1p = x(eval(d.chemShift1) + usedHorizontalShiftX); 
+  const x2p = x(eval(d.chemShift2) - usedHorizontalShiftX); 
 
   const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
   var Gen = d3.line();

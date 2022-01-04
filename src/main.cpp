@@ -40,12 +40,12 @@ int main(int argc, char *argv[]) {
       jGraph.addAssignedCoupling("c", "d", 7.07);
       jGraph.addAssignedCoupling("c", "e", 7.08);
       jGraph.addAssignedCoupling("d", "e", 7.09);
+      cout << "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" << endl;
       jGraph.updateShiftedPositionsCouplings();
     } else { // read file...
 
     }
 
-    cout << " I have " << jGraph.getSize() << " elements in jGraph" << endl;
     for (size_t i = 0; i < jGraph.getSize(); i++) {
         cerr << i << " : " << jGraph.fColumns[i].label << " at " << jGraph.fColumns[i].chemicalShift << " ppm ";
         const size_t size = jGraph.fColumns[i].columnMembers.size();

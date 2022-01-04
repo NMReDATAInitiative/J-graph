@@ -35,9 +35,9 @@ public:
 	size_t getSize() const {return fColumns.size();};
 public:
 	vector <Column> fColumns;
-	const double fDeltaDotAbove = 0.0;
+	const double fDeltaDotAbove = 1.0;
 	const double fDeltaDotBelow = fDeltaDotAbove;
-	const double fDeltaLineAbove = 0.1;
+	const double fDeltaLineAbove = 1.0;
 	const double fDeltaLineBelow = fDeltaLineAbove;
 };
 

@@ -78,11 +78,11 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 				if ((currentShiftedJ < (it.first + fDeltaDotAbove)) && (currentShiftedJ > (it.second - fDeltaDotBelow))) {
 						currentShiftedJ = it.first + fDeltaDotAbove;
 						if (test) {// remove after tests
-							std::cout << "*****************************" << std::endl;// remove after tests
-							std::cout << "Should never happen" << std::endl;// remove after tests
-							std::cout << "Should never happen" << std::endl;// remove after tests
-							std::cout << "Should never happen" << std::endl;// remove after tests
-							std::cout << "Should never happen" << std::endl;// remove after tests
+							std::cerr << "*****************************" << std::endl;// remove after tests
+							std::cerr << "Should never happen" << std::endl;// remove after tests
+							std::cerr << "Should never happen" << std::endl;// remove after tests
+							std::cerr << "Should never happen" << std::endl;// remove after tests
+							std::cerr << "Should never happen" << std::endl;// remove after tests
 						}// remove after tests
 					} else {
 						bool test = true; // remove after tests
@@ -92,10 +92,21 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 			if (abs(currentShiftedJ - currentJ)> 0.00001) {
 				setShiftedJ(first, second, currentShiftedJ);
 				setShiftedJ(second, first, currentShiftedJ);
-				std::cout << "for (" << first << "," << second << ") shifted to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
+				std::cerr << "For (" << first << "," << second << ") shifted to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
 			} else{
-				std::cout << "for (" << first << "," << second << ") NOT to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
+				std::cerr << "For (" << first << "," << second << ") NOT to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
 			}
+			//  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" 
+
+		std::cout 
+			<< this->fColumns[first].chemicalShift << ","
+			<< this->fColumns[second].chemicalShift << ","
+			<< first << "," << second << ","
+			<< currentJ << "," <<  currentShiftedJ << ","
+			//<< "J_" << first << "_" << second
+			<< "notLabel_" << first
+			<< std::endl;
+
 		} //else{
 			//	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
 			//}
