@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   for (int mainLoop = 0; mainLoop < numberOfFiles; mainLoop ++) {
     JGraph jGraph = JGraph();
     if (mainLoop == 0 && argc == 1) {
-      cout << "Using hard wired data" << endl;
+      cerr << "Using hard wired data" << endl;
       vector < double > Jvalues; // for unassigned J's
       Jvalues.push_back(7.0); // to test unassigned J
       Jvalues.push_back(1.0); // to test unassigned J
@@ -47,15 +47,15 @@ int main(int argc, char *argv[]) {
 
     cout << " I have " << jGraph.getSize() << " elements in jGraph" << endl;
     for (size_t i = 0; i < jGraph.getSize(); i++) {
-        cout << i << " : " << jGraph.fColumns[i].label << " at " << jGraph.fColumns[i].chemicalShift << " ppm ";
+        cerr << i << " : " << jGraph.fColumns[i].label << " at " << jGraph.fColumns[i].chemicalShift << " ppm ";
         const size_t size = jGraph.fColumns[i].columnMembers.size();
         for (size_t j = 0; j < size; j++) {
-          cout <<  jGraph.fColumns[i].columnMembers[j].Jvalues << " ";
+          cerr <<  jGraph.fColumns[i].columnMembers[j].Jvalues << " ";
           if (jGraph.fColumns[i].columnMembers[j].hasPartnerIndex)
-                  cout << "(" << jGraph.fColumns[i].columnMembers[j].partnerIndex << ")";
-          if (j == (size-  1)) cout << " Hz "; else cout << ", ";
+                  cerr << "(" << jGraph.fColumns[i].columnMembers[j].partnerIndex << ")";
+          if (j == (size-  1)) cerr << " Hz "; else cerr << ", ";
         }
-        cout << endl;
+        cerr << endl;
     }
   }
   return 0;
