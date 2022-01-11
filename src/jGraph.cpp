@@ -3,6 +3,11 @@
 #include <cmath>
 #include <iostream> // remove with std::cout and std::endl
 
+/*
+/usr/bin/clang++ -std=c++17 -stdlib=libc++ -fdiagnostics-color=always -g /Users/djeanner/git/J-graph/src/*.cpp -o /Users/djeanner/git/J-graph/build/main.out
+build/main.out > html/andro.csv
+*/
+
 JGraph::JGraph() {
 }
 
