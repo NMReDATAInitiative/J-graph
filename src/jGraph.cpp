@@ -55,18 +55,32 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 				for (auto it : this->fColumns[inside].columnMembers) {
 					if (currentJ < (it.Jvalues + fDeltaDotAbove)) {
 						rangesToAvoid.push_back(make_pair(it.Jvalues + fDeltaDotAbove, it.Jvalues - fDeltaDotBelow));
+								std::cerr << "1)   For (" << first << "," << second << ") incremented because " << inside << " J " << it.Jvalues << " " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
+								std::cerr << "1)                 ZZZ (" << it.Jvalues + fDeltaDotAbove << " " << it.Jvalues - fDeltaDotBelow << ") "<< std::endl;
 					}
 				}
 			}		
 
 			// list all ranges of lines for which top is above currentJ 
-			for (size_t inside1 = 0; inside1 <= second -1 ; inside1 ++) { // includes current
-				for (size_t inside2 = first + 1; inside2 <= lastColuNumber; inside2 ++) { // includes current
+			for (size_t inside1 = first + 1; inside1 <= second - 1; inside1 ++) { // includes current
+				size_t from = 0;
+				if (inside1 > diffIndex) from = inside1 - diffIndex;
+				size_t to = lastColuNumber;
+				if (inside1 + diffIndex < lastColuNumber) to = inside1 + diffIndex;
+				for (size_t inside2 = from; inside2 <= to; inside2 ++) { // includes current
+					if (inside1 == inside2) continue;
+					//if (inside2 <= first && inside1 <= first) continue;
+					//if (inside2 >= second && inside1 >= second) continue;
+					//			std::cerr << "2)           test (" << inside1 << "," << inside2 << ") " << std::endl;
+
 					double currentShiftedJ2 = 0.0;
 					double currentJ2 = 0.0;
 					if (hasJ(inside1, inside2, currentJ2, currentShiftedJ2)) {
 						if (currentJ < (currentShiftedJ2 + fDeltaLineAbove)) {
 							rangesToAvoid.push_back(make_pair(currentShiftedJ2 + fDeltaLineAbove, currentShiftedJ2 - fDeltaLineBelow));
+			std::cerr << "2)=  For (" << first << "," << second << ") incremented because " << inside1 << "&" << inside2 << " " << currentShiftedJ2 << " for " <<  currentJ2 << " Hz" << std::endl;
+											std::cerr << "2)                 ZZZ (" << currentShiftedJ2 + fDeltaLineAbove << " " << currentShiftedJ2 - fDeltaLineBelow << ") "<< std::endl;
+
 						}
 					}
 				}
@@ -75,8 +89,8 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 			sort(rangesToAvoid.begin(), rangesToAvoid.end()); // sort by first element
 			bool test = false; // remove after tests
 			for (auto it : rangesToAvoid) {
-				if ((currentShiftedJ < (it.first + fDeltaDotAbove)) && (currentShiftedJ > (it.second - fDeltaDotBelow))) {
-						currentShiftedJ = it.first + fDeltaDotAbove;
+				if ((currentShiftedJ < (it.first)) && (currentShiftedJ > (it.second))) {
+						currentShiftedJ = it.first;
 						if (test) {// remove after tests
 							std::cerr << "*****************************" << std::endl;// remove after tests
 							std::cerr << "Should never happen" << std::endl;// remove after tests
@@ -95,7 +109,7 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 				setShiftedJ(second, first, currentShiftedJ);
 				std::cerr << "For (" << first << "," << second << ") shifted to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
 			} else {
-				std::cerr << "For (" << first << "," << second << ") NOT to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
+				std::cerr << "For (" << first << "," << second << ") Not shifted to " << currentShiftedJ << " (for " <<  currentJ << " Hz)" << std::endl;
 			}
 			//  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" 
 
