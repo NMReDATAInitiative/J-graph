@@ -32,7 +32,7 @@ return false;
 void JGraph::updateShiftedPositionsCouplings() {
 // Will shift up the lines to avoid crossing dots (at the position of the J's) and the lines (possibly shifted)
 const size_t lastColuNumber = fColumns.size() - 1;
-for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
+for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 	const size_t lastColGigenDiffIndex = lastColuNumber - diffIndex;
 	for (size_t curCol = 0; curCol <= lastColGigenDiffIndex; curCol ++ ) {
 		const size_t first = curCol;
@@ -60,8 +60,8 @@ for (size_t diffIndex = 2; diffIndex < lastColuNumber ; diffIndex++) {
 			}		
 
 			// list all ranges of lines for which top is above currentJ 
-			for (size_t inside1 = first; inside1 <= second; inside1 ++) { // includes current
-				for (size_t inside2 = inside1 + 1; inside2 <= second; inside2 ++) { // includes current
+			for (size_t inside1 = 0; inside1 <= second -1 ; inside1 ++) { // includes current
+				for (size_t inside2 = first + 1; inside2 <= lastColuNumber; inside2 ++) { // includes current
 					double currentShiftedJ2 = 0.0;
 					double currentJ2 = 0.0;
 					if (hasJ(inside1, inside2, currentJ2, currentShiftedJ2)) {
