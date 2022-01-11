@@ -90,24 +90,11 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 					}
 				}
 			}
-
 			sort(rangesToAvoid.begin(), rangesToAvoid.end()); // sort by first element
-			bool test = false; // remove after tests
 			for (auto it : rangesToAvoid) {
 				if ((currentShiftedJ < (it.first)) && (currentShiftedJ > (it.second))) {
 						currentShiftedJ = it.first;
-						if (test) {// remove after tests
-							std::cerr << "*****************************" << std::endl;// remove after tests
-							std::cerr << "Should never happen" << std::endl;// remove after tests
-							std::cerr << "Should never happen" << std::endl;// remove after tests
-							std::cerr << "Should never happen" << std::endl;// remove after tests
-							std::cerr << "Should never happen" << std::endl;// remove after tests
-						}// remove after tests
-				} else {
-						bool test = true; // remove after tests
-						//break; // put back after tests
-				}
-			
+				} 
 			}
 			if (abs(currentShiftedJ - currentJ)> 0.00001) {
 				setShiftedJ(first, second, currentShiftedJ);

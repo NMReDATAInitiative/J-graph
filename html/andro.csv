@@ -4,10 +4,10 @@ chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label
 4.3,4.4,3,4,7.07,7.07,notLabel_3
 4.4,4.5,4,5,7.09,7.09,notLabel_4
 5.3,5.8,6,7,5.3,5.3,notLabel_6
-4.1,4.3,1,3,7.01,8.06,notLabel_1
-4.2,4.4,2,4,7.05,9.06,notLabel_2
-4.3,4.5,3,5,7.08,10.06,notLabel_3
-4.1,4.4,1,4,7.02,11.06,notLabel_1
-4.2,4.5,2,5,7.06,12.06,notLabel_2
-4.1,4.5,1,5,7.03,13.06,notLabel_1
-3.8,5.3,0,6,11.3,14.06,notLabel_0
+4.1,4.3,1,3,7.01,9.06,notLabel_1
+4.2,4.4,2,4,7.05,10.06,notLabel_2
+4.3,4.5,3,5,7.08,11.06,notLabel_3
+4.1,4.4,1,4,7.02,12.06,notLabel_1
+4.2,4.5,2,5,7.06,13.06,notLabel_2
+4.1,4.5,1,5,7.03,14.06,notLabel_1
+3.8,5.3,0,6,11.3,15.06,notLabel_0
