@@ -14,13 +14,13 @@ var bodyHeight = 450;
 var lineWidth = 1.5; 
 var maxScaleJ = 22.0;
 var ratioOccupyJgraph = 1.0 / 6.0;
-var preferedDistanceInPtBetweenColumns = 20;
+var preferedDistanceInPtBetweenColumns = 20; // In pt
 
 //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 if(   /Android|webOS|iPhone     |iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
  var margin = {top: 10, right: 10, bottom: 30, left: 10}; // For vertical
  bodyWidth = 800;
- bodyHeight = 1000; // Not goot when horizontal....
+ bodyHeight = 1000; // Not good when horizontal....
  lineWidth = 5; 
  ratioOccupyJgraph = 1.0 / 2.0;
 }
@@ -37,7 +37,32 @@ var svg = d3.select("#my_dataviz")
     .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
-d3.csv("./andro.csv", function(dataLines) {
+d3.csv("./andro.csv", function(jGraphData) {
+
+
+
+
+// Make list of positions accoding to size of jGraphData
+const numberItem = 6;  // this will be size of jGraphData
+var smallSpace = width / (numberItem + 1); // five items, six spaces
+if (smallSpace >  preferedDistanceInPtBetweenColumns) {
+  smallSpace = preferedDistanceInPtBetweenColumns;
+}
+  console.log("=======================")
+
+for (i = 0; i < numberItem; i ++) {
+  console.log(i)
+  const curPos = (0.5 + i ) * smallSpace;
+    console.log(curPos)
+
+}
+
+
+
+
+
+
+
   var color = d3.scaleOrdinal()
     .domain(["sefsdosa", "versifsdcolor", "vigdfginica", "asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
    // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
@@ -245,7 +270,7 @@ function pathy(d) {
   var theLinesW = svg
     .selectAll("myPath222")
     .attr("class","lineW")
-    .data(dataLines)
+    .data(jGraphData)
     .enter()
     .append("path")
       .attr("class", function (d) { return "line " + d.Label } ) // 2 class for each line: 'line' and the group name
