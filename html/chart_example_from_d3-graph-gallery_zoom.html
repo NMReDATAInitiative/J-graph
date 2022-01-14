@@ -1,27 +1,24 @@
 <html lang="en">
-
-
 <div id="my_dataviz"></div>
  <head>
     <meta charset="utf-8" />
-           <script src="https://d3js.org/d3.v4.js"></script>
-
+    <script src="https://d3js.org/d3.v4.js"></script>
 </head>
-  <body>
-   
-
-   
-<script>
+<body>
+ <script>
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60};
-var width = 500 - margin.left - margin.right;
+var width  = 500 - margin.left - margin.right;
 var height = 450 - margin.top - margin.bottom;
-var lineWidth = 2; 
+var lineWidth = 1.5; 
+var heightJscale = height / 6;
+var maxScaleJ = 22.0;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
- width = 200 - margin.left - margin.right;
- height = 600 - margin.top - margin.bottom;
+ width = 800 - margin.left - margin.right;
+ height = 1000 - margin.top - margin.bottom;
  lineWidth = 3; 
+ heightJscale = height / 2;
  }
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -33,7 +30,7 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 d3.csv("./andro.csv", function(dataLines) {
   var color = d3.scaleOrdinal()
-    .domain(["sefsdosa", "versifsdcolor", "vigdfginica","asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
+    .domain(["sefsdosa", "versifsdcolor", "vigdfginica", "asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
    // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
     .range([ "orange", "green", "blue", "red"]) // fourth color
   //listOfChemicalShifts = ["chemShift1","chemShift2"]
@@ -51,7 +48,6 @@ d3.csv("./andro.csv", function(dataLines) {
   var highlight = function(d){
 
     selected_specie = d.Label
-
     // first every group turns grey
     d3.selectAll(".line")
       .transition().duration(200)
@@ -78,9 +74,7 @@ d3.csv("./Androsten_forMult_analysis.csv",
     return { chemShift : d.x, value : d.y }
   },
 
-  // Now I can use this dataset:
   function(chemShift) {
-
   // Add X axis 
     var x = d3.scaleLinear()
       .domain([d3.max(chemShift, function(d) { return +d.chemShift; }), d3.min(chemShift, function(d) { return +d.chemShift; })])
@@ -91,8 +85,8 @@ d3.csv("./Androsten_forMult_analysis.csv",
 
  // Add Y axis2
     var yJs = d3.scaleLinear()
-      .domain([0, 22.0])
-      .range([ height / 3.0, height / 6.0 ]);
+      .domain([0, maxScaleJ])
+      .range([ heightJscale, 0.0 ]);
     yAxisn = svg.append("g")
    // .attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
     .call(d3.axisLeft(yJs).ticks(3));
@@ -332,8 +326,7 @@ function pathy(d) {
   })
 })
 </script>
-  <h4>Result of the recursive deconvolution of multiplet structures.</h4>
-    <p> Demo32.</p>
-
+<h4>J Graph</h4>
+<p> Demo. </p>
 </body>
 </html>
