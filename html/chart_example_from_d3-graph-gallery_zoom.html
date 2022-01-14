@@ -9,17 +9,26 @@
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60};
-var width  = 500 - margin.left - margin.right;
-var height = 450 - margin.top - margin.bottom;
+var bodyWidth = 500;
+var bodyHeight = 450;
 var lineWidth = 1.5; 
-var heightJscale = height / 6;
 var maxScaleJ = 22.0;
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
- width = 800 - margin.left - margin.right;
- height = 1000 - margin.top - margin.bottom;
+var ratioOccupyJgraph = 1.0 / 6.0;
+var preferedDistanceInPtBetweenColumns = 20;
+
+//if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+if(   /Android|webOS|iPhone     |iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ var margin = {top: 10, right: 10, bottom: 30, left: 10}; // For vertical
+ bodyWidth = 800;
+ bodyHeight = 1000; // Not goot when horizontal....
  lineWidth = 5; 
- heightJscale = height / 2;
+ ratioOccupyJgraph = 1.0 / 2.0;
 }
+var width  = bodyWidth - margin.left - margin.right;
+var height = bodyHeight - margin.top - margin.bottom;
+var heightJscale = height * ratioOccupyJgraph;
+
+
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
   .append("svg")
@@ -106,7 +115,6 @@ var yn = {}
       // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
       .range([ height / 3.0, height / 6.0 ]);
   }
-
     // Add Y axis
     var y = d3.scaleLinear()
       .domain([0, d3.max(chemShift, function(d) { return +d.value; })])
@@ -131,7 +139,7 @@ var yn = {}
     var line = svg.append('g')
       .attr("clip-path", "url(#clip)")
 
-    // Add the line
+    // Add the spectrum
     line.append("path")
       .datum(chemShift)
       .attr("class", "lineG")  // add the class line to be able to modify this line later on.
@@ -145,12 +153,11 @@ var yn = {}
         )
 
     var dataCircles = [
-      {chemShift: 5.5, Jvalue: 7.5},
-      {chemShift: 5.6, Jvalue: 7.4},
-      {chemShift: 5.62, Jvalue: 7.42},
+      {chemShift: 5.5, value: 17.5},
+      {chemShift: 5.6, value: 7.4},
+      {chemShift: 5.62, value: 2.42},
       ]
 
-     //function funnn1(d) { return x(d.chemShift); }
     // Circles
     var theDots = svg.selectAll("dots")
     .data(dataCircles)
@@ -158,8 +165,7 @@ var yn = {}
     .append("circle")
       .attr("class", "circle")  
       .attr("cx", function(d) { return x(d.chemShift); })
-      //.attr("cx", funnn1 )
-      .attr("cy", function(d) { return yJs(d.Jvalue); } )
+      .attr("cy", function(d) { return yJs(d.value); } )
       .attr("r", "7")
       .style("fill", "#69b3a2")
       .attr("stroke", "red")
@@ -173,7 +179,6 @@ var yn = {}
       {Jval: 20},
       ]
 
-     //function funnn1(d) { return x(d.chemShift); }
     // Circles
     var theTicksLines = svg.selectAll("tickLines")
     .data(dataTicksLines)
@@ -184,14 +189,13 @@ var yn = {}
       .attr("y1", function(d) { return yJs(d.Jval); })
       .attr("x2",  width)
       .attr("y2", function(d) { return yJs(d.Jval); })
-      //.attr("cx", funnn1 )
       .attr("stroke", "#00000020")
       .style("stroke-width", lineWidth)
 
       svg.append("line")
-  .attr("x1", x(0)).attr("y1", yJs(5))
-  .attr("x2", x(10)).attr("y2", yJs(5))
-  .style("stroke", "11223388");
+      .attr("x1", x(0)).attr("y1", yJs(5))
+      .attr("x2", x(10)).attr("y2", yJs(5))
+      .style("stroke", "11223388");
 
 // Lines
 function path(d) {
