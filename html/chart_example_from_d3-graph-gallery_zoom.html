@@ -17,9 +17,9 @@ var maxScaleJ = 22.0;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
  width = 800 - margin.left - margin.right;
  height = 1000 - margin.top - margin.bottom;
- lineWidth = 10; 
+ lineWidth = 5; 
  heightJscale = height / 2;
- }
+}
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
   .append("svg")
