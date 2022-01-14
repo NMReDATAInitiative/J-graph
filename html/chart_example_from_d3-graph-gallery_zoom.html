@@ -1,21 +1,28 @@
-<!-- Code from d3-graph-gallery.com -->
-<!DOCTYPE html>
-<meta charset="utf-8">
+<html lang="en">
 
-<!-- Load d3.js -->
-<script src="https://d3js.org/d3.v4.js"></script>
 
-<!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
+ <head>
+    <meta charset="utf-8" />
+           <script src="https://d3js.org/d3.v4.js"></script>
 
+</head>
+  <body>
+   
 
+   
 <script>
 
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 900 - margin.left - margin.right,
-    height = 450 - margin.top - margin.bottom;
-
+var margin = {top: 10, right: 30, bottom: 30, left: 60};
+var width = 500 - margin.left - margin.right;
+var height = 450 - margin.top - margin.bottom;
+var lineWidth = 2; 
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ width = 200 - margin.left - margin.right;
+ height = 600 - margin.top - margin.bottom;
+ lineWidth = 3; 
+ }
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
   .append("svg")
@@ -137,7 +144,7 @@ var yn = {}
       .attr("fill", "none")
       .attr("stroke", "steelblue")
      // .attr("stroke", "red")
-      .attr("stroke-width", 2.0)
+      .attr("stroke-width", lineWidth)
       .attr("d", d3.line()
         .x(function(d) { return x(d.chemShift) })
         .y(function(d) { return y(d.value) })
@@ -162,7 +169,7 @@ var yn = {}
       .attr("r", "7")
       .style("fill", "#69b3a2")
       .attr("stroke", "red")
-      .style("stroke-width", 2)
+      .style("stroke-width", lineWidth)
 
       var dataTicksLines = [
       {Jval: 0},
@@ -185,7 +192,7 @@ var yn = {}
       .attr("y2", function(d) { return yJs(d.Jval); })
       //.attr("cx", funnn1 )
       .attr("stroke", "#00000020")
-      .style("stroke-width", 2)
+      .style("stroke-width", lineWidth)
 
       svg.append("line")
   .attr("x1", x(0)).attr("y1", yJs(5))
@@ -246,7 +253,7 @@ function pathy(d) {
       .attr("class", function (d) { return "line " + d.Label } ) // 2 class for each line: 'line' and the group name
       //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
       .attr("d", path)
-      .style("stroke-width", 2)
+      .style("stroke-width", lineWidth)
       /*.attr("d", d3.line()
         //.x(pathx)
         .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
@@ -325,3 +332,8 @@ function pathy(d) {
   })
 })
 </script>
+  <h4>Result of the recursive deconvolution of multiplet structures.</h4>
+    <p> Demo32.</p>
+
+</body>
+</html>
