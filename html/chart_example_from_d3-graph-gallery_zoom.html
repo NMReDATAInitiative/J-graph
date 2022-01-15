@@ -19,13 +19,14 @@
     var preferedDistanceInPtBetweenColumns = 10; // In pt
 
     //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    if (/Android|webOS|iPhone     |iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       margin = { top: 10, right: 10, bottom: 30, left: 10 }; // For vertical
       bodyWidth = 800;
       bodyHeight = 1000; // Not good when horizontal....
       lineWidth = 5;
       ratioOccupyJgraph = 1.0 / 2.0;
     }
+    
     var width = bodyWidth - margin.left - margin.right;
     var height = bodyHeight - margin.top - margin.bottom;
     var heightJscale = height * ratioOccupyJgraph;
