@@ -65,12 +65,12 @@
       }
       console.log("=====================")
 
-      var del = [];
+      var leftPosColumns = [];
       for (i = 0; i < numberItem; i++) {
         const curPos = (0.5 + i) * smallSpace;
-        del.push(curPos);
+        leftPosColumns.push(curPos);
       } 
-      console.log(JSON.stringify(del))
+      console.log(JSON.stringify(leftPosColumns))
 
 
 
@@ -354,7 +354,16 @@
 // experimental....
               theDots
               .transition().duration(1000)
-              .attr("cx", function (d) { return del[d.MyIndex]; })
+              .attr("cx", function (d) { return leftPosColumns[d.MyIndex]; })
+// complex....
+              theDots
+              .transition().duration(1000)
+              .attr("cx", function (d) { 
+                if (leftPosColumns[d.MyIndex] > x(d.chemShift))
+                return leftPosColumns[d.MyIndex]; 
+                else
+                return x(d.chemShift); 
+              })
 
 
             //.attr("cx", x(5.555))
