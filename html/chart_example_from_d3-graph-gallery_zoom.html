@@ -16,7 +16,7 @@
     var lineWidth = 1.5;
     var maxScaleJ = 22.0;
     var ratioOccupyJgraph = 1.0 / 6.0;
-    var preferedDistanceInPtBetweenColumns = 20; // In pt
+    var preferedDistanceInPtBetweenColumns = 10; // In pt
 
     //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     if (/Android|webOS|iPhone     |iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -42,22 +42,34 @@
     d3.csv("./andro.csv", function (jGraphData) {
 
 
-
+      var dataCircles = [ // sorted by decreading values, index gives position
+          { chemShift: 8.5, value: 17.5, MyIndex: 0 },
+          { chemShift: 7.5, value: 17.4, MyIndex: 1 },
+          { chemShift: 6.5, value: 17.2, MyIndex: 2 },
+          { chemShift: 5.7, value: 17.1, MyIndex: 3 },
+          { chemShift: 5.62, value: 7.4 ,MyIndex: 4},
+          { chemShift: 5.61, value: 2.42 , MyIndex: 5},
+          { chemShift: 5.601, value: 2.421 , MyIndex: 6},
+          { chemShift: 5.60, value: 2.422 , MyIndex: 7},
+          { chemShift: 4, value: 2.422 , MyIndex: 8},
+          { chemShift: 1, value: 2.422 , MyIndex: 9},
+          { chemShift: -0.1, value: 2.422 , MyIndex: 10},
+          ]
 
       // Make list of positions accoding to size of jGraphData
-      const numberItem = 6;  // this will be size of jGraphData
+      const numberItem = 11;  // this will be size of jGraphData
       var smallSpace = width / (numberItem + 1); // five items, six spaces
       if (smallSpace > preferedDistanceInPtBetweenColumns) {
         smallSpace = preferedDistanceInPtBetweenColumns;
       }
-      console.log("=======================")
+      console.log("=====================")
 
+      var del = [];
       for (i = 0; i < numberItem; i++) {
-        console.log(i)
         const curPos = (0.5 + i) * smallSpace;
-        console.log(curPos)
-
-      }
+        del.push(curPos);
+      } 
+      console.log(JSON.stringify(del))
 
 
 
@@ -113,7 +125,10 @@
         function (chemShift) {
           // Add X axis 
           var x = d3.scaleLinear()
-            .domain([d3.max(chemShift, function (d) { return +d.chemShift; }), d3.min(chemShift, function (d) { return +d.chemShift; })])
+            .domain([
+              d3.max(chemShift, function (d) { return +d.chemShift; }),
+              d3.min(chemShift, function (d) { return +d.chemShift; })
+            ])
             .range([0, width]);
           xAxis = svg.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -179,11 +194,7 @@
               .y(function (d) { return y(d.value) })
             )
 
-          var dataCircles = [
-            { chemShift: 5.5, value: 17.5 },
-            { chemShift: 5.6, value: 7.4 },
-            { chemShift: 5.62, value: 2.42 },
-          ]
+          
 
           // Circles
           var theDots = svg.selectAll("dots")
@@ -312,9 +323,15 @@
             // If no selection, back to initial coordinate. Otherwise, update X axis domain
             if (!extent) {
               if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-              x.domain([d3.max(chemShift, function (d) { return +d.chemShift; }), d3.min(chemShift, function (d) { return +d.chemShift; })])
+              x.domain([
+                d3.max(chemShift, function (d) { return +d.chemShift; }), 
+                d3.min(chemShift, function (d) { return +d.chemShift; })
+              ])
             } else {
-              x.domain([x.invert(extent[0]), x.invert(extent[1])])
+              x.domain([
+                x.invert(extent[0]),
+                x.invert(extent[1])
+              ])
               line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
             }
 
@@ -329,16 +346,46 @@
                 .x(function (d) { return x(d.chemShift) })
                 .y(function (d) { return y(d.value) })
               )
-
+// old
             theDots
               .transition().duration(1000)
               .attr("cx", function (d) { return x(d.chemShift); })
-            //.attr("cx", x(5.555))
+// experimental....
+              theDots
+              .transition().duration(1000)
+              .attr("cx", function (d) { return del[d.MyIndex]; })
 
+
+            //.attr("cx", x(5.555))
+            console.log("Function updateChart ...===========")
+            console.log("calc di" + x(13.333333))
+            console.log(JSON.stringify(
+              (theDots.attr("cx"))
+            ))
+        
+
+
+            console.log("chem :" + JSON.stringify(
+              (dataCircles.map(function (d) {
+               // console.log("ch" + d.chemShift);
+                return d.chemShift;
+              }))
+            ))
+            console.log("index :" + JSON.stringify(
+              (dataCircles.map(function (d) {
+                console.log("ch " + d.MyIndex);
+                console.log("x " + x(d.MyIndex));
+                console.log("del() " + del[d.MyIndex]);
+                return d.index;
+              }))
+            ))
+            console.log("fff :" + JSON.stringify(del))
+           
             theLinesW
               //.select('.lineW')
               .transition().duration(1000)
               .attr("d", path)
+
 
           }
           // If user double click, reinitialize the chart
