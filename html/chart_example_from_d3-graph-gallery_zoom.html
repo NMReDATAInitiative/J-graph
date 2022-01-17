@@ -200,6 +200,25 @@
               .y(function (d) { return y(d.value) })
             )
 
+          var dataTicksLines = [
+            { Jval: 0 },
+            { Jval: 5 },
+            { Jval: 10 },
+            { Jval: 15 },
+            { Jval: 20 },
+          ]
+
+          var theTicksLines = svg.selectAll("tickLines")
+            .data(dataTicksLines)
+            .enter()
+            .append("line")
+            .attr("class", "Grid")
+            .attr("x1", 0)
+            .attr("y1", function (d) { return yJs(d.Jval); })
+            .attr("x2", width)
+            .attr("y2", function (d) { return yJs(d.Jval); })
+            .attr("stroke", "#CCCCCC")
+            .style("stroke-width", lineWidth)
 
 
           // Circles
@@ -230,29 +249,12 @@
 
 
 
-          var dataTicksLines = [
-            { Jval: 0 },
-            { Jval: 5 },
-            { Jval: 10 },
-            { Jval: 15 },
-            { Jval: 20 },
-          ]
+
 
           const colorShowLine = "#CCCCCC";
           const colorHideLine = "#EEEEEE00";
 
-          var theTicksLines = svg.selectAll("tickLines")
-            .data(dataTicksLines)
-            .enter()
-            .append("line")
-            .attr("class", "Grid")
-            .attr("x1", 0)
-            .attr("y1", function (d) { return yJs(d.Jval); })
-            .attr("x2", width)
-            .attr("y2", function (d) { return yJs(d.Jval); })
-            .attr("stroke", "#CCCCCC")
-            .style("stroke-width", lineWidth)
-          
+
           // Lines
           function path(d) {
 
