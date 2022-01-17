@@ -235,25 +235,32 @@
             .style("stroke-width", lineWidthCircle)
 
           // Columns
-          var theColumns = svg.selectAll("columnns")
+          const colorShowLine = "#CCCCCC";
+          const colorHideLine = "#EEEEEE00";
+          // oblique
+          var theColumns1 = svg.selectAll("columnns")
+            .data(dataCircles)
+            .enter()
+            .append("line")
+            .attr("class", "ColunnSegment1")
+            .attr("x1", function (d) { return x(d.chemShift); })
+            .attr("x2", function (d) { return x(d.chemShift); })
+            .attr("y1", function (d) { return bottomJGraphYposition; })
+            .attr("y2", function (d) { return pointingLineColum; })
+            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
+            .style("stroke-width", lineWidthCircle)
+          // streight down
+          var theColumns2 = svg.selectAll("ColunnSegment2")
             .data(dataCircles)
             .enter()
             .append("line")
             .attr("class", "Colunn")
             .attr("x1", function (d) { return x(d.chemShift); })
             .attr("x2", function (d) { return x(d.chemShift); })
-            .attr("y1", function (d) { return bottomJGraphYposition; })
-            .attr("y2", function (d) { return pointingLineColum; })
-            .attr("stroke", "#00000020") // transparent black
+            .attr("y1", function (d) { return pointingLineColum; })
+            .attr("y2", function (d) { return height; })
+            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
             .style("stroke-width", lineWidthCircle)
-
-
-
-
-
-          const colorShowLine = "#CCCCCC";
-          const colorHideLine = "#EEEEEE00";
-
 
           // Lines
           function path(d) {
@@ -300,6 +307,70 @@
           // Draw the lines
           console.log("HERE")
 
+
+          function updateColumns() {
+
+            spreadPositions = [];
+            for (i = 0; i < dataCircles.length; i++) {
+              const curPosLeft = (i + 0.5) * smallSpace;
+              const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
+              var returnValue = 0.0;
+
+              const curChemShift = dataCircles.map(function (d) { return d.chemShift; })
+              console.log("curChemShift  " + JSON.stringify(curChemShift))
+
+              const curChrem = curChemShift[i];
+              if (leftPosColumns[i] < x(curChrem)) {
+                if (rightPosColumns[i] > x(curChrem)) {
+                  returnValue = x(curChrem);
+                } else {
+                  returnValue = rightPosColumns[i];
+                }
+              } else {
+                returnValue = leftPosColumns[i];
+              }
+              spreadPositions.push(returnValue);
+            }
+            console.log("spreadPositions  " + JSON.stringify(spreadPositions))
+
+            theColumns1
+              .transition().duration(1000)
+              .attr("x1", function (d) {
+                return spreadPositions[d.MyIndex];
+               })
+              .attr("x2", function (d) {
+                return x(d.chemShift);
+              })
+              .attr("stroke", function (d) {
+                if (
+                  (x(d.chemShift) > 0.0) &&
+                  (x(d.chemShift) < width)) {
+                  return colorShowLine;
+                } else {
+                  return colorHideLine;
+                }
+              })
+            theColumns2
+              .transition().duration(1000)
+              .attr("x1", function (d) {
+                return x(d.chemShift);
+              })
+              .attr("x2", function (d) {
+                return x(d.chemShift);
+              })
+              .attr("stroke", function (d) {
+                if (
+                  (x(d.chemShift) > 0.0) &&
+                  (x(d.chemShift) < width)) {
+                  return colorShowLine;
+                } else {
+                  return colorHideLine;
+                }
+              })
+          }
+
+          updateColumns();
+
           var theLinesW = svg
             .selectAll("myPath222")
             .attr("class", "lineW")
@@ -333,6 +404,7 @@
           // A function that set idleTimeOut to null
           var idleTimeout
           function idled() { idleTimeout = null; }
+
 
 
           // A function that update the chart for given boundaries
@@ -393,33 +465,8 @@
                 }
               })
 
-            theColumns
-              .transition().duration(1000)
-              .attr("x1", function (d) {
-                var returnValue = 0.0;
-                if (leftPosColumns[d.MyIndex] < x(d.chemShift)) {
-                  if (rightPosColumns[d.MyIndex] > x(d.chemShift)) {
-                    returnValue = x(d.chemShift);
-                  } else {
-                    returnValue = rightPosColumns[d.MyIndex];
-                  }
-                } else {
-                  returnValue = leftPosColumns[d.MyIndex];
-                }
-                return returnValue;
-              })
-              .attr("x2", function (d) {
-                return x(d.chemShift);
-              })
-              .attr("stroke", function (d) {
-                if (
-                  (x(d.chemShift) > 0.0) &&
-                  (x(d.chemShift) < width)) {
-                  return colorShowLine;
-                } else {
-                  return colorHideLine;
-                }
-              })
+            updateColumns();
+
 
             console.log("x2Line grasss :" + JSON.stringify(
               (dataCircles.map(function (d) {
@@ -474,7 +521,6 @@
                 .y(function (d) { return y(d.value) })
               )
           });
-
 
 
         })
