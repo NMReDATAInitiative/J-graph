@@ -47,22 +47,41 @@
         "translate(" + margin.left + "," + margin.top + ")");
     d3.csv("./andro.csv", function (jGraphData) {
 
+      var arrayChemicalShiftsFromLines = [];
+      {
+        var curChemShiftToReplace = [];
+        var indexArray = [];
+        curChemShiftToReplace = jGraphData.map(function (d) { return d.chemShift1; })
+        indexArray = jGraphData.map(function (d) { return d.indexColumn1; })
+        //index 1
+        for (i = 0; i < curChemShiftToReplace.length; i++) {
+          const index = indexArray[i];
+          //dataCircles[index].chemShift = curChemShiftToReplace[i];
+          arrayChemicalShiftsFromLines[index - 1] = curChemShiftToReplace[i];
+        }
+        // index 2
+        curChemShiftToReplace = jGraphData.map(function (d) { return d.chemShift2; })
+        indexArray = jGraphData.map(function (d) { return d.indexColumn2; })
+        for (i = 0; i < indexArray.length; i++) {
+          const index = indexArray[i];
+          //dataCircles[index].chemShift = curChemShiftToReplace[i];
+          arrayChemicalShiftsFromLines[index - 1] = curChemShiftToReplace[i];
+        }
+      }
+      arrayChemicalShiftsFromLines.sort();
+      arrayChemicalShiftsFromLines.reverse();
+      console.log("arrayChemicalShiftsFromLines  " + JSON.stringify(arrayChemicalShiftsFromLines))
 
-      var dataCircles = [ // sorted by decreading values, index gives position
-        { chemShift: 8.5, value: 17.5, MyIndex: 0 },
-        { chemShift: 7.5, value: 17.4, MyIndex: 1 },
-        { chemShift: 6.5, value: 17.2, MyIndex: 2 },
-        { chemShift: 5.7, value: 17.1, MyIndex: 3 },
-        { chemShift: 5.62, value: 7.4, MyIndex: 4 },
-        { chemShift: 5.61, value: 2.42, MyIndex: 5 },
-        { chemShift: 5.601, value: 2.421, MyIndex: 6 },
-        { chemShift: 5.60, value: 2.422, MyIndex: 7 },
-        { chemShift: 4, value: 2.422, MyIndex: 8 },
-        { chemShift: 1, value: 2.422, MyIndex: 9 },
-        { chemShift: 0.13, value: 2.422, MyIndex: 10 },
-        { chemShift: 0.12, value: 8.422, MyIndex: 11 },
-        { chemShift: 0.11, value: 17.422, MyIndex: 12 },
-      ]
+      var dataCircles = new Array(arrayChemicalShiftsFromLines.length);
+
+      for (i = 0; i < arrayChemicalShiftsFromLines.length; i++) {
+        dataCircles[i] = {
+          'chemShift': arrayChemicalShiftsFromLines[i],
+          'value': 0.0,
+          'MyIndex': i,
+        };
+      }
+
 
       // Make list of positions accoding to size of jGraphData
       const numberItem = dataCircles.length;  // this will be size of jGraphData
@@ -70,6 +89,9 @@
       if (smallSpace > preferedDistanceInPtBetweenColumns) {
         smallSpace = preferedDistanceInPtBetweenColumns;
       }
+
+
+
       console.log("=====================")
 
       var leftPosColumns = [];
@@ -270,22 +292,31 @@
             console.log(JSON.stringify(d))
             const y1 = yJs(d.Jvalue);
             const y2 = yJs(d.JvalueShifted);
-            const horizontalShiftX = 0.01;
+            //const horizontalShiftX = 0.01;
+            const horizontalShiftX = 2;
             var usedHorizontalShiftX = eval(horizontalShiftX);
-            if (d.chemShift1 > d.chemShift2) {
+            const cs1 = spreadPositionsZZ[d.indexColumn1 - 1];
+            const cs2 = spreadPositionsZZ[d.indexColumn2 - 1];
+            if (cs1 > cs2) {
               var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
             }
-
-            const x1 = x(eval(d.chemShift1));
-            const x2 = x(eval(d.chemShift2));
-            const x1p = x(eval(d.chemShift1) + usedHorizontalShiftX);
-            const x2p = x(eval(d.chemShift2) - usedHorizontalShiftX);
-
+            const x1 = ((cs1));
+            const x2 = ((cs2));
+            const x1p = ((cs1) + usedHorizontalShiftX);
+            const x2p = ((cs2) - usedHorizontalShiftX);
+            /*
+            if (d.chemShift1 > d.chemShift2) {
+               var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
+             } const x1 = x(eval(d.chemShift1));
+             const x2 = x(eval(d.chemShift2));
+             const x1p = x(eval(d.chemShift1) + usedHorizontalShiftX);
+             const x2p = x(eval(d.chemShift2) - usedHorizontalShiftX);
+ */
             const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
             var Gen = d3.line();
             /*Gen.attr("d", d3.line()
                     .x(function(d) { return x(pathOx) })
-                    .y(function(d) { return yJs(pathOy) })
+               .y(function(d) { return yJs(pathOy) })
              )*/
             return Gen(combine);
           }
@@ -442,9 +473,10 @@
               .attr("cx", function (d) {
                 return spreadPositions[d.MyIndex];
               })
+            return spreadPositions;
           }
 
-          updateColumns();
+          var spreadPositionsZZ = updateColumns();
 
           var theLinesW = svg
             .selectAll("myPath222")
@@ -527,49 +559,46 @@
             */
             // complex....
 
-            updateColumns();
+            spreadPositionsZZ = updateColumns();
 
 
-            console.log("x2Line grasss :" + JSON.stringify(
-              (dataCircles.map(function (d) {
-                //console.log("ch " + d.MyIndex);
-                //  console.log("x " + x(d.MyIndex));
-                return d.index;
-              }))
-            ))
-
-
-            //.attr("cx", x(5.555))
-            console.log(JSON.stringify(
-              (theDots.attr("cx"))
-            ))
-
-
-
-            console.log("chem :" + JSON.stringify(
-              (dataCircles.map(function (d) {
-                // console.log("ch" + d.chemShift);
-                return d.chemShift;
-              }))
-            ))
-            console.log("index :" + JSON.stringify(
-              (dataCircles.map(function (d) {
-                //console.log("ch " + d.MyIndex);
-                //  console.log("x " + x(d.MyIndex));
-                return d.index;
-              }))
-            ))
 
             theLinesW
               //.select('.lineW')
               .transition().duration(1000)
               .attr("d", path)
+            /*
+                        console.log("x2Line grasss :" + JSON.stringify(
+                          (dataCircles.map(function (d) {
+                            //console.log("ch " + d.MyIndex);
+                            //  console.log("x " + x(d.MyIndex));
+                            return d.index;
+                          }))
+                        ))
+            */
 
+            //.attr("cx", x(5.555))
+            /*   console.log(JSON.stringify(
+                 (theDots.attr("cx"))
+               ))
+   
+   */
 
+            /*       console.log("chem :" + JSON.stringify(
+                     (dataCircles.map(function (d) {
+                       // console.log("ch" + d.chemShift);
+                       return d.chemShift;
+                     }))
+                   ))
+                   console.log("index :" + JSON.stringify(
+                     (dataCircles.map(function (d) {
+                       //console.log("ch " + d.MyIndex);
+                       //  console.log("x " + x(d.MyIndex));
+                       return d.index;
+                     }))
+                   ))
+       */
           }
-
-
-
           // If user double click, reinitialize the chart
           svg.on("dblclick", function () {
             x.domain([d3.max(chemShift, function (d) { return +d.chemShift; }), d3.min(chemShift, function (d) { return +d.chemShift; })])
