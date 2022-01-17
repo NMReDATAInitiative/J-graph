@@ -46,7 +46,7 @@
       .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
     d3.csv("./andro.csv", function (jGraphData) {
-
+      // get chemical shifts from lines... should come from other source !
       var arrayChemicalShiftsFromLines = [];
       {
         var curChemShiftToReplace = [];
@@ -56,7 +56,6 @@
         //index 1
         for (i = 0; i < curChemShiftToReplace.length; i++) {
           const index = indexArray[i];
-          //dataCircles[index].chemShift = curChemShiftToReplace[i];
           arrayChemicalShiftsFromLines[index - 1] = curChemShiftToReplace[i];
         }
         // index 2
@@ -64,13 +63,12 @@
         indexArray = jGraphData.map(function (d) { return d.indexColumn2; })
         for (i = 0; i < indexArray.length; i++) {
           const index = indexArray[i];
-          //dataCircles[index].chemShift = curChemShiftToReplace[i];
           arrayChemicalShiftsFromLines[index - 1] = curChemShiftToReplace[i];
         }
       }
+      // sort by decreasing values
       arrayChemicalShiftsFromLines.sort();
       arrayChemicalShiftsFromLines.reverse();
-      console.log("arrayChemicalShiftsFromLines  " + JSON.stringify(arrayChemicalShiftsFromLines))
 
       var dataCircles = new Array(arrayChemicalShiftsFromLines.length);
 
@@ -223,13 +221,14 @@
               .y(function (d) { return y(d.value) })
             )
 
+            // level of tickLine
           var dataTicksLines = [
             { Jval: 0 },
             { Jval: 5 },
             { Jval: 10 },
             { Jval: 15 },
             { Jval: 20 },
-          ]
+          ];
 
           var theTicksLines = svg.selectAll("tickLines")
             .data(dataTicksLines)
@@ -242,7 +241,6 @@
             .attr("y2", function (d) { return yJs(d.Jval); })
             .attr("stroke", "#CCCCCC")
             .style("stroke-width", lineWidth)
-
 
           // Circles
           var theDots = svg.selectAll("dots")
@@ -336,11 +334,10 @@
                return listOfChemicalShifts.map(function(p) { return yJs(d[p]); });
           }
           */
-          // Draw the lines
-          console.log("HERE");
 
           function spread(spreadDelta, smallSpace) {
-
+            // determine how to spead objects to avoid contacts
+            // there muss be anough space for this function to work
             for (i = 0; i < spreadDelta.length; i++) {
               const curDelta = spreadDelta[i];
               if (curDelta < smallSpace) {
@@ -473,6 +470,7 @@
               .attr("cx", function (d) {
                 return spreadPositions[d.MyIndex];
               })
+
             return spreadPositions;
           }
 
@@ -500,8 +498,6 @@
             .on("mouseover", highlight)
             .on("mouseleave", doNotHighlight)
 
-          console.log("HERE=============")
-
           // Add the brushing
           line
             .append("g")
@@ -511,8 +507,6 @@
           // A function that set idleTimeOut to null
           var idleTimeout
           function idled() { idleTimeout = null; }
-
-
 
           // A function that update the chart for given boundaries
           function updateChart() {
@@ -547,21 +541,9 @@
                 .x(function (d) { return x(d.chemShift) })
                 .y(function (d) { return y(d.value) })
               )
-            /*
-// old
-          theDots
-            .transition().duration(1000)
-            .attr("cx", function (d) { return x(d.chemShift); })
-// experimental....
-            theDots
-            .transition().duration(1000)
-            .attr("cx", function (d) { return leftPosColumns[d.MyIndex]; })
-            */
-            // complex....
+
 
             spreadPositionsZZ = updateColumns();
-
-
 
             theLinesW
               //.select('.lineW')
