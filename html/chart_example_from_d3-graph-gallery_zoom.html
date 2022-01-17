@@ -305,20 +305,78 @@
           }
           */
           // Draw the lines
-          console.log("HERE")
+          console.log("HERE");
 
+          function spread(spreadDelta, smallSpace) {
+
+            for (i = 0; i < spreadDelta.length; i++) {
+              const curDelta = spreadDelta[i];
+              if (curDelta < smallSpace) {
+                const spreadFull = (smallSpace - curDelta);
+                var spreadleft = spreadFull / 2.0;
+                // try shift left (1 of 3)
+                for (j = i - 1; j >= 0; j -= 1) {
+                  const curExtraSpace = (spreadDelta[j] - smallSpace);
+                  if (curExtraSpace > 0.0) {
+                    if (curExtraSpace > spreadleft) {
+                      spreadDelta[j] -= spreadleft;
+                      spreadDelta[i] += spreadleft;
+                      spreadleft = 0;
+                    } else {
+                      spreadDelta[j] -= curExtraSpace;
+                      spreadDelta[i] += curExtraSpace;
+                      spreadleft -= curExtraSpace;
+                    }
+                  }
+                }
+                // work left over
+                var spreadRight = spreadFull - spreadleft;
+                // try shift right (2 of 3)
+                for (j = i + 1; j < spreadDelta.length; j += 1) {
+                  const curExtraSpace = (spreadDelta[j] - smallSpace);
+                  if (curExtraSpace > 0.0) {
+                    if (curExtraSpace > spreadRight) {
+                      spreadDelta[j] -= spreadRight;
+                      spreadDelta[i] += spreadRight;
+                      spreadRight = 0;
+                    } else {
+                      spreadDelta[j] -= curExtraSpace;
+                      spreadDelta[i] += curExtraSpace;
+                      spreadRight -= curExtraSpace;
+                    }
+                  }
+                }
+                // work left over (rare but there may be a left over....)
+                if (spreadRight > 0.0) {
+                  spreadleft = spreadRight;
+                  // try shift left (3 of 3)
+                  for (j = i - 1; j >= 0; j -= 1) {
+                    const curExtraSpace = (spreadDelta[j] - smallSpace);
+                    if (curExtraSpace > 0.0) {
+                      if (curExtraSpace > spreadleft) {
+                        spreadDelta[j] -= spreadleft;
+                        spreadDelta[i] += spreadleft;
+                        spreadleft = 0;
+                      } else {
+                        spreadDelta[j] -= curExtraSpace;
+                        spreadDelta[i] += curExtraSpace;
+                        spreadleft -= curExtraSpace;
+                      }
+                    }
+                  }
+                }
+                // Done 3/3
+              }
+            }
+            return spreadDelta;
+          }
 
           function updateColumns() {
-
             spreadPositions = [];
+            spreadDelta = [];
             for (i = 0; i < dataCircles.length; i++) {
-              const curPosLeft = (i + 0.5) * smallSpace;
-              const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
               var returnValue = 0.0;
-
               const curChemShift = dataCircles.map(function (d) { return d.chemShift; })
-              console.log("curChemShift  " + JSON.stringify(curChemShift))
-
               const curChrem = curChemShift[i];
               if (leftPosColumns[i] < x(curChrem)) {
                 if (rightPosColumns[i] > x(curChrem)) {
@@ -330,16 +388,26 @@
                 returnValue = leftPosColumns[i];
               }
               spreadPositions.push(returnValue);
+              if (i > 0) {
+                spreadDelta.push(returnValue - spreadPositions[i - 1]);
+              }
             }
             console.log("spreadPositions  " + JSON.stringify(spreadPositions))
+            console.log("spreadDelta  " + JSON.stringify(spreadDelta))
+            // See if need to seprated in the central region.
+            spreadDelta = spread(spreadDelta, smallSpace);
 
+
+            for (i = 0; i < spreadDelta.length; i++) {
+              spreadPositions[i + 1] = spreadPositions[i] + spreadDelta[i];
+            }
             theColumns1
               .transition().duration(1000)
               .attr("x1", function (d) {
                 return spreadPositions[d.MyIndex];
-               })
+              })
               .attr("x2", function (d) {
-                return x(d.chemShift);
+                   return x(d.chemShift);
               })
               .attr("stroke", function (d) {
                 if (
@@ -366,6 +434,12 @@
                 } else {
                   return colorHideLine;
                 }
+              })
+
+            theDots
+              .transition().duration(1000)
+              .attr("cx", function (d) {
+                return spreadPositions[d.MyIndex];
               })
           }
 
@@ -451,20 +525,7 @@
             .attr("cx", function (d) { return leftPosColumns[d.MyIndex]; })
             */
             // complex....
-            theDots
-              .transition().duration(1000)
-              .attr("cx", function (d) {
-                if (leftPosColumns[d.MyIndex] < x(d.chemShift)) {
-                  if (rightPosColumns[d.MyIndex] > x(d.chemShift)) {
-                    return x(d.chemShift);
-                  } else {
-                    return rightPosColumns[d.MyIndex];
-                  }
-                } else {
-                  return leftPosColumns[d.MyIndex];
-                }
-              })
-
+           
             updateColumns();
 
 
