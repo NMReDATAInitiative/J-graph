@@ -16,10 +16,9 @@
     var lineWidth = 1.5;
     var maxScaleJ = 22.0;
     var ratioOccupyJgraph = 1.0 / 6.0;
-    var preferedDistanceInPtBetweenColumns = 10; // In pt
 
     //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    if ( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       margin = { top: 10, right: 10, bottom: 30, left: 10 }; // For vertical
       bodyWidth = 800;
       bodyHeight = 1000; // Not good when horizontal....
@@ -30,6 +29,10 @@
     var width = bodyWidth - margin.left - margin.right;
     var height = bodyHeight - margin.top - margin.bottom;
     var heightJscale = height * ratioOccupyJgraph;
+
+var lineWidthCircle = lineWidth;
+var circleRadius = 5;
+    var preferedDistanceInPtBetweenColumns = 2.0 * (circleRadius) + lineWidthCircle; // In pt
 
 
     // append the svg object to the body of the page
@@ -54,11 +57,13 @@
           { chemShift: 5.60, value: 2.422 , MyIndex: 7},
           { chemShift: 4, value: 2.422 , MyIndex: 8},
           { chemShift: 1, value: 2.422 , MyIndex: 9},
-          { chemShift: -0.1, value: 2.422 , MyIndex: 10},
+          { chemShift: 0.13, value: 2.422 , MyIndex: 10},
+          { chemShift: 0.12, value: 8.422 , MyIndex: 11}, 
+          { chemShift: 0.11, value: 17.422 , MyIndex: 12},
           ]
 
       // Make list of positions accoding to size of jGraphData
-      const numberItem = 11;  // this will be size of jGraphData
+      const numberItem = dataCircles.length;  // this will be size of jGraphData
       var smallSpace = width / (numberItem + 1); // five items, six spaces
       if (smallSpace > preferedDistanceInPtBetweenColumns) {
         smallSpace = preferedDistanceInPtBetweenColumns;
@@ -66,17 +71,16 @@
       console.log("=====================")
 
       var leftPosColumns = [];
+      var rightPosColumns = [];
       for (i = 0; i < numberItem; i++) {
-        const curPos = (0.5 + i) * smallSpace;
-        leftPosColumns.push(curPos);
+        const curPosLeft = (i + 0.5) * smallSpace;
+        const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
+        leftPosColumns.push(curPosLeft);
+        rightPosColumns.push(curPosRight);
       } 
-      console.log(JSON.stringify(leftPosColumns))
-
-
-
-
-
-
+      
+      console.log("Left pos :" + JSON.stringify(leftPosColumns)) 
+      console.log("Right pos :" + JSON.stringify(rightPosColumns))
 
       var color = d3.scaleOrdinal()
         .domain(["sefsdosa", "versifsdcolor", "vigdfginica", "asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
@@ -205,10 +209,10 @@
             .attr("class", "circle")
             .attr("cx", function (d) { return x(d.chemShift); })
             .attr("cy", function (d) { return yJs(d.value); })
-            .attr("r", "7")
+            .attr("r", circleRadius)
             .style("fill", "#69b3a2")
             .attr("stroke", "red")
-            .style("stroke-width", lineWidth)
+            .style("stroke-width", lineWidthCircle)
 
           var dataTicksLines = [
             { Jval: 0 },
@@ -347,6 +351,7 @@
                 .x(function (d) { return x(d.chemShift) })
                 .y(function (d) { return y(d.value) })
               )
+              /*
 // old
             theDots
               .transition().duration(1000)
@@ -355,15 +360,21 @@
               theDots
               .transition().duration(1000)
               .attr("cx", function (d) { return leftPosColumns[d.MyIndex]; })
+              */
 // complex....
               theDots
               .transition().duration(1000)
-              .attr("cx", function (d) { 
-                if (leftPosColumns[d.MyIndex] > x(d.chemShift))
-                return leftPosColumns[d.MyIndex]; 
-                else
-                return x(d.chemShift); 
-              })
+                .attr("cx", function (d) {
+                  if (leftPosColumns[d.MyIndex] < x(d.chemShift)) {
+                    if (rightPosColumns[d.MyIndex] > x(d.chemShift)) {
+                      return x(d.chemShift);
+                    } else {
+                      return rightPosColumns[d.MyIndex];
+                    }
+                  } else {
+                    return leftPosColumns[d.MyIndex];
+                  }
+                })
 
 
             //.attr("cx", x(5.555))
