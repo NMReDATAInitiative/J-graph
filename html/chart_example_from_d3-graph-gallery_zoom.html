@@ -17,8 +17,6 @@
     var maxScaleJ = 22.0;
     var ratioOccupyJgraph = 1.0 / 6.0;
     var circleRadius = 5;
-    var circleRadiusSmall = 2;
-
     //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       circleRadius = 15;
@@ -28,13 +26,14 @@
       lineWidth = 5;
       ratioOccupyJgraph = 1.0 / 2.0;
     }
+    var circleRadiusSmall = circleRadius / 2;
 
     var width = bodyWidth - margin.left - margin.right;
     var height = bodyHeight - margin.top - margin.bottom;
     var heightJscale = height * ratioOccupyJgraph;
 
     var lineWidthCircle = lineWidth;
-    var lineWidthCircleSmall = lineWidth;
+    var lineWidthCircleSmall = lineWidth / 2;
     
     var preferedDistanceInPtBetweenColumns = 2.0 * (circleRadius) + lineWidthCircle; // In pt
     var bottomJGraphYposition = heightJscale;
@@ -449,7 +448,7 @@
             .attr("cx", function (d) { return x(d.chemShift); })
             .attr("cy", function (d) { return yJs(d.value); })
             .attr("r", circleRadius)
-            .style("fill", "#69b3a2")
+            .style("fill", "white")
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircle)
 
@@ -462,7 +461,7 @@
             .attr("cx", function (d) { return x(d.chemShift); })
             .attr("cy", function (d) { return yJs(d.value); })
             .attr("r", circleRadiusSmall)
-            .style("fill", "black")
+            .style("fill", "gray")
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircleSmall)
 
