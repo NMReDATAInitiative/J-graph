@@ -391,7 +391,7 @@
 
 
           // Lines
-          function path(d) {
+          function pathFun(d) {
 
             // var pathOx = listOfChemicalShifts.map(function(p) { return x(d[p]); });
             console.log(JSON.stringify(d))
@@ -594,13 +594,13 @@
           var theLinesW = svg
             .selectAll("myPath222")
             .attr("class", "lineW")
-          //  .data(jGraphData)
-            .data(theAssignedCouplings)
+          .data(jGraphData)
+          //  .data(theAssignedCouplings)
             .enter()
             .append("path")
             .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
             //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
-            .attr("d", path)
+            .attr("d", pathFun)
             .style("stroke-width", lineWidth)
             /*.attr("d", d3.line()
               //.x(pathx)
@@ -698,7 +698,7 @@
             theLinesW
               //.select('.lineW')
               .transition().duration(1000)
-              .attr("d", path)
+              .attr("d", pathFun)
             /*
                         console.log("x2Line grasss :" + JSON.stringify(
                           (dataCircles.map(function (d) {
