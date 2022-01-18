@@ -17,6 +17,7 @@
     var maxScaleJ = 22.0;
     var ratioOccupyJgraph = 1.0 / 6.0;
     var circleRadius = 5;
+    var circleRadiusSmall = 2;
 
     //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -33,94 +34,144 @@
     var heightJscale = height * ratioOccupyJgraph;
 
     var lineWidthCircle = lineWidth;
+    var lineWidthCircleSmall = lineWidth;
+    
     var preferedDistanceInPtBetweenColumns = 2.0 * (circleRadius) + lineWidthCircle; // In pt
     var bottomJGraphYposition = heightJscale;
     var pointingLineColum = bottomJGraphYposition + 20;
 
-    // append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-    d3.csv("./andro.csv", function (jGraphData) {
-      // get chemical shifts from lines... should come from other source !
-      var arrayChemicalShiftsFromLines = [];
-      {
-        var curChemShiftToReplace = [];
-        var indexArray = [];
-        curChemShiftToReplace = jGraphData.map(function (d) { return d.chemShift1; })
-        indexArray = jGraphData.map(function (d) { return d.indexColumn1; })
-        //index 1
-        for (i = 0; i < curChemShiftToReplace.length; i++) {
-          const index = indexArray[i];
-          arrayChemicalShiftsFromLines[index - 1] = curChemShiftToReplace[i];
+      // append the svg object to the body of the page
+      var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+      d3.csv("./andro.csv", function (jGraphData) {
+        // get chemical shifts from lines... should come from other source !
+        var arrayColumns = [];
+        var unassignedCouplings = []; // marked with label "noAssignement" in file
+        var theAssignedCouplings = []; 
+        {
+          var curChemShiftToReplace = [];
+          var indexArray = [];
+          curChemShiftToReplace = jGraphData.map(function (d) { return d.chemShift1; })
+          indexArray = jGraphData.map(function (d) { return d.indexColumn1; })
+          label = jGraphData.map(function (d) { return d.Label; })
+          Jvalue = jGraphData.map(function (d) { return d.Jvalue; })
+          //index 1
+          for (i = 0; i < curChemShiftToReplace.length; i++) {
+            const index = indexArray[i];
+            arrayColumns[index - 1] = curChemShiftToReplace[i];
+            if (label[i] == "noAssignement") {
+              unassignedCouplings.push({Jvalue: +Jvalue[i], colNumber: (index - 1) })
+            } else {
+              theAssignedCouplings.push({Jvalue: +Jvalue[i], colNumber: (index - 1) })
+            }
+          }
+          // index 2
+          curChemShiftToReplace = jGraphData.map(function (d) { return d.chemShift2; })
+          indexArray = jGraphData.map(function (d) { return d.indexColumn2; })
+          for (i = 0; i < indexArray.length; i++) {
+            const index = indexArray[i];
+            arrayColumns[index - 1] = curChemShiftToReplace[i];
+            if (label[i] == "noAssignement") {
+              unassignedCouplings.push({Jvalue: +Jvalue[i], colNumber: (index - 1) })
+            } else {
+              theAssignedCouplings.push({Jvalue: +Jvalue[i], colNumber: (index - 1) })
+            }
+          }
         }
-        // index 2
-        curChemShiftToReplace = jGraphData.map(function (d) { return d.chemShift2; })
-        indexArray = jGraphData.map(function (d) { return d.indexColumn2; })
-        for (i = 0; i < indexArray.length; i++) {
-          const index = indexArray[i];
-          arrayChemicalShiftsFromLines[index - 1] = curChemShiftToReplace[i];
+        console.log("unassignedCouplings :" + JSON.stringify(unassignedCouplings))
+        console.log("arrayColumns1 " + arrayColumns);
+
+        // sort by decreasing values
+        var len = arrayColumns.length;
+        var indices = new Array(len);
+        for (var i = 0; i < len; ++i) indices[i] = i;
+        indices.sort(function (a, b) { return arrayColumns[a] < arrayColumns[b] ? 1 : arrayColumns[a] > arrayColumns[b] ? -1 : 0; });
+      //  console.log("arrayColumns indices " + indices);
+       // console.log("arrayColumns2 " + arrayColumns);
+        //arrayColumns.sort().reverse();
+        var indices2 = new Array(len);
+        for (var i = 0; i < len; ++i) indices2[indices[i]] = i;
+        var indices3 = new Array(len); for (var i = 0; i < len; ++i) indices3[i] = indices[i];
+      //  console.log("arrayColumns indices2 " + indices2);
+      //  console.log("arrayColumns indices3 " + indices3);
+
+        // renumber index jGraphData(from 0 instread of 1 and decreasing chemical shift)
+        for (var i = 0; i < jGraphData.length; ++i) {
+                //  console.log("arrayColumnsTTTT  " + i + " " + jGraphData[i].indexColumn1);
+          jGraphData[i].indexColumn1 = indices2[jGraphData[i].indexColumn1 - 1];
+          jGraphData[i].indexColumn2 = indices2[jGraphData[i].indexColumn2 - 1];
         }
-      }
-      // sort by decreasing values
-      arrayChemicalShiftsFromLines.sort();
-      arrayChemicalShiftsFromLines.reverse();
 
-      var dataCircles = new Array(arrayChemicalShiftsFromLines.length);
-
-      for (i = 0; i < arrayChemicalShiftsFromLines.length; i++) {
-        dataCircles[i] = {
-          'chemShift': arrayChemicalShiftsFromLines[i],
-          'value': 0.0,
-          'MyIndex': i,
-        };
-      }
-
-
-      // Make list of positions accoding to size of jGraphData
-      const numberItem = dataCircles.length;  // this will be size of jGraphData
-      var smallSpace = width / (numberItem + 1); // five items, six spaces
-      if (smallSpace > preferedDistanceInPtBetweenColumns) {
-        smallSpace = preferedDistanceInPtBetweenColumns;
-      }
-
-
-
-      console.log("=====================")
-
-      var leftPosColumns = [];
-      var rightPosColumns = [];
-      for (i = 0; i < numberItem; i++) {
-        const curPosLeft = (i + 0.5) * smallSpace;
-        const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
-        leftPosColumns.push(curPosLeft);
-        rightPosColumns.push(curPosRight);
-      }
-
-      console.log("Left pos :" + JSON.stringify(leftPosColumns))
-      console.log("Right pos :" + JSON.stringify(rightPosColumns))
-
-      var color = d3.scaleOrdinal()
-        .domain(["sefsdosa", "versifsdcolor", "vigdfginica", "asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
-        // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
-        .range(["orange", "green", "blue", "red"]) // fourth color
-      //listOfChemicalShifts = ["chemShift1","chemShift2"]
-      // listOfPosition = ["JvalueShif","JvalueShifted","y3","y4"]
-      /*
-        for (var key in dataLines[0]) {
-             listOfChemicalShifts.push(key)
+        var dataColumns = [];
+        for (i = 0; i < arrayColumns.length; i++) {
+          dataColumns.push({
+            'chemShift': arrayColumns[indices[i]],
+            'MyIndex': i,
+          });
         }
-        for (var key in dataLines[0]) {
-             listOfChemicalShifts.push(key)
+
+        var dataUnassignedCoupCircles = [];
+        for (i = 0; i < unassignedCouplings.length; i++) {
+          const inInd = indices2[unassignedCouplings[i].colNumber];
+          dataUnassignedCoupCircles.push({
+           'chemShift': arrayColumns[inInd],
+            'value': unassignedCouplings[i].Jvalue,
+            'MyIndex': inInd,
+          });
         }
-        listOfChemicalShifts.pop()
-      */
-      // Highlight the specie that is hovered
-      var highlight = function (d) {
+
+        var dataAssignedCoupCircles = [];
+        for (i = 0; i < theAssignedCouplings.length; i++) {
+          const inInd = indices2[theAssignedCouplings[i].colNumber];
+          dataAssignedCoupCircles.push({
+           'chemShift': arrayColumns[inInd],
+            'value': theAssignedCouplings[i].Jvalue,
+            'MyIndex': inInd,
+          });
+        }
+
+
+        // Make list of positions accoding to size of jGraphData
+        const numberItem = arrayColumns.length;  //
+        var smallSpace = width / (numberItem + 1); // five items, six spaces
+        if (smallSpace > preferedDistanceInPtBetweenColumns) {
+          smallSpace = preferedDistanceInPtBetweenColumns;
+        }
+
+        var leftPosColumns = [];
+        var rightPosColumns = [];
+        for (i = 0; i < numberItem; i++) {
+          const curPosLeft = (i + 0.5) * smallSpace;
+          const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
+          leftPosColumns.push(curPosLeft);
+          rightPosColumns.push(curPosRight);
+        }
+
+        console.log("Left pos :" + JSON.stringify(leftPosColumns))
+        console.log("Right pos :" + JSON.stringify(rightPosColumns))
+
+        var color = d3.scaleOrdinal()
+          .domain(["sefsdosa", "versifsdcolor", "vigdfginica", "asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
+          // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
+          .range(["orange", "green", "blue", "red", "#440154ff", "#21908dff", "#fde725ff", "orange", "cyan", "magenta", "black", "gray"]) // fourth color
+        //listOfChemicalShifts = ["chemShift1","chemShift2"]
+        // listOfPosition = ["JvalueShif","JvalueShifted","y3","y4"]
+        /*
+               for (var key in dataLines[0]) {
+               listOfChemicalShifts.push(key)
+          }
+          for (var key in dataLines[0]) {
+               listOfChemicalShifts.push(key)
+          }
+          listOfChemicalShifts.pop()
+        */
+        // Highlight the specie that is hovered
+        var highlight = function (d) {
 
         selected_specie = d.Label
         // first every group turns grey
@@ -242,25 +293,13 @@
             .attr("stroke", "#CCCCCC")
             .style("stroke-width", lineWidth)
 
-          // Circles
-          var theDots = svg.selectAll("dots")
-            .data(dataCircles)
-            .enter()
-            .append("circle")
-            .attr("class", "circle")
-            .attr("cx", function (d) { return x(d.chemShift); })
-            .attr("cy", function (d) { return yJs(d.value); })
-            .attr("r", circleRadius)
-            .style("fill", "#69b3a2")
-            .attr("stroke", "red")
-            .style("stroke-width", lineWidthCircle)
-
+         
           // Columns
           const colorShowLine = "#CCCCCC";
           const colorHideLine = "#EEEEEE00";
           // oblique
           var theColumns1 = svg.selectAll("columnns")
-            .data(dataCircles)
+            .data(dataColumns)
             .enter()
             .append("line")
             .attr("class", "ColunnSegment1")
@@ -272,7 +311,7 @@
             .style("stroke-width", lineWidthCircle)
           // streight down
           var theColumns2 = svg.selectAll("ColunnSegment2")
-            .data(dataCircles)
+            .data(dataColumns)
             .enter()
             .append("line")
             .attr("class", "Colunn")
@@ -282,6 +321,7 @@
             .attr("y2", function (d) { return height; })
             .attr("stroke", colorHideLine) // just sketched... update wil fix colors
             .style("stroke-width", lineWidthCircle)
+
 
           // Lines
           function path(d) {
@@ -293,8 +333,8 @@
             //const horizontalShiftX = 0.01;
             const horizontalShiftX = 2;
             var usedHorizontalShiftX = eval(horizontalShiftX);
-            const cs1 = spreadPositionsZZ[d.indexColumn1 - 1];
-            const cs2 = spreadPositionsZZ[d.indexColumn2 - 1];
+            const cs1 = spreadPositionsZZ[d.indexColumn1];
+            const cs2 = spreadPositionsZZ[d.indexColumn2];
             if (cs1 > cs2) {
               var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
             }
@@ -335,7 +375,7 @@
           }
           */
 
-          function spread(spreadDelta, smallSpace) {
+          function getSpread(spreadDelta, smallSpace) {
             // determine how to spead objects to avoid contacts
             // there muss be anough space for this function to work
             for (i = 0; i < spreadDelta.length; i++) {
@@ -400,16 +440,42 @@
             return spreadDelta;
           }
 
+ // Circles
+          var theDots = svg.selectAll("dots")
+            .data(dataUnassignedCoupCircles)
+            .enter()
+            .append("circle")
+            .attr("class", "circle")
+            .attr("cx", function (d) { return x(d.chemShift); })
+            .attr("cy", function (d) { return yJs(d.value); })
+            .attr("r", circleRadius)
+            .style("fill", "#69b3a2")
+            .attr("stroke", "black")
+            .style("stroke-width", lineWidthCircle)
+
+           // Dots
+          var theDots2 = svg.selectAll("dots")
+            .data(dataAssignedCoupCircles)
+            .enter()
+            .append("circle")
+            .attr("class", "circle")
+            .attr("cx", function (d) { return x(d.chemShift); })
+            .attr("cy", function (d) { return yJs(d.value); })
+            .attr("r", circleRadiusSmall)
+            .style("fill", "black")
+            .attr("stroke", "black")
+            .style("stroke-width", lineWidthCircleSmall)
+
           function updateColumns() {
             spreadPositions = [];
             spreadDelta = [];
-            for (i = 0; i < dataCircles.length; i++) {
+            for (i = 0; i < dataColumns.length; i++) {
               var returnValue = 0.0;
-              const curChemShift = dataCircles.map(function (d) { return d.chemShift; })
-              const curChrem = curChemShift[i];
-              if (leftPosColumns[i] < x(curChrem)) {
-                if (rightPosColumns[i] > x(curChrem)) {
-                  returnValue = x(curChrem);
+              const curChemShift = dataColumns.map(function (d) { return d.chemShift; })
+              const curChem = curChemShift[i];
+              if (leftPosColumns[i] < x(curChem)) {
+                if (rightPosColumns[i] > x(curChem)) {
+                  returnValue = x(curChem);
                 } else {
                   returnValue = rightPosColumns[i];
                 }
@@ -424,12 +490,13 @@
             console.log("spreadPositions  " + JSON.stringify(spreadPositions))
             console.log("spreadDelta  " + JSON.stringify(spreadDelta))
             // See if need to seprated in the central region.
-            spreadDelta = spread(spreadDelta, smallSpace);
-
+            spreadDelta = getSpread(spreadDelta, smallSpace);
+            console.log("spreadDeltaspreadDelta  " + JSON.stringify(spreadDelta))
 
             for (i = 0; i < spreadDelta.length; i++) {
               spreadPositions[i + 1] = spreadPositions[i] + spreadDelta[i];
             }
+
             theColumns1
               .transition().duration(1000)
               .attr("x1", function (d) {
@@ -447,6 +514,7 @@
                   return colorHideLine;
                 }
               })
+
             theColumns2
               .transition().duration(1000)
               .attr("x1", function (d) {
@@ -466,6 +534,11 @@
               })
 
             theDots
+              .transition().duration(1000)
+              .attr("cx", function (d) {
+                return spreadPositions[d.MyIndex];
+              })
+            theDots2
               .transition().duration(1000)
               .attr("cx", function (d) {
                 return spreadPositions[d.MyIndex];
