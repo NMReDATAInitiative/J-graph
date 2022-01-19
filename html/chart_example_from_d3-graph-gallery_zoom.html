@@ -115,12 +115,12 @@
               Jvalue: +Jvalue[i],
               colNumber1: (index1 - 1),
               colNumber2: (index2 - 1),
-              })
+            })
             unassignedCouplings.push({
               Jvalue: +Jvalue[i],
               colNumber1: (index1 - 1),
               colNumber2: (index2 - 1),
-               })
+            })
           } else {
             theAssignedCouplings.push({
               Jvalue: +Jvalue[i],
@@ -208,9 +208,9 @@
         }
       }
 
-for (i = 0; i < theAssignedCouplings.length; i++) {
-        theAssignedCouplings[i].indexColumn1 =  indices2[theAssignedCouplings[i].indexColumn1 - 1];
-        theAssignedCouplings[i].indexColumn2 =  indices2[theAssignedCouplings[i].indexColumn2 - 1];
+      for (i = 0; i < theAssignedCouplings.length; i++) {
+        theAssignedCouplings[i].indexColumn1 = indices2[theAssignedCouplings[i].indexColumn1 - 1];
+        theAssignedCouplings[i].indexColumn2 = indices2[theAssignedCouplings[i].indexColumn2 - 1];
       }
 
       // Make list of positions accoding to size of jGraphData
@@ -469,11 +469,9 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
           // Lines
           function pathFun(d) {
 
-            // var pathOx = listOfChemicalShifts.map(function(p) { return x(d[p]); });
-            console.log("BEFEG" + JSON.stringify(d))
+          //  console.log("BEFEG" + JSON.stringify(d))
             const y1 = yJs(d.Jvalue);
             const y2 = yJs(d.JvalueShifted);
-            //const horizontalShiftX = 0.01;
             const horizontalShiftX = 2;
             var usedHorizontalShiftX = eval(horizontalShiftX);
             const cs1 = spreadPositionsZZ[d.indexColumn1];
@@ -485,38 +483,12 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
             const x2 = ((cs2));
             const x1p = ((cs1) + usedHorizontalShiftX);
             const x2p = ((cs2) - usedHorizontalShiftX);
-            /*
-            if (d.chemShift1 > d.chemShift2) {
-               var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
-             } const x1 = x(eval(d.chemShift1));
-             const x2 = x(eval(d.chemShift2));
-             const x1p = x(eval(d.chemShift1) + usedHorizontalShiftX);
-             const x2p = x(eval(d.chemShift2) - usedHorizontalShiftX);
- */
+           
             const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
             var Gen = d3.line();
-            /*Gen.attr("d", d3.line()
-                    .x(function(d) { return x(pathOx) })
-               .y(function(d) { return yJs(pathOy) })
-             )*/
+           
             return Gen(combine);
           }
-          /*
-          function pathx(d) {
-            console.log("pathx")
-            console.log(JSON.stringify(d))
-             console.log("pathxo")
-            console.log(JSON.stringify(listOfChemicalShifts.map(function(p) { return x(p); })))
-               return listOfChemicalShifts.map(function(p) { return x(p); });
-          }
-          function pathy(d) {
-            console.log("pathy")
-            console.log(JSON.stringify(d))
-            console.log("pathyo")
-            console.log(JSON.stringify(listOfChemicalShifts.map(function(p) { return yJs(d[p]); })))
-               return listOfChemicalShifts.map(function(p) { return yJs(d[p]); });
-          }
-          */
 
           function getSpread(spreadDelta, smallSpace) {
             // determine how to spead objects to avoid contacts
@@ -673,14 +645,11 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
           var theLinesW = svg
             .selectAll("myPath222")
             .attr("class", "lineW")
-           //.data(jGraphData)
+            //.data(jGraphData)
             .data(theAssignedCouplings)
             .enter()
             .append("path")
-            .attr("class", function (d) {
-                          console.log("theLinesWtheLinesW  " + JSON.stringify(d))
-
-               return "line " + d.Label }) // 2 class for each line: 'line' and the group name
+            .attr("class", function (d) {return "line " + d.Label}) // 2 class for each line: 'line' and the group name
             //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
             .attr("d", pathFun)
             .style("stroke-width", lineWidth)
@@ -707,7 +676,6 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
             .attr("cx", function (d) { return x(d.chemShift); })
             .attr("cy", function (d) { return yJs(d.value); })
             .attr("r", circleRadius)
-            //.style("fill", "white")
             .style("fill", function (d) { return getJgraphColor(d.value, darkMode); })
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircle)
@@ -742,14 +710,11 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
 
           updateColumns333(spreadPositionsZZ, 0);
 
-
           // Add the brushing
           lineSpectrum
             .append("g")
             .attr("class", "brush")
             .call(brush);
-
-
 
           // A function that set idleTimeOut to null
           var idleTimeout
@@ -779,7 +744,6 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
 
             // Update axis and line position
             xAxis.transition().duration(1000).call(d3.axisBottom(x))
-            //xAxis2.transition().duration(1000).call(d3.axisBottom(x))
 
             lineSpectrum
               .select('.lineG')
@@ -796,37 +760,7 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
               //.select('.lineW')
               .transition().duration(1000)
               .attr("d", pathFun)
-            /*
-                        console.log("x2Line grasss :" + JSON.stringify(
-                          (dataCircles.map(function (d) {
-                            //console.log("ch " + d.MyIndex);
-                            //  console.log("x " + x(d.MyIndex));
-                            return d.index;
-                          }))
-                        ))
-            */
 
-            //.attr("cx", x(5.555))
-            /*   console.log(JSON.stringify(
-                 (theDots.attr("cx"))
-               ))
-   
-   */
-
-            /*       console.log("chem :" + JSON.stringify(
-                     (dataCircles.map(function (d) {
-                       // console.log("ch" + d.chemShift);
-                       return d.chemShift;
-                     }))
-                   ))
-                   console.log("index :" + JSON.stringify(
-                     (dataCircles.map(function (d) {
-                       //console.log("ch " + d.MyIndex);
-                       //  console.log("x " + x(d.MyIndex));
-                       return d.index;
-                     }))
-                   ))
-       */
           }
           // If user double click, reinitialize the chart
           svg.on("dblclick", function () {
@@ -835,7 +769,6 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
               d3.min(chemShift, function (d) { return +d.chemShift; })
             ])
             xAxis.transition().call(d3.axisBottom(x))
-
             lineSpectrum
               .select('.line')
               .transition()
@@ -844,8 +777,6 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
                 .y(function (d) { return y(d.value) })
               )
           });
-
-
         })
     })
 
@@ -857,7 +788,7 @@ for (i = 0; i < theAssignedCouplings.length; i++) {
   <p>- Highligh possible partners frame : green when only one possibility.... </p>
   <p>(eventually allow to make pair....)</p>
   <h4> Add spin label on top of column</h4>
-    <h4> Change logic of highlight on colored lines (show J):</h4>
+  <h4> Change logic of highlight on colored lines (show J):</h4>
 
   <p>- ... </p>
 
