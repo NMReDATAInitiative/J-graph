@@ -681,6 +681,21 @@
             .style("fill", "gray")
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircleSmall)
+           
+            var theTextDots2 = svg.selectAll("textt")
+            .data(dataAssignedCoupCircles)
+            .enter()
+            .append("text")
+            .attr("class", "circleS")
+            .attr("x", function (d) { return x(d.chemShift); })
+            .attr("y", function (d) { return yJs(d.value); })
+           // .style("fill", "gray")
+          //  .attr("stroke", "black")
+         // .style("stroke-width", lineWidthCircleSmall)
+          .text("stroke-width")
+          .attr('dy', '.35em')
+  .style("font-size",8)
+  .attr("transform", function(d) {return "rotate("+45+","+10+",00)";});
 
           updateColumns333(spreadPositionsZZ, 0);
 
