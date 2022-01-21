@@ -50,7 +50,22 @@
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
 		"fstream": "cpp",
-		"cstring": "cpp"
+		"cstring": "cpp",
+		"__bit_reference": "cpp",
+		"__config": "cpp",
+		"__debug": "cpp",
+		"__functional_base": "cpp",
+		"__locale": "cpp",
+		"__mutex_base": "cpp",
+		"__split_buffer": "cpp",
+		"__tuple": "cpp",
+		"bitset": "cpp",
+		"chrono": "cpp",
+		"ctime": "cpp",
+		"ios": "cpp",
+		"locale": "cpp",
+		"mutex": "cpp",
+		"ratio": "cpp"
 	},
 	"C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
 	"cSpell.words": [

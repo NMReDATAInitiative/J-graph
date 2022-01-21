@@ -105,22 +105,24 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 			} else {
 				std::cerr << "For (" << first << "," << second << ") Not shifted to " << currentShiftedJ << " (for " <<  currentJ << " Hz)" << std::endl;
 			}
-			//  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" 
+			//  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label"
 
-			std::cout 
+			std::cout
 				<< this->fColumns[first].chemicalShift << ","
 				<< this->fColumns[second].chemicalShift << ","
 				<< first << "," << second << ","
-				<< currentJ << "," <<  currentShiftedJ << ","
-				//<< "J_" << first << "_" << second
-				
-				//<< "notLabel_" << first
-				<< "noAssignement" 
-				<< std::endl;
-
-			} //else{
-				//	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
-				//}
+				<< currentJ << "," << currentShiftedJ << ",";
+			if ((std::rand()/((RAND_MAX + 1u)/30)))	{
+				std::cout
+				<< "J_" << first << "_" << second << "notLabel_" << first;
+			} else {
+			std::cout
+				<< "noAssignement";
+			}
+			std::cout << std::endl;
+		} // else{
+		  //	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
+		  // }
 		}
 	}
 
