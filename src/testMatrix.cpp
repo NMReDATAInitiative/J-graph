@@ -375,7 +375,8 @@ Eigen::SelfAdjointEigenSolver<Eigen::MatrixXcd> eigensolver;
 
  cout << "dot22   " << endl << tts2(2) - tts2(1)  << endl << endl;//-1  0  1  0 -1  0  1  0
  cout << "dot22   " << endl << tts2(4+2) - tts2(4+1) << endl << endl;//-1  0  1  0 -1  0  1  0
- cout << "dot22   " << endl << tts2(3) - tts2(0) + tts2(4+3) - tts2(4+0) << endl << endl;// 0 -1  0  1  0 -1  0  1
+ cout << "dot22   " << endl << tts2(3) - tts2(0)  << endl << endl;// 0 -1  0  1  0 -1  0  1
+ cout << "dot22   " << endl << tts2(4+3) - tts2(4+0) << endl << endl;// 0 -1  0  1  0 -1  0  1
 
  cout << "dot22   " << endl << tts2(1) - tts2(0) + tts2(4+1) - tts2(4+0) << endl << endl;//-1  1  0  0
  cout << "dot22   " << endl << tts2(3) - tts2(2) + tts2(4+3) - tts2(4+2) << endl << endl;// 0  0 -1  1
