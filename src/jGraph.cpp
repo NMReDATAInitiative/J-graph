@@ -6,6 +6,8 @@
 /*
 /usr/bin/clang++ -std=c++17 -stdlib=libc++ -fdiagnostics-color=always -g /Users/djeanner/git/J-graph/src/*.cpp -o /Users/djeanner/git/J-graph/build/main.out
 build/main.out > html/andro.csv
+
+ ./main.out > ../html/androNew.csv; cat ../html/androNew.csv;
 */
 
 JGraph::JGraph() {
@@ -111,7 +113,9 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 				<< first << "," << second << ","
 				<< currentJ << "," <<  currentShiftedJ << ","
 				//<< "J_" << first << "_" << second
-				<< "notLabel_" << first
+				
+				//<< "notLabel_" << first
+				<< "noAssignement" 
 				<< std::endl;
 
 			} //else{
@@ -184,6 +188,14 @@ void JGraph::addColumn(double chemicalShift, const vector < double > &aVectorJva
 		columnMember.hasPartnerIndex = false;
 		column.columnMembers.push_back(columnMember);
 	}
+	column.sortJ();
+	fColumns.push_back(column);
+}
+void JGraph::addColumn(string aString, double chemicalShift) {
+	Column column;
+	column.chemicalShift = chemicalShift;
+	column.shiftedChemicalShift = chemicalShift;
+	column.label = aString;
 	column.sortJ();
 	fColumns.push_back(column);
 }
