@@ -307,7 +307,7 @@ MatrixXcd E2SxE2 =  newKroneker(I2, newKroneker(Ix, I2));
 MatrixXcd E2E2Mx =  newKroneker(I2, newKroneker(I2, Ix));
 MatrixXcd IzSzE2 =  newKroneker(IzSz, I2);
 MatrixXcd E2IzSz =  newKroneker(I2, IzSz);
-MatrixXcd IzE2Mz =  newKroneker(I2, newKroneker(I2, Iz));
+MatrixXcd IzE2Mz =  newKroneker(Iz, newKroneker(I2, Iz));
 
 MatrixXcd IxE2Mx =  newKroneker(Ix, newKroneker(I2, Ix));
 MatrixXcd IyE2My =  newKroneker(Iy, newKroneker(I2, Iy));
