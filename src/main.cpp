@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
   */
 
-            jGraph.addColumn("H20", 5.75);
+            jGraph.addColumn("H4", 5.75);
             jGraph.addColumn("11ax", 1.45);
             jGraph.addColumn("11eq", 1.69);
             jGraph.addColumn("12ax", 1.27);
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 
             jGraph.sortColumnByChemicalShift(); // don't sortColumn after addAssignedCoupling because it will mess the indices
 
-            jGraph.addAssignedCoupling("H20", "6ax", 1.76);
+            jGraph.addAssignedCoupling("H4", "6ax", 1.76);
             jGraph.addAssignedCoupling("H9", "11ax", 12.51);
             jGraph.addAssignedCoupling("H9", "7ax", 4.19);
             jGraph.addAssignedCoupling("H9", "H8", 10.55);
