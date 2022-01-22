@@ -51,8 +51,9 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 		size_t indexOther2 = 0;
 		
 		if (hasJ(first, second, currentJ, currentShiftedJ)) {
-			currentJ = abs(currentJ);
-			currentShiftedJ = abs(currentShiftedJ);
+			const double currentJwithTrueSign = currentJ;
+			 currentJ = abs(currentJ);
+			 currentShiftedJ = abs(currentShiftedJ);
 		//	while (abs(currentShiftedJlast - currentShiftedJ) > 0.01) {
 		//		currentShiftedJlast = currentShiftedJ	;
 		//	}
@@ -85,6 +86,8 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 					double currentShiftedJ2 = 0.0;
 					double currentJ2 = 0.0;
 					if (hasJ(inside1, inside2, currentJ2, currentShiftedJ2)) {
+						currentJ2 = abs(currentJ2);
+						currentShiftedJ2 = abs(currentShiftedJ2);
 						if (currentJ < (currentShiftedJ2 + fDeltaLineAbove)) {
 							rangesToAvoid.push_back(make_pair(currentShiftedJ2 + fDeltaLineAbove, currentShiftedJ2 - fDeltaLineBelow));
 			std::cerr << "2)=  For (" << first << "," << second << ") incremented because " << inside1 << "&" << inside2 << " " << currentShiftedJ2 << " for " <<  currentJ2 << " Hz" << std::endl;
@@ -113,7 +116,7 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 				<< this->fColumns[first].chemicalShift << ","
 				<< this->fColumns[second].chemicalShift << ","
 				<< first << "," << second << ","
-				<< currentJ << "," << currentShiftedJ << ",";
+				<< currentJwithTrueSign << "," << currentShiftedJ << ",";
 			if ((std::rand()/((RAND_MAX + 1u)/30)))	{
 				std::cout
 				<< "J_" << this->fColumns[first].label << "_" << this->fColumns[second].label << ",";
