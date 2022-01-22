@@ -114,11 +114,14 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 				<< currentJ << "," << currentShiftedJ << ",";
 			if ((std::rand()/((RAND_MAX + 1u)/30)))	{
 				std::cout
-				<< "J_" << first << "_" << second << "notLabel_" << first;
+				<< "J_" << first << "_" << second << ",";
 			} else {
 			std::cout
-				<< "noAssignement";
+				<< "noAssignement" << ",";
 			}
+			// Add labels of columns
+			std::cout
+				<< first << "," << second << "";
 			std::cout << std::endl;
 		} // else{
 		  //	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;

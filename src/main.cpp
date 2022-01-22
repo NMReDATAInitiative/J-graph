@@ -139,7 +139,7 @@ jGraph.addAssignedCoupling("11eq", "12eq", 2.74);
       jGraph.addAssignedCoupling("c", "e", 7.08);
       jGraph.addAssignedCoupling("d", "e", 7.09);
       */
-      cout << "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label" << endl;
+      cout << "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2" << endl;
       jGraph.updateShiftedPositionsCouplings();
     } else { // read file...
 
