@@ -38,7 +38,7 @@ public:
 	vector <Column> fColumns;
 	const double fDeltaDotAbove = 0.8;
 	const double fDeltaDotBelow = fDeltaDotAbove;
-	const double fDeltaLineAbove = 0.8;
+	const double fDeltaLineAbove = 0.5;
 	const double fDeltaLineBelow = fDeltaLineAbove;
 };
 

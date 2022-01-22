@@ -116,7 +116,7 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 				<< this->fColumns[second].chemicalShift << ","
 				<< first << "," << second << ","
 				<< currentJwithTrueSign << "," << currentShiftedJ << ",";
-			if ((std::rand()/((RAND_MAX + 1u)/30)))	{
+			if ((std::rand()/((RAND_MAX + 1u)/20)))	{
 				std::cout
 				<< "J_" << this->fColumns[first].label << "_" << this->fColumns[second].label << ",";
 			} else {
