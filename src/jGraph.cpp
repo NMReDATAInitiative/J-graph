@@ -90,9 +90,8 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 						currentShiftedJ2 = abs(currentShiftedJ2);
 						if (currentJ < (currentShiftedJ2 + fDeltaLineAbove)) {
 							rangesToAvoid.push_back(make_pair(currentShiftedJ2 + fDeltaLineAbove, currentShiftedJ2 - fDeltaLineBelow));
-			std::cerr << "2)=  For (" << first << "," << second << ") incremented because " << inside1 << "&" << inside2 << " " << currentShiftedJ2 << " for " <<  currentJ2 << " Hz" << std::endl;
-											std::cerr << "2)                 ZZZ (" << currentShiftedJ2 + fDeltaLineAbove << " " << currentShiftedJ2 - fDeltaLineBelow << ") "<< std::endl;
-
+//std::cerr << "2)=  For (" << first << "," << second << ") incremented because " << inside1 << "&" << inside2 << " " << currentShiftedJ2 << " for " <<  currentJ2 << " Hz" << std::endl;
+//std::cerr << "2)                 ZZZ (" << currentShiftedJ2 + fDeltaLineAbove << " " << currentShiftedJ2 - fDeltaLineBelow << ") "<< std::endl;
 						}
 					}
 				}

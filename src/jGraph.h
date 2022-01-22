@@ -36,9 +36,9 @@ bool addAssignedCoupling(string label1, string label2, double valueJ);
 	size_t getSize() const {return fColumns.size();};
 public:
 	vector <Column> fColumns;
-	const double fDeltaDotAbove = 2.0;
+	const double fDeltaDotAbove = 1.0;
 	const double fDeltaDotBelow = fDeltaDotAbove;
-	const double fDeltaLineAbove = 1.0;
+	const double fDeltaLineAbove = 0.8;
 	const double fDeltaLineBelow = fDeltaLineAbove;
 };
 

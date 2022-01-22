@@ -47,6 +47,7 @@
     var pointingLineColum = bottomJGraphYposition + 20;
 
     function getJgraphColor(Jcoupling, darkmode) {
+      // https://nmredatainitiative.github.io/color-map-J-coupling/
       // input
       // Color maps. First color for 0 Hz, second color for 2 Hz, etc. up to 20 Hz
 
@@ -134,6 +135,10 @@
               indexColumn2: indexColumn2[i],
               chemShift1: +chemShift1[i],
               chemShift2: +chemShift2[i],
+              labelColumn1: labelColumn1[i],
+              labelColumn2: labelColumn2[i],
+              lineText: ("J(" + labelColumn1[i] + "," + labelColumn2[i] +") = " + Jvalue[i] + " Hz"),
+              xx: 0.0,
             })
           }
         }
@@ -258,7 +263,12 @@
         listOfChemicalShifts.pop()
       */
       // Highlight the specie that is hovered
-      var highlight = function (d) {
+      var highlightLines = function (d) {
+
+        console.log("toto update" );
+
+
+
         selected_specie = d.Label
         // first every group turns grey
         d3.selectAll(".line")
@@ -270,33 +280,77 @@
           .transition().duration(200)
           //  .style("stroke", color(selected_specie))
           //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
-          .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode); })
+          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
           .style("opacity", 1.0)
+     
 
+        var theTextLine2 = svg
+          .append("text")
+          .attr("class", "toBeHidden")
+          .attr("x", d.xx)
+          .attr("y", yJs(Math.abs(d.JvalueShifted)))
+          .text("" + d.lineText)
+          .attr('dx', 1.3 * circleRadius)
+          .style("font-size", circleRadius * 2.5)
+          .style("font-family", "Helvetica")
+          .style("text-anchor", "middle")
 
       }
 
       // Unhighlight
-      var doNotHighlight = function (d) {
+      var doNotHighlightLines = function (d) {
+
+        d3.selectAll(".toBeHidden")
+          .transition().duration(100).delay(1000)
+          .remove()
+
         d3.selectAll(".line")
-          .transition().duration(200).delay(1000)
+          .transition().duration(200).delay(300)
           //   .style("stroke", function (d) { return (color(d.Label)) })
           // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-          .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode); })
+          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
           .style("opacity", "1")
+
+     
+
       }
 
       var highlightDot = function (d) {
-        console.log("highlightDot  " + JSON.stringify(d))
-        console.log("highlightDot   textCircle" + d.chemShift + "_" + d.value)
+
         const delayBeforeErase = 3000;
+
+        d3.selectAll(".line")
+          .transition().duration(200)
+          .style("stroke", "black")
+          .style("opacity", "0.1")
+          .transition().duration(20).delay(delayBeforeErase)
+          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+          .style("opacity", "1")
+
+        var theTextDots2 = svg.selectAll("textt")
+            .data(dataUnassignedCoupCircles)
+            .enter()
+            .append("text")
+            .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
+            .attr("y", function (d) { return yJs(Math.abs(d.value)); })
+            // .style("fill", "gray")
+           //   .attr("stroke", "red")
+            // .style("stroke-width", lineWidthCircleSmall)
+            .text(function (d) { return "J = " + d.value; })
+            .attr('dx', 1.3 * circleRadius)
+            .style("font-size", circleRadius * 2.5)
+            .style("font-family", "Helvetica")
+              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+              .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+              .attr("opacity", 0.0)
+      
         const highlightWidth = lineWidth * 2.0;
 
         // first every group dimmed
         d3.selectAll(".circleL")
           .transition().duration(200).delay(0)
           .style("stroke", "black")
-          .style("opacity", "0.2")
+          .style("opacity", "0.1")
           .style("stroke-width", lineWidth)
 
         // specific to those matching the condition of similarity of J's
@@ -350,8 +404,9 @@
           .style("opacity", "1.0")
           .transition().duration(200).delay(delayBeforeErase)
           .style("opacity", "0.0")
-
       }
+
+
       //  Unhighlight
       var doNotHighlightDot = function (d) {
         d3.selectAll(".circleL")
@@ -547,7 +602,7 @@
            // .text(function (d) { return "" + d.chemShift; })
             .text(function (d) { return "" + d.labelColumn; })
             .attr('dx', -1.0 * circleRadius)
-            .style("font-size", circleRadius * 2.0)
+            .style("font-size", circleRadius * 2.5)
             .style("font-family", "Helvetica")
             //.style("font-weight", "2pt")            
           // Lines
@@ -569,6 +624,7 @@
             const x2p = ((cs2) - usedHorizontalShiftX);
 
             const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
+            d.xx = (x1 + x2) / 2.0;
             var Gen = d3.line();
 
             return Gen(combine);
@@ -682,15 +738,18 @@
             theDots
               .transition().duration(timeAnimation)
               .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
+
             theDots2
               .transition().duration(timeAnimation)
               .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
 
-            theTextDots.transition().duration(timeAnimation)
-              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-              .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
-              .attr("opacity", 0.0)
+       
+            //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+              //.attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+            //  .attr("opacity", 0.0)
 
+           
+           
             theColumnLabel.transition().duration(timeAnimation)
               .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
               .attr("transform", function (d) {
@@ -751,19 +810,20 @@
             .style("stroke-dasharray", 
                 function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth)}
              )
-            
-    
-               /*.attr("d", d3.line()
+            /*.attr("d", d3.line()
               //.x(pathx)
               .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
               //.y(pathy)
               .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
             )*/
             .style("fill", "none")
-            .style("stroke", function (d) { return (color(d.Label)) })
+            .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode) })
             .style("opacity", 0.5)
-          //.on("mouseover", highlight)
-          // .on("mouseleave", doNotHighlight)
+            .on("mouseover", highlightLines)
+            .on("mouseleave", doNotHighlightLines)
+
+          
+
 
 
 
@@ -796,20 +856,9 @@
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircleSmall)
 
-          var theTextDots = svg.selectAll("textt")
-            .data(dataUnassignedCoupCircles)
-            .enter()
-            .append("text")
-            .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-            .attr("y", function (d) { return yJs(Math.abs(d.value)); })
-            // .style("fill", "gray")
-            //  .attr("stroke", "black")
-            // .style("stroke-width", lineWidthCircleSmall)
-            .text(function (d) { return "J = " + d.value; })
-            .attr('dx', 1.3 * circleRadius)
-            .style("font-size", circleRadius * 2.0)
-            .style("font-family", "Helvetica")
+        
 
+         
           updateColumnsAction(spreadPositionsZZ, 0);
 
           // Add the brushing
