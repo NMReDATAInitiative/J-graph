@@ -825,6 +825,7 @@
             .style("fill", "none")
             .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode) })
             .style("opacity", 0.5)
+            .on("click", highlightLines)
             .on("mouseover", highlightLines)
             .on("mouseleave", doNotHighlightLines)
 
