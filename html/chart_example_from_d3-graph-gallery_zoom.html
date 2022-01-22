@@ -328,13 +328,13 @@
 
         d3.selectAll(".rulerClass")
           .transition().duration(200).delay(00)
-          .attr("y1", yJs(d.value))
-          .attr("y2", yJs(d.value))
+          .attr("y1", yJs(Math.abs(d.value)))
+          .attr("y2", yJs(Math.abs(d.value)))
           .style("opacity", '1.0')
           .style("stroke", highColor)
           .transition().duration(200).delay(delayBeforeErase)
-          .attr("y1", yJs(d.value))
-          .attr("y2", yJs(d.value))
+          .attr("y1", yJs(Math.abs(d.value)))
+          .attr("y2", yJs(Math.abs(d.value)))
           .style("opacity", '0.0')
           .style("stroke", "black")
 
@@ -536,8 +536,6 @@
             .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
             .attr("stroke", "black") // just sketched... update wil fix colors
             .style("stroke-width", lineWidthCircle)
-
-
             
             var theColumnLabel = svg.selectAll("textc")
             .data(dataColumns)
@@ -556,9 +554,9 @@
           function pathFun(d) {
 
             //  console.log("BEFEG" + JSON.stringify(d))
-            const y1 = yJs(d.Jvalue);
-            const y2 = yJs(d.JvalueShifted);
-            const horizontalShiftX = 2;
+            const y1 = yJs(Math.abs(d.Jvalue));
+            const y2 = yJs(Math.abs(d.JvalueShifted));
+            const horizontalShiftX = circleRadius;
             var usedHorizontalShiftX = eval(horizontalShiftX);
             const cs1 = spreadPositionsZZ[d.indexColumn1];
             const cs2 = spreadPositionsZZ[d.indexColumn2];
@@ -579,6 +577,7 @@
           function getSpread(spreadDelta, smallSpace) {
             // determine how to spead objects to avoid contacts
             // there muss be anough space for this function to work
+            // this is obtained by setting smallSpace to a value below the width/number of items
             for (i = 0; i < spreadDelta.length; i++) {
               const curDelta = spreadDelta[i];
               if (curDelta < smallSpace) {
@@ -689,7 +688,7 @@
 
             theTextDots.transition().duration(timeAnimation)
               .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-              .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(d.value) + ")"; })
+              .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
               .attr("opacity", 0.0)
 
             theColumnLabel.transition().duration(timeAnimation)
@@ -748,8 +747,13 @@
             .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
             //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
             .attr("d", pathFun)
-            .style("stroke-width", lineWidth)
-            /*.attr("d", d3.line()
+            .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+            .style("stroke-dasharray", 
+                function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth)}
+             )
+            
+    
+               /*.attr("d", d3.line()
               //.x(pathx)
               .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
               //.y(pathy)
@@ -770,9 +774,9 @@
             .append("circle")
             .attr("class", "circleL")
             .attr("cx", function (d) { return x(d.chemShift); })
-            .attr("cy", function (d) { return yJs(d.value); })
+            .attr("cy", function (d) { return yJs(Math.abs(d.value)); })
             .attr("r", circleRadius)
-            .style("fill", function (d) { return getJgraphColor(d.value, darkMode); })
+            .style("fill", function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircle)
             .on("mouseenter", highlightDot)
@@ -786,7 +790,7 @@
             .append("circle")
             .attr("class", "circleS")
             .attr("cx", function (d) { return x(d.chemShift); })
-            .attr("cy", function (d) { return yJs(d.value); })
+            .attr("cy", function (d) { return yJs(Math.abs(d.value)); })
             .attr("r", circleRadiusSmall)
             .style("fill", "gray")
             .attr("stroke", "black")
@@ -797,7 +801,7 @@
             .enter()
             .append("text")
             .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-            .attr("y", function (d) { return yJs(d.value); })
+            .attr("y", function (d) { return yJs(Math.abs(d.value)); })
             // .style("fill", "gray")
             //  .attr("stroke", "black")
             // .style("stroke-width", lineWidthCircleSmall)

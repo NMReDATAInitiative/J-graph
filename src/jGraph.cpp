@@ -51,6 +51,8 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 		size_t indexOther2 = 0;
 		
 		if (hasJ(first, second, currentJ, currentShiftedJ)) {
+			currentJ = abs(currentJ);
+			currentShiftedJ = abs(currentShiftedJ);
 		//	while (abs(currentShiftedJlast - currentShiftedJ) > 0.01) {
 		//		currentShiftedJlast = currentShiftedJ	;
 		//	}
