@@ -88,13 +88,18 @@
       var arrayColumns = [];
       var unassignedCouplings = []; // marked with label "noAssignement" in file
       var theAssignedCouplings = [];
+      var labelColumnarray = [];
+
       {
         var curChemShiftToReplace1 = [];
         var curChemShiftToReplace2 = [];
         var indexArray1 = [];
         var indexArray2 = [];
+        
         curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; })
         curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; })
+        labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; })
+        labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; })
         indexArray1 = jGraphData.map(function (d) { return d.indexColumn1; })
         indexArray2 = jGraphData.map(function (d) { return d.indexColumn2; })
         label = jGraphData.map(function (d) { return d.Label; })
@@ -110,6 +115,8 @@
           const index2 = indexArray2[i];
           arrayColumns[index1 - 1] = curChemShiftToReplace1[i];
           arrayColumns[index2 - 1] = curChemShiftToReplace2[i];
+          labelColumnarray[index1  - 1] = labelColumn1[i];
+          labelColumnarray[index2  - 1] = labelColumn2[i];
           if (label[i] == "noAssignement") {
             unassignedCouplings.push({
               Jvalue: +Jvalue[i],
@@ -159,6 +166,7 @@
       for (i = 0; i < arrayColumns.length; i++) {
         dataColumns.push({
           'chemShift': arrayColumns[indices[i]],
+          'labelColumn': labelColumnarray[indices[i]],
           'MyIndex': i,
         });
       }
@@ -530,6 +538,20 @@
             .style("stroke-width", lineWidthCircle)
 
 
+            
+            var theColumnLabel = svg.selectAll("textc")
+            .data(dataColumns)
+            .enter()
+            .append("text")
+            .attr("class", function (d) { return "textColumn" + d.uniqIndex; })
+            .attr("x", function (d) { return spreadPositionsUU[d.MyIndex]; })
+            .attr("y", function (d) { return -3 + topJGraphYposition + positionJscale; })
+           // .text(function (d) { return "" + d.chemShift; })
+            .text(function (d) { return "" + d.labelColumn; })
+            .attr('dx', -1.0 * circleRadius)
+            .style("font-size", circleRadius * 2.0)
+            .style("font-family", "Helvetica")
+            //.style("font-weight", "2pt")            
           // Lines
           function pathFun(d) {
 
@@ -670,6 +692,16 @@
               .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(d.value) + ")"; })
               .attr("opacity", 0.0)
 
+            theColumnLabel.transition().duration(timeAnimation)
+              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+              .attr("transform", function (d) {
+                return "rotate(-30," + spreadPositions[d.MyIndex] + "," +
+                  eval(-6 + topJGraphYposition + positionJscale) + " )";
+              })
+
+           //   .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+                //  .attr("opacity", 0.0)
+
           }
           function updateColumnsPositions() {
             spreadPositions = [];
@@ -772,6 +804,7 @@
             .text(function (d) { return "J = " + d.value; })
             .attr('dx', 1.3 * circleRadius)
             .style("font-size", circleRadius * 2.0)
+            .style("font-family", "Helvetica")
 
           updateColumnsAction(spreadPositionsZZ, 0);
 
