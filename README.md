@@ -1,9 +1,12 @@
 
-J-graphs are graphical representations of NMR scalar coupling constants. They can be used to [facilitate the assignment of homonuclear J-coupling](assembleCouplingNetwork), *i.e.* make pairs of protons with equal values of J.
+J-graphs are graphical representations of NMR scalar coupling constants. They can be used to [facilitate the assignment of homonuclear coupling constants](assembleCouplingNetwork), *i.e.* make pairs of protons with equal values of J.
 
 A [color map](https://nmredatainitiative.github.io/color-map-J-coupling/) was introduced specifically for J(H,H).
-### Example 
-Comparison of calculated (DFT/GIAO) and experimental coupling constants of [androsten](androsten). The abscissa corresponds to the chemical shifts.
+### Examples 
+
+An on-line dynamic [J-graph visualizer](./html/chart_example_from_d3-graph-gallery_zoom.html) shows how J-Graph can be used to assign coupling constants.
+
+Other uses include the comparision of calculated (DFT/GIAO) and experimental coupling constants of [androsten](androsten). The abscissa corresponds to the chemical shifts.
 
 <img style="border:1px solid black;" src="images/annie.png" width="600" alt="J-Graph." />
 
