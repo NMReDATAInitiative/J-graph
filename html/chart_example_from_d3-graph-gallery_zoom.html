@@ -96,7 +96,7 @@
         var curChemShiftToReplace2 = [];
         var indexArray1 = [];
         var indexArray2 = [];
-        
+
         curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; })
         curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; })
         labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; })
@@ -116,8 +116,8 @@
           const index2 = indexArray2[i];
           arrayColumns[index1 - 1] = curChemShiftToReplace1[i];
           arrayColumns[index2 - 1] = curChemShiftToReplace2[i];
-          labelColumnarray[index1  - 1] = labelColumn1[i];
-          labelColumnarray[index2  - 1] = labelColumn2[i];
+          labelColumnarray[index1 - 1] = labelColumn1[i];
+          labelColumnarray[index2 - 1] = labelColumn2[i];
           if (label[i] == "noAssignement") {
             unassignedCouplings.push({
               Jvalue: +Jvalue[i],
@@ -137,7 +137,7 @@
               chemShift2: +chemShift2[i],
               labelColumn1: labelColumn1[i],
               labelColumn2: labelColumn2[i],
-              lineText: ("J(" + labelColumn1[i] + "," + labelColumn2[i] +") = " + Jvalue[i] + " Hz"),
+              lineText: ("J(" + labelColumn1[i] + "," + labelColumn2[i] + ") = " + Jvalue[i] + " Hz"),
               xx: 0.0,
             })
           }
@@ -288,7 +288,7 @@
           //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
           .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
           .style("opacity", 1.0)
-     
+
 
         var theTextLine2 = svg
           .append("text")
@@ -307,17 +307,17 @@
       // Unhighlight
       var doNotHighlightLines = function (d) {
 
-       /*
-
-        d3.selectAll(".line")
-          .transition().duration(200).delay(300)
-          //   .style("stroke", function (d) { return (color(d.Label)) })
-          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
-          .style("opacity", "1")
-
-     
-*/
+        /*
+ 
+         d3.selectAll(".line")
+           .transition().duration(200).delay(300)
+           //   .style("stroke", function (d) { return (color(d.Label)) })
+           // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
+           .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+           .style("opacity", "1")
+ 
+      
+ */
       }
 
       var highlightDot = function (d) {
@@ -333,22 +333,23 @@
           .style("opacity", "1")
 
         var theTextDots2 = svg.selectAll("textt")
-            .data(dataUnassignedCoupCircles)
-            .enter()
-            .append("text")
-            .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-            .attr("y", function (d) { return yJs(Math.abs(d.value)); })
-            // .style("fill", "gray")
-           //   .attr("stroke", "red")
-            // .style("stroke-width", lineWidthCircleSmall)
-            .text(function (d) { return "J = " + d.value; })
-            .attr('dx', 1.3 * circleRadius)
-            .style("font-size", circleRadius * 2.5)
-            .style("font-family", "Helvetica")
-              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-              .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
-              .attr("opacity", 0.0)
-      
+          .data(dataUnassignedCoupCircles)
+          .enter()
+          .append("text")
+          .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
+          .attr("y", function (d) { return yJs(Math.abs(d.value)); })
+          // .style("fill", "gray")
+          //   .attr("stroke", "red")
+          // .style("stroke-width", lineWidthCircleSmall)
+          .text(function (d) { return "J = " + d.value; })
+          .attr('dx', 1.3 * circleRadius)
+          .style("font-size", circleRadius * 2.5)
+          .style("font-family", "Helvetica")
+          .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+          .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+          .attr("opacity", 0.0)
+          .transition().duration(100).delay(3000)
+          .remove()
         const highlightWidth = lineWidth * 2.0;
 
         // first every group dimmed
@@ -413,24 +414,24 @@
 
 
       //  Unhighlight
-      var doNotHighlightDot = function (d) {
-        d3.selectAll(".circleL")
-          .transition().duration(200).delay(300)
-          .style("opacity", "1")
-        selected_specie = "textCircle" + d.uniqIndex;
-
-        d3.selectAll("." + selected_specie)
-          .transition().duration(200).delay(3000)
-          // .style("stroke", color(selected_specie))
-          .style("opacity", "0")
-
-        d3.selectAll(".rulerClass")
-          .transition().duration(200).delay(3000)
-          .attr("y1", yJs(0.0))
-          .attr("y2", yJs(0.0))
-          .style("opacity", '0.0')
-      }
-
+      /*    var doNotHighlightDot = function (d) {
+            d3.selectAll(".circleL")
+              .transition().duration(200).delay(300)
+              .style("opacity", "1")
+            selected_specie = "textCircle" + d.uniqIndex;
+    
+            d3.selectAll("." + selected_specie)
+              .transition().duration(200).delay(3000)
+              // .style("stroke", color(selected_specie))
+              .style("opacity", "0")
+    
+            d3.selectAll(".rulerClass")
+              .transition().duration(200).delay(3000)
+              .attr("y1", yJs(0.0))
+              .attr("y2", yJs(0.0))
+              .style("opacity", '0.0')
+          }
+    */
       d3.csv("./Androsten_forMult_analysis.csv",
         // format variables:
         function (d) {
@@ -596,20 +597,20 @@
             .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
             .attr("stroke", "black") // just sketched... update wil fix colors
             .style("stroke-width", lineWidthCircle)
-            
-            var theColumnLabel = svg.selectAll("textc")
+
+          var theColumnLabel = svg.selectAll("textc")
             .data(dataColumns)
             .enter()
             .append("text")
             .attr("class", function (d) { return "textColumn" + d.uniqIndex; })
             .attr("x", function (d) { return spreadPositionsUU[d.MyIndex]; })
             .attr("y", function (d) { return -3 + topJGraphYposition + positionJscale; })
-           // .text(function (d) { return "" + d.chemShift; })
+            // .text(function (d) { return "" + d.chemShift; })
             .text(function (d) { return "" + d.labelColumn; })
             .attr('dx', -1.0 * circleRadius)
             .style("font-size", circleRadius * 2.5)
             .style("font-family", "Helvetica")
-            //.style("font-weight", "2pt")            
+          //.style("font-weight", "2pt")            
           // Lines
           function pathFun(d) {
 
@@ -748,13 +749,13 @@
               .transition().duration(timeAnimation)
               .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
 
-       
+
             //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-              //.attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+            //.attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
             //  .attr("opacity", 0.0)
 
-           
-           
+
+
             theColumnLabel.transition().duration(timeAnimation)
               .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
               .attr("transform", function (d) {
@@ -762,8 +763,8 @@
                   eval(-6 + topJGraphYposition + positionJscale) + " )";
               })
 
-           //   .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-                //  .attr("opacity", 0.0)
+            //   .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+            //  .attr("opacity", 0.0)
 
           }
           function updateColumnsPositions() {
@@ -812,9 +813,9 @@
             //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
             .attr("d", pathFun)
             .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
-            .style("stroke-dasharray", 
-                function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth)}
-             )
+            .style("stroke-dasharray",
+              function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth) }
+            )
             /*.attr("d", d3.line()
               //.x(pathx)
               .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
@@ -827,7 +828,7 @@
             .on("mouseover", highlightLines)
             .on("mouseleave", doNotHighlightLines)
 
-          
+
 
 
 
@@ -861,9 +862,9 @@
             .attr("stroke", "black")
             .style("stroke-width", lineWidthCircleSmall)
 
-        
 
-         
+
+
           updateColumnsAction(spreadPositionsZZ, 0);
 
           // Add the brushing
@@ -936,14 +937,14 @@
         })
     })
 
-</script>
+  </script>
   <h2>J Graph v0.5</h2>
-    <h3>To do</h3>
-      <p> Allow to make pair?</p>
-      <p> Make it compatible with NMReDATA</p>
-    <h4> Add spin label on top of column</h4>
-    <h4> Change logic of highlight on colored lines (show J):</h4>
-      <h4>- ... </h4>
+  <h3>To do</h3>
+  <p> Allow to make pair?</p>
+  <p> Make it compatible with NMReDATA</p>
+  <h4> Add spin label on top of column</h4>
+  <h4> Change logic of highlight on colored lines (show J):</h4>
+  <h4>- ... </h4>
 </body>
 
 </html>
