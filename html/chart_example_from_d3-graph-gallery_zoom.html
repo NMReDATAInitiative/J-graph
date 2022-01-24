@@ -8,22 +8,25 @@
 <body>
     <h4>J-graph demonstration page</h4>
     <p>This demo is still under development...</p>
+<script type="text/javascript" src="src/JSmol.min.js"></script>
+<script>
+  Cholest = {
+    script: "set antialiasDisplay true;load ../data/androsten/Androsten_forMult_analysis_3d_fromAvogadro.mol;cartoon on;color cartoon structure; rotate z 45.0;rotate x 80;",
+    width: 350,
+    height: 200,
+    j2sPath: "src/j2s",
+    disableJ2SLoadMonitor: false,
+    isableInitialConsole: true
+  }
+  Jmol.getApplet("JmolAppletA", Cholest);
+</script>
 
- <script src=src/JSmolMin2.js></script>
-    <script type='text/javascript' language='javascript'>
-        Jmol.Info.j2sPath = 'https://chemapps.stolaf.edu/jmol/jsmol/j2s';
-        Jmol.Info.serverURL = 'https://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php';
-        jmolInitialize('https://chemapps.stolaf.edu/jmol/files', true);
-        jmolApplet(['200', '150'], "set antialiasdisplay\;load ../data/androsten/Androsten_forMult_analysis_3d_fromAvogadro.mol;", '0');</script>
-    <div style='width:200px'>Androsten 3D structure.
-        <script>
-        //jmolCheckbox('spin on', 'spin off', 'spin on/off')
-        </script>
-    </div>
- <p id="textMainPage"> Selected J's will apear here...</p>
-  <img style="border:1px solid black;" src="../images/androsten.png" width="200" alt="androsten" />
+<a href="javascript:Jmol.script(JmolAppletA,&quot;select atomno = 1;color [0,255,0];spacefill 100&quot;)">highlight an atom</a>
+
+<p></p>
+
+<img style="border:1px solid black;" src="../images/androsten.png" width="200" alt="androsten" />
   <div id="my_dataviz"></div>
-
   <script>
     // set the dimensions and margins of the graph
     var margin = { top: 10, right: 30, bottom: 30, left: 60 };
