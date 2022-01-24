@@ -20,6 +20,7 @@ public:
  		void sortJ();
 		double chemicalShift;
 		double shiftedChemicalShift;
+		int indexInMolFile;
 		string label;
 		vector <ColumnMember> columnMembers;
 	};
@@ -27,6 +28,8 @@ public:
 	void sortColumnByChemicalShift();
 	void addColumn(double chemicalShift, const vector < double > &Jvalues, string aString = "no label");
 	void addColumn(string aString, double chemicalShift);
+	void addColumn(string aString, double chemicalShift, int indexInMolFile);
+
 bool addAssignedCoupling(string label1, string label2, double valueJ);
 	void setAssignedCoupling(int index1, int index2, double valueJ);
 	void updateShiftedPositionsCouplings();

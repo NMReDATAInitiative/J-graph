@@ -33,27 +33,27 @@ int main(int argc, char *argv[]) {
 
   */
 
-            jGraph.addColumn("H4", 5.75);
-            jGraph.addColumn("11ax", 1.45);
-            jGraph.addColumn("11eq", 1.69);
-            jGraph.addColumn("12ax", 1.27);
-            jGraph.addColumn("12eq", 1.86);
-            jGraph.addColumn("15ax", 1.57);
-            jGraph.addColumn("15eq", 1.97);
-            jGraph.addColumn("16ax", 2.10);
-            jGraph.addColumn("16eq", 2.47);
-            jGraph.addColumn("1ax", 1.71);
-            jGraph.addColumn("1eq", 2.04);
-            jGraph.addColumn("2ax", 2.4301);
-            jGraph.addColumn("2eq", 2.35);
-            jGraph.addColumn("6ax", 2.43);
-            jGraph.addColumn("6eq", 2.33);
-            jGraph.addColumn("7ax", 1.11);
-            jGraph.addColumn("7eq", 1.9701);
-            jGraph.addColumn("H14", 1.29);
-            jGraph.addColumn("H8", 1.73);
-            jGraph.addColumn("H9", 0.99);
-            jGraph.addColumn("Hffff9", 0.98);
+            jGraph.addColumn("H4", 5.75, 41);
+            jGraph.addColumn("11ax", 1.45, 36);
+            jGraph.addColumn("11eq", 1.69, 37);
+            jGraph.addColumn("12ax", 1.27, 38);
+            jGraph.addColumn("12eq", 1.86, 33);
+            jGraph.addColumn("15ax", 1.57, 35);
+            jGraph.addColumn("15eq", 1.97, 40);
+            jGraph.addColumn("16ax", 2.10, 39);
+            jGraph.addColumn("16eq", 2.47, 34);
+            jGraph.addColumn("1ax", 1.71, 27);
+            jGraph.addColumn("1eq", 2.04, 28);
+            jGraph.addColumn("2ax", 2.4301, 26);
+            jGraph.addColumn("2eq", 2.35, 25);
+            jGraph.addColumn("6ax", 2.43, 29);
+            jGraph.addColumn("6eq", 2.33, 30);
+            jGraph.addColumn("7ax", 1.11, 31);
+            jGraph.addColumn("7eq", 1.9701, 32);
+            jGraph.addColumn("H14", 1.29, 24);
+            jGraph.addColumn("H8", 1.73, 22);
+            jGraph.addColumn("H9", 0.99, 23);
+            jGraph.addColumn("Hffff9", 0.98, 00);
 
             jGraph.sortColumnByChemicalShift(); // don't sortColumn after addAssignedCoupling because it will mess the indices
 
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
                   jGraph.addAssignedCoupling("c", "e", 7.08);
                   jGraph.addAssignedCoupling("d", "e", 7.09);
                   */
-            cout << "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2" << endl;
+            cout << "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2" << endl;
             jGraph.updateShiftedPositionsCouplings();
     } else { // read file...
 

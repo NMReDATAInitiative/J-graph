@@ -125,7 +125,9 @@ for (size_t diffIndex = 1; diffIndex < lastColuNumber ; diffIndex++) {
 			}
 			// Add labels of columns
 			std::cout
-				<< this->fColumns[first].label << "," << this->fColumns[second].label << "";
+				<< this->fColumns[first].label << "," << this->fColumns[second].label << ",";
+				std::cout
+				<< this->fColumns[first].indexInMolFile << "," << this->fColumns[second].indexInMolFile << "";
 			std::cout << std::endl;
 		} // else{
 		  //	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
@@ -205,6 +207,16 @@ void JGraph::addColumn(string aString, double chemicalShift) {
 	column.chemicalShift = chemicalShift;
 	column.shiftedChemicalShift = chemicalShift;
 	column.label = aString;
+	column.sortJ();
+	fColumns.push_back(column);
+}
+
+void JGraph::addColumn(string aString, double chemicalShift, int indexInMolFile) {
+	Column column;
+	column.chemicalShift = chemicalShift;
+	column.shiftedChemicalShift = chemicalShift;
+	column.label = aString;
+	column.indexInMolFile = indexInMolFile;
 	column.sortJ();
 	fColumns.push_back(column);
 }

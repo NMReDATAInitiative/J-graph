@@ -18,6 +18,8 @@
     <div style='width:200px'>Androsten 3D structure.
         <script>jmolCheckbox('spin on', 'spin off', 'spin on/off')</script>
     </div>
+ <p>Selected J's will apear here : </p>
+ <p id="textMainPage"> no selection of coupling yet...</p>
   <img style="border:1px solid black;" src="../images/androsten.png" width="200" alt="androsten" />
   <div id="my_dataviz"></div>
 
@@ -124,6 +126,8 @@
         indexColumn2 = jGraphData.map(function (d) { return d.indexColumn2; })
         chemShift1 = jGraphData.map(function (d) { return d.chemShift1; })
         chemShift2 = jGraphData.map(function (d) { return d.chemShift2; })
+        indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; })
+        indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; })
         //index 1
         for (i = 0; i < curChemShiftToReplace1.length; i++) {
           const index1 = indexArray1[i];
@@ -153,6 +157,8 @@
               labelColumn2: labelColumn2[i],
               lineText: ("J(" + labelColumn1[i] + "," + labelColumn2[i] + ") = " + Jvalue[i] + " Hz"),
               xx: 0.0,
+              indexInMolFile1: indexInMolFile1[i],
+              indexInMolFile2: indexInMolFile2[i],
             })
           }
         }
@@ -165,7 +171,6 @@
       var indices = new Array(len);
       for (var i = 0; i < len; ++i) indices[i] = i;
       indices.sort(function (a, b) { return arrayColumns[a] < arrayColumns[b] ? 1 : arrayColumns[a] > arrayColumns[b] ? -1 : 0; });
-      //  console.log("arrayColumns indices " + indices);
       // console.log("arrayColumns2 " + arrayColumns);
       //arrayColumns.sort().reverse();
       var indices2 = new Array(len);
@@ -278,7 +283,6 @@
       */
       // Highlight the specie that is hovered
       var highlightLines = function (d) {
-
         d3.selectAll(".toBeHidden")
           .transition().duration(10).delay(0)
           .remove()
@@ -316,10 +320,20 @@
           .style("text-anchor", "middle")
           .transition().duration(100).delay(3000)
           .remove()
+        // document.getElementById("textMainPage").innerHTML = d.lineText;
+
+        var toto = function (d) { return d.lineText; }
+        document.getElementById("textMainPage").innerHTML = "For " + d.lineText + "the indices of the atoms are " +
+          d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
+
+        console.log("ddddd " + d);
+
+        console.log("ddddd" + JSON.stringify(d))
       }
 
+
       // Unhighlight
-      var doNotHighlightLines = function (d) {
+      var doNotHighlightLines = function (toto) {
 
         /*
  
