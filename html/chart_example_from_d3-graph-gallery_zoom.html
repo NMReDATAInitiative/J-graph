@@ -18,8 +18,7 @@
     <div style='width:200px'>Androsten 3D structure.
         <script>jmolCheckbox('spin on', 'spin off', 'spin on/off')</script>
     </div>
- <p>Selected J's will apear here : </p>
- <p id="textMainPage"> no selection of coupling yet...</p>
+ <p id="textMainPage"> Selected J's will apear here...</p>
   <img style="border:1px solid black;" src="../images/androsten.png" width="200" alt="androsten" />
   <div id="my_dataviz"></div>
 
@@ -323,7 +322,7 @@
         // document.getElementById("textMainPage").innerHTML = d.lineText;
 
         var toto = function (d) { return d.lineText; }
-        document.getElementById("textMainPage").innerHTML = "For " + d.lineText + "the indices of the atoms are " +
+        document.getElementById("textMainPage").innerHTML = "For " + d.lineText + " the indices of the atoms are " +
           d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
 
         console.log("ddddd " + d);
