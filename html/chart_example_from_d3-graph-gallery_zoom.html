@@ -22,12 +22,19 @@
 </script>
 
 <a href="javascript:Jmol.script(JmolAppletA,&quot;select atomno = 41;color [0,255,0];spacefill 100&quot;)">Highlight atom 41</a>
+
 <p></p>
  <p id="textMainPage" style="padding: 1px; border: 1px solid black;">Selected J's will apear here while browsing the J-Graph. They will be highlighted on the model above in a coming Version!</p>
 
 <img style="border:1px black;" src="../images/androsten.png" width="200" alt="androsten" />
   <div id="my_dataviz"></div>
   <script>
+  //Jmol.getApplet("JmolAppletA", Cholest);
+ //JmolAppletA("reset");
+ //Jmol.script(JmolAppletA,"spin on");
+
+    //    Cholest.jmolButton(myJmol, "reset", "Reset to original orientation");
+
     // set the dimensions and margins of the graph
     var margin = { top: 10, right: 30, bottom: 30, left: 60 };
     var bodyWidth = 800;
@@ -329,15 +336,16 @@
         var toto = function (d) { return d.lineText; }
         document.getElementById("textMainPage").innerHTML = "For " + d.lineText + " the indices of the atoms are " +
           d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
+          Jmol.script(JmolAppletA,"select hydrogen; color white");
 
-        console.log("ddddd " + d);
+          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [255,127,127];spacefill 80");
+          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [255,127,127];spacefill 80");
 
-        console.log("ddddd" + JSON.stringify(d))
       }
-
 
       // Unhighlight
       var doNotHighlightLines = function (toto) {
+
 
         /*
  
@@ -353,6 +361,9 @@
       }
 
       var highlightDot = function (d) {
+
+        //unselect
+        Jmol.script(JmolAppletA,"select hydrogen; color white");
 
         const delayBeforeErase = 3000;
 
