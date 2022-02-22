@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
             jGraph.addAssignedCoupling("H14", "15eq", 5.91);
             jGraph.addAssignedCoupling("H14", "H8", 10.90);
             jGraph.addAssignedCoupling("12ax", "11ax", 13.44);
-            jGraph.addAssignedCoupling("12ax", "6eq", 4.19);
+           // jGraph.addAssignedCoupling("12ax", "6eq", 4.19);
             jGraph.addAssignedCoupling("12ax", "12eq", 13.01);
             jGraph.addAssignedCoupling("12ax", "11ax", 13.44);
             jGraph.addAssignedCoupling("12ax", "6eq", 4.19);
