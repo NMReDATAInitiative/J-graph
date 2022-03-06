@@ -65,11 +65,11 @@ int main(int argc, char *argv[]) {
             jGraph.addAssignedCoupling("H14", "15eq", 5.91);
             jGraph.addAssignedCoupling("H14", "H8", 10.90);
             jGraph.addAssignedCoupling("12ax", "11ax", 13.44);
-            jGraph.addAssignedCoupling("12ax", "6eq", 4.19);
+           // jGraph.addAssignedCoupling("12ax", "6eq", 4.19);
             jGraph.addAssignedCoupling("12ax", "12eq", 13.01);
             jGraph.addAssignedCoupling("12ax", "11ax", 13.44);
             jGraph.addAssignedCoupling("12ax", "6eq", 4.19);
-            jGraph.addAssignedCoupling("2ax", "12eq", 13.01);
+           // jGraph.addAssignedCoupling("2ax", "12eq", 13.01);
             jGraph.addAssignedCoupling("15ax", "H14", 12.76);
             jGraph.addAssignedCoupling("15ax", "15eq", -12.42);
             jGraph.addAssignedCoupling("15ax", "16eq", 9.00);
@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
             jGraph.addAssignedCoupling("2eq", "1eq", 3.09);
             jGraph.addAssignedCoupling("2eq", "2ax", -16.75);
             jGraph.addAssignedCoupling("2eq", "1ax", 4.41);
-            jGraph.addAssignedCoupling("6eq", "12ax", 4.19);
+            jGraph.addAssignedCoupling("6eq", "H4", 1.00);
             jGraph.addAssignedCoupling("6eq", "6ax", -14.56);
             jGraph.addAssignedCoupling("6eq", "7eq", 2.45);
             jGraph.addAssignedCoupling("16ax", "15ax", 9.29);
