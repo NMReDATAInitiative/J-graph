@@ -306,8 +306,8 @@
          d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
          Jmol.script(JmolAppletA,"select hydrogen; color white");
 
-         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [255,127,127];spacefill 80");
-         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [255,127,127];spacefill 80");
+         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80");
+         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
 
      }
 
