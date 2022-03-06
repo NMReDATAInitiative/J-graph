@@ -1,6 +1,4 @@
-//Jmol.getApplet("JmolAppletA", Cholest);
-//JmolAppletA("reset");
-//Jmol.script(JmolAppletA,"spin on");
+//import * as d3 from "d3";
 
    //    Cholest.jmolButton(myJmol, "reset", "Reset to original orientation");
 
