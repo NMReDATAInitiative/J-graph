@@ -1,7 +1,6 @@
-//import * as d3 from "d3";
-
-   //    Cholest.jmolButton(myJmol, "reset", "Reset to original orientation");
-
+//import * as d3 from "d3"; // 
+import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
+   //
    // set the dimensions and margins of the graph
    var margin = { top: 10, right: 30, bottom: 30, left: 60 };
    var bodyWidth = 800;
@@ -40,32 +39,7 @@
    var bottomJGraphYposition = heightJscale;
    var pointingLineColum = bottomJGraphYposition + 20;
 
-   function getJgraphColor(Jcoupling, darkmode) {
-     // https://nmredatainitiative.github.io/color-map-J-coupling/
-     // input
-     // Color maps. First color for 0 Hz, second color for 2 Hz, etc. up to 20 Hz
 
-     var colormap = [0, 1, 1, 0, 1, 0, 0.8, 0.8, 0, 0.9, 0.4, 0, 1, 0, 0, 1, 0, 0.5, 1, 0, 1, 0.5, 0, 1, 0, 0, 1, 0, 0, 0.5, 0, 0, 0]; // for white background
-     if (darkmode) {
-       colormap = [0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0.5, 0, 1, 0, 0, 1, 0, 0.5, 1, 0, 1, 0.5, 0, 0.9, 0.2, 0.2, 1, 0.4, 0.4, 0.5, 1, 1, 1]; // for black background
-     }
-
-     const JcouplingAbs = Math.abs(Jcoupling); // Hz
-     var baseColorInt = Math.floor(JcouplingAbs / 2.0); // -20 - 20.0 ->  0 - 9 
-     if (baseColorInt > 9) baseColorInt = 9; // baseColorInt 0 - 9
-     var adjust = +(JcouplingAbs - 2.0 * baseColorInt) / 2.0; // normalized diff (0-1) for 2 Hz
-     if (adjust > 1.0) adjust = 1.0; // adjust 0 - 1.0
-     const baseColorIndex = 3 * baseColorInt; // 3 because RGB
-
-     // the loop is language dependent, lets drop it...
-     const r = Math.floor(+255.0 * colormap[baseColorIndex + 0] + adjust * (colormap[baseColorIndex + 3 + 0] - colormap[baseColorIndex + 0]));
-     const g = Math.floor(+255.0 * colormap[baseColorIndex + 1] + adjust * (colormap[baseColorIndex + 3 + 1] - colormap[baseColorIndex + 1]));
-     const b = Math.floor(+255.0 * colormap[baseColorIndex + 2] + adjust * (colormap[baseColorIndex + 3 + 2] - colormap[baseColorIndex + 2]));
-
-     //const negExpVal = (Jcoupling < 0.0); // used to change line type for negative values.                   
-
-     return (["rgb(", r, ",", g, ",", b, ")"].join(""));
-   }
    /*
        const jcccol = getJgraphColor(11.2, darkMode);
        console.log("getJgraphColor :jcccol " + jcccol);
@@ -91,21 +65,21 @@
        var indexArray1 = [];
        var indexArray2 = [];
 
-       curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; })
+       curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
        curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; })
-       labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; })
-       labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; })
+       var labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; })
+       var labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; })
        indexArray1 = jGraphData.map(function (d) { return d.indexColumn1; })
        indexArray2 = jGraphData.map(function (d) { return d.indexColumn2; })
-       label = jGraphData.map(function (d) { return d.Label; })
-       Jvalue = jGraphData.map(function (d) { return d.Jvalue; })
-       JvalueShifted = jGraphData.map(function (d) { return d.JvalueShifted; })
-       indexColumn1 = jGraphData.map(function (d) { return d.indexColumn1; })
-       indexColumn2 = jGraphData.map(function (d) { return d.indexColumn2; })
-       chemShift1 = jGraphData.map(function (d) { return d.chemShift1; })
-       chemShift2 = jGraphData.map(function (d) { return d.chemShift2; })
-       indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; })
-       indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; })
+       var label = jGraphData.map(function (d) { return d.Label; })
+       var Jvalue = jGraphData.map(function (d) { return d.Jvalue; })
+       var JvalueShifted = jGraphData.map(function (d) { return d.JvalueShifted; })
+       var indexColumn1 = jGraphData.map(function (d) { return d.indexColumn1; })
+       var indexColumn2 = jGraphData.map(function (d) { return d.indexColumn2; })
+       var chemShift1 = jGraphData.map(function (d) { return d.chemShift1; })
+       var chemShift2 = jGraphData.map(function (d) { return d.chemShift2; })
+       var indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; })
+       var indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; })
        //index 1
        for (i = 0; i < curChemShiftToReplace1.length; i++) {
          const index1 = indexArray1[i];
@@ -240,7 +214,7 @@
      var yJs = d3.scaleLinear()
        .domain([0, maxScaleJ])
        .range([heightJscale + positionJscale, positionJscale]);
-     yAxisn = svg.append("g")
+     var yAxisn = svg.append("g")
        // .attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
        .call(d3.axisLeft(yJs).ticks(3));
 
@@ -265,7 +239,7 @@
          .transition().duration(10).delay(0)
          .remove()
 
-       selected_specie = d.Label
+      var selected_specie = d.Label
        // first every group turns grey
        d3.selectAll(".line")
          .transition().duration(200)
@@ -363,7 +337,7 @@
 
        // first every group dimmed
        d3.selectAll(".circleL")
-         .transition().duration(200).delay(0)
+         .transition().duration(200).delay()
          .style("stroke", "black")
          .style("opacity", "0.1")
          .style("stroke-width", lineWidth)
@@ -396,7 +370,7 @@
          .style("stroke-width", lineWidth)
 
        d3.selectAll(".rulerClass")
-         .transition().duration(200).delay(00)
+         .transition().duration(200).delay()
          .attr("y1", yJs(Math.abs(d.value)))
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '1.0')
@@ -455,14 +429,14 @@
              d3.min(chemShift, function (d) { return +d.chemShift; })
            ])
            .range([0, width]);
-         xAxis = svg.append("g")
+           var xAxis = svg.append("g")
            .attr("transform", "translate(0," + height + ")")
            .call(d3.axisBottom(x));
 
          // Add Y axis2
 
 
-         yAxisn2 = svg.append("g")
+         var yAxisn2 = svg.append("g")
            .attr("transform", function (d) { return "translate(" + (width) + ")"; })
            .call(d3.axisRight(yJs).ticks(3))
            ;
@@ -655,7 +629,7 @@
                const spreadFull = (smallSpace - curDelta);
                var spreadleft = spreadFull / 2.0;
                // try shift left (1 of 3)
-               for (j = i - 1; j >= 0; j -= 1) {
+               for (var j = i - 1; j >= 0; j -= 1) {
                  const curExtraSpace = (spreadDelta[j] - smallSpace);
                  if (curExtraSpace > 0.0) {
                    if (curExtraSpace > spreadleft) {
@@ -777,8 +751,8 @@
 
          }
          function updateColumnsPositions() {
-           spreadPositions = [];
-           spreadDelta = [];
+          var spreadPositions = [];
+          var spreadDelta = [];
            for (i = 0; i < dataColumns.length; i++) {
              var returnValue = 0.0;
              const curChemShift = dataColumns.map(function (d) { return d.chemShift; })
@@ -892,7 +866,7 @@
            console.log("Function updateChart ...===========")
 
            // What are the selected boundaries?
-           extent = d3.event.selection
+           var extent = d3.event.selection
 
            // If no selection, back to initial coordinate. Otherwise, update X axis domain
            if (!extent) {
