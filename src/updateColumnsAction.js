@@ -9,7 +9,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                if ((x(d.chemShift) > 0.0) && (x(d.chemShift) < width)) {
                  return colorShowLine;
                } else { return colorHideLine; }
-             })
+             });
 
            theColumns2
              .transition().duration(timeAnimation)
@@ -19,7 +19,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                if ((x(d.chemShift) > 0.0) && (x(d.chemShift) < width)) {
                  return colorShowLine;
                } else { return colorHideLine; }
-             })
+             });
 
            theColumns3
              .transition().duration(timeAnimation)
@@ -27,7 +27,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .attr("x2", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("stroke", function (d) {
                return "black";
-             })
+             });
 
            theColumns4
              .transition().duration(timeAnimation)
@@ -35,15 +35,15 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .attr("x2", function (d) { return spreadPositions[d.MyIndex] - circleRadius; })
              .attr("stroke", function (d) {
                return "black";
-             })
+             });
 
            theDots
              .transition().duration(timeAnimation)
-             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
+             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; });
 
            theDots2
              .transition().duration(timeAnimation)
-             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
+             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; });
 
 
            //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
@@ -57,7 +57,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .attr("transform", function (d) {
                return "rotate(-45," + spreadPositions[d.MyIndex] + "," +
                  eval(-6 + topJGraphYposition + positionJscale) + " )";
-             })
+             });
 
            //   .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
            //  .attr("opacity", 0.0)
