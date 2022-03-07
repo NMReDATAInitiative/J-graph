@@ -1,5 +1,11 @@
 //import * as d3 from "d3"; // 
-import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
+import { getJgraphColor } from './src/getJgraphColor.js'; 
+import { updateColumnsPositions } from './src/updateColumnsPositions.js'; 
+import { updateColumnsAction } from './src/updateColumnsAction.js'; 
+//import { pathFun } from './src/pathFun.js'; 
+//import { updateChart } from './src/updateChart.js'; 
+
+
    //
    // set the dimensions and margins of the graph
    var margin = { top: 10, right: 30, bottom: 30, left: 60 };
@@ -328,8 +334,8 @@ import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
          .attr('dx', 1.3 * circleRadius)
          .style("font-size", circleRadius * 2.5)
          .style("font-family", "Helvetica")
-         .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-         .attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+         .attr("x", function (d) { return spreadPositionsUU[d.MyIndex]; })
+         .attr("transform", function (d) { return "rotate(-45," + spreadPositionsUU[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
          .attr("opacity", 0.0)
          .transition().duration(100).delay(3000)
          .remove()
@@ -531,7 +537,7 @@ import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
          const colorShowLine = "#CCCCCC";
          const colorHideLine = "#EEEEEE00";
          // oblique
-         var spreadPositionsUU = updateColumnsPositions();
+         var spreadPositionsUU = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
          var theColumns1 = svg.selectAll("columnns")
            .data(dataColumns)
@@ -595,196 +601,34 @@ import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
            .style("font-family", "Helvetica")
          //.style("font-weight", "2pt")            
          // Lines
+        
          function pathFun(d) {
 
-           //  console.log("BEFEG" + JSON.stringify(d))
-           const y1 = yJs(Math.abs(d.Jvalue));
-           const y2 = yJs(Math.abs(d.JvalueShifted));
-           const horizontalShiftX = circleRadius;
-           var usedHorizontalShiftX = eval(horizontalShiftX);
-           const cs1 = spreadPositionsZZ[d.indexColumn1];
-           const cs2 = spreadPositionsZZ[d.indexColumn2];
-           if (cs1 > cs2) {
-             var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
-           }
-           const x1 = ((cs1));
-           const x2 = ((cs2));
-           const x1p = ((cs1) + usedHorizontalShiftX);
-           const x2p = ((cs2) - usedHorizontalShiftX);
+          //  console.log("BEFEG" + JSON.stringify(d))
+          const y1 = yJs(Math.abs(d.Jvalue));
+          const y2 = yJs(Math.abs(d.JvalueShifted));
+          const horizontalShiftX = circleRadius;
+          var usedHorizontalShiftX = eval(horizontalShiftX);
+          const cs1 = spreadPositionsZZ[d.indexColumn1];
+          const cs2 = spreadPositionsZZ[d.indexColumn2];
+          if (cs1 > cs2) {
+            var usedHorizontalShiftX = eval(- usedHorizontalShiftX);
+          }
+          const x1 = ((cs1));
+          const x2 = ((cs2));
+          const x1p = ((cs1) + usedHorizontalShiftX);
+          const x2p = ((cs2) - usedHorizontalShiftX);
 
-           const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
-           d.xx = (x1 + x2) / 2.0;
-           var Gen = d3.line();
+          const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
+          d.xx = (x1 + x2) / 2.0;
+          var Gen = d3.line();
 
-           return Gen(combine);
-         }
-
-         function getSpread(spreadDelta, smallSpace) {
-           // determine how to spead objects to avoid contacts
-           // there muss be anough space for this function to work
-           // this is obtained by setting smallSpace to a value below the width/number of items
-           for (i = 0; i < spreadDelta.length; i++) {
-             const curDelta = spreadDelta[i];
-             if (curDelta < smallSpace) {
-               const spreadFull = (smallSpace - curDelta);
-               var spreadleft = spreadFull / 2.0;
-               // try shift left (1 of 3)
-               for (var j = i - 1; j >= 0; j -= 1) {
-                 const curExtraSpace = (spreadDelta[j] - smallSpace);
-                 if (curExtraSpace > 0.0) {
-                   if (curExtraSpace > spreadleft) {
-                     spreadDelta[j] -= spreadleft;
-                     spreadDelta[i] += spreadleft;
-                     spreadleft = 0;
-                   } else {
-                     spreadDelta[j] -= curExtraSpace;
-                     spreadDelta[i] += curExtraSpace;
-                     spreadleft -= curExtraSpace;
-                   }
-                 }
-               }
-               // work left over
-               var spreadRight = spreadFull - spreadleft;
-               // try shift right (2 of 3)
-               for (j = i + 1; j < spreadDelta.length; j += 1) {
-                 const curExtraSpace = (spreadDelta[j] - smallSpace);
-                 if (curExtraSpace > 0.0) {
-                   if (curExtraSpace > spreadRight) {
-                     spreadDelta[j] -= spreadRight;
-                     spreadDelta[i] += spreadRight;
-                     spreadRight = 0;
-                   } else {
-                     spreadDelta[j] -= curExtraSpace;
-                     spreadDelta[i] += curExtraSpace;
-                     spreadRight -= curExtraSpace;
-                   }
-                 }
-               }
-               // work left over (rare but there may be a left over....)
-               if (spreadRight > 0.0) {
-                 spreadleft = spreadRight;
-                 // try shift left (3 of 3)
-                 for (j = i - 1; j >= 0; j -= 1) {
-                   const curExtraSpace = (spreadDelta[j] - smallSpace);
-                   if (curExtraSpace > 0.0) {
-                     if (curExtraSpace > spreadleft) {
-                       spreadDelta[j] -= spreadleft;
-                       spreadDelta[i] += spreadleft;
-                       spreadleft = 0;
-                     } else {
-                       spreadDelta[j] -= curExtraSpace;
-                       spreadDelta[i] += curExtraSpace;
-                       spreadleft -= curExtraSpace;
-                     }
-                   }
-                 }
-               }
-               // Done 3/3
-             }
-           }
-           return spreadDelta;
-         }
+          return Gen(combine);
+        }
 
 
-         function updateColumnsAction(spreadPositions, timeAnimation) {
-
-           theColumns1
-             .transition().duration(timeAnimation)
-             .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
-             .attr("x2", function (d) { return x(d.chemShift); })
-             .attr("stroke", function (d) {
-               if ((x(d.chemShift) > 0.0) && (x(d.chemShift) < width)) {
-                 return colorShowLine;
-               } else { return colorHideLine; }
-             })
-
-           theColumns2
-             .transition().duration(timeAnimation)
-             .attr("x1", function (d) { return x(d.chemShift); })
-             .attr("x2", function (d) { return x(d.chemShift); })
-             .attr("stroke", function (d) {
-               if ((x(d.chemShift) > 0.0) && (x(d.chemShift) < width)) {
-                 return colorShowLine;
-               } else { return colorHideLine; }
-             })
-
-           theColumns3
-             .transition().duration(timeAnimation)
-             .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
-             .attr("x2", function (d) { return spreadPositions[d.MyIndex]; })
-             .attr("stroke", function (d) {
-               return "black";
-             })
-
-           theColumns4
-             .transition().duration(timeAnimation)
-             .attr("x1", function (d) { return spreadPositions[d.MyIndex] + circleRadius; })
-             .attr("x2", function (d) { return spreadPositions[d.MyIndex] - circleRadius; })
-             .attr("stroke", function (d) {
-               return "black";
-             })
-
-           theDots
-             .transition().duration(timeAnimation)
-             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
-
-           theDots2
-             .transition().duration(timeAnimation)
-             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
-
-
-           //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-           //.attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
-           //  .attr("opacity", 0.0)
-
-
-
-           theColumnLabel.transition().duration(timeAnimation)
-             .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-             .attr("transform", function (d) {
-               return "rotate(-45," + spreadPositions[d.MyIndex] + "," +
-                 eval(-6 + topJGraphYposition + positionJscale) + " )";
-             })
-
-           //   .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
-           //  .attr("opacity", 0.0)
-
-         }
-         function updateColumnsPositions() {
-          var spreadPositions = [];
-          var spreadDelta = [];
-           for (i = 0; i < dataColumns.length; i++) {
-             var returnValue = 0.0;
-             const curChemShift = dataColumns.map(function (d) { return d.chemShift; })
-             const curChem = curChemShift[i];
-             if (leftPosColumns[i] < x(curChem)) {
-               if (rightPosColumns[i] > x(curChem)) {
-                 returnValue = x(curChem);
-               } else {
-                 returnValue = rightPosColumns[i];
-               }
-             } else {
-               returnValue = leftPosColumns[i];
-             }
-             spreadPositions.push(returnValue);
-             if (i > 0) {
-               spreadDelta.push(returnValue - spreadPositions[i - 1]);
-             }
-           }
-           console.log("spreadPositions  " + JSON.stringify(spreadPositions))
-           console.log("spreadDelta  " + JSON.stringify(spreadDelta))
-           // See if need to seprated in the central region.
-           spreadDelta = getSpread(spreadDelta, smallSpace);
-           console.log("spreadDeltaspreadDelta  " + JSON.stringify(spreadDelta))
-
-           for (i = 0; i < spreadDelta.length; i++) {
-             spreadPositions[i + 1] = spreadPositions[i] + spreadDelta[i];
-           }
-
-
-           return spreadPositions;
-         }
-         var spreadPositionsZZ = updateColumnsPositions();
+        
+         var spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
          var theLinesW = svg
            .selectAll("myPath222")
            .attr("class", "lineW")
@@ -847,9 +691,9 @@ import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
            .style("stroke-width", lineWidthCircleSmall)
 
 
+           
 
-
-         updateColumnsAction(spreadPositionsZZ, 0);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
 
          // Add the brushing
          lineSpectrum
@@ -862,62 +706,63 @@ import { getJgraphColor } from './src/getJgraphColor.js'; // this is not working
          function idled() { idleTimeout = null; }
 
          // A function that update the chart for given boundaries
+        
          function updateChart() {
-           console.log("Function updateChart ...===========")
+          console.log("Function updateChart ...===========")
 
-           // What are the selected boundaries?
-           var extent = d3.event.selection
+          // What are the selected boundaries?
+          var extent = d3.event.selection
 
-           // If no selection, back to initial coordinate. Otherwise, update X axis domain
-           if (!extent) {
-             if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-             x.domain([
-               d3.max(chemShift, function (d) { return +d.chemShift; }),
-               d3.min(chemShift, function (d) { return +d.chemShift; })
-             ])
-           } else {
-             x.domain([
-               x.invert(extent[0]),
-               x.invert(extent[1])
-             ])
-             lineSpectrum.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-           }
+          // If no selection, back to initial coordinate. Otherwise, update X axis domain
+          if (!extent) {
+            if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+            x.domain([
+              d3.max(chemShift, function (d) { return +d.chemShift; }),
+              d3.min(chemShift, function (d) { return +d.chemShift; })
+            ])
+          } else {
+            x.domain([
+              x.invert(extent[0]),
+              x.invert(extent[1])
+            ])
+            lineSpectrum.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+          }
 
-           // Update axis and line position
-           xAxis.transition().duration(1000).call(d3.axisBottom(x))
+          // Update axis and line position
+          xAxis.transition().duration(1000).call(d3.axisBottom(x))
 
-           lineSpectrum
-             .select('.lineG')
-             .transition().duration(1000)
-             .attr("d", d3.line()
-               .x(function (d) { return x(d.chemShift) })
-               .y(function (d) { return y(d.value) })
-             )
+          lineSpectrum
+            .select('.lineG')
+            .transition().duration(1000)
+            .attr("d", d3.line()
+              .x(function (d) { return x(d.chemShift) })
+              .y(function (d) { return y(d.value) })
+            )
 
 
-           spreadPositionsZZ = updateColumnsPositions();
-           updateColumnsAction(spreadPositionsZZ, 1000);
-           theLinesW
-             //.select('.lineW')
-             .transition().duration(1000)
-             .attr("d", pathFun)
+           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
+          theLinesW
+            //.select('.lineW')
+            .transition().duration(1000)
+            .attr("d", pathFun)
 
-         }
-         // If user double click, reinitialize the chart
-         svg.on("dblclick", function () {
-           x.domain([
-             d3.max(chemShift, function (d) { return +d.chemShift; }),
-             d3.min(chemShift, function (d) { return +d.chemShift; })
-           ])
-           xAxis.transition().call(d3.axisBottom(x))
-           lineSpectrum
-             .select('.line')
-             .transition()
-             .attr("d", d3.line()
-               .x(function (d) { return x(d.chemShift) })
-               .y(function (d) { return y(d.value) })
-             )
-         });
+                }
+        // If user double click, reinitialize the chart
+        svg.on("dblclick", function () {
+          x.domain([
+            d3.max(chemShift, function (d) { return +d.chemShift; }),
+            d3.min(chemShift, function (d) { return +d.chemShift; })
+          ])
+          xAxis.transition().call(d3.axisBottom(x))
+          lineSpectrum
+            .select('.line')
+            .transition()
+            .attr("d", d3.line()
+              .x(function (d) { return x(d.chemShift) })
+              .y(function (d) { return y(d.value) })
+            )
+        });
        })
    })
 
