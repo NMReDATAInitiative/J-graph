@@ -99,7 +99,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
              Jvalue: +Jvalue[i],
              colNumber1: (index1 - 1),
              colNumber2: (index2 - 1),
-           })
+           });
          } else {
            theAssignedCouplings.push({
              Jvalue: +Jvalue[i],
@@ -117,11 +117,11 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
              xx: 0.0,
              indexInMolFile1: indexInMolFile1[i],
              indexInMolFile2: indexInMolFile2[i],
-           })
+           });
          }
        }
      }
-     console.log("unassignedCouplings :" + JSON.stringify(unassignedCouplings))
+     console.log("unassignedCouplings :" + JSON.stringify(unassignedCouplings));
      console.log("arrayColumns1 " + arrayColumns);
 
      // sort by decreasing values
@@ -199,7 +199,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      }
 
      // Make list of positions accoding to size of jGraphData
-     const numberItem = arrayColumns.length;  //
+     const numberItem = arrayColumns.length;
      var smallSpace = width / (numberItem + 1); // five items, six spaces
      if (smallSpace > preferedDistanceInPtBetweenColumns) {
        smallSpace = preferedDistanceInPtBetweenColumns;
@@ -214,8 +214,8 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
        rightPosColumns.push(curPosRight);
      }
 
-     console.log("Left pos :" + JSON.stringify(leftPosColumns))
-     console.log("Right pos :" + JSON.stringify(rightPosColumns))
+     console.log("Left pos :" + JSON.stringify(leftPosColumns));
+     console.log("Right pos :" + JSON.stringify(rightPosColumns));
 
      var yJs = d3.scaleLinear()
        .domain([0, maxScaleJ])
@@ -245,7 +245,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .transition().duration(10).delay(0)
          .remove()
 
-      var selected_specie = d.Label
+      var selected_specie = d.Label;
        // first every group turns grey
        d3.selectAll(".line")
          .transition().duration(200)
@@ -255,7 +255,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          //   .style("stroke", function (d) { return (color(d.Label)) })
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
-         .style("opacity", "1")
+         .style("opacity", "1");
 
        // Second the hovered specie takes its color
        d3.selectAll("." + selected_specie)
@@ -263,7 +263,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          //  .style("stroke", color(selected_specie))
          //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
-         .style("opacity", 1.0)
+         .style("opacity", 1.0);
 
 
        var theTextLine2 = svg
@@ -279,7 +279,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .transition().duration(100).delay(3000)
          .remove()
 
-       var toto = function (d) { return d.lineText; }
+       var toto = function (d) { return d.lineText; };
       // document.getElementById("textMainPage").innerHTML = "For " + d.lineText + " the indices of the atoms are " +
          d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
          Jmol.script(JmolAppletA,"select hydrogen; color white");
@@ -287,26 +287,26 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80");
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
 
-     }
+     };
 
      // Unhighlight
      var doNotHighlightLines = function (toto) {
 
 
        /*
-
         d3.selectAll(".line")
           .transition().duration(200).delay(300)
           //   .style("stroke", function (d) { return (color(d.Label)) })
           // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
           .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
           .style("opacity", "1")
-
-     
 */
-     }
+     };
 
      var highlightDot = function (d) {
+      var x = d3.scaleLinear();
+
+      var spreadPositionsNew = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
        //unselect
        Jmol.script(JmolAppletA,"select hydrogen; color white");
@@ -319,7 +319,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .style("opacity", "0.1")
          .transition().duration(20).delay(delayBeforeErase)
          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
-         .style("opacity", "1")
+         .style("opacity", "1");
 
        var theTextDots2 = svg.selectAll("textt")
          .data(dataUnassignedCoupCircles)
@@ -334,19 +334,19 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .attr('dx', 1.3 * circleRadius)
          .style("font-size", circleRadius * 2.5)
          .style("font-family", "Helvetica")
-         .attr("x", function (d) { return spreadPositionsUU[d.MyIndex]; })
-         .attr("transform", function (d) { return "rotate(-45," + spreadPositionsUU[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+         .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
+         .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
          .attr("opacity", 0.0)
          .transition().duration(100).delay(3000)
-         .remove()
+         .remove();
        const highlightWidth = lineWidth * 2.0;
 
        // first every group dimmed
        d3.selectAll(".circleL")
-         .transition().duration(200).delay()
+         .transition().duration(200).delay(0)
          .style("stroke", "black")
          .style("opacity", "0.1")
-         .style("stroke-width", lineWidth)
+         .style("stroke-width", lineWidth);
 
        // specific to those matching the condition of similarity of J's
        var a = 0;
@@ -356,27 +356,27 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            if (Math.abs(d.value - p.value) <= deltaSearchJ)
              if (d.uniqIndex != p.uniqIndex)
                a++;
-         })
+         });
 
-       var highColor = "green"
+       var highColor = "green";
        if (a > 1)
-         highColor = "red"
+         highColor = "red";
 
        d3.selectAll(".circleL")
          .transition().duration(10).delay(300)
          .filter(function (p) { return (Math.abs(d.value - p.value) <= deltaSearchJ) && (d.uniqIndex != p.uniqIndex) })
          .style("stroke", highColor)
          .style("opacity", "1.0")
-         .style("stroke-width", highlightWidth)
+         .style("stroke-width", highlightWidth);
 
        d3.selectAll(".circleL")
          .transition().duration(200).delay(delayBeforeErase)
          .style("stroke", "black")
          .style("opacity", "1.0")
-         .style("stroke-width", lineWidth)
+         .style("stroke-width", lineWidth);
 
        d3.selectAll(".rulerClass")
-         .transition().duration(200).delay()
+         .transition().duration(200).delay(0)
          .attr("y1", yJs(Math.abs(d.value)))
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '1.0')
@@ -385,22 +385,21 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .attr("y1", yJs(Math.abs(d.value)))
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '0.0')
-         .style("stroke", "black")
+         .style("stroke", "black");
 
        d3.select(this)
          .transition(10).duration(200)
          .style("opacity", "1.0")
          .style("stroke", "black")
-         .style("stroke-width", lineWidth)
+         .style("stroke-width", lineWidth);
 
        selected_specie = "textCircle" + d.uniqIndex;
        d3.selectAll("." + selected_specie)
          .transition().duration(100).delay(10)
          .style("opacity", "1.0")
          .transition().duration(200).delay(delayBeforeErase)
-         .style("opacity", "0.0")
-     }
-
+         .style("opacity", "0.0");
+     };
 
      //  Unhighlight
      /*    var doNotHighlightDot = function (d) {
@@ -424,7 +423,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      d3.csv("./Androsten_forMult_analysis.csv",
        // format variables:
        function (d) {
-         return { chemShift: d.x, value: d.y }
+         return { chemShift: d.x, value: d.y};
        },
 
        function (chemShift) {
@@ -466,7 +465,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("x2", width)
            .attr("y2", function (d) { return yJs(d); })
            .attr("stroke", "#EEEEEE")
-           .style("stroke-width", lineWidth)
+           .style("stroke-width", lineWidth);
 
          var theRuler = svg
            .selectAll("theRuler")
@@ -481,11 +480,11 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("stroke", "red")
            .style("stroke-dasharray", [lineWidth * 2, lineWidth * 2])
            .style("stroke-width", lineWidth)
-           .style("opacity", '0.0')
+           .style("opacity", '0.0');
 
-         let dimensions = [1, 1.2, 1.3, 2, 3, 5];
+         var dimensions = [1, 1.2, 1.3, 2, 3, 5];
 
-         var yn = {}
+         var yn = {};
          for (i in dimensions) {
            name = dimensions[i]
            yn[name] = d3.scaleLinear()
@@ -515,8 +514,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
 
          // Create the line variable: where both the line and the brush take place
          var lineSpectrum = svg.append('g')
-           .attr("clip-path", "url(#clip)")
-
+           .attr("clip-path", "url(#clip)");
 
          // Add the spectrum
          lineSpectrum.append("path")
@@ -529,7 +527,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("d", d3.line()
              .x(function (d) { return x(d.chemShift) })
              .y(function (d) { return y(d.value) })
-           )
+           );
 
 
 
@@ -549,7 +547,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y1", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("y2", function (d) { return pointingLineColum + positionJscale; })
            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
-           .style("stroke-width", lineWidthCircle)
+           .style("stroke-width", lineWidthCircle);
          // streight down
          var theColumns2 = svg.selectAll("ColunnSegment2")
            .data(dataColumns)
@@ -561,7 +559,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y1", function (d) { return pointingLineColum + positionJscale; })
            .attr("y2", function (d) { return height; })
            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
-           .style("stroke-width", lineWidthCircle)
+           .style("stroke-width", lineWidthCircle);
 
          var theColumns3 = svg.selectAll("ColunnSegment3")
            .data(dataColumns)
@@ -573,7 +571,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y1", function (d) { return topJGraphYposition + positionJscale; })
            .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("stroke", "black") // just sketched... update wil fix colors
-           .style("stroke-width", lineWidthColumn)
+           .style("stroke-width", lineWidthColumn);
 
          var theColumns4 = svg.selectAll("ColunnSegment4")
            .data(dataColumns)
@@ -585,7 +583,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y1", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("stroke", "black") // just sketched... update wil fix colors
-           .style("stroke-width", lineWidthCircle)
+           .style("stroke-width", lineWidthCircle);
 
          var theColumnLabel = svg.selectAll("textc")
            .data(dataColumns)
@@ -598,7 +596,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .text(function (d) { return "" + d.labelColumn; })
            .attr('dx', -1.0 * circleRadius)
            .style("font-size", circleRadius * 2.5)
-           .style("font-family", "Helvetica")
+           .style("font-family", "Helvetica");
          //.style("font-weight", "2pt")            
          // Lines
         
@@ -655,11 +653,6 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .on("click", highlightLines)
            .on("mouseover", highlightLines)
            .on("mouseleave", doNotHighlightLines)
-
-
-
-
-
 
          // Circles
          var theDots = svg.selectAll("dots")
