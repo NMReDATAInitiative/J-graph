@@ -64,6 +64,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      var unassignedCouplings = []; // marked with label "noAssignement" in file
      var theAssignedCouplings = [];
      var labelColumnarray = [];
+     var indexAtomMol = [];
 
      {
        var curChemShiftToReplace1 = [];
@@ -94,7 +95,9 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          arrayColumns[index2 - 1] = curChemShiftToReplace2[i];
          labelColumnarray[index1 - 1] = labelColumn1[i];
          labelColumnarray[index2 - 1] = labelColumn2[i];
-         if (label[i] == "noAssignement") {
+         indexAtomMol[index1 - 1] = indexInMolFile1[i];
+         indexAtomMol[index2 - 1] = indexInMolFile2[i];    
+        if (label[i] == "noAssignement") {
            unassignedCouplings.push({
              Jvalue: +Jvalue[i],
              colNumber1: (index1 - 1),
@@ -150,6 +153,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          'chemShift': arrayColumns[indices[i]],
          'labelColumn': labelColumnarray[indices[i]],
          'MyIndex': i,
+         'atomIndexMol': indexAtomMol[indices[i]],
        });
      }
 
@@ -239,13 +243,12 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
        }
        listOfChemicalShifts.pop()
      */
-     // Highlight the specie that is hovered
-     var highlightColumn = function (d) {
-      Jmol.script(JmolAppletA,"select hydrogen; color white");
-var number =  d.indexInMolFile1;
-number = 1;
-         Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80");
-     };
+
+      var highlightColumn = function (d) {
+        Jmol.script(JmolAppletA,"select hydrogen; color white");
+        const number = d.atomIndexMol;
+        Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80");
+      };
 
 
      var highlightLines = function (d) {
@@ -518,7 +521,7 @@ number = 1;
          // Add brushing
          var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
            .extent([[0, 0], [width, height]])  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-           .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+           .on("end", updateChart);             // Each time the brush selection changes, trigger the 'updateChart' function
 
          // Create the line variable: where both the line and the brush take place
          var lineSpectrum = svg.append('g')
