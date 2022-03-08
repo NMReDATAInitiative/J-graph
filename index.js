@@ -245,17 +245,19 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      */
 
       var highlightColumn = function (d) {
-        Jmol.script(JmolAppletA,"select hydrogen; color white");
-        const number = d.atomIndexMol;
-        Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80");
-      };
+				Jmol.script(JmolAppletA, "select hydrogen; color white");
+				const number = d.atomIndexMol;
+				Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80");
+				setTimeout(function () {
+					Jmol.script(JmolAppletA, "select hydrogen; color white");
+				}, 3200);
+			};
 
 
      var highlightLines = function (d) {
        d3.selectAll(".toBeHidden")
          .transition().duration(10).delay(0)
          .remove();
-
       var selected_specie = d.Label;
        // first every group turns grey
        d3.selectAll(".line")
@@ -293,10 +295,11 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
        var toto = function (d) { return d.lineText; };
       // document.getElementById("textMainPage").innerHTML = "For " + d.lineText + " the indices of the atoms are " + d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
          Jmol.script(JmolAppletA,"select hydrogen; color white");
-
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80");
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
-        
+        setTimeout(function () {
+					Jmol.script(JmolAppletA, "select hydrogen; color white");
+				}, 3200);
      };
 
      // Unhighlight
