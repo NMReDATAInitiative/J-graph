@@ -562,6 +562,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y2", function (d) { return pointingLineColum + positionJscale; })
            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
+           .on("click", highlightColumn)
            .on("mouseover", highlightColumn);
 
          // streight down
@@ -576,6 +577,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y2", function (d) { return height; })
            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
+           .on("click", highlightColumn)
            .on("mouseover", highlightColumn);
 
          var theColumns3 = svg.selectAll("ColunnSegment3")
@@ -589,6 +591,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("stroke", "black") // just sketched... update wil fix colors
            .style("stroke-width", lineWidthColumn)
+           .on("click", highlightColumn)
            .on("mouseover", highlightColumn);
 
 
@@ -603,6 +606,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("stroke", "black") // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
+           .on("click", highlightColumn)
            .on("mouseover", highlightColumn);
 
 
@@ -617,7 +621,9 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .text(function (d) { return "" + d.labelColumn; })
            .attr('dx', -1.0 * circleRadius)
            .style("font-size", circleRadius * 2.5)
-           .style("font-family", "Helvetica");
+           .style("font-family", "Helvetica")
+           .on("click", highlightColumn)
+           .on("mouseover", highlightColumn);
          //.style("font-weight", "2pt")            
          // Lines
         
@@ -673,7 +679,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            .style("opacity", 0.5)
            .on("click", highlightLines)
            .on("mouseover", highlightLines)
-           .on("mouseleave", doNotHighlightLines)
+          // .on("mouseleave", doNotHighlightLines)
 
          // Circles
          var theDots = svg.selectAll("dots")

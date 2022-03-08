@@ -1,5 +1,4 @@
 export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel) {
- //            updateColumnsAction(spreadPositionsZZ, 1000,         colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
  
             theColumns1
              .transition().duration(timeAnimation)
@@ -52,7 +51,8 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
 
 
 
-           theColumnLabel.transition().duration(timeAnimation)
+           theColumnLabel
+             .transition().duration(timeAnimation)
              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("transform", function (d) {
                return "rotate(-45," + spreadPositions[d.MyIndex] + "," +
