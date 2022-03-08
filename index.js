@@ -63,6 +63,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      var arrayColumns = [];
      var unassignedCouplings = []; // marked with label "noAssignement" in file
      var theAssignedCouplings = [];
+    
      var labelColumnarray = [];
      var indexAtomMol = [];
 
@@ -93,6 +94,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          const index2 = indexArray2[i];
          arrayColumns[index1 - 1] = curChemShiftToReplace1[i];
          arrayColumns[index2 - 1] = curChemShiftToReplace2[i];
+         
          labelColumnarray[index1 - 1] = labelColumn1[i];
          labelColumnarray[index2 - 1] = labelColumn2[i];
          indexAtomMol[index1 - 1] = indexInMolFile1[i];
@@ -102,6 +104,10 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
              Jvalue: +Jvalue[i],
              colNumber1: (index1 - 1),
              colNumber2: (index2 - 1),
+             colNumberMol1: indexInMolFile1[i],
+             colNumberMol2: indexInMolFile2[i],
+             label1: labelColumn1[i],
+             label2: labelColumn2[i],
            });
          } else {
            theAssignedCouplings.push({
@@ -166,12 +172,16 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          'value': unassignedCouplings[i].Jvalue,
          'MyIndex': inInd1,
          'uniqIndex': dataUnassignedCoupCircles.length,
+         'atomIndexMol': unassignedCouplings[i].colNumberMol1,
+         'labelColumn': unassignedCouplings[i].label1,
        });
        dataUnassignedCoupCircles.push({
          'chemShift': arrayColumns[inInd2],
          'value': unassignedCouplings[i].Jvalue,
          'MyIndex': inInd2,
          'uniqIndex': dataUnassignedCoupCircles.length,
+         'atomIndexMol': unassignedCouplings[i].colNumberMol2,
+         'labelColumn': unassignedCouplings[i].label2,
        });
      }
 
@@ -245,11 +255,11 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      */
 
       var highlightColumn = function (d) {
-				Jmol.script(JmolAppletA, "select hydrogen; color white");
+				Jmol.script(JmolAppletA, "select hydrogen; color white; label off");
 				const number = d.atomIndexMol;
-				Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80");
+				Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80;label <color #222222>" + d.labelColumn + "</color>");
 				setTimeout(function () {
-					Jmol.script(JmolAppletA, "select hydrogen; color white");
+					Jmol.script(JmolAppletA, "select hydrogen; color white; label off");
 				}, 3200);
 			};
 
@@ -294,18 +304,18 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
 
        var toto = function (d) { return d.lineText; };
       // document.getElementById("textMainPage").innerHTML = "For " + d.lineText + " the indices of the atoms are " + d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
-         Jmol.script(JmolAppletA,"select hydrogen; color white");
-         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80");
-         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
+         Jmol.script(JmolAppletA,"select hydrogen; color white; label off");
+         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80;label <color #222222>" + d.labelColumn1 + "</color>");
+         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80;label <color #222222>" + d.labelColumn2 + "</color>");
         setTimeout(function () {
-					Jmol.script(JmolAppletA, "select hydrogen; color white");
+					Jmol.script(JmolAppletA, "select hydrogen; color white; label off");
 				}, 3200);
      };
 
      // Unhighlight
      var doNotHighlightLines = function (toto) {
 
-    //  Jmol.script(JmolAppletA,"select hydrogen; color white");
+    //  Jmol.script(JmolAppletA,"select hydrogen; color white; label off");
 
        /*
         d3.selectAll(".line")
@@ -320,12 +330,13 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      var highlightDot = function (d) {
       var x = d3.scaleLinear();
 
+      var xAxis = svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
       var spreadPositionsNew = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
-       //unselect
-       Jmol.script(JmolAppletA,"select hydrogen; color white");
-
-       const delayBeforeErase = 3000;
+       const delayBeforeErase = 5000;
 
        d3.selectAll(".line")
          .transition().duration(200)
@@ -362,14 +373,18 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .style("opacity", "0.1")
          .style("stroke-width", lineWidth);
 
+         Jmol.script(JmolAppletA,"select hydrogen; color white; label off");
+
        // specific to those matching the condition of similarity of J's
        var a = 0;
        const deltaSearchJ = 0.5;
        d3.selectAll(".circleL")
          .filter(function (p) {
            if (Math.abs(d.value - p.value) <= deltaSearchJ)
-             if (d.uniqIndex != p.uniqIndex)
+             if (d.uniqIndex != p.uniqIndex) {
                a++;
+               Jmol.script(JmolAppletA,"select atomno = " + p.atomIndexMol + ";color [127,255,127];spacefill 80;label <color #222222>" + p.labelColumn + "</color>");
+             }
          });
 
        var highColor = "green";
@@ -407,12 +422,20 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .style("stroke", "black")
          .style("stroke-width", lineWidth);
 
-       selected_specie = "textCircle" + d.uniqIndex;
+      const selected_specie = "textCircle" + d.uniqIndex;
        d3.selectAll("." + selected_specie)
          .transition().duration(100).delay(10)
          .style("opacity", "1.0")
          .transition().duration(200).delay(delayBeforeErase)
          .style("opacity", "0.0");
+
+
+         Jmol.script(JmolAppletA,"select atomno = " + d.atomIndexMol + ";color [255,255,0];spacefill 80;label <color #222222>" + d.labelColumn + "</color>");
+       // erase
+         setTimeout(function () {
+					Jmol.script(JmolAppletA, "select hydrogen; color white; label off");
+				}, delayBeforeErase); 
+
      };
 
      //  Unhighlight
