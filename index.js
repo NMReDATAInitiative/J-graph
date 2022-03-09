@@ -294,9 +294,29 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
 
        var toto = function (d) { return d.lineText; };
       // document.getElementById("textMainPage").innerHTML = "For " + d.lineText + " the indices of the atoms are " + d.indexInMolFile1 + " and " + d.indexInMolFile2 + ".";
+
          Jmol.script(JmolAppletA,"select hydrogen; color white");
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80");
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
+        // var outJmo = Jmol.script(JmolAppletA,'x = getproperty("bondInfo", (@' + d.indexInMolFile1 + '|@' + d.indexInMolFile2 + '));print x[1].order');
+      //   var outJmo = Jmol.script(JmolAppletA,'getproperty("bondInfo", (@' + d.indexInMolFile1 + '|@' + d.indexInMolFile2 + ')');
+       //                   console.log(outJmo)
+          var outJmo345 = Jmol.getPropertyAsJavaObject(JmolAppletA,'modelInfo');
+          console.log(outJmo345)
+
+
+       ////  DEMO
+       //// 
+       ////  x = getproperty("bondInfo", (@20|@89));print x[1].order
+
+       //   var outJmo3 = Jmol.getPropertyAsJavaObject(JmolAppletA,'bondInfo (@0|@1)');
+       //   console.log(outJmo3)
+
+       
+       //  var outJmo2 = Jmol.getproperty(JmolAppletA,"bondInfo", '(@' + d.indexInMolFile1 + '|@' + d.indexInMolFile2 + ')');
+      // var dataJmol = Jmol.getPropertyAsJavaObject(JmolAppletA, 'x = getproperty("bondInfo", (@' + d.indexInMolFile1 + '|@' + d.indexInMolFile2 + '));print x[1].order');
+                      //    console.log(dataJmol)
+
         setTimeout(function () {
 					Jmol.script(JmolAppletA, "select hydrogen; color white");
 				}, 3200);
@@ -407,7 +427,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .style("stroke", "black")
          .style("stroke-width", lineWidth);
 
-       selected_specie = "textCircle" + d.uniqIndex;
+       var selected_specie = "textCircle" + d.uniqIndex;
        d3.selectAll("." + selected_specie)
          .transition().duration(100).delay(10)
          .style("opacity", "1.0")
