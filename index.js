@@ -308,6 +308,11 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
           var atomInfo = Jmol.getPropertyAsArray(JmolAppletA, "atomInfo");
 
 /*
+https://chemapps.stolaf.edu/jmol/docs/#getproperty
+
+https://chemapps.stolaf.edu/jmol/docs/misc/bondInfo.txt
+
+https://chemapps.stolaf.edu/jmol/docs/misc/atomInfo.txt
 atomInfo[0].bondCount=1
 atomInfo[0].atomno=1
 atomInfo[0].elemno=1
@@ -343,6 +348,7 @@ atomInfo[0].formalCharge=0
               if (at1to == at2to) { // is a 2J
                  const elementNumber = atomInfo[at1to - 1].elemno;
                  const numberOfBonds = atomInfo[at1to - 1].bondCount;
+                 // const partialCharge = atomInfo[at1to - 1].partialCharge;
                  var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2 + ")");
                  textToDisplay = ("<sup>2</sup>" + d.lineText + " angle H-X-H : " + theta.toFixed(2));
                  if (elementNumber == 6 && numberOfBonds == 4) { // is sp3
@@ -376,6 +382,7 @@ atomInfo[0].formalCharge=0
                     if (elementNumber1 == 6 && numberOfBonds1 == 2 && elementNumber2 == 6 && numberOfBonds2 == 2) {
                       textToDisplay += " on C=C bond";
                     }
+                    break;
                   }
                   for (var j = 0; j < bondInfo.length; j++) {
                     if (bondInfo[i].atom1.atomno == at1to && bondInfo[j].atom1.atomno == at2to && bondInfo[i].atom2.atomno == bondInfo[j].atom2.atomno) middleAtomFro4J = bondInfo[i].atom2.atomno;
@@ -385,6 +392,7 @@ atomInfo[0].formalCharge=0
                   }
                   if (middleAtomFro4J > -1) { // is a 4J
                     textToDisplay = ("<sup>4</sup>" + d.lineText + " via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
+                    // here don't break in case a 4J is replaced with a 3J.
                   }
                 }
               }
