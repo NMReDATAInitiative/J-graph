@@ -801,7 +801,7 @@ atomInfo[0].formalCharge=0
            .attr("cx", function (d) { return x(d.chemShift); })
            .attr("cy", function (d) { return yJs(Math.abs(d.value)); })
            .attr("r", circleRadius)
-           .style("fill",  function (d) { return getJisOK(getJisOK(d.jOKcolor)); })
+           .style("fill",  function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircle)
            .on("mouseenter", highlightDot)
