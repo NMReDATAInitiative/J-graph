@@ -1,7 +1,8 @@
 //import * as d3 from "d3"; // 
-import { getJgraphColor } from './src/getJgraphColor.js'; 
-import { updateColumnsPositions } from './src/updateColumnsPositions.js'; 
-import { updateColumnsAction } from './src/updateColumnsAction.js'; 
+import { getJgraphColor } from './src/getJgraphColor.js';
+import { getJisOK } from './src/getJisOK.js';
+import { updateColumnsPositions } from './src/updateColumnsPositions.js';
+import { updateColumnsAction } from './src/updateColumnsAction.js';
 //import { pathFun } from './src/pathFun.js'; 
 //import { updateChart } from './src/updateChart.js'; 
 
@@ -105,6 +106,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
            });
          } else {
            theAssignedCouplings.push({
+             jOKcolor: "grey",
              Jvalue: +Jvalue[i],
              colNumber1: (index1 - 1),
              colNumber2: (index2 - 1),
@@ -267,7 +269,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          .transition().duration(200).delay(3000)
          //   .style("stroke", function (d) { return (color(d.Label)) })
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-         .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
          .style("opacity", "1");
 
        // Second the hovered specie takes its color
@@ -276,7 +278,12 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
          //  .style("stroke", color(selected_specie))
          //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
-         .style("opacity", 1.0);
+         .style("opacity", 1.0)
+         .transition().duration(200).delay(3000)
+         //   .style("stroke", function (d) { return (color(d.Label)) })
+         // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
+         .style("opacity", "1");;
 
 
        var theTextLine2 = svg
@@ -779,7 +786,7 @@ atomInfo[0].formalCharge=0
              .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
            )*/
            .style("fill", "none")
-           .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode) })
+           .style("stroke", "grey")
            .style("opacity", 0.5)
            .on("click", highlightLines)
            .on("mouseover", highlightLines)
@@ -794,7 +801,7 @@ atomInfo[0].formalCharge=0
            .attr("cx", function (d) { return x(d.chemShift); })
            .attr("cy", function (d) { return yJs(Math.abs(d.value)); })
            .attr("r", circleRadius)
-           .style("fill", function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
+           .style("fill",  function (d) { return getJisOK(getJisOK(d.jOKcolor)); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircle)
            .on("mouseenter", highlightDot)
@@ -810,7 +817,7 @@ atomInfo[0].formalCharge=0
            .attr("cx", function (d) { return x(d.chemShift); })
            .attr("cy", function (d) { return yJs(Math.abs(d.value)); })
            .attr("r", circleRadiusSmall)
-           .style("fill", "gray")
+           .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircleSmall)
 
