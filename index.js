@@ -443,7 +443,7 @@ atomInfo[0].formalCharge=0
          .style("stroke", "black")
          .style("opacity", "0.1")
          .transition().duration(20).delay(delayBeforeErase)
-         .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
          .style("opacity", "1");
 
        var theTextDots2 = svg.selectAll("textt")
@@ -804,7 +804,7 @@ atomInfo[0].formalCharge=0
            .style("fill",  function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircle)
-           .on("mouseenter", highlightDot)
+           .on("mouseover", highlightDot)
            .on("click", highlightDot)
          // .on("mouseleave", doNotHighlightDot)
 
