@@ -335,7 +335,7 @@ atomInfo[0].formalCharge=0
             if (atom2 == at1) at1to = atom1;
             if (atom2 == at2) at2to = atom1; 
           }
-          const defaultText = "More than 4 bond apart!";
+          const defaultText = "More than 4 bonds apart!";
           var textToDisplay = defaultText;
           if (at1to > -1 && at2to > -1) {
             // Is this 2J, 3J, 4J ?
