@@ -330,21 +330,21 @@ atomInfo[0].formalCharge=0
             if (atom2 == at1) at1to = atom1;
             if (atom2 == at2) at2to = atom1; 
           }
-          const defaultText = "J-Graph";
+          const defaultText = "More than 4 bond apart!";
           var textToDisplay = defaultText;
           if (at1to > -1 && at2to > -1) {
             // Is this 2J, 3J, 4J ?
             // Important note: A pair may be both 3J and 4J (think of cyclopropane)
             if (at1 == at2to && at2 == at1to) { // is a 1J
                // var distance = Jmol.evaluateVar(JmolAppletA, "distance(@" + at1 + ", @" + at2 + ")") 
-               // console.log("2J, angle H-X-H : " + distance);
-               textToDisplay = "1J";
+               // console.log("2J, angle H-X-H : " + distance.toFixed(2));
+               textToDisplay = "1" + d.lineText ;
             } else {
               if (at1to == at2to) { // is a 2J
                  const elementNumber = atomInfo[at1to - 1].elemno;
                  const numberOfBonds = atomInfo[at1to - 1].bondCount;
                  var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2 + ")");
-                 textToDisplay = ("2J, angle H-X-H : " + theta);
+                 textToDisplay = ("<sup>2</sup>" + d.lineText + " angle H-X-H : " + theta.toFixed(2));
                  if (elementNumber == 6 && numberOfBonds == 4) { // is sp3
                     textToDisplay += " sp3 carbon";
                  }
@@ -368,8 +368,8 @@ atomInfo[0].formalCharge=0
                     const numberOfBonds1 = atomInfo[at1to - 1].bondCount;
                     const elementNumber2 = atomInfo[at2to - 1].elemno;
                     const numberOfBonds2 = atomInfo[at2to - 1].bondCount;
-                    var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2to + ", @" + at2 + ")") 
-                    textToDisplay = ("3J, dihedral angle H-X-X-H : " + theta);
+                    var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2to + ", @" + at2 + ")"); 
+                    textToDisplay = ("<sup>3</sup>" + d.lineText + " dihedral angle H-X-X-H : " + theta.toFixed(2));
                     if (elementNumber1 == 6 && numberOfBonds1 == 4 && elementNumber2 == 6 && numberOfBonds2 == 4) {
                       textToDisplay += " on C-C bond";
                     }
@@ -384,8 +384,7 @@ atomInfo[0].formalCharge=0
                     if (bondInfo[i].atom2.atomno == at1to && bondInfo[j].atom2.atomno == at2to && bondInfo[i].atom1.atomno == bondInfo[j].atom1.atomno) middleAtomFro4J = bondInfo[i].atom1.atomno;
                   }
                   if (middleAtomFro4J > -1) { // is a 4J
-                    var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2to + ", @" + at2 + ")") ;
-                    textToDisplay = ("4J, via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
+                    textToDisplay = ("<sup>4</sup>" + d.lineText + " via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
                   }
                 }
               }
@@ -395,7 +394,7 @@ atomInfo[0].formalCharge=0
 
         setTimeout(function () {
 					Jmol.script(JmolAppletA, "select hydrogen; color white");
-          document.getElementById("textMainPage").innerHTML = defaultText;
+        //  document.getElementById("textMainPage").innerHTML = defaultText;
 				}, 3200);
      };
 
