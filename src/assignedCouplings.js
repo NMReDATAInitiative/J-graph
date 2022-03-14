@@ -44,7 +44,5 @@ export class AssignedCouplings {
       }
       this.content = theAssignedCouplings;
     }
-    updateBrokeLines() {
-      
-    }
+   
   }

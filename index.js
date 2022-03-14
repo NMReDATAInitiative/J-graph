@@ -4,6 +4,7 @@ import { getJisOK } from './src/getJisOK.js';
 import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
 import { AssignedCouplings } from './src/assignedCouplings.js';
+import { UnassignedCouplings } from './src/unassignedCouplings.js';
 //import { pathFun } from './src/pathFun.js'; 
 //import { updateChart } from './src/updateChart.js'; 
 
@@ -63,13 +64,13 @@ import { AssignedCouplings } from './src/assignedCouplings.js';
    d3.csv("./androNew.csv", function (jGraphData) {
      // get chemical shifts from lines... should come from other source !
      var arrayColumns = [];
-     var unassignedCouplings = [];
+     //var unassignedCouplings.content = [];
      //var assignedCouplings.content = [];
      var labelColumnarray = [];
      var indexAtomMol = []; // atom index in the mol structure
     
-    var assignedCouplings = new AssignedCouplings(jGraphData);
-    //var assignedCouplings.content = assignedCouplings.content; // marked with label "noAssignement" in file
+     var assignedCouplings = new AssignedCouplings(jGraphData);
+     var unassignedCouplings = new UnassignedCouplings(jGraphData);
 
      {
       // var curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
@@ -97,16 +98,8 @@ import { AssignedCouplings } from './src/assignedCouplings.js';
          labelColumnarray[index2 - 1] = labelColumn2[i];
          indexAtomMol[index1 - 1] = indexInMolFile1[i];
          indexAtomMol[index2 - 1] = indexInMolFile2[i];    
-        if (label[i] == "noAssignement") {
-           unassignedCouplings.push({
-             Jvalue: +Jvalue[i],
-             colNumber1: (index1 - 1),
-             colNumber2: (index2 - 1),
-           });
-         } 
        }
      }
-     //console.log("unassignedCouplings :" + JSON.stringify(unassignedCouplings));
 
      // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
@@ -135,18 +128,18 @@ import { AssignedCouplings } from './src/assignedCouplings.js';
      }
 
      var dataUnassignedCoupCircles = [];
-     for (i = 0; i < unassignedCouplings.length; i++) {
-       const inInd1 = indices2[unassignedCouplings[i].colNumber1];
-       const inInd2 = indices2[unassignedCouplings[i].colNumber2];
+     for (i = 0; i < unassignedCouplings.content.length; i++) {
+       const inInd1 = indices2[unassignedCouplings.content[i].colNumber1];
+       const inInd2 = indices2[unassignedCouplings.content[i].colNumber2];
        dataUnassignedCoupCircles.push({
          'chemShift': arrayColumns[inInd1],
-         'value': unassignedCouplings[i].Jvalue,
+         'value': unassignedCouplings.content[i].Jvalue,
          'MyIndex': inInd1,
          'uniqIndex': dataUnassignedCoupCircles.length,
        });
        dataUnassignedCoupCircles.push({
          'chemShift': arrayColumns[inInd2],
-         'value': unassignedCouplings[i].Jvalue,
+         'value': unassignedCouplings.content[i].Jvalue,
          'MyIndex': inInd2,
          'uniqIndex': dataUnassignedCoupCircles.length,
        });
