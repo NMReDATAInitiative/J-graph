@@ -3,6 +3,7 @@ import { getJgraphColor } from './src/getJgraphColor.js';
 import { getJisOK } from './src/getJisOK.js';
 import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
+import { AssignedCouplings } from './src/assignedCouplings.js';
 //import { pathFun } from './src/pathFun.js'; 
 //import { updateChart } from './src/updateChart.js'; 
 
@@ -62,14 +63,17 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
    d3.csv("./androNew.csv", function (jGraphData) {
      // get chemical shifts from lines... should come from other source !
      var arrayColumns = [];
-     var unassignedCouplings = []; // marked with label "noAssignement" in file
-     var theAssignedCouplings = [];
+     var unassignedCouplings = [];
+     //var assignedCouplings.content = [];
      var labelColumnarray = [];
      var indexAtomMol = []; // atom index in the mol structure
+    
+    var assignedCouplings = new AssignedCouplings(jGraphData);
+    //var assignedCouplings.content = assignedCouplings.content; // marked with label "noAssignement" in file
 
      {
-       var curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
-       var curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; });
+      // var curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
+      // var curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; });
        var labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; });
        var labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; });
        var indexArray1 = jGraphData.map(function (d) { return d.indexColumn1; });
@@ -84,11 +88,11 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
        var indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; });
        var indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; });
        //index 1
-       for (i = 0; i < curChemShiftToReplace1.length; i++) {
+       for (i = 0; i < chemShift1.length; i++) {
          const index1 = indexArray1[i];
          const index2 = indexArray2[i];
-         arrayColumns[index1 - 1] = curChemShiftToReplace1[i];
-         arrayColumns[index2 - 1] = curChemShiftToReplace2[i];
+         arrayColumns[index1 - 1] = chemShift1[i];
+         arrayColumns[index2 - 1] = chemShift2[i];
          labelColumnarray[index1 - 1] = labelColumn1[i];
          labelColumnarray[index2 - 1] = labelColumn2[i];
          indexAtomMol[index1 - 1] = indexInMolFile1[i];
@@ -99,26 +103,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
              colNumber1: (index1 - 1),
              colNumber2: (index2 - 1),
            });
-         } else {
-           theAssignedCouplings.push({
-             jOKcolor: "grey",
-             Jvalue: +Jvalue[i],
-             colNumber1: (index1 - 1),
-             colNumber2: (index2 - 1),
-             Label: label[i],
-             JvalueShifted: +JvalueShifted[i],
-             indexColumn1: indexColumn1[i],
-             indexColumn2: indexColumn2[i],
-             chemShift1: +chemShift1[i],
-             chemShift2: +chemShift2[i],
-             labelColumn1: labelColumn1[i],
-             labelColumn2: labelColumn2[i],
-             lineText: ("J(" + labelColumn1[i] + "," + labelColumn2[i] + ") = " + Jvalue[i] + " Hz"),
-             xx: 0.0,
-             indexInMolFile1: indexInMolFile1[i],
-             indexInMolFile2: indexInMolFile2[i],
-           });
-         }
+         } 
        }
      }
      //console.log("unassignedCouplings :" + JSON.stringify(unassignedCouplings));
@@ -168,30 +153,30 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      }
 
      var dataAssignedCoupCircles = [];
-     for (i = 0; i < theAssignedCouplings.length; i++) {
+     for (i = 0; i < assignedCouplings.content.length; i++) {
        {
-         const inInd = indices2[theAssignedCouplings[i].colNumber1];
+         const inInd = indices2[assignedCouplings.content[i].colNumber1];
          dataAssignedCoupCircles.push({
            'chemShift': arrayColumns[inInd],
-           'value': theAssignedCouplings[i].Jvalue,
+           'value': assignedCouplings.content[i].Jvalue,
            'MyIndex': inInd,
            'uniqIndex': dataAssignedCoupCircles.length,
          });
        }
        {
-         const inInd = indices2[theAssignedCouplings[i].colNumber2];
+         const inInd = indices2[assignedCouplings.content[i].colNumber2];
          dataAssignedCoupCircles.push({
            'chemShift': arrayColumns[inInd],
-           'value': theAssignedCouplings[i].Jvalue,
+           'value': assignedCouplings.content[i].Jvalue,
            'MyIndex': inInd,
            'uniqIndex': dataAssignedCoupCircles.length,
          });
        }
      }
 
-     for (i = 0; i < theAssignedCouplings.length; i++) {
-       theAssignedCouplings[i].indexColumn1 = indices2[theAssignedCouplings[i].indexColumn1 - 1];
-       theAssignedCouplings[i].indexColumn2 = indices2[theAssignedCouplings[i].indexColumn2 - 1];
+     for (i = 0; i < assignedCouplings.content.length; i++) {
+       assignedCouplings.content[i].indexColumn1 = indices2[assignedCouplings.content[i].indexColumn1 - 1];
+       assignedCouplings.content[i].indexColumn2 = indices2[assignedCouplings.content[i].indexColumn2 - 1];
      }
 
      // Make list of positions according to size of jGraphData
@@ -738,7 +723,7 @@ atomInfo[0].formalCharge=0
            .selectAll("myPath222")
            .attr("class", "lineW")
            //.data(jGraphData)
-           .data(theAssignedCouplings)
+           .data(assignedCouplings.content)
            .enter()
            .append("path")
            .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
