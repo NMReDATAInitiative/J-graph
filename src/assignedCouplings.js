@@ -44,5 +44,7 @@ export class AssignedCouplings {
       }
       this.content = theAssignedCouplings;
     }
-   
+    udateLineTrajectory() {
+      
+    }
   }

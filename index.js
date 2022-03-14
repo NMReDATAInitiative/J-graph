@@ -64,26 +64,13 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
    d3.csv("./androNew.csv", function (jGraphData) {
      // get chemical shifts from lines... should come from other source !
      var arrayColumns = [];
-     //var unassignedCouplings.content = [];
-     //var assignedCouplings.content = [];
      var labelColumnarray = [];
      var indexAtomMol = []; // atom index in the mol structure
-    
-     var assignedCouplings = new AssignedCouplings(jGraphData);
-     var unassignedCouplings = new UnassignedCouplings(jGraphData);
-
      {
-      // var curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
-      // var curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; });
        var labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; });
        var labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; });
        var indexArray1 = jGraphData.map(function (d) { return d.indexColumn1; });
        var indexArray2 = jGraphData.map(function (d) { return d.indexColumn2; });
-       var label = jGraphData.map(function (d) { return d.Label; });
-       var Jvalue = jGraphData.map(function (d) { return d.Jvalue; });
-       var JvalueShifted = jGraphData.map(function (d) { return d.JvalueShifted; });
-       var indexColumn1 = jGraphData.map(function (d) { return d.indexColumn1; });
-       var indexColumn2 = jGraphData.map(function (d) { return d.indexColumn2; });
        var chemShift1 = jGraphData.map(function (d) { return d.chemShift1; });
        var chemShift2 = jGraphData.map(function (d) { return d.chemShift2; });
        var indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; });
@@ -100,6 +87,10 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
          indexAtomMol[index2 - 1] = indexInMolFile2[i];    
        }
      }
+
+     var unassignedCouplings = new UnassignedCouplings(jGraphData);
+     var assignedCouplings = new AssignedCouplings(jGraphData);
+     assignedCouplings.udateLineTrajectory();
 
      // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
