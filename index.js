@@ -138,7 +138,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      var dataAssignedCoupCircles = [];
      for (i = 0; i < assignedCouplings.content.length; i++) {
        {
-         const inInd = indices2[assignedCouplings.content[i].colNumber1];
+         const inInd = indicesSorted[assignedCouplings.content[i].colNumber1];
          dataAssignedCoupCircles.push({
            'chemShift': arrayColumns[inInd],
            'value': assignedCouplings.content[i].Jvalue,
@@ -147,7 +147,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
          });
        }
        {
-         const inInd = indices2[assignedCouplings.content[i].colNumber2];
+         const inInd = indicesSorted[assignedCouplings.content[i].colNumber2];
          dataAssignedCoupCircles.push({
            'chemShift': arrayColumns[inInd],
            'value': assignedCouplings.content[i].Jvalue,

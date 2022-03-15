@@ -77,8 +77,8 @@ export class AssignedCouplings {
           //if (hasJ(first, second, currentJ, currentShiftedJ)) {
           if (OK) {
             const currentJwithTrueSign = currentJ;
-            currentJ = abs(currentJ);
-            currentShiftedJ = abs(currentShiftedJ);
+            currentJ = Math.abs(currentJ);
+            currentShiftedJ = Math.abs(currentShiftedJ);
           }
          }
     }
