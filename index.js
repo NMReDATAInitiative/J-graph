@@ -90,7 +90,6 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
 
      var unassignedCouplings = new UnassignedCouplings(jGraphData);
      var assignedCouplings = new AssignedCouplings(jGraphData);
-     assignedCouplings.udateLineTrajectory();
 
      // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
@@ -99,14 +98,14 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      indices.sort(function (a, b) {
        return arrayColumns[a] < arrayColumns[b] ? 1 : arrayColumns[a] > arrayColumns[b] ? -1 : 0; 
      });
-     var indices2 = new Array(len);
-     for (i = 0; i < len; ++i) indices2[indices[i]] = i;
+     var indicesSorted = new Array(len);
+     for (i = 0; i < len; ++i) indicesSorted[indices[i]] = i;
 
      // renumber index jGraphData(from 0 instead of 1 and decreasing chemical shift)
-     for (i = 0; i < jGraphData.length; ++i) {
-       jGraphData[i].indexColumn1 = indices2[jGraphData[i].indexColumn1 - 1];
-       jGraphData[i].indexColumn2 = indices2[jGraphData[i].indexColumn2 - 1];
-     }
+    /* for (i = 0; i < jGraphData.length; ++i) {
+       jGraphData[i].indexColumn1 = indicesSorted[jGraphData[i].indexColumn1 - 1];
+       jGraphData[i].indexColumn2 = indicesSorted[jGraphData[i].indexColumn2 - 1];
+     }*/
 
      var dataColumns = [];
      for (i = 0; i < arrayColumns.length; i++) {
@@ -120,8 +119,8 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
 
      var dataUnassignedCoupCircles = [];
      for (i = 0; i < unassignedCouplings.content.length; i++) {
-       const inInd1 = indices2[unassignedCouplings.content[i].colNumber1];
-       const inInd2 = indices2[unassignedCouplings.content[i].colNumber2];
+       const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
+       const inInd2 = indicesSorted[unassignedCouplings.content[i].colNumber2];
        dataUnassignedCoupCircles.push({
          'chemShift': arrayColumns[inInd1],
          'value': unassignedCouplings.content[i].Jvalue,
@@ -159,9 +158,11 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      }
 
      for (i = 0; i < assignedCouplings.content.length; i++) {
-       assignedCouplings.content[i].indexColumn1 = indices2[assignedCouplings.content[i].indexColumn1 - 1];
-       assignedCouplings.content[i].indexColumn2 = indices2[assignedCouplings.content[i].indexColumn2 - 1];
+       assignedCouplings.content[i].indexColumn1 = indicesSorted[assignedCouplings.content[i].indexColumn1 - 1];
+       assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
      }
+
+     assignedCouplings.udateLineTrajectory();
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;

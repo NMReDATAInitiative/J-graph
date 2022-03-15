@@ -45,6 +45,42 @@ export class AssignedCouplings {
       this.content = theAssignedCouplings;
     }
     udateLineTrajectory() {
-      
+      const lastColuNumber = this.content.length - 1;// .size() - 1;
+      for (var diffIndex = 1; diffIndex < lastColuNumber; diffIndex++) {
+        const lastColGigenDiffIndex = lastColuNumber - diffIndex;
+        for (var curCol = 0; curCol <= lastColGigenDiffIndex; curCol ++ ) {
+          const first = curCol;
+          const second = curCol + diffIndex;
+          //	double currentShiftedJlast = 0.0;
+          var currentShiftedJ = 0.0;
+          var currentJ = 0.0;
+          var indexOther1 = 0;
+          var indexOther2 = 0;
+          for (var indexList = 0; indexList < this.content.length; indexList++) {
+            var fs = this.content[indexList].indexColumn1;
+            var fl = this.content[indexList].indexColumn2;
+            //if (fs > fl) {const del = fl; fl = fs; fs = del;} // Swap
+            var OK = false;
+            if (fs == first && fl == second) {
+              currentJ = this.content[indexList].Jvalue;
+              currentShiftedJ = this.content[indexList].JvalueShifted;
+              OK =true;
+              break;
+            }
+            if (fs == second && fl == first) {
+              currentJ = this.content[indexList].Jvalue;
+              currentShiftedJ = this.content[indexList].JvalueShifted;
+              OK =true;
+              break;
+            }
+          }
+          //if (hasJ(first, second, currentJ, currentShiftedJ)) {
+          if (OK) {
+            const currentJwithTrueSign = currentJ;
+            currentJ = abs(currentJ);
+            currentShiftedJ = abs(currentShiftedJ);
+          }
+         }
     }
   }
+}
