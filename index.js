@@ -3,6 +3,8 @@ import { getJgraphColor } from './src/getJgraphColor.js';
 import { getJisOK } from './src/getJisOK.js';
 import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
+import { AssignedCouplings } from './src/assignedCouplings.js';
+import { UnassignedCouplings } from './src/unassignedCouplings.js';
 //import { pathFun } from './src/pathFun.js'; 
 //import { updateChart } from './src/updateChart.js'; 
 
@@ -62,92 +64,48 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
    d3.csv("./androNew.csv", function (jGraphData) {
      // get chemical shifts from lines... should come from other source !
      var arrayColumns = [];
-     var unassignedCouplings = []; // marked with label "noAssignement" in file
-     var theAssignedCouplings = [];
      var labelColumnarray = [];
-     var indexAtomMol = [];
-
+     var indexAtomMol = []; // atom index in the mol structure
      {
-       var curChemShiftToReplace1 = [];
-       var curChemShiftToReplace2 = [];
-       var indexArray1 = [];
-       var indexArray2 = [];
-
-       curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
-       curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; })
-       var labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; })
-       var labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; })
-       indexArray1 = jGraphData.map(function (d) { return d.indexColumn1; })
-       indexArray2 = jGraphData.map(function (d) { return d.indexColumn2; })
-       var label = jGraphData.map(function (d) { return d.Label; })
-       var Jvalue = jGraphData.map(function (d) { return d.Jvalue; })
-       var JvalueShifted = jGraphData.map(function (d) { return d.JvalueShifted; })
-       var indexColumn1 = jGraphData.map(function (d) { return d.indexColumn1; })
-       var indexColumn2 = jGraphData.map(function (d) { return d.indexColumn2; })
-       var chemShift1 = jGraphData.map(function (d) { return d.chemShift1; })
-       var chemShift2 = jGraphData.map(function (d) { return d.chemShift2; })
-       var indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; })
-       var indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; })
+       var labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; });
+       var labelColumn2 = jGraphData.map(function (d) { return d.labelColumn2; });
+       var indexArray1 = jGraphData.map(function (d) { return d.indexColumn1; });
+       var indexArray2 = jGraphData.map(function (d) { return d.indexColumn2; });
+       var chemShift1 = jGraphData.map(function (d) { return d.chemShift1; });
+       var chemShift2 = jGraphData.map(function (d) { return d.chemShift2; });
+       var indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; });
+       var indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; });
        //index 1
-       for (i = 0; i < curChemShiftToReplace1.length; i++) {
+       for (i = 0; i < chemShift1.length; i++) {
          const index1 = indexArray1[i];
          const index2 = indexArray2[i];
-         arrayColumns[index1 - 1] = curChemShiftToReplace1[i];
-         arrayColumns[index2 - 1] = curChemShiftToReplace2[i];
+         arrayColumns[index1 - 1] = chemShift1[i];
+         arrayColumns[index2 - 1] = chemShift2[i];
          labelColumnarray[index1 - 1] = labelColumn1[i];
          labelColumnarray[index2 - 1] = labelColumn2[i];
          indexAtomMol[index1 - 1] = indexInMolFile1[i];
          indexAtomMol[index2 - 1] = indexInMolFile2[i];    
-        if (label[i] == "noAssignement") {
-           unassignedCouplings.push({
-             Jvalue: +Jvalue[i],
-             colNumber1: (index1 - 1),
-             colNumber2: (index2 - 1),
-           });
-         } else {
-           theAssignedCouplings.push({
-             jOKcolor: "grey",
-             Jvalue: +Jvalue[i],
-             colNumber1: (index1 - 1),
-             colNumber2: (index2 - 1),
-             Label: label[i],
-             JvalueShifted: +JvalueShifted[i],
-             indexColumn1: indexColumn1[i],
-             indexColumn2: indexColumn2[i],
-             chemShift1: +chemShift1[i],
-             chemShift2: +chemShift2[i],
-             labelColumn1: labelColumn1[i],
-             labelColumn2: labelColumn2[i],
-             lineText: ("J(" + labelColumn1[i] + "," + labelColumn2[i] + ") = " + Jvalue[i] + " Hz"),
-             xx: 0.0,
-             indexInMolFile1: indexInMolFile1[i],
-             indexInMolFile2: indexInMolFile2[i],
-           });
-         }
        }
      }
-     console.log("unassignedCouplings :" + JSON.stringify(unassignedCouplings));
-     console.log("arrayColumns1 " + arrayColumns);
 
-     // sort by decreasing values
+     var unassignedCouplings = new UnassignedCouplings(jGraphData);
+     var assignedCouplings = new AssignedCouplings(jGraphData);
+
+     // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
      var indices = new Array(len);
      for (var i = 0; i < len; ++i) indices[i] = i;
-     indices.sort(function (a, b) { return arrayColumns[a] < arrayColumns[b] ? 1 : arrayColumns[a] > arrayColumns[b] ? -1 : 0; });
-     // console.log("arrayColumns2 " + arrayColumns);
-     //arrayColumns.sort().reverse();
-     var indices2 = new Array(len);
-     for (var i = 0; i < len; ++i) indices2[indices[i]] = i;
-     var indices3 = new Array(len); for (var i = 0; i < len; ++i) indices3[i] = indices[i];
-     //  console.log("arrayColumns indices2 " + indices2);
-     //  console.log("arrayColumns indices3 " + indices3);
+     indices.sort(function (a, b) {
+       return arrayColumns[a] < arrayColumns[b] ? 1 : arrayColumns[a] > arrayColumns[b] ? -1 : 0; 
+     });
+     var indicesSorted = new Array(len);
+     for (i = 0; i < len; ++i) indicesSorted[indices[i]] = i;
 
-     // renumber index jGraphData(from 0 instread of 1 and decreasing chemical shift)
-     for (var i = 0; i < jGraphData.length; ++i) {
-       //  console.log("arrayColumnsTTTT  " + i + " " + jGraphData[i].indexColumn1);
-       jGraphData[i].indexColumn1 = indices2[jGraphData[i].indexColumn1 - 1];
-       jGraphData[i].indexColumn2 = indices2[jGraphData[i].indexColumn2 - 1];
-     }
+     // renumber index jGraphData(from 0 instead of 1 and decreasing chemical shift)
+    /* for (i = 0; i < jGraphData.length; ++i) {
+       jGraphData[i].indexColumn1 = indicesSorted[jGraphData[i].indexColumn1 - 1];
+       jGraphData[i].indexColumn2 = indicesSorted[jGraphData[i].indexColumn2 - 1];
+     }*/
 
      var dataColumns = [];
      for (i = 0; i < arrayColumns.length; i++) {
@@ -160,51 +118,53 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
      }
 
      var dataUnassignedCoupCircles = [];
-     for (i = 0; i < unassignedCouplings.length; i++) {
-       const inInd1 = indices2[unassignedCouplings[i].colNumber1];
-       const inInd2 = indices2[unassignedCouplings[i].colNumber2];
+     for (i = 0; i < unassignedCouplings.content.length; i++) {
+       const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
+       const inInd2 = indicesSorted[unassignedCouplings.content[i].colNumber2];
        dataUnassignedCoupCircles.push({
          'chemShift': arrayColumns[inInd1],
-         'value': unassignedCouplings[i].Jvalue,
+         'value': unassignedCouplings.content[i].Jvalue,
          'MyIndex': inInd1,
          'uniqIndex': dataUnassignedCoupCircles.length,
        });
        dataUnassignedCoupCircles.push({
          'chemShift': arrayColumns[inInd2],
-         'value': unassignedCouplings[i].Jvalue,
+         'value': unassignedCouplings.content[i].Jvalue,
          'MyIndex': inInd2,
          'uniqIndex': dataUnassignedCoupCircles.length,
        });
      }
 
      var dataAssignedCoupCircles = [];
-     for (i = 0; i < theAssignedCouplings.length; i++) {
+     for (i = 0; i < assignedCouplings.content.length; i++) {
        {
-         const inInd = indices2[theAssignedCouplings[i].colNumber1];
+         const inInd = indicesSorted[assignedCouplings.content[i].colNumber1];
          dataAssignedCoupCircles.push({
            'chemShift': arrayColumns[inInd],
-           'value': theAssignedCouplings[i].Jvalue,
+           'value': assignedCouplings.content[i].Jvalue,
            'MyIndex': inInd,
            'uniqIndex': dataAssignedCoupCircles.length,
          });
        }
        {
-         const inInd = indices2[theAssignedCouplings[i].colNumber2];
+         const inInd = indicesSorted[assignedCouplings.content[i].colNumber2];
          dataAssignedCoupCircles.push({
            'chemShift': arrayColumns[inInd],
-           'value': theAssignedCouplings[i].Jvalue,
+           'value': assignedCouplings.content[i].Jvalue,
            'MyIndex': inInd,
            'uniqIndex': dataAssignedCoupCircles.length,
          });
        }
      }
 
-     for (i = 0; i < theAssignedCouplings.length; i++) {
-       theAssignedCouplings[i].indexColumn1 = indices2[theAssignedCouplings[i].indexColumn1 - 1];
-       theAssignedCouplings[i].indexColumn2 = indices2[theAssignedCouplings[i].indexColumn2 - 1];
+     for (i = 0; i < assignedCouplings.content.length; i++) {
+       assignedCouplings.content[i].indexColumn1 = indicesSorted[assignedCouplings.content[i].indexColumn1 - 1];
+       assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
      }
 
-     // Make list of positions accoding to size of jGraphData
+     assignedCouplings.udateLineTrajectory();
+
+     // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
      var smallSpace = width / (numberItem + 1); // five items, six spaces
      if (smallSpace > preferedDistanceInPtBetweenColumns) {
@@ -227,24 +187,7 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
        .domain([0, maxScaleJ])
        .range([heightJscale + positionJscale, positionJscale]);
      var yAxisn = svg.append("g")
-       // .attr("transform", function(d) { return "translate(" + x(5.5) + ")"; })
        .call(d3.axisLeft(yJs).ticks(3));
-
-     var color = d3.scaleOrdinal()
-       .domain(["sefsdosa", "versifsdcolor", "vigdfginica", "asdf"]) // colors do not need to match the ones of the file only the numver in the file matters
-       // .range([ "#440154ff", "#21908dff", "#fde725ff", "red"]) // fourth color
-       .range(["orange", "green", "blue", "red", "#440154ff", "#21908dff", "#fde725ff", "orange", "cyan", "magenta", "black", "gray"]) // fourth color
-     //listOfChemicalShifts = ["chemShift1","chemShift2"]
-     // listOfPosition = ["JvalueShif","JvalueShifted","y3","y4"]
-     /*
-            for (var key in dataLines[0]) {
-            listOfChemicalShifts.push(key)
-       }
-       for (var key in dataLines[0]) {
-            listOfChemicalShifts.push(key)
-       }
-       listOfChemicalShifts.pop()
-     */
 
       var highlightColumn = function (d) {
 				Jmol.script(JmolAppletA, "select hydrogen; color white");
@@ -254,7 +197,6 @@ import { updateColumnsAction } from './src/updateColumnsAction.js';
 					Jmol.script(JmolAppletA, "select hydrogen; color white");
 				}, 3200);
 			};
-
 
      var highlightLines = function (d) {
        d3.selectAll(".toBeHidden")
@@ -414,26 +356,27 @@ atomInfo[0].formalCharge=0
      };
 
      // Unhighlight
+            /*
+
      var doNotHighlightLines = function (toto) {
 
     //  Jmol.script(JmolAppletA,"select hydrogen; color white");
 
-       /*
         d3.selectAll(".line")
           .transition().duration(200).delay(300)
           //   .style("stroke", function (d) { return (color(d.Label)) })
           // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
           .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
           .style("opacity", "1")
-*/
      };
+*/
 
      var highlightDot = function (d) {
       var x = d3.scaleLinear();
 
       var spreadPositionsNew = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
-       //unselect
+       //unselect hydrogens
        Jmol.script(JmolAppletA,"select hydrogen; color white");
 
        const delayBeforeErase = 3000;
@@ -464,7 +407,6 @@ atomInfo[0].formalCharge=0
          .attr("opacity", 0.0)
          .transition().duration(100).delay(3000)
          .remove();
-       const highlightWidth = lineWidth * 2.0;
 
        // first every group dimmed
        d3.selectAll(".circleL")
@@ -474,19 +416,21 @@ atomInfo[0].formalCharge=0
          .style("stroke-width", lineWidth);
 
        // specific to those matching the condition of similarity of J's
-       var a = 0;
+       var numberCandidate = 0;
        const deltaSearchJ = 0.5;
        d3.selectAll(".circleL")
          .filter(function (p) {
            if (Math.abs(d.value - p.value) <= deltaSearchJ)
              if (d.uniqIndex != p.uniqIndex)
-               a++;
+               numberCandidate++;
          });
 
+       // select color when only one candidate, or more ...
        var highColor = "green";
-       if (a > 1)
+       if (numberCandidate > 1)
          highColor = "red";
 
+       const highlightWidth = lineWidth * 2.0;
        d3.selectAll(".circleL")
          .transition().duration(10).delay(300)
          .filter(function (p) { return (Math.abs(d.value - p.value) <= deltaSearchJ) && (d.uniqIndex != p.uniqIndex) })
@@ -518,8 +462,8 @@ atomInfo[0].formalCharge=0
          .style("stroke", "black")
          .style("stroke-width", lineWidth);
 
-       var selected_specie = "textCircle" + d.uniqIndex;
-       d3.selectAll("." + selected_specie)
+       var selectedCicle = "textCircle" + d.uniqIndex;
+       d3.selectAll("." + selectedCicle)
          .transition().duration(100).delay(10)
          .style("opacity", "1.0")
          .transition().duration(200).delay(delayBeforeErase)
@@ -545,6 +489,7 @@ atomInfo[0].formalCharge=0
              .style("opacity", '0.0')
          }
    */
+   
      d3.csv("./Androsten_forMult_analysis.csv",
        // format variables:
        function (d) {
@@ -561,23 +506,14 @@ atomInfo[0].formalCharge=0
            .range([0, width]);
            var xAxis = svg.append("g")
            .attr("transform", "translate(0," + height + ")")
-           .call(d3.axisBottom(x));
+           .call(d3.axisBottom(x))
+           ;
 
          // Add Y axis2
-
-
          var yAxisn2 = svg.append("g")
            .attr("transform", function (d) { return "translate(" + (width) + ")"; })
            .call(d3.axisRight(yJs).ticks(3))
            ;
-         // level of tickLine
-         /* var dataTicksLinesold = [
-            { Jval: 0 },
-            { Jval: 5 },
-            { Jval: 10 },
-            { Jval: 15 },
-            { Jval: 20 },
-          ];*/
          var dataTicksLines = [0, 5, 10, 15, 20];
          var theTicksLines = svg
            .selectAll("tickLines")
@@ -590,7 +526,8 @@ atomInfo[0].formalCharge=0
            .attr("x2", width)
            .attr("y2", function (d) { return yJs(d); })
            .attr("stroke", "#EEEEEE")
-           .style("stroke-width", lineWidth);
+           .style("stroke-width", lineWidth)
+           ;
 
          var theRuler = svg
            .selectAll("theRuler")
@@ -605,10 +542,11 @@ atomInfo[0].formalCharge=0
            .attr("stroke", "red")
            .style("stroke-dasharray", [lineWidth * 2, lineWidth * 2])
            .style("stroke-width", lineWidth)
-           .style("opacity", '0.0');
+           .style("opacity", '0.0')
+           ;
 
          var dimensions = [1, 1.2, 1.3, 2, 3, 5];
-
+         /*
          var yn = {};
          for (i in dimensions) {
            var name = dimensions[i];
@@ -617,6 +555,8 @@ atomInfo[0].formalCharge=0
              // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
              .range([height / 3.0, height / 6.0]);
          }
+         */
+
          // Add Y axis
          var y = d3.scaleLinear()
            .domain([0, d3.max(chemShift, function (d) { return +d.value; })])
@@ -650,8 +590,8 @@ atomInfo[0].formalCharge=0
            // .attr("stroke", "red")
            .attr("stroke-width", lineWidth)
            .attr("d", d3.line()
-             .x(function (d) { return x(d.chemShift) })
-             .y(function (d) { return y(d.value) })
+             .x(function (d) { return x(d.chemShift);})
+             .y(function (d) { return y(d.value);})
            );
 
 
@@ -674,7 +614,8 @@ atomInfo[0].formalCharge=0
            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
            .on("click", highlightColumn)
-           .on("mouseover", highlightColumn);
+           .on("mouseover", highlightColumn)
+           ;
 
          // streight down
          var theColumns2 = svg.selectAll("ColunnSegment2")
@@ -689,7 +630,8 @@ atomInfo[0].formalCharge=0
            .attr("stroke", colorHideLine) // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
            .on("click", highlightColumn)
-           .on("mouseover", highlightColumn);
+           .on("mouseover", highlightColumn)
+           ;
 
          var theColumns3 = svg.selectAll("ColunnSegment3")
            .data(dataColumns)
@@ -739,8 +681,10 @@ atomInfo[0].formalCharge=0
          // Lines
         
          function pathFun(d) {
-
-          //  console.log("BEFEG" + JSON.stringify(d))
+          /*
+              ________
+             /        |
+          */
           const y1 = yJs(Math.abs(d.Jvalue));
           const y2 = yJs(Math.abs(d.JvalueShifted));
           const horizontalShiftX = circleRadius;
@@ -750,26 +694,21 @@ atomInfo[0].formalCharge=0
           if (cs1 > cs2) {
              usedHorizontalShiftX = eval(- usedHorizontalShiftX);
           }
-          const x1 = ((cs1));
-          const x2 = ((cs2));
           const x1p = ((cs1) + usedHorizontalShiftX);
           const x2p = ((cs2) - usedHorizontalShiftX);
-
-          const combine = [[x1, y1], [x1p, y2], [x2p, y2], [x2, y1]];
-          d.xx = (x1 + x2) / 2.0;
+          const combine = [[cs1, y1], [x1p, y2], [x2p, y2], [cs2, y1]];
+          d.xx = (cs1 + cs2) / 2.0;
           var Gen = d3.line();
 
           return Gen(combine);
         }
 
-
-        
          var spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
          var theLinesW = svg
            .selectAll("myPath222")
            .attr("class", "lineW")
            //.data(jGraphData)
-           .data(theAssignedCouplings)
+           .data(assignedCouplings.content)
            .enter()
            .append("path")
            .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
@@ -790,6 +729,7 @@ atomInfo[0].formalCharge=0
            .style("opacity", 0.5)
            .on("click", highlightLines)
            .on("mouseover", highlightLines)
+           ;
           // .on("mouseleave", doNotHighlightLines)
 
          // Circles
@@ -806,6 +746,7 @@ atomInfo[0].formalCharge=0
            .style("stroke-width", lineWidthCircle)
            .on("mouseover", highlightDot)
            .on("click", highlightDot)
+           ;
          // .on("mouseleave", doNotHighlightDot)
 
          // Dots
@@ -821,9 +762,7 @@ atomInfo[0].formalCharge=0
            .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircleSmall)
-
-
-           
+           ;
 
          updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
 
@@ -831,31 +770,31 @@ atomInfo[0].formalCharge=0
          lineSpectrum
            .append("g")
            .attr("class", "brush")
-           .call(brush);
+           .call(brush)
+           ;
 
          // A function that set idleTimeOut to null
-         var idleTimeout
+         var idleTimeout;
          function idled() { idleTimeout = null; }
 
          // A function that update the chart for given boundaries
         
          function updateChart() {
-          console.log("Function updateChart ...===========")
 
           // What are the selected boundaries?
-          var extent = d3.event.selection
+          var extent = d3.event.selection;
 
           // If no selection, back to initial coordinate. Otherwise, update X axis domain
           if (!extent) {
             if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
             x.domain([
-              d3.max(chemShift, function (d) { return +d.chemShift; }),
-              d3.min(chemShift, function (d) { return +d.chemShift; })
+              d3.max(chemShift, function (d) {return +d.chemShift;}),
+              d3.min(chemShift, function (d) {return +d.chemShift;}),
             ])
           } else {
             x.domain([
               x.invert(extent[0]),
-              x.invert(extent[1])
+              x.invert(extent[1]),
             ])
             lineSpectrum.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
           }
@@ -871,15 +810,14 @@ atomInfo[0].formalCharge=0
               .y(function (d) { return y(d.value) })
             )
 
-
-           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
+          spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
           updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)
             .attr("d", pathFun)
+        }
 
-                }
         // If user double click, reinitialize the chart
         svg.on("dblclick", function () {
           x.domain([
@@ -895,7 +833,8 @@ atomInfo[0].formalCharge=0
               .y(function (d) { return y(d.value) })
             )
         });
-       })
-   })
+
+      }) // reading file 1
+    }) // reading file 2
 
 

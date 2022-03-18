@@ -7,10 +7,12 @@
   </head>
   
   <body>
-      <h4>J-graph demonstration page</h4>
-      <p>This demo is still under development... The assignement is incorrect to faciliate tests of different features.</p>
-  <script type="text/javascript" src="src/JSmol.min.js"></script>
-  <script>
+    <h4>J-graph demonstration page</h4>
+    <p>This demo is still under development... The assignement is incorrect to faciliate tests of different features.</p>
+    <img style="border:1px black;" src="../images/androsten.png" width="200" alt="androsten" />
+
+    <script type="text/javascript" src="src/JSmol.min.js"></script>
+    <script>
     Cholest = {
       script: "set antialiasDisplay true;load ../data/androsten/Androsten_forMult_analysis_3d_fromAvogadro.mol;cartoon on;color cartoon structure; rotate z 45.0;rotate x 80;",
       width: 350,
@@ -20,7 +22,7 @@
       isableInitialConsole: true
     }
     Jmol.getApplet("JmolAppletA", Cholest);
-  </script>
+    </script>
   
   <!-- <a href="javascript:Jmol.script(JmolAppletA,&quot;select atomno = 41;color [0,255,0];spacefill 100&quot;)">Highlight atom 41</a>
    --> 
@@ -28,9 +30,8 @@
    <!--
      <p id="textMainPage" style="padding: 1px; border: 1px solid black;"></p>
     --> 
-   <p id="textMainPage" style="height:100px">J-graph output </p>
+   <p id="textMainPage" style="height:20px">J-graph output</p>
  
-  <img style="border:1px black;" src="../images/androsten.png" width="200" alt="androsten" />
     <div id="my_dataviz"></div>
     <script type="module" src="../index.js">
    
