@@ -42,7 +42,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
 
            theDots2
              .transition().duration(timeAnimation)
-             .attr("x", function (d) { return spreadPositions[d.MyIndex] - circleRadius; });
+             .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); });
 
 
            //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })

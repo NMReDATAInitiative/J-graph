@@ -758,7 +758,7 @@ atomInfo[0].formalCharge=0
            .append("rect")
            .attr("class", "circleS")
            .attr("x", function (d) { return x(d.chemShift + blockWidth); })
-           .attr("y", function (d) { return yJs(Math.abs(d.value )) - blockWidth; })
+           .attr("y", function (d) { return yJs(Math.abs(d.value )) - blockHeight; })
            .attr("width", 2 * blockWidth)
            .attr("height", 2 * blockHeight)
            .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
@@ -813,7 +813,7 @@ atomInfo[0].formalCharge=0
             )
 
           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel, blockWidth);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)
