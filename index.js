@@ -31,6 +31,8 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      spaceBetweenColumns = spaceBetweenColumns / 2.0;
    }
    var circleRadiusSmall = circleRadius / 2;
+   var blockWidth = circleRadius;
+   var blockHeight = circleRadius / 3;
 
    var width = bodyWidth - margin.left - margin.right;
    var height = bodyHeight - margin.top - margin.bottom;
@@ -755,16 +757,16 @@ atomInfo[0].formalCharge=0
            .enter()
            .append("rect")
            .attr("class", "circleS")
-           .attr("x", function (d) { return x(d.chemShift + circleRadius); })
-           .attr("y", function (d) { return yJs(Math.abs(d.value )) - circleRadiusSmall/2; })
-           .attr("width", 2 * circleRadius)
-           .attr("height", circleRadiusSmall)
+           .attr("x", function (d) { return x(d.chemShift + blockWidth); })
+           .attr("y", function (d) { return yJs(Math.abs(d.value )) - blockWidth; })
+           .attr("width", 2 * blockWidth)
+           .attr("height", 2 * blockHeight)
            .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircleSmall)
            ;
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel, blockWidth);
 
          // Add the brushing
          lineSpectrum
