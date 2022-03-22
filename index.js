@@ -164,7 +164,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
      }
 
-     assignedCouplings.udateLineTrajectory(blockHeight);
+     assignedCouplings.udateLineTrajectory((blockHeight / 2.0) , 0.5);
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
@@ -690,10 +690,10 @@ atomInfo[0].formalCharge=0
           const y1 = yJs(Math.abs(d.Jvalue));
          // const y2 = yJs(Math.abs(d.JvalueShifted));
          const iiidex = d.iindex;
-              console.log("iiidex = " + JSON.stringify(iiidex));
-              console.log("assignedCouplings.content = " + JSON.stringify(assignedCouplings.content.length));
+           //   console.log("iiidex = " + JSON.stringify(iiidex));
+         //     console.log("assignedCouplings.content[iiidex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[iiidex].JvalueShifted));
 
-          const y2 = assignedCouplings.content[iiidex].JvalueShifted;
+          const y2 = yJs(Math.abs(assignedCouplings.content[iiidex].JvalueShifted));
           //const y2 = yJs(Math.abs(d.JvalueShifted));
           const horizontalShiftX = circleRadius; // make larger here !
           var usedHorizontalShiftX = eval(horizontalShiftX);
