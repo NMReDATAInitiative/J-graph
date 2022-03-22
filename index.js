@@ -695,7 +695,7 @@ atomInfo[0].formalCharge=0
 
           const y2 = yJs(Math.abs(assignedCouplings.content[iiidex].JvalueShifted));
           //const y2 = yJs(Math.abs(d.JvalueShifted));
-          const horizontalShiftX = smallSpace - blockWidth; // make larger here !
+          const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
           const horizontalShiftSideBlock = blockWidth; // make larger here !
           var usedHorizontalShiftX = eval(horizontalShiftX);
           var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
