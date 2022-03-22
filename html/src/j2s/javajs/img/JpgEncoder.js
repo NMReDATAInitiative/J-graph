@@ -58,7 +58,7 @@ minBlockWidth = ((huf.imageWidth % 8 != 0) ? Clazz.doubleToInt (Math.floor (huf.
 minBlockHeight = ((huf.imageHeight % 8 != 0) ? Clazz.doubleToInt (Math.floor (huf.imageHeight / 8.0) + 1) * 8 : huf.imageHeight);
 for (comp = 0; comp < jpegObj.numberOfComponents; comp++) {
 minBlockWidth = Math.min (minBlockWidth, jpegObj.blockWidth[comp]);
-minBlockHeight = Math.min (minBlockHeight, jpegObj.blockHeight[comp]);
+minBlockHeight = Math.min (minBlockHeight, jpegObj.halfBlockHeight[comp]);
 }
 xpos = 0;
 for (r = 0; r < minBlockHeight; r++) {
@@ -674,7 +674,7 @@ this.comment = null;
 this.imageHeight = 0;
 this.imageWidth = 0;
 this.blockWidth = null;
-this.blockHeight = null;
+this.halfBlockHeight = null;
 this.precision = 8;
 this.numberOfComponents = 3;
 this.components = null;
@@ -712,7 +712,7 @@ this.components = JU.AU.newFloat3 (this.numberOfComponents, -1);
 this.compWidth =  Clazz.newIntArray (this.numberOfComponents, 0);
 this.compHeight =  Clazz.newIntArray (this.numberOfComponents, 0);
 this.blockWidth =  Clazz.newIntArray (this.numberOfComponents, 0);
-this.blockHeight =  Clazz.newIntArray (this.numberOfComponents, 0);
+this.halfBlockHeight =  Clazz.newIntArray (this.numberOfComponents, 0);
 });
 Clazz.defineMethod (c$, "getYCCArray", 
 function (pixels) {
@@ -730,7 +730,7 @@ this.lastColumnIsDummy[y] = true;
 this.compHeight[y] = (Clazz.doubleToInt (((this.imageHeight % 8 != 0) ? (Clazz.doubleToInt (Math.ceil (this.imageHeight / 8.0))) * 8 : this.imageHeight) / this.maxVsampFactor)) * this.vsampFactor[y];
 if (this.compHeight[y] != ((Clazz.doubleToInt (this.imageHeight / this.maxVsampFactor)) * this.vsampFactor[y])) {
 this.lastRowIsDummy[y] = true;
-}this.blockHeight[y] = Clazz.doubleToInt (Math.ceil (this.compHeight[y] / 8.0));
+}this.halfBlockHeight[y] = Clazz.doubleToInt (Math.ceil (this.compHeight[y] / 8.0));
 }
 var Y =  Clazz.newFloatArray (this.compHeight[0], this.compWidth[0], 0);
 var Cr1 =  Clazz.newFloatArray (this.compHeight[0], this.compWidth[0], 0);

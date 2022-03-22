@@ -29,6 +29,7 @@ export class AssignedCouplings {
             colNumber1: (index1 - 1),
             colNumber2: (index2 - 1),
             Label: label[i],
+            JvalueAntiOverlap: +JvalueShifted[i],
             JvalueShifted: +JvalueShifted[i],
             indexColumn1: indexColumn1[i],
             indexColumn2: indexColumn2[i],

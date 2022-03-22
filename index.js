@@ -17,12 +17,12 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
    var lineWidth = 1.5;
    var maxScaleJ = 22.0;
    var ratioOccupyJgraph = 1.0 / 4.0;
-   var circleRadius = 5;
+   var circleRadius = 5.0;
    var spaceBetweenColumns = 10;
    var darkMode = false; // True not implemented
    //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
    if ((/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
-     circleRadius = 15;
+     circleRadius = 15.0;
      margin = { top: 50, right: 10, bottom: 30, left: 10 }; // For vertical
      bodyWidth = 800;
      bodyHeight = 1000; // Not good when horizontal....
@@ -30,9 +30,9 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      ratioOccupyJgraph = 1.0 / 2.0;
      spaceBetweenColumns = spaceBetweenColumns / 2.0;
    }
-   var circleRadiusSmall = circleRadius / 2;
+   var circleRadiusSmall = circleRadius / 2.0;
    var blockWidth = circleRadius;
-   var blockHeight = circleRadius / 3;
+   var halfBlockHeight = circleRadius / 3.0;
 
    var width = bodyWidth - margin.left - margin.right;
    var height = bodyHeight - margin.top - margin.bottom;
@@ -40,7 +40,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
    var positionJscale = 20;
 
    var lineWidthCircle = lineWidth;
-   var lineWidthColumn = lineWidth / 2;
+   var lineWidthColumn = lineWidth / 2.0;
 
    var lineWidthCircleSmall = lineWidth / 2;
 
@@ -163,8 +163,8 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        assignedCouplings.content[i].indexColumn1 = indicesSorted[assignedCouplings.content[i].indexColumn1 - 1];
        assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
      }
-
-     assignedCouplings.udateLineTrajectory((blockHeight / 2.0) , 0.5);
+     const nbHzPerPoint = 0.25;
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + 1.0)* nbHzPerPoint , 2 * nbHzPerPoint);
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
@@ -687,7 +687,7 @@ atomInfo[0].formalCharge=0
               ________
              /        |
           */
-          const y1 = yJs(Math.abs(d.Jvalue));
+          const y1 = yJs(Math.abs(d.JvalueAntiOverlap));
          // const y2 = yJs(Math.abs(d.JvalueShifted));
          const iiidex = d.iindex;
            //   console.log("iiidex = " + JSON.stringify(iiidex));
@@ -695,16 +695,22 @@ atomInfo[0].formalCharge=0
 
           const y2 = yJs(Math.abs(assignedCouplings.content[iiidex].JvalueShifted));
           //const y2 = yJs(Math.abs(d.JvalueShifted));
-          const horizontalShiftX = circleRadius; // make larger here !
+          const horizontalShiftX = smallSpace - blockWidth; // make larger here !
+          const horizontalShiftSideBlock = blockWidth; // make larger here !
           var usedHorizontalShiftX = eval(horizontalShiftX);
+          var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
           const cs1 = spreadPositionsZZ[d.indexColumn1];
           const cs2 = spreadPositionsZZ[d.indexColumn2];
           if (cs1 > cs2) {
-             usedHorizontalShiftX = eval(- usedHorizontalShiftX);
+             usedHorizontalShiftX = eval(-usedHorizontalShiftX);
+             usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
           }
-          const x1p = ((cs1) + usedHorizontalShiftX);
-          const x2p = ((cs2) - usedHorizontalShiftX);
-          const combine = [[cs1, y1], [x1p, y2], [x2p, y2], [cs2, y1]];
+          const combine = [
+            [cs1 + usedHorizontalShiftSideBlock, y1],
+            [cs1 + usedHorizontalShiftX, y2], 
+            [cs2 - usedHorizontalShiftX, y2],
+            [cs2 - usedHorizontalShiftSideBlock, y1]
+          ];
           d.xx = (cs1 + cs2) / 2.0;
           var Gen = d3.line();
 
@@ -758,21 +764,21 @@ atomInfo[0].formalCharge=0
          // .on("mouseleave", doNotHighlightDot)
 
          // Dots
-         var theDots2 = svg.selectAll("dots")
+         var theBlocks = svg.selectAll("dots")
            .data(dataAssignedCoupCircles)
            .enter()
            .append("rect")
            .attr("class", "circleS")
            .attr("x", function (d) { return x(d.chemShift + blockWidth); })
-           .attr("y", function (d) { return yJs(Math.abs(d.value )) - blockHeight; })
+           .attr("y", function (d) { return yJs(Math.abs(d.value )) - halfBlockHeight; })
            .attr("width", 2 * blockWidth)
-           .attr("height", 2 * blockHeight)
+           .attr("height", 2 * halfBlockHeight)
            .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircleSmall)
            ;
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel, blockWidth);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth);
 
          // Add the brushing
          lineSpectrum
@@ -819,7 +825,7 @@ atomInfo[0].formalCharge=0
             )
 
           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel, blockWidth);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)

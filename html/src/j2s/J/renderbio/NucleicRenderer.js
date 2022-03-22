@@ -3,7 +3,7 @@ Clazz.load (null, "J.renderbio.NucleicRenderer", ["JU.P3", "JU.C"], function () 
 c$ = Clazz.decorateAsClass (function () {
 this.cartoonBaseEdges = false;
 this.cartoonBlocks = false;
-this.blockHeight = 0;
+this.halfBlockHeight = 0;
 this.cartoonLadders = false;
 this.cartoonRibose = false;
 this.rPt = null;
@@ -51,7 +51,7 @@ this.cartoonBaseEdges = this.vwr.getBoolean (603979816);
 this.cartoonSteps = this.vwr.getBoolean (603979811);
 this.cartoonLadders = this.vwr.getBoolean (603979818);
 this.cartoonRibose = this.vwr.getBoolean (603979819);
-this.blockHeight = this.vwr.getFloat (570425347);
+this.halfBlockHeight = this.vwr.getFloat (570425347);
 var isTraceAlpha = this.vwr.getBoolean (603979966);
 var bsVisible = this.bsr.bsVisible;
 for (var i = bsVisible.nextSetBit (0); i >= 0; i = bsVisible.nextSetBit (i + 1)) {
@@ -178,8 +178,8 @@ for (var j = 0; j < 8; j++) this.scrBox[j] =  new JU.P3 ();
 var box = g.dssrBox;
 var lastHeight = g.dssrBoxHeight;
 var isPurine = g.isPurine ();
-if (box == null || lastHeight != this.blockHeight) {
-g.dssrBoxHeight = this.blockHeight;
+if (box == null || lastHeight != this.halfBlockHeight) {
+g.dssrBoxHeight = this.halfBlockHeight;
 if (box == null) {
 box =  new Array (8);
 for (var j = 8; --j >= 0; ) box[j] =  new JU.P3 ();
@@ -189,10 +189,10 @@ g.dssrBox = box;
 if (this.ptTemp == null) this.ptTemp =  new JU.P3 ();
 this.ptTemp.setT (oxyz[0]);
 uc.toFractional (this.ptTemp, true);
-uc.setOffsetPt (JU.P3.new3 (this.ptTemp.x - 2.25, this.ptTemp.y + 5, this.ptTemp.z - this.blockHeight / 2));
+uc.setOffsetPt (JU.P3.new3 (this.ptTemp.x - 2.25, this.ptTemp.y + 5, this.ptTemp.z - this.halfBlockHeight / 2));
 var x = 4.5;
 var y = (isPurine ? -4.5 : -3.0);
-var z = this.blockHeight;
+var z = this.halfBlockHeight;
 uc.toCartesian (box[0] = JU.P3.new3 (0, 0, 0), false);
 uc.toCartesian (box[1] = JU.P3.new3 (x, 0, 0), false);
 uc.toCartesian (box[2] = JU.P3.new3 (x, y, 0), false);

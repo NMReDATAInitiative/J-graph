@@ -1,4 +1,4 @@
-export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theDots2, theColumnLabel, blockWidth) {
+export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth) {
  
             theColumns1
              .transition().duration(timeAnimation)
@@ -40,7 +40,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .transition().duration(timeAnimation)
              .attr("cx", function (d) { return spreadPositions[d.MyIndex]; });
 
-           theDots2
+           theBlocks
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); });
 
