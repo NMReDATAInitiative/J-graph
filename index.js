@@ -166,7 +166,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
             console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
      const nbHzPerPoint = maxScaleJ / heightJscale;
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + 1.5)* nbHzPerPoint , 3.0 * nbHzPerPoint);
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + 2.5)* nbHzPerPoint , 3.0 * nbHzPerPoint);
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
