@@ -42,7 +42,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
    var lineWidthCircle = lineWidth;
    var lineWidthColumn = lineWidth / 2.0;
 
-   var lineWidthCircleSmall = lineWidth / 2;
+   var lineWidthBlocks = lineWidth / 2;
 
    var preferedDistanceInPtBetweenColumns = 2.0 * (circleRadius) + lineWidthCircle + spaceBetweenColumns; // In pt
 
@@ -166,7 +166,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
             console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
      const nbHzPerPoint = maxScaleJ / heightJscale;
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + 2.5)* nbHzPerPoint , 3.0 * nbHzPerPoint);
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
@@ -401,7 +401,7 @@ atomInfo[0].formalCharge=0
          .attr("y", function (d) { return yJs(Math.abs(d.value)); })
          // .style("fill", "gray")
          //   .attr("stroke", "red")
-         // .style("stroke-width", lineWidthCircleSmall)
+         // .style("stroke-width", lineWidthBlocks)
          .text(function (d) { return "J = " + d.value; })
          .attr('dx', 1.3 * circleRadius)
          .style("font-size", circleRadius * 2.5)
@@ -777,7 +777,7 @@ atomInfo[0].formalCharge=0
            .attr("height", 2 * halfBlockHeight)
            .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
-           .style("stroke-width", lineWidthCircleSmall)
+           .style("stroke-width", lineWidthBlocks)
            ;
 
          updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth);
