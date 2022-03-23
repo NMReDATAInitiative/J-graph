@@ -110,15 +110,32 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      }*/
 
      var dataColumns = [];
-     for (i = 0; i < arrayColumns.length; i++) {
-       dataColumns.push({
-         'chemShift': arrayColumns[indices[i]],
-         'labelColumn': labelColumnarray[indices[i]],
-         'MyIndex': i,
-         'atomIndexMol': indexAtomMol[indices[i]],
-       });
-     }
+     for (i = 0; i < arrayColumns.length; i++) { // loop over columns
+       // populate J's assigned J
+       var listOfJs=[];
+       for (var i1 = 0; i1 < jGraphData.length; i1++) {
+         if (indices[i] == jGraphData[i1].indexColumn1) {
+           //var jdata;
+            // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
 
+           var jdata = {
+             isAssigned: true,
+             Jvalue : jGraphData[i].Jvalue,
+             //assignmenetPartner: jGraphData[i].indexColumn2, // NEED CORRECTION
+             JlevelAvoidContact: jGraphData[i].Jvalue,
+           };
+           listOfJs.push(jdata);
+         }
+        }
+        dataColumns.push({
+           'chemShift': arrayColumns[indices[i]],
+           'labelColumn': labelColumnarray[indices[i]],
+           'MyIndex': i,
+           'atomIndexMol': indexAtomMol[indices[i]],
+           'listOfJs' : listOfJs,
+        });
+     }
+     
      var dataUnassignedCoupCircles = [];
      for (i = 0; i < unassignedCouplings.content.length; i++) {
        const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
@@ -689,13 +706,17 @@ atomInfo[0].formalCharge=0
               ________
              /        |
           */
-          const y1 = yJs(Math.abs(d.JvalueAntiOverlap));
+          const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
+          const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
          // const y2 = yJs(Math.abs(d.JvalueShifted));
-         const iiidex = d.iindex;
-           //   console.log("iiidex = " + JSON.stringify(iiidex));
-         //     console.log("assignedCouplings.content[iiidex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[iiidex].JvalueShifted));
-
-          const y2 = yJs(Math.abs(assignedCouplings.content[iiidex].JvalueShifted));
+         //const iiidex = d.iindex;
+           //   console.log("iiidex = " + JSON.stringify(d.iindex));
+         //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
+console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
+// HERE
+const alterative = dataColumns[0].JvalueAntiOverlap1;//
+console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
+          const y2 = yJs(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted));
           //const y2 = yJs(Math.abs(d.JvalueShifted));
           const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
           const horizontalShiftSideBlock = blockWidth; // make larger here !
@@ -708,10 +729,10 @@ atomInfo[0].formalCharge=0
              usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
           }
           const combine = [
-            [cs1 + usedHorizontalShiftSideBlock, y1],
+            [cs1 + usedHorizontalShiftSideBlock, y1a],
             [cs1 + usedHorizontalShiftX, y2], 
             [cs2 - usedHorizontalShiftX, y2],
-            [cs2 - usedHorizontalShiftSideBlock, y1]
+            [cs2 - usedHorizontalShiftSideBlock, y1b]
           ];
           d.xx = (cs1 + cs2) / 2.0;
           var Gen = d3.line();
