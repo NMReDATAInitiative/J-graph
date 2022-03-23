@@ -163,8 +163,10 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        assignedCouplings.content[i].indexColumn1 = indicesSorted[assignedCouplings.content[i].indexColumn1 - 1];
        assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
      }
-     const nbHzPerPoint = 0.25;
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + 1.0)* nbHzPerPoint , 2 * nbHzPerPoint);
+            console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
+
+     const nbHzPerPoint = maxScaleJ / heightJscale;
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + 1.5)* nbHzPerPoint , 2 * nbHzPerPoint);
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
