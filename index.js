@@ -492,34 +492,41 @@ atomInfo[0].formalCharge=0
          }
    */
    
+      var jGraphParameters = {
+          dataTicksCouplings : [0, 5, 10, 15, 20],
+          colorShowLine : "#CCCCCC",
+          colorHideLine : "#EEEEEE00",
+        };
+
      d3.csv("./Androsten_forMult_analysis.csv",
        // format variables:
        function (d) {
          return { chemShift: d.x, value: d.y};
        },
 
+
        function (chemShift) {
          // Add X axis 
          var x = d3.scaleLinear()
            .domain([
-             d3.max(chemShift, function (d) { return +d.chemShift; }),
-             d3.min(chemShift, function (d) { return +d.chemShift; })
+             d3.max(chemShift, function (d) { return +d.chemShift;}),
+             d3.min(chemShift, function (d) { return +d.chemShift;})
            ])
            .range([0, width]);
            var xAxis = svg.append("g")
            .attr("transform", "translate(0," + height + ")")
            .call(d3.axisBottom(x))
            ;
-
+         
          // Add Y axis2
          var yAxisn2 = svg.append("g")
            .attr("transform", function (d) { return "translate(" + (width) + ")"; })
            .call(d3.axisRight(yJs).ticks(3))
            ;
-         var dataTicksLines = [0, 5, 10, 15, 20];
-         var theTicksLines = svg
+        
+         var theTicksCouplings = svg
            .selectAll("tickLines")
-           .data(dataTicksLines)
+           .data(jGraphParameters.dataTicksCouplings)
            .enter()
            .append("line")
            .attr("class", "Grid")
@@ -530,10 +537,10 @@ atomInfo[0].formalCharge=0
            .attr("stroke", "#EEEEEE")
            .style("stroke-width", lineWidth)
            ;
-
-         var theRuler = svg
+ 
+         var theGridLinesCouplings = svg
            .selectAll("theRuler")
-           .data(dataTicksLines)
+           .data(jGraphParameters.dataTicksCouplings)
            .enter()
            .append("line")
            .attr("class", "rulerClass")
@@ -547,8 +554,8 @@ atomInfo[0].formalCharge=0
            .style("opacity", '0.0')
            ;
 
-         var dimensions = [1, 1.2, 1.3, 2, 3, 5];
          /*
+         var dimensions = [1, 1.2, 1.3, 2, 3, 5];
          var yn = {};
          for (i in dimensions) {
            var name = dimensions[i];
@@ -582,7 +589,7 @@ atomInfo[0].formalCharge=0
          // Create the line variable: where both the line and the brush take place
          var lineSpectrum = svg.append('g')
            .attr("clip-path", "url(#clip)");
-
+ 
          // Add the spectrum
          lineSpectrum.append("path")
            .datum(chemShift)
@@ -599,12 +606,11 @@ atomInfo[0].formalCharge=0
 
 
          // Columns
-         const colorShowLine = "#CCCCCC";
-         const colorHideLine = "#EEEEEE00";
+        
          // oblique
          var spreadPositionsUU = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
-         var theColumns1 = svg.selectAll("columnns")
+         var theColumnsConnectColumnToSpectrumPosition = svg.selectAll("columnns")
            .data(dataColumns)
            .enter()
            .append("line")
@@ -613,14 +619,14 @@ atomInfo[0].formalCharge=0
            .attr("x2", function (d) { return spreadPositionsUU[d.MyIndex]; })
            .attr("y1", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("y2", function (d) { return pointingLineColum + positionJscale; })
-           .attr("stroke", colorHideLine) // just sketched... update wil fix colors
+           .attr("stroke", jGraphParameters.colorHideLine) // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
            .on("click", highlightColumn)
            .on("mouseover", highlightColumn)
            ;
 
          // streight down
-         var theColumns2 = svg.selectAll("ColunnSegment2")
+         var theColumnsVerticalInSpectrum = svg.selectAll("ColunnSegment2")
            .data(dataColumns)
            .enter()
            .append("line")
@@ -629,13 +635,13 @@ atomInfo[0].formalCharge=0
            .attr("x2", function (d) { return spreadPositionsUU[d.MyIndex]; })
            .attr("y1", function (d) { return pointingLineColum + positionJscale; })
            .attr("y2", function (d) { return height; })
-           .attr("stroke", colorHideLine) // just sketched... update wil fix colors
+           .attr("stroke", jGraphParameters.colorHideLine) // just sketched... update wil fix colors
            .style("stroke-width", lineWidthCircle)
            .on("click", highlightColumn)
            .on("mouseover", highlightColumn)
            ;
 
-         var theColumns3 = svg.selectAll("ColunnSegment3")
+         var theColumnsMainVerticalLine = svg.selectAll("ColunnSegment3")
            .data(dataColumns)
            .enter()
            .append("line")
@@ -650,7 +656,7 @@ atomInfo[0].formalCharge=0
            .on("mouseover", highlightColumn);
 
 
-         var theColumns4 = svg.selectAll("ColunnSegment4")
+         var theColumnsBase = svg.selectAll("ColunnSegment4")
            .data(dataColumns)
            .enter()
            .append("line")
@@ -778,7 +784,25 @@ atomInfo[0].formalCharge=0
            .style("stroke-width", lineWidthCircleSmall)
            ;
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth);
+var jgraphObj = {
+           yAxisn2 : yAxisn2, 
+           theTicksCouplings : theTicksCouplings,
+           theGridLinesCouplings : theGridLinesCouplings,
+           y : y,
+           brush : brush,
+           theColumns : { 
+             theColumnsConnectColumnToSpectrumPosition : theColumnsConnectColumnToSpectrumPosition,
+             theColumnsVerticalInSpectrum : theColumnsVerticalInSpectrum,
+             theColumnsMainVerticalLine : theColumnsMainVerticalLine,
+             theColumnsBase : theColumnsBase,
+             theColumnLabel : theColumnLabel,
+             } ,
+             theLinesW : theLinesW,
+             theDots : theDots,
+             theBlocks : theBlocks,
+           };
+
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, circleRadius, x, width, jgraphObj.theColumns, theDots, theBlocks, blockWidth);
 
          // Add the brushing
          lineSpectrum
@@ -825,7 +849,7 @@ atomInfo[0].formalCharge=0
             )
 
           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, circleRadius, x, width, jgraphObj.theColumns, theDots, theBlocks, blockWidth);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)

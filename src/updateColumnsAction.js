@@ -1,6 +1,6 @@
-export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns1, theColumns2, theColumns3, theColumns4, theDots, theBlocks, theColumnLabel, blockWidth) {
+export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns, theDots, theBlocks, blockWidth) {
  
-            theColumns1
+            theColumns.theColumnsConnectColumnToSpectrumPosition
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("x2", function (d) { return x(d.chemShift); })
@@ -10,7 +10,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                } else { return colorHideLine; }
              });
 
-           theColumns2
+           theColumns.theColumnsVerticalInSpectrum
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return x(d.chemShift); })
              .attr("x2", function (d) { return x(d.chemShift); })
@@ -20,7 +20,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                } else { return colorHideLine; }
              });
 
-           theColumns3
+           theColumns.theColumnsMainVerticalLine
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("x2", function (d) { return spreadPositions[d.MyIndex]; })
@@ -28,7 +28,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                return "black";
              });
 
-           theColumns4
+           theColumns.theColumnsBase
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex] + circleRadius; })
              .attr("x2", function (d) { return spreadPositions[d.MyIndex] - circleRadius; })
@@ -51,7 +51,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
 
 
 
-           theColumnLabel
+           theColumns.theColumnLabel
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("transform", function (d) {
