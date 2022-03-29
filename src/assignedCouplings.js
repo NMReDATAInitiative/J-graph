@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 export class AssignedCouplings {
     constructor(jGraphData) {
       var theAssignedCouplings = [];
@@ -48,6 +49,27 @@ export class AssignedCouplings {
         }
       }
       this.content = theAssignedCouplings;
+    }
+
+    createFromDataColumns(dataColumns) {
+      /*for (var indexList = 0; indexList < dataColumns.length; indexList++) {
+        for (var i = 0; i < dataColumns[indexList].listOfJs.length; i++) {
+          const iddex = dataColumns[indexList].listOfJs[i].indexInAssignementList;
+          const JlevelAvoidContactTMP = dataColumns[indexList].listOfJs[i].JlevelAvoidContact;
+          if (iddex >= this.content.length) {
+            console.log("ERROR  iddex ");
+          } else {
+            console.log("OK  iddex " + iddex);
+
+            if (dataColumns[indexList].listOfJs[i].isFirstInAssignmentIndex) {
+              this.content[iddex].JvalueAntiOverlap1 = JlevelAvoidContactTMP;
+            } else {
+              this.content[iddex].JvalueAntiOverlap2 = JlevelAvoidContactTMP;
+            }
+          }
+        }
+      }
+      */
     }
 
     udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove) {

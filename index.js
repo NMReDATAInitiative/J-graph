@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 //import * as d3 from "d3"; // 
 import { getJgraphColor } from './src/getJgraphColor.js';
 import { getJisOK } from './src/getJisOK.js';
@@ -108,24 +110,50 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        jGraphData[i].indexColumn1 = indicesSorted[jGraphData[i].indexColumn1 - 1];
        jGraphData[i].indexColumn2 = indicesSorted[jGraphData[i].indexColumn2 - 1];
      }*/
-
      var dataColumns = [];
      for (i = 0; i < arrayColumns.length; i++) { // loop over columns
        // populate J's assigned J
        var listOfJs=[];
        for (var i1 = 0; i1 < jGraphData.length; i1++) {
-         if (indices[i] == jGraphData[i1].indexColumn1) {
+         if (indices[i] == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
            //var jdata;
             // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
-           var jdata = {
-             isAssigned: true,
-             Jvalue : jGraphData[i].Jvalue,
-             //assignmenetPartner: jGraphData[i].indexColumn2, // NEED CORRECTION
-             JlevelAvoidContact: jGraphData[i].Jvalue,
-           };
-           listOfJs.push(jdata);
+          // var jdata = ;
+           listOfJs.push({
+            isAssigned: true,
+            indexInAssignementList: i1,
+            isFirstInAssignmentIndex : true,
+            Jvalue : jGraphData[i1].Jvalue,
+            //assignmentPartner: jGraphData[i].indexColumn2, // NEED CORRECTION
+            JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
+          });
          }
+         if (indices[i] == jGraphData[i1].indexColumn2) { // almost SAME BLOCK
+          //var jdata;
+           // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
+          listOfJs.push({
+            isAssigned: true,
+            indexInAssignementList: i1,
+            isFirstInAssignmentIndex : false,
+            Jvalue : jGraphData[i1].Jvalue,
+            //assignmentPartner: jGraphData[i].indexColumn1, // NEED CORRECTION
+            JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
+           });
+          }
         }
+        // Make increasing in size
+        listOfJs.sort((a, b) => {
+          return a.JlevelAvoidContact - b.JlevelAvoidContact;
+        });
+        const minDist = 0.1; //Hz HERE
+        for (var index1 = 1; index1 < listOfJs.length; index1++ ) {
+          const ref = listOfJs[index1 - 1].JlevelAvoidContact + minDist;
+          if (listOfJs[index1].JlevelAvoidContact < ref) {
+            listOfJs[index1].JlevelAvoidContact = ref;
+          }
+        }
+       // console.log("listOfJsU :" + JSON.stringify(listOfJs));
+
         dataColumns.push({
            'chemShift': arrayColumns[indices[i]],
            'labelColumn': labelColumnarray[indices[i]],
@@ -135,6 +163,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
         });
      }
      
+
      var dataUnassignedCoupCircles = [];
      for (i = 0; i < unassignedCouplings.content.length; i++) {
        const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
@@ -182,6 +211,18 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      // console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
      const nbHzPerPoint = maxScaleJ / heightJscale;
+
+/*
+     for (var indexList = 0; indexList < dataColumns.length; indexList++) {
+      for (i = 0; i < dataColumns[indexList].listOfJs.length; i++) {
+        const iddex = dataColumns[indexList].listOfJs[i].indexInAssignementList;
+        dataColumns[indexList].listOfJs[i].indexInAssignementList = indicesSorted[iddex];
+      }
+    }
+*/
+
+          // update JlevelAvoidContact in the assigned....
+     assignedCouplings.createFromDataColumns(dataColumns);
      assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
 
      // Make list of positions according to size of jGraphData
@@ -711,6 +752,9 @@ atomInfo[0].formalCharge=0
               ________
              /        |
           */
+             dataColumns.JvalueAntiOverlap1
+
+
           const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
           const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
          // const y2 = yJs(Math.abs(d.JvalueShifted));

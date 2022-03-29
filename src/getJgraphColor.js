@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 export function getJgraphColor(Jcoupling, darkmode) {
     // https://nmredatainitiative.github.io/color-map-J-coupling/
     // input
