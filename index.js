@@ -117,7 +117,6 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
          if (indices[i] == jGraphData[i1].indexColumn1) {
            //var jdata;
             // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
-
            var jdata = {
              isAssigned: true,
              Jvalue : jGraphData[i].Jvalue,
@@ -180,7 +179,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        assignedCouplings.content[i].indexColumn1 = indicesSorted[assignedCouplings.content[i].indexColumn1 - 1];
        assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
      }
-            console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
+     // console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
      const nbHzPerPoint = maxScaleJ / heightJscale;
      assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
@@ -201,8 +200,8 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        rightPosColumns.push(curPosRight);
      }
 
-     console.log("Left pos :" + JSON.stringify(leftPosColumns));
-     console.log("Right pos :" + JSON.stringify(rightPosColumns));
+     // console.log("Left pos :" + JSON.stringify(leftPosColumns));
+     // console.log("Right pos :" + JSON.stringify(rightPosColumns));
 
      var yJs = d3.scaleLinear()
        .domain([0, maxScaleJ])
@@ -362,7 +361,7 @@ atomInfo[0].formalCharge=0
                   }
                   if (middleAtomFro4J > -1) { // is a 4J
                     textToDisplay = ("<sup>4</sup>" + d.lineText + " via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
-                    // here don't break in case a 4J is replaced with a 3J.
+                    // here don't break in case a 4J is replaced with a 3J such as in cyclopropane...
                   }
                 }
               }
@@ -392,6 +391,12 @@ atomInfo[0].formalCharge=0
      };
 */
 
+      var jGraphParameters = {
+          dataTicksCouplings : [0, 5, 10, 15, 20],
+          colorShowLine : "#CCCCCC",
+          colorHideLine : "#EEEEEE00",
+          delayBeforeErase : 3000,
+        };
      var highlightDot = function (d) {
       var x = d3.scaleLinear();
 
@@ -400,13 +405,12 @@ atomInfo[0].formalCharge=0
        //unselect hydrogens
        Jmol.script(JmolAppletA,"select hydrogen; color white");
 
-       const delayBeforeErase = 3000;
 
        d3.selectAll(".line")
          .transition().duration(200)
          .style("stroke", "black")
          .style("opacity", "0.1")
-         .transition().duration(20).delay(delayBeforeErase)
+         .transition().duration(20).delay(jGraphParameters.delayBeforeErase)
          .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
          .style("opacity", "1");
 
@@ -460,7 +464,7 @@ atomInfo[0].formalCharge=0
          .style("stroke-width", highlightWidth);
 
        d3.selectAll(".circleL")
-         .transition().duration(200).delay(delayBeforeErase)
+         .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .style("stroke", "black")
          .style("opacity", "1.0")
          .style("stroke-width", lineWidth);
@@ -471,7 +475,7 @@ atomInfo[0].formalCharge=0
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '1.0')
          .style("stroke", highColor)
-         .transition().duration(200).delay(delayBeforeErase)
+         .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .attr("y1", yJs(Math.abs(d.value)))
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '0.0')
@@ -487,7 +491,7 @@ atomInfo[0].formalCharge=0
        d3.selectAll("." + selectedCicle)
          .transition().duration(100).delay(10)
          .style("opacity", "1.0")
-         .transition().duration(200).delay(delayBeforeErase)
+         .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .style("opacity", "0.0");
      };
 
@@ -511,11 +515,6 @@ atomInfo[0].formalCharge=0
          }
    */
    
-      var jGraphParameters = {
-          dataTicksCouplings : [0, 5, 10, 15, 20],
-          colorShowLine : "#CCCCCC",
-          colorHideLine : "#EEEEEE00",
-        };
 
      d3.csv("./Androsten_forMult_analysis.csv",
        // format variables:
