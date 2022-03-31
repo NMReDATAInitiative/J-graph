@@ -96,7 +96,6 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      }
 
      var unassignedCouplings = new UnassignedCouplings(jGraphData);
-     var assignedCouplings = new AssignedCouplings(jGraphData);
 
    // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
@@ -173,6 +172,9 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
           return a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0
           });
 
+     var assignedCouplings = new AssignedCouplings(dataColumns);
+     //assignedCouplings.consconstructFromJgraphtructor(jGraph);  // obsolete
+
      var dataUnassignedCoupCircles = [];
      for (i = 0; i < unassignedCouplings.content.length; i++) {
        const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
@@ -248,7 +250,6 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      //u console.log("dataColumns  :" + JSON.stringify(dataColumns));
      //u console.log("assignedCouplings.content.length before " + JSON.stringify(assignedCouplings.content.length));
 
-     assignedCouplings.createFromDataColumns(dataColumns);
     
      //u console.log("assignedCouplings.content.length after " + JSON.stringify(assignedCouplings.content.length));
      //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
