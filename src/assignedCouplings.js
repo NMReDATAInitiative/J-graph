@@ -52,6 +52,77 @@ export class AssignedCouplings {
     }
 
     createFromDataColumns(dataColumns) {
+      var theAssignedCouplings = [];
+      var counter = 0;
+      for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+        for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+          if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
+            if (dataColumns[indexList1].listOfJs[i1].isFirstInAssignmentIndex) { // Otherwise will come twice - once for each partner
+              const number1 = dataColumns[indexList1].listOfJs[i1].indexInAssignementList;
+              // doubling the loop...
+              var foundPartner = false;
+            //  var log = "";
+              for (var indexList2 = 0; indexList2 < dataColumns.length; indexList2++) {
+                for (var i2 = 0; i2 < dataColumns[indexList2].listOfJs.length; i2++) {
+                const number2 = dataColumns[indexList2].listOfJs[i2].indexInAssignementList;
+
+            //   log += " " + indexList2 + "!=" + indexList1 + "." + " :" + i2 + "!=" + i1 + ":" + number2 + "=" + number1 + dataColumns[indexList2].listOfJs[i2].isFirstInAssignmentIndex + "=false true=" +dataColumns[indexList1].listOfJs[i1].isFirstInAssignmentIndex;
+
+                  if (dataColumns[indexList2].listOfJs[i2].isAssigned) {
+                    if (!dataColumns[indexList2].listOfJs[i2].isFirstInAssignmentIndex) { // Otherwise will come twice - once for each partner
+                      if (number1 == number2 ) { // are partners... could search for index with same value there directly...
+                       //  console.log(" 1: :" + indexList + ":" + i);
+                       //  console.log(" 2: :" + indexList2 + ":" + i2);
+                        const JlevelAvoidContact1 = dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact;
+                        const JlevelAvoidContact2 = dataColumns[indexList2].listOfJs[i2].JlevelAvoidContact;
+                        const Jvalue1 = dataColumns[indexList1].listOfJs[i1].Jvalue;
+                        const Jvalue2 = dataColumns[indexList2].listOfJs[i2].Jvalue;
+                        //const assignmentPartner = dataColumns[indexList].listOfJs[i1].assignmentPartner;
+                        
+                        const avJcoupling = ((eval(Jvalue1) + eval(Jvalue2)) / 2.0); // Should be equal, but in case slightly different, take average
+                       
+                        theAssignedCouplings.push({
+                          jOKcolor: "grey",
+                          Jvalue: avJcoupling, 
+                          colNumber1: indexList1,
+                          colNumber2: indexList2,
+                          // J_H9_7ax
+                          Label: "J_" + dataColumns[indexList1].labelColumn + "_" + dataColumns[indexList2].labelColumn, // used for highlight of lines
+                          JvalueAntiOverlap1: +JlevelAvoidContact1,
+                          JvalueAntiOverlap2: +JlevelAvoidContact2,
+                          JvalueShifted: avJcoupling, // initial value, will be change later
+                          indexColumn1: indexList1,
+                          indexColumn2: indexList2,
+                          indexJ1: i1,
+                          indexJ2: i2,
+                          chemShift1: dataColumns[indexList1].chemShift, // should probably remove - redundance... possibly problementic if shift
+                          chemShift2: dataColumns[indexList2].chemShift, // should probably remove - redundance... possibly problementic if shift
+                          labelColumn1: dataColumns[indexList1].labelColumn,
+                          labelColumn2: dataColumns[indexList2].labelColumn,
+                          lineText: ("J(" + dataColumns[indexList1].labelColumn + "," + dataColumns[indexList2].labelColumn + ") = " + avJcoupling + " Hz"),
+                          xx: 0.0,
+                          indexInMolFile1: dataColumns[indexList1].atomIndexMol,
+                          indexInMolFile2: dataColumns[indexList2].atomIndexMol,
+                          iindex: counter,
+                        });                       
+                        counter ++;
+                        foundPartner = true;
+                      }
+                    }
+                  }
+                }
+              }
+          //    if (!foundPartner) {
+           //   console.log("Found no partner for " + indexList1 + " " + i1 + " " + dataColumns[indexList1].listOfJs[i1].Jvalue + log);
+          //    }
+            }
+          }
+        }
+      }
+      this.content = theAssignedCouplings;
+    }
+
+
       /*for (var indexList = 0; indexList < dataColumns.length; indexList++) {
         for (var i = 0; i < dataColumns[indexList].listOfJs.length; i++) {
           const iddex = dataColumns[indexList].listOfJs[i].indexInAssignementList;
@@ -70,7 +141,7 @@ export class AssignedCouplings {
         }
       }
       */
-    }
+    
 
     udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove) {
 
@@ -115,7 +186,7 @@ export class AssignedCouplings {
           }
           //if (hasJ(first, second, currentJ, currentShiftedJ)) {
           if (OK) {
-            console.log("ZZ ENTERING = ");
+   //t         console.log("ZZ ENTERING = ");
 
             const currentJwithTrueSign = currentJ;
             currentJ = Math.abs(currentJ);
@@ -210,8 +281,8 @@ export class AssignedCouplings {
         }
       }
       //sort(rangesToAvoid.begin(), rangesToAvoid.end()); // sort by first element
-         console.log("ZZ rangesToAvoidFirst = " + JSON.stringify(rangesToAvoidFirst));
-         console.log("ZZ rangesToAvoidSecond = " + JSON.stringify(rangesToAvoidSecond));
+   //t      console.log("ZZ rangesToAvoidFirst = " + JSON.stringify(rangesToAvoidFirst));
+   //t      console.log("ZZ rangesToAvoidSecond = " + JSON.stringify(rangesToAvoidSecond));
 
 
            var indices = new Array(rangesToAvoidFirst.length);
@@ -223,35 +294,35 @@ export class AssignedCouplings {
           // var indicesSorted = new Array(rangesToAvoidFirst.length);
           // for (i = 0; i < rangesToAvoidFirst.length; ++i) indicesSorted[indices[i]] = i;
          //  console.log("ZZ                   indices " + JSON.stringify(indices));
-                           console.log("ZZ  ===========currentJ " + JSON.stringify(currentJ));
-                           console.log("ZZ  ===========currentShiftedJ " + JSON.stringify(currentShiftedJ));
+     //t                      console.log("ZZ  ===========currentJ " + JSON.stringify(currentJ));
+     //t                      console.log("ZZ  ===========currentShiftedJ " + JSON.stringify(currentShiftedJ));
 const delBefore = currentShiftedJ;
     			for (var item = 0; item < rangesToAvoidFirst.length; item++) {
 
             var it1 = rangesToAvoidFirst [indices[item]];
             var it2 = rangesToAvoidSecond[indices[item]];
-           console.log("ZZ                   it1 " + JSON.stringify(it1)  + "   it2 " + JSON.stringify(it2));
+   //t        console.log("ZZ                   it1 " + JSON.stringify(it1)  + "   it2 " + JSON.stringify(it2));
 
     				if ((currentShiftedJ < (it1)) && (currentShiftedJ > (it2))) {
     						currentShiftedJ = it1;
-                           console.log("ZZ          currentShiftedJ " + JSON.stringify(currentShiftedJ));
+    //t                       console.log("ZZ          currentShiftedJ " + JSON.stringify(currentShiftedJ));
 
     				} 
     			}
           if (delBefore > currentShiftedJ )
-          console.log("ZZ     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
+    //t      console.log("ZZ     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
  if (currentJ > currentShiftedJ ) {
-          console.log("ZZ    currentJ ????????????????????????????????? " + JSON.stringify(currentJ));
-          console.log("ZZ    currentShiftedJ ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
+       //t   console.log("ZZ    currentJ ????????????????????????????????? " + JSON.stringify(currentJ));
+        //t  console.log("ZZ    currentShiftedJ ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
  }
-             console.log("ZZ AA i = " + JSON.stringify(i));
+         //t    console.log("ZZ AA i = " + JSON.stringify(i));
 
       			//if (Math.abs(currentShiftedJ - currentJ)> 0.00001) {
-            console.log("before = this.content[first].JvalueShifted " + JSON.stringify(this.content[indexOther].JvalueShifted));
-            console.log("before = curthis.content[first].Jvalue " + JSON.stringify(this.content[indexOther].Jvalue));
+       //t     console.log("before = this.content[first].JvalueShifted " + JSON.stringify(this.content[indexOther].JvalueShifted));
+        //t    console.log("before = curthis.content[first].Jvalue " + JSON.stringify(this.content[indexOther].Jvalue));
 
               this.content[indexOther].JvalueShifted = currentShiftedJ;
-              console.log("ZZZZAAAA  this.content[second].JvalueShifted = " + JSON.stringify(currentShiftedJ));
+       //t       console.log("ZZZZAAAA  this.content[second].JvalueShifted = " + JSON.stringify(currentShiftedJ));
 
       				//setShiftedJ(first, second, currentShiftedJ);
       			//	setShiftedJ(second, first, currentShiftedJ);
@@ -271,7 +342,7 @@ const delBefore = currentShiftedJ;
 		 // else{
 		  //	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
 		  // }
-		
+		 
            }
         }
       	}

@@ -69,6 +69,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      // get chemical shifts from lines... should come from other source !
      var arrayColumns = [];
      var labelColumnarray = [];
+     var chemColumnarray = [];
      var indexAtomMol = []; // atom index in the mol structure
      {
        var labelColumn1 = jGraphData.map(function (d) { return d.labelColumn1; });
@@ -80,7 +81,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        var indexInMolFile1 = jGraphData.map(function (d) { return d.indexInMolFile1; });
        var indexInMolFile2 = jGraphData.map(function (d) { return d.indexInMolFile2; });
        //index 1
-       for (i = 0; i < chemShift1.length; i++) {
+       for (var i = 0; i < chemShift1.length; i++) {
          const index1 = indexArray1[i];
          const index2 = indexArray2[i];
          arrayColumns[index1 - 1] = chemShift1[i];
@@ -89,13 +90,15 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
          labelColumnarray[index2 - 1] = labelColumn2[i];
          indexAtomMol[index1 - 1] = indexInMolFile1[i];
          indexAtomMol[index2 - 1] = indexInMolFile2[i];    
+         chemColumnarray[index1 - 1] = chemShift1[i];
+         chemColumnarray[index2 - 1] = chemShift2[i];    
        }
      }
 
      var unassignedCouplings = new UnassignedCouplings(jGraphData);
      var assignedCouplings = new AssignedCouplings(jGraphData);
 
-     // sort arrayColumns by decreasing values of chemical shift
+   // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
      var indices = new Array(len);
      for (var i = 0; i < len; ++i) indices[i] = i;
@@ -104,6 +107,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      });
      var indicesSorted = new Array(len);
      for (i = 0; i < len; ++i) indicesSorted[indices[i]] = i;
+
 
      // renumber index jGraphData(from 0 instead of 1 and decreasing chemical shift)
     /* for (i = 0; i < jGraphData.length; ++i) {
@@ -115,7 +119,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        // populate J's assigned J
        var listOfJs=[];
        for (var i1 = 0; i1 < jGraphData.length; i1++) {
-         if (indices[i] == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
+         if (i + 1  == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
            //var jdata;
             // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
           // var jdata = ;
@@ -124,11 +128,11 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
             indexInAssignementList: i1,
             isFirstInAssignmentIndex : true,
             Jvalue : jGraphData[i1].Jvalue,
-            //assignmentPartner: jGraphData[i].indexColumn2, // NEED CORRECTION
+        //    assignmentPartner: jGraphData[i].indexColumn2, // NEEDS CORRECTION
             JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
           });
          }
-         if (indices[i] == jGraphData[i1].indexColumn2) { // almost SAME BLOCK
+         if (i + 1 == jGraphData[i1].indexColumn2) { // almost SAME BLOCK
           //var jdata;
            // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
           listOfJs.push({
@@ -136,16 +140,17 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
             indexInAssignementList: i1,
             isFirstInAssignmentIndex : false,
             Jvalue : jGraphData[i1].Jvalue,
-            //assignmentPartner: jGraphData[i].indexColumn1, // NEED CORRECTION
+           // assignmentPartner: jGraphData[i].indexColumn1, // NEEDS CORRECTION
             JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
            });
           }
         }
         // Make increasing in size
-        listOfJs.sort((a, b) => {
-          return a.JlevelAvoidContact - b.JlevelAvoidContact;
+        listOfJs.sort((a, b) => { // sort over absolute values
+          return a.JlevelAvoidContact > b.JlevelAvoidContact ? 1 : a.JlevelAvoidContact < b.JlevelAvoidContact ? -1 : 0
         });
-        const minDist = 0.1; //Hz HERE
+       
+        const minDist = 1.0; //Hz HERE
         for (var index1 = 1; index1 < listOfJs.length; index1++ ) {
           const ref = listOfJs[index1 - 1].JlevelAvoidContact + minDist;
           if (listOfJs[index1].JlevelAvoidContact < ref) {
@@ -155,14 +160,17 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        // console.log("listOfJsU :" + JSON.stringify(listOfJs));
 
         dataColumns.push({
-           'chemShift': arrayColumns[indices[i]],
-           'labelColumn': labelColumnarray[indices[i]],
-           'MyIndex': i,
-           'atomIndexMol': indexAtomMol[indices[i]],
+           'chemShift': chemColumnarray[i],
+           'labelColumn': labelColumnarray[i],
+           'MyIndex': indicesSorted[i],
+           'atomIndexMol': indexAtomMol[i],
            'listOfJs' : listOfJs,
         });
      }
      
+     dataColumns.sort((a, b) => {
+          return a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0
+          });
 
      var dataUnassignedCoupCircles = [];
      for (i = 0; i < unassignedCouplings.content.length; i++) {
@@ -182,32 +190,29 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
        });
      }
 
-     var dataAssignedCoupCircles = [];
+     var dataAssignedCoupBlocks = [];
      for (i = 0; i < assignedCouplings.content.length; i++) {
        {
          const inInd = indicesSorted[assignedCouplings.content[i].colNumber1];
-         dataAssignedCoupCircles.push({
+         dataAssignedCoupBlocks.push({
            'chemShift': arrayColumns[inInd],
-           'value': assignedCouplings.content[i].Jvalue,
+           'value': assignedCouplings.content[i].JvalueShifted,
            'MyIndex': inInd,
-           'uniqIndex': dataAssignedCoupCircles.length,
+           'uniqIndex': dataAssignedCoupBlocks.length,
          });
        }
        {
          const inInd = indicesSorted[assignedCouplings.content[i].colNumber2];
-         dataAssignedCoupCircles.push({
+         dataAssignedCoupBlocks.push({
            'chemShift': arrayColumns[inInd],
-           'value': assignedCouplings.content[i].Jvalue,
+           'value': assignedCouplings.content[i].JvalueShifted,
            'MyIndex': inInd,
-           'uniqIndex': dataAssignedCoupCircles.length,
+           'uniqIndex': dataAssignedCoupBlocks.length,
          });
        }
      }
 
-     for (i = 0; i < assignedCouplings.content.length; i++) {
-       assignedCouplings.content[i].indexColumn1 = indicesSorted[assignedCouplings.content[i].indexColumn1 - 1];
-       assignedCouplings.content[i].indexColumn2 = indicesSorted[assignedCouplings.content[i].indexColumn2 - 1];
-     }
+    
      // console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
      const nbHzPerPoint = maxScaleJ / heightJscale;
@@ -222,8 +227,20 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
 */
 
           // update JlevelAvoidContact in the assigned....
+     //p var assignedCouplings2 = new AssignedCouplings(jGraphData);
+
+     //p assignedCouplings2.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
+     //u console.log("dataColumns  :" + JSON.stringify(dataColumns));
+     //u console.log("assignedCouplings.content.length before " + JSON.stringify(assignedCouplings.content.length));
+
      assignedCouplings.createFromDataColumns(dataColumns);
+    
+     //u console.log("assignedCouplings.content.length after " + JSON.stringify(assignedCouplings.content.length));
+     //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
+     //p console.log("TassignedCouplings 2 :" + JSON.stringify(assignedCouplings2));
+
      assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
+     //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
@@ -752,7 +769,7 @@ atomInfo[0].formalCharge=0
               ________
              /        |
           */
-             dataColumns.JvalueAntiOverlap1
+           //  dataColumns.JvalueAntiOverlap1
 
 
           const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
@@ -837,7 +854,7 @@ console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.string
 
          // Dots
          var theBlocks = svg.selectAll("dots")
-           .data(dataAssignedCoupCircles)
+           .data(dataAssignedCoupBlocks)
            .enter()
            .append("rect")
            .attr("class", "circleS")
