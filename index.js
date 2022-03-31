@@ -116,15 +116,17 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      }*/
      var dataColumns = [];
      for (i = 0; i < arrayColumns.length; i++) { // loop over columns
+
        // populate J's assigned J
        var listOfJs=[];
        for (var i1 = 0; i1 < jGraphData.length; i1++) {
+
          if (i + 1  == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
            //var jdata;
             // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
           // var jdata = ;
            listOfJs.push({
-            isAssigned: true,
+            isAssigned: (jGraphData[i1].Label != "noAssignement"),
             indexInAssignementList: i1,
             isFirstInAssignmentIndex : true,
             Jvalue : jGraphData[i1].Jvalue,
@@ -136,7 +138,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
           //var jdata;
            // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
           listOfJs.push({
-            isAssigned: true,
+            isAssigned: (jGraphData[i1].Label != "noAssignement"),
             indexInAssignementList: i1,
             isFirstInAssignmentIndex : false,
             Jvalue : jGraphData[i1].Jvalue,
@@ -156,8 +158,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
           if (listOfJs[index1].JlevelAvoidContact < ref) {
             listOfJs[index1].JlevelAvoidContact = ref;
           }
-        }
-       // console.log("listOfJsU :" + JSON.stringify(listOfJs));
+         }
 
         dataColumns.push({
            'chemShift': chemColumnarray[i],
@@ -191,6 +192,20 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
      }
 
      var dataAssignedCoupBlocks = [];
+      for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+        for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+          if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
+            dataAssignedCoupBlocks.push({
+             'chemShift': dataColumns[indexList1].chemShift,
+             'value': dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
+             'trueValue': dataColumns[indexList1].listOfJs[i1].Jvalue,
+             'MyIndex': indexList1,
+             'uniqIndex': dataAssignedCoupBlocks.length,
+             });
+          }
+        }
+      }
+      /*
      for (i = 0; i < assignedCouplings.content.length; i++) {
        {
          const inInd = indicesSorted[assignedCouplings.content[i].colNumber1];
@@ -211,7 +226,7 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
          });
        }
      }
-
+*/
     
      // console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
@@ -862,7 +877,7 @@ console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.string
            .attr("y", function (d) { return yJs(Math.abs(d.value )) - halfBlockHeight; })
            .attr("width", 2 * blockWidth)
            .attr("height", 2 * halfBlockHeight)
-           .style("fill",function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
+           .style("fill",function (d) { return getJgraphColor(Math.abs(d.trueValue), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthBlocks)
            ;
