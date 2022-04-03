@@ -7,12 +7,20 @@ import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
 import { AssignedCouplings } from './src/assignedCouplings.js';
 import { UnassignedCouplings } from './src/unassignedCouplings.js';
-
 /*
 import { nmredata } from 'nmredata-data-test';
 import { readNmrRecord, NmrRecord } from 'nmredata';
+*/
 
-readNmrRecord(nmredata['menthol_1D_1H_assigned_J.zip'], {
+/*
+npm install browserify --save
+npm install nmredata-data-test --save
+npm install nmredata --save
+node_modules/.bin/browserify client.js > client.bundle.js 
+*/
+/*
+//readNmrRecord(nmredata['menthol_1D_1H_assigned_J.zip'], {
+readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_assigned_J.zip'], {
   zipOptions: { base64: true },
 }).then(async (nmrRecord) => {
   
