@@ -45,13 +45,14 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
    var lineWidthColumn = lineWidth / 2.0;
 
    var lineWidthBlocks = lineWidth / 2;
-
+   
    var preferedDistanceInPtBetweenColumns = 2.0 * (circleRadius) + lineWidthCircle + spaceBetweenColumns; // In pt
 
    var topJGraphYposition = 0;
    var bottomJGraphYposition = heightJscale;
    var pointingLineColum = bottomJGraphYposition + 20;
-
+   const nbHzPerPoint = maxScaleJ / heightJscale;
+   const minSpaceBetweekBlocks = nbHzPerPoint * (2 * halfBlockHeight + 0.0 * lineWidthBlocks / 2.0);
 
    /*
        const jcccol = getJgraphColor(11.2, darkMode);
@@ -151,9 +152,9 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
           return a.JlevelAvoidContact > b.JlevelAvoidContact ? 1 : a.JlevelAvoidContact < b.JlevelAvoidContact ? -1 : 0
         });
        
-        const minDist = 1.0; //Hz HERE
+        //const minDist = 1.0; //Hz HERE
         for (var index1 = 1; index1 < listOfJs.length; index1++ ) {
-          const ref = listOfJs[index1 - 1].JlevelAvoidContact + minDist;
+          const ref = listOfJs[index1 - 1].JlevelAvoidContact + minSpaceBetweekBlocks;
           if (listOfJs[index1].JlevelAvoidContact < ref) {
             listOfJs[index1].JlevelAvoidContact = ref;
           }
@@ -232,7 +233,6 @@ import { UnassignedCouplings } from './src/unassignedCouplings.js';
     
      // console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
 
-     const nbHzPerPoint = maxScaleJ / heightJscale;
 
 /*
      for (var indexList = 0; indexList < dataColumns.length; indexList++) {
