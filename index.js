@@ -7,12 +7,28 @@ import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
 import { AssignedCouplings } from './src/assignedCouplings.js';
 import { UnassignedCouplings } from './src/unassignedCouplings.js';
+
 /*
 import { nmredata } from 'nmredata-data-test';
 import { readNmrRecord, NmrRecord } from 'nmredata';
 */
 
+//import { nmredata } from './node_modules/nmredata-data-test/index.js';
+//import { readNmrRecord, NmrRecord } from './node_modules/nmredata/src/index.js';
+//import { readNmrRecord } from './node_modules/nmredata/src/reader/readNmrRecord.js';
+//import { nmredata } from 'nmredata-data-test';
+
+//declare module 'nmredata';
+//import { readNmrRecord, NmrRecord } from 'nmredata';
+
 /*
+npm install nmredata-data-test --save
+npm install nmredata --save
+*/
+
+
+/*
+// NOT USED ....
 https://medium.com/weekly-webtips/import-use-npm-modules-in-the-browser-easily-e70d6c84fc31
 npm install browserify --save
 npm install nmredata-data-test --save
@@ -39,11 +55,11 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
   let tagsList = Object.keys(allTags);
  
   let nmredata = nmrRecord.getNMReData();
-  //console.log(nmredata)
 
   
   var json = await nmrRecord.toJSON();
- 
+  //console.log(nmredata);
+
 });
 */
 
