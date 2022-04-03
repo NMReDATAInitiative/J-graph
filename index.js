@@ -7,9 +7,36 @@ import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
 import { AssignedCouplings } from './src/assignedCouplings.js';
 import { UnassignedCouplings } from './src/unassignedCouplings.js';
-//import { pathFun } from './src/pathFun.js'; 
-//import { updateChart } from './src/updateChart.js'; 
 
+/*
+import { nmredata } from 'nmredata-data-test';
+import { readNmrRecord, NmrRecord } from 'nmredata';
+
+readNmrRecord(nmredata['menthol_1D_1H_assigned_J.zip'], {
+  zipOptions: { base64: true },
+}).then(async (nmrRecord) => {
+  
+  let nbSDFFiles = nmrRecord.nbSamples;
+  let sdfList = nmrRecord.getSDFList(); // it's return ["wild_JCH_coupling","only_one_HH_coupling_in_Jtag","compound1.nmredata","compound1_with_jcamp.nmredata","with_char_10","compound1_special_labels.nmredata copy"]
+ 
+  let activeElement = nmrRecord.getActiveElement(); //should return 'wild_JCH_coupling'
+  nmrRecord.setActiveElement('only_one_HH_coupling_in_Jtag');
+
+  
+  let allTags = nmrRecord.getNMReDataTags(); //return the tags of 'only_one_HH_coupling_in_Jtag'
+  // you can get a specific tag
+  let solvent = allTags['SOLVENT'];
+  // To get one list with the current's tags
+  let tagsList = Object.keys(allTags);
+ 
+  let nmredata = nmrRecord.getNMReData();
+  //console.log(nmredata)
+
+  
+  var json = await nmrRecord.toJSON();
+ 
+});
+*/
 
    //
    // set the dimensions and margins of the graph
