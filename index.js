@@ -13,6 +13,7 @@ import { readNmrRecord, NmrRecord } from 'nmredata';
 */
 
 /*
+https://medium.com/weekly-webtips/import-use-npm-modules-in-the-browser-easily-e70d6c84fc31
 npm install browserify --save
 npm install nmredata-data-test --save
 npm install nmredata --save
