@@ -307,7 +307,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
      //p console.log("TassignedCouplings 2 :" + JSON.stringify(assignedCouplings2));
 
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, dataColumns);
      //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
      // Make list of positions according to size of jGraphData

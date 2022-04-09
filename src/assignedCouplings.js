@@ -29,7 +29,7 @@ export class AssignedCouplings {
                         //const assignmentPartner = dataColumns[indexList].listOfJs[i1].assignmentPartner;
                         
                         const avJcoupling = ((eval(Jvalue1) + eval(Jvalue2)) / 2.0); // Should be equal, but in case slightly different, take average
-                       
+
                         theAssignedCouplings.push({
                           jOKcolor: "grey",
                           Jvalue: avJcoupling, 
@@ -144,7 +144,7 @@ export class AssignedCouplings {
       */
     
 
-    udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove) {
+    udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove, dataColumns) {
 
       for (var indexList = 0; indexList < this.content.length; indexList++) {
         this.content[indexList].JvalueShifted = this.content[indexList].Jvalue;
@@ -204,7 +204,13 @@ export class AssignedCouplings {
                 const it = this.content[iter];
                 var itfs = it.indexColumn1;
                 var itfl = it.indexColumn2;
-                 if (itfs > itfl) {const del = itfl; itfl = itfs; itfs = del;} // Swap
+                var itfsVertPositionHz = dataColumns[it.indexColumn1].listOfJs[it.indexJ1].JlevelAvoidContact;
+                var itflVertPositionHz = dataColumns[it.indexColumn2].listOfJs[it.indexJ2].JlevelAvoidContact;
+
+                 if (itfs > itfl) { // swap
+                  const del = itfl; itfl = itfs; itfs = del;
+                  const del2 = itfsVertPositionHz; itfsVertPositionHz = itflVertPositionHz; itflVertPositionHz = del2;
+                } // Swap
 
             // avoid lines
                 if ((itfs > first && itfs < second) || (itfl > first && itfl < second )) 
@@ -219,10 +225,11 @@ export class AssignedCouplings {
       					    }
       				  }
                 // avoid itfs
+              
                 if (itfs > first && itfs < second) {
           					if (currentJ < (it.Jvalue + fDeltaDotAbove)) {
-                      rangesToAvoidFirst.push(it.Jvalue + fDeltaDotAbove);
-                      rangesToAvoidSecond.push(it.Jvalue - fDeltaDotAbove);
+                      rangesToAvoidFirst.push(itfsVertPositionHz + fDeltaDotAbove);
+                      rangesToAvoidSecond.push(itfsVertPositionHz - fDeltaDotAbove);
       					    }
       				  }
                 // avoid itfs
