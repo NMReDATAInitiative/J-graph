@@ -206,7 +206,8 @@ export class AssignedCouplings {
                 var itfl = it.indexColumn2;
                 var itfsVertPositionHz = dataColumns[it.indexColumn1].listOfJs[it.indexJ1].JlevelAvoidContact;
                 var itflVertPositionHz = dataColumns[it.indexColumn2].listOfJs[it.indexJ2].JlevelAvoidContact;
-
+                it.JvalueAntiOverlap1 = itfsVertPositionHz;
+                it.JvalueAntiOverlap2 = itflVertPositionHz;
                  if (itfs > itfl) { // swap
                   const del = itfl; itfl = itfs; itfs = del;
                   const del2 = itfsVertPositionHz; itfsVertPositionHz = itflVertPositionHz; itflVertPositionHz = del2;

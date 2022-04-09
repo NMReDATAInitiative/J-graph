@@ -834,11 +834,12 @@ atomInfo[0].formalCharge=0
         
          function pathFun(d) {
           /*
-              ________
-             /        |
+          The four points for assignment lines  
+           | __ |
+           |/  \|
+           O    O
+           |    |
           */
-           //  dataColumns.JvalueAntiOverlap1
-
 
           const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
           const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
@@ -848,8 +849,8 @@ atomInfo[0].formalCharge=0
          //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
 console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
 // HERE
-const alterative = dataColumns[0].JvalueAntiOverlap1;//
-console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
+//const alterative = dataColumns[0].JvalueAntiOverlap1;//
+//console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
           const y2 = yJs(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted));
           //const y2 = yJs(Math.abs(d.JvalueShifted));
           const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
@@ -862,6 +863,7 @@ console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.string
              usedHorizontalShiftX = eval(-usedHorizontalShiftX);
              usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
           }
+         
           const combine = [
             [cs1 + usedHorizontalShiftSideBlock, y1a],
             [cs1 + usedHorizontalShiftX, y2], 
