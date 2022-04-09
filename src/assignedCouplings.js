@@ -153,8 +153,8 @@ export class AssignedCouplings {
     // parameters 
 
     const lastColuNumber = this.content.length - 1;// .size() - 1;
-    for (var diffIndex = 1; diffIndex < lastColuNumber; diffIndex++) {
-
+    // from close by pairs to farther appart pairs
+    for (var diffIndex = 1; diffIndex < lastColuNumber; diffIndex++) { 
       const lastColGigenDiffIndex = lastColuNumber - diffIndex;
       for (var curCol = 0; curCol <= lastColGigenDiffIndex; curCol ++ ) {
 
@@ -196,53 +196,59 @@ export class AssignedCouplings {
           var rangesToAvoidFirst= [];
           var rangesToAvoidSecond= [];
 
-          //vector < pair < double, double > > rangesToAvoid; 
-
-          // list all ranges of dots for which top is above currentJ 
-          for (var iter = 0; iter < this.content.length; iter++) {
-            if (iter != indexOther ) {
-            const it = this.content[iter];
-            var itfs = it.indexColumn1;
-            var itfl = it.indexColumn2;
-            var itfsVertPositionHz = dataColumns[it.indexColumn1].listOfJs[it.indexJ1].JlevelAvoidContact;
-            var itflVertPositionHz = dataColumns[it.indexColumn2].listOfJs[it.indexJ2].JlevelAvoidContact;
-            it.JvalueAntiOverlap1 = itfsVertPositionHz;
-            it.JvalueAntiOverlap2 = itflVertPositionHz;
-            if (itfs > itfl) { // swap
-                const del = itfl; itfl = itfs; itfs = del;
-                const del2 = itfsVertPositionHz; itfsVertPositionHz = itflVertPositionHz; itflVertPositionHz = del2;
-             } // Swap
-            
-            // avoid lines
-            if ((itfs > first && itfs < second) || (itfl > first && itfl < second )) {
-              if (diffIndex <=  (itfl -itfs)) {
-
-                //for (var inside = first + 1; inside <= second - 1; inside ++) { // exclude current
-                //  if (it.colNumber1 > first || it.colNumber2 == inside )
-                if (currentJ < (it.JvalueShifted + fDeltaLineAbove)) {
-                    rangesToAvoidFirst.push(it.JvalueShifted + fDeltaLineAbove);
-                    rangesToAvoidSecond.push(it.JvalueShifted - fDeltaLineAbove);
-                    //						rangesToAvoid.push_back(make_pair(it.Jvalues + fDeltaDotAbove, it.Jvalues - fDeltaDotBelow));
+          for (var iterator = 0; iterator < dataColumns.length; iterator++) {
+            if (iterator > first && iterator < second) {
+              for (var iterJ = 0; iterJ < dataColumns[iterator].listOfJs.length; iterJ++) {
+               var  delta = 0;
+                if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
+                  delta = fDeltaDotAbove;
+                } else {
+                  delta = 1 * fDeltaDotAbove * 2.0;
+                }
+                const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
+                if (currentJ < refValue + delta) {
+                  rangesToAvoidFirst.push(refValue + delta);
+                  rangesToAvoidSecond.push(refValue - delta);
                 }
               }
             }
+          }
+          // list all ranges of dots for which top is above currentJ 
+         /* for (var iter = 0; iter < this.content.length; iter++) {
+            if (iter != indexOther ) {
+              const it = this.content[iter];
+              var itfs = it.indexColumn1;
+              var itfl = it.indexColumn2;
+              var itfsVertPositionHz = dataColumns[it.indexColumn1].listOfJs[it.indexJ1].JlevelAvoidContact;
+              var itflVertPositionHz = dataColumns[it.indexColumn2].listOfJs[it.indexJ2].JlevelAvoidContact;
+              it.JvalueAntiOverlap1 = itfsVertPositionHz;
+              it.JvalueAntiOverlap2 = itflVertPositionHz;
+              if (itfs > itfl) { // swap
+                  const del = itfl; itfl = itfs; itfs = del;
+                  const del2 = itfsVertPositionHz; itfsVertPositionHz = itflVertPositionHz; itflVertPositionHz = del2;
+               } // Swap
+              
+              // avoid lines
+              
+             
               // avoid itfs
-            
-            if (itfs > first && itfs < second) {
+              
+              if (itfs > first && itfs < second) {
                 if (currentJ < (it.Jvalue + fDeltaDotAbove)) {
                   rangesToAvoidFirst.push(itfsVertPositionHz + fDeltaDotAbove);
                   rangesToAvoidSecond.push(itfsVertPositionHz - fDeltaDotAbove);
                 }
-            }
-                // avoid itfs
-            if (itfl > first && itfl < second) {
+              }
+                  // avoid itfs
+              if (itfl > first && itfl < second) {
                 if (currentJ < (it.Jvalue + fDeltaDotAbove)) {
                   rangesToAvoidFirst.push(it.Jvalue + fDeltaDotAbove);
                   rangesToAvoidSecond.push(it.Jvalue - fDeltaDotAbove);
                 }
+              }
             }
           }
-        }
+          */
          // list all ranges of lines for which top is above currentJ 
     
           for (var inside1 = first + 1; inside1 <= second - 1; inside1 ++) { // includes current
