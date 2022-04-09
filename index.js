@@ -71,12 +71,12 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    var lineWidth = 1.5;
    var maxScaleJ = 22.0;
    var ratioOccupyJgraph = 1.0 / 4.0;
-   var circleRadius = 5.0;
+   var generalUseWidth = 5.0;
    var spaceBetweenColumns = 10;
    var darkMode = false; // True not implemented
    //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
    if ((/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
-     circleRadius = 15.0;
+     generalUseWidth = 15.0;
      margin = { top: 50, right: 10, bottom: 30, left: 10 }; // For vertical
      bodyWidth = 800;
      bodyHeight = 1000; // Not good when horizontal....
@@ -84,9 +84,9 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      ratioOccupyJgraph = 1.0 / 2.0;
      spaceBetweenColumns = spaceBetweenColumns / 2.0;
    }
-   var circleRadiusSmall = circleRadius / 2.0;
-   var blockWidth = circleRadius;
-   var halfBlockHeight = circleRadius / 3.0;
+   var circleRadius = generalUseWidth * 0.8;
+   var blockWidth = generalUseWidth;
+   var halfBlockHeight = generalUseWidth / 3.0;
 
    var width = bodyWidth - margin.left - margin.right;
    var height = bodyHeight - margin.top - margin.bottom;
@@ -98,7 +98,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
    var lineWidthBlocks = lineWidth / 2;
    
-   var preferedDistanceInPtBetweenColumns = 2.0 * (circleRadius) + lineWidthCircle + spaceBetweenColumns; // In pt
+   var preferedDistanceInPtBetweenColumns = 2.0 * (generalUseWidth) + lineWidthCircle + spaceBetweenColumns; // In pt
 
    var topJGraphYposition = 0;
    var bottomJGraphYposition = heightJscale;
@@ -150,7 +150,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
      var unassignedCouplings = new UnassignedCouplings(jGraphData);
 
-   // sort arrayColumns by decreasing values of chemical shift
+     // sort arrayColumns by decreasing values of chemical shift
      var len = arrayColumns.length;
      var indices = new Array(len);
      for (var i = 0; i < len; ++i) indices[i] = i;
@@ -162,56 +162,48 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
 
      // renumber index jGraphData(from 0 instead of 1 and decreasing chemical shift)
-    /* for (i = 0; i < jGraphData.length; ++i) {
+     /* for (i = 0; i < jGraphData.length; ++i) {
        jGraphData[i].indexColumn1 = indicesSorted[jGraphData[i].indexColumn1 - 1];
        jGraphData[i].indexColumn2 = indicesSorted[jGraphData[i].indexColumn2 - 1];
      }*/
      var dataColumns = [];
      for (i = 0; i < arrayColumns.length; i++) { // loop over columns
-
        // populate J's assigned J
        var listOfJs=[];
        for (var i1 = 0; i1 < jGraphData.length; i1++) {
-
          if (i + 1  == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
-           //var jdata;
-            // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
-          // var jdata = ;
-           listOfJs.push({
-            isAssigned: (jGraphData[i1].Label != "noAssignement"),
-            indexInAssignementList: i1,
-            isFirstInAssignmentIndex : true,
-            Jvalue : jGraphData[i1].Jvalue,
-        //    assignmentPartner: jGraphData[i].indexColumn2, // NEEDS CORRECTION
-            JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
-          });
+            listOfJs.push({
+              isAssigned: (jGraphData[i1].Label != "noAssignement"),
+              indexInAssignementList: i1,
+              isFirstInAssignmentIndex : true,
+              Jvalue : jGraphData[i1].Jvalue,
+              JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
+            });
          }
          if (i + 1 == jGraphData[i1].indexColumn2) { // almost SAME BLOCK
-          //var jdata;
-           // chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label,labelColumn1,labelColumn2,indexInMolFile1,indexInMolFile2
-          listOfJs.push({
-            isAssigned: (jGraphData[i1].Label != "noAssignement"),
-            indexInAssignementList: i1,
-            isFirstInAssignmentIndex : false,
-            Jvalue : jGraphData[i1].Jvalue,
-           // assignmentPartner: jGraphData[i].indexColumn1, // NEEDS CORRECTION
-            JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
-           });
+            listOfJs.push({
+              isAssigned: (jGraphData[i1].Label != "noAssignement"),
+              indexInAssignementList: i1,
+              isFirstInAssignmentIndex : false,
+              Jvalue : jGraphData[i1].Jvalue,
+              JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
+            });
           }
         }
         // Make increasing in size
         listOfJs.sort((a, b) => { // sort over absolute values
           return a.JlevelAvoidContact > b.JlevelAvoidContact ? 1 : a.JlevelAvoidContact < b.JlevelAvoidContact ? -1 : 0
         });
-       
-        //const minDist = 1.0; //Hz HERE
         for (var index1 = 1; index1 < listOfJs.length; index1++ ) {
-          const ref = listOfJs[index1 - 1].JlevelAvoidContact + minSpaceBetweekBlocks;
+          var minSpace = minSpaceBetweekBlocks;
+          if (!listOfJs[index1].isAssigned) {
+            minSpace = circleRadius / 2.0;
+          }
+          const ref = listOfJs[index1 - 1].JlevelAvoidContact + minSpace;
           if (listOfJs[index1].JlevelAvoidContact < ref) {
             listOfJs[index1].JlevelAvoidContact = ref;
           }
-         }
-
+        }
         dataColumns.push({
            'chemShift': chemColumnarray[i],
            'labelColumn': labelColumnarray[i],
@@ -219,7 +211,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
            'atomIndexMol': indexAtomMol[i],
            'listOfJs' : listOfJs,
         });
-     }
+      }
      
      dataColumns.sort((a, b) => {
           return a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0
@@ -228,7 +220,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      var assignedCouplings = new AssignedCouplings(dataColumns);
      //assignedCouplings.consconstructFromJgraphtructor(jGraph);  // obsolete
 
-     var dataUnassignedCoupCircles = [];
+   /*  var dataUnassignedCoupCircles = [];
      for (i = 0; i < unassignedCouplings.content.length; i++) {
        const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
        const inInd2 = indicesSorted[unassignedCouplings.content[i].colNumber2];
@@ -244,7 +236,23 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          'MyIndex': inInd2,
          'uniqIndex': dataUnassignedCoupCircles.length,
        });
-     }
+     }*/
+ var dataUnassignedCoupCircles = [];
+      for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+        for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+          if (!dataColumns[indexList1].listOfJs[i1].isAssigned) {
+            dataUnassignedCoupCircles.push({
+             'chemShift': dataColumns[indexList1].chemShift,
+             'valueOnBar': dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
+             'value': dataColumns[indexList1].listOfJs[i1].Jvalue,
+             'MyIndex': indexList1,
+             'uniqIndex': dataUnassignedCoupCircles.length,
+             });
+          }
+        }
+      }
+
+
 
      var dataAssignedCoupBlocks = [];
       for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
@@ -260,54 +268,8 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
           }
         }
       }
-      /*
-     for (i = 0; i < assignedCouplings.content.length; i++) {
-       {
-         const inInd = indicesSorted[assignedCouplings.content[i].colNumber1];
-         dataAssignedCoupBlocks.push({
-           'chemShift': arrayColumns[inInd],
-           'value': assignedCouplings.content[i].JvalueShifted,
-           'MyIndex': inInd,
-           'uniqIndex': dataAssignedCoupBlocks.length,
-         });
-       }
-       {
-         const inInd = indicesSorted[assignedCouplings.content[i].colNumber2];
-         dataAssignedCoupBlocks.push({
-           'chemShift': arrayColumns[inInd],
-           'value': assignedCouplings.content[i].JvalueShifted,
-           'MyIndex': inInd,
-           'uniqIndex': dataAssignedCoupBlocks.length,
-         });
-       }
-     }
-*/
-    
-     // console.log("maxScaleJ / heightJscale " + (maxScaleJ / heightJscale));  
-
-
-/*
-     for (var indexList = 0; indexList < dataColumns.length; indexList++) {
-      for (i = 0; i < dataColumns[indexList].listOfJs.length; i++) {
-        const iddex = dataColumns[indexList].listOfJs[i].indexInAssignementList;
-        dataColumns[indexList].listOfJs[i].indexInAssignementList = indicesSorted[iddex];
-      }
-    }
-*/
-
-          // update JlevelAvoidContact in the assigned....
-     //p var assignedCouplings2 = new AssignedCouplings(jGraphData);
-
-     //p assignedCouplings2.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint);
-     //u console.log("dataColumns  :" + JSON.stringify(dataColumns));
-     //u console.log("assignedCouplings.content.length before " + JSON.stringify(assignedCouplings.content.length));
-
-    
-     //u console.log("assignedCouplings.content.length after " + JSON.stringify(assignedCouplings.content.length));
-     //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
-     //p console.log("TassignedCouplings 2 :" + JSON.stringify(assignedCouplings2));
-
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, dataColumns);
+      
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, circleRadius, dataColumns);
      //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
      // Make list of positions according to size of jGraphData
@@ -380,8 +342,8 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          .attr("x", d.xx)
          .attr("y", yJs(Math.abs(d.JvalueShifted)) - 3.0)
          .text("" + d.lineText)
-         .attr('dx', 1.3 * circleRadius)
-         .style("font-size", circleRadius * 2.5)
+         .attr('dx', 1.3 * generalUseWidth)
+         .style("font-size", generalUseWidth * 2.5)
          .style("font-family", "Helvetica")
          .style("text-anchor", "middle")
          .transition().duration(100).delay(3000)
@@ -540,24 +502,7 @@ atomInfo[0].formalCharge=0
          .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
          .style("opacity", "1");
 
-       var theTextDots2 = svg.selectAll("textt")
-         .data(dataUnassignedCoupCircles)
-         .enter()
-         .append("text")
-         .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-         .attr("y", function (d) { return yJs(Math.abs(d.value)); })
-         // .style("fill", "gray")
-         //   .attr("stroke", "red")
-         // .style("stroke-width", lineWidthBlocks)
-         .text(function (d) { return "J = " + d.value; })
-         .attr('dx', 1.3 * circleRadius)
-         .style("font-size", circleRadius * 2.5)
-         .style("font-family", "Helvetica")
-         .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
-         .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
-         .attr("opacity", 0.0)
-         .transition().duration(100).delay(3000)
-         .remove();
+      
 
        // first every group dimmed
        d3.selectAll(".circleL")
@@ -805,8 +750,8 @@ atomInfo[0].formalCharge=0
            .enter()
            .append("line")
            .attr("class", "Colunn")
-           .attr("x1", function (d) { return spreadPositionsUU[d.MyIndex] + circleRadius; })
-           .attr("x2", function (d) { return spreadPositionsUU[d.MyIndex] - circleRadius; })
+           .attr("x1", function (d) { return spreadPositionsUU[d.MyIndex] + generalUseWidth; })
+           .attr("x2", function (d) { return spreadPositionsUU[d.MyIndex] - generalUseWidth; })
            .attr("y1", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("y2", function (d) { return bottomJGraphYposition + positionJscale; })
            .attr("stroke", "black") // just sketched... update wil fix colors
@@ -824,8 +769,8 @@ atomInfo[0].formalCharge=0
            .attr("y", function (d) { return -3 + topJGraphYposition + positionJscale; })
            // .text(function (d) { return "" + d.chemShift; })
            .text(function (d) { return "" + d.labelColumn; })
-           .attr('dx', -1.0 * circleRadius)
-           .style("font-size", circleRadius * 2.5)
+           .attr('dx', -1.0 * generalUseWidth)
+           .style("font-size", generalUseWidth * 2.5)
            .style("font-family", "Helvetica")
            .on("click", highlightColumn)
            .on("mouseover", highlightColumn);
@@ -912,7 +857,7 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
            .append("circle")
            .attr("class", "circleL")
            .attr("cx", function (d) { return x(d.chemShift); })
-           .attr("cy", function (d) { return yJs(Math.abs(d.value)); })
+           .attr("cy", function (d) { return yJs(Math.abs(d.valueOnBar)); })
            .attr("r", circleRadius)
            .style("fill",  function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
@@ -920,9 +865,30 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
            .on("mouseover", highlightDot)
            .on("click", highlightDot)
            ;
-         // .on("mouseleave", doNotHighlightDot)
 
+           
+         // .on("mouseleave", doNotHighlightDot)
+          var theTextDots2 = svg.selectAll("textt")
+           .data(dataUnassignedCoupCircles)
+           .enter()
+           .append("text")
+           .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
+           .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar)); })
+           // .style("fill", "gray")
+           //   .attr("stroke", "red")
+           // .style("stroke-width", lineWidthBlocks)
+           .text(function (d) { return "J = " + d.value; })
+        //   .attr("dx", 1.3 * generalUseWidth)
+           .style("font-size", generalUseWidth * 2.5)
+           .style("font-family", "Helvetica")
+           .attr("x", function (d) { return x(d.chemShift); })
+          // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
+         //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+           .attr("opacity", 0.0);
+        //   .transition().duration(100).delay(3000);
+          // .remove();
          // Dots
+
          var theBlocks = svg.selectAll("dots")
            .data(dataAssignedCoupBlocks)
            .enter()
@@ -955,7 +921,7 @@ var jgraphObj = {
              theBlocks : theBlocks,
            };
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, circleRadius, x, width, jgraphObj.theColumns, theDots, theBlocks, blockWidth);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
 
          // Add the brushing
          lineSpectrum
@@ -1002,7 +968,7 @@ var jgraphObj = {
             )
 
           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, circleRadius, x, width, jgraphObj.theColumns, theDots, theBlocks, blockWidth);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)

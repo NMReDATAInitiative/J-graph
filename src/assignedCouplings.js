@@ -144,7 +144,7 @@ export class AssignedCouplings {
       */
     
 
-  udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove, dataColumns) {
+  udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove, circleRadius, dataColumns) {
 
     for (var indexList = 0; indexList < this.content.length; indexList++) {
       this.content[indexList].JvalueShifted = this.content[indexList].Jvalue;
@@ -203,7 +203,7 @@ export class AssignedCouplings {
                 if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
                   delta = fDeltaDotAbove;
                 } else {
-                  delta = 1 * fDeltaDotAbove * 2.0;
+                  delta = circleRadius;
                 }
                 const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
                 if (currentJ < refValue + delta) {

@@ -1,4 +1,4 @@
-export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, circleRadius, x, width, theColumns, theDots, theBlocks, blockWidth) {
+export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, generalUseWidth, x, width, theColumns, theDots, theTextDots2, theBlocks, blockWidth) {
  
             theColumns.theColumnsConnectColumnToSpectrumPosition
              .transition().duration(timeAnimation)
@@ -30,15 +30,21 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
 
            theColumns.theColumnsBase
              .transition().duration(timeAnimation)
-             .attr("x1", function (d) { return spreadPositions[d.MyIndex] + circleRadius; })
-             .attr("x2", function (d) { return spreadPositions[d.MyIndex] - circleRadius; })
+             .attr("x1", function (d) { return spreadPositions[d.MyIndex] + generalUseWidth; })
+             .attr("x2", function (d) { return spreadPositions[d.MyIndex] - generalUseWidth; })
              .attr("stroke", function (d) {
                return "black";
              });
 
            theDots
              .transition().duration(timeAnimation)
-             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; });
+             .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
+             ;
+
+           theTextDots2
+             .transition().duration(timeAnimation)
+             .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
+            ;
 
            theBlocks
              .transition().duration(timeAnimation)
