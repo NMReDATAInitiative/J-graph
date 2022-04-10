@@ -85,7 +85,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      spaceBetweenColumns = spaceBetweenColumns / 2.0;
    }
    var circleRadius = generalUseWidth * 0.8;
-   var blockWidth = generalUseWidth;
+   var blockWidth = Math.round(generalUseWidth * 0.9);
    var halfBlockHeight = generalUseWidth / 3.0;
 
    var width = bodyWidth - margin.left - margin.right;
@@ -271,7 +271,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
         }
       }
       
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, circleRadius, dataColumns);
+     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
      //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
      // Make list of positions according to size of jGraphData
