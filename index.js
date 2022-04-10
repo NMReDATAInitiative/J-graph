@@ -495,7 +495,6 @@ atomInfo[0].formalCharge=0
        //unselect hydrogens
        Jmol.script(JmolAppletA,"select hydrogen; color white");
 
-
        d3.selectAll(".line")
          .transition().duration(200)
          .style("stroke", "black")
@@ -503,8 +502,6 @@ atomInfo[0].formalCharge=0
          .transition().duration(20).delay(jGraphParameters.delayBeforeErase)
          .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
          .style("opacity", "1");
-
-      
 
        // first every group dimmed
        d3.selectAll(".circleL")
@@ -566,6 +563,43 @@ atomInfo[0].formalCharge=0
          .style("opacity", "1.0")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .style("opacity", "0.0");
+
+
+       var theTextDotNew = svg
+         .append("text")
+      //   .attr("class", "toBesgdfgfsgdHidden")
+         .attr("x", spreadPositionsNew[d.MyIndex])
+        // .attr("x",  x(d.chemShift))
+         .attr("y",  yJs(Math.abs(d.valueOnBar) + 3.0))
+       //  .text( "J = " + d.value + "val " + (Math.abs(d.valueOnBar + 3.0)) + " pos:" + spreadPositionsNew[d.MyIndex])
+         .text( "J = " + d.value)
+        // .attr('dx', 1.3 * generalUseWidth)
+         .style("font-size", generalUseWidth * 2.5)
+         .style("font-family", "Helvetica")
+         .style("text-anchor", "middle")
+         .transition().duration(100).delay(3000)
+         .remove();
+/*
+  var theTextDots2 = svg.selectAll("textt")
+           .data(dataUnassignedCoupCircles)
+           .enter()
+           .append("text")
+           .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
+           .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar + 3.0)); })
+           // .style("fill", "gray")
+           //   .attr("stroke", "red")
+           // .style("stroke-width", lineWidthBlocks)
+           .text(function (d) { return "J = " + d.value; })
+        //   .attr("dx", 1.3 * generalUseWidth)
+           .style("font-size", generalUseWidth * 2.5)
+           .style("font-family", "Helvetica")
+           .attr("x", function (d) { return x(d.chemShift); })
+          // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
+         //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+           .attr("opacity", 0.0);
+        //   .transition().duration(100).delay(3000);
+          // .remove();
+       */
      };
 
      //  Unhighlight
@@ -876,7 +910,7 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
            .enter()
            .append("text")
            .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-           .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar)); })
+           .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar + 3.0)); })
            // .style("fill", "gray")
            //   .attr("stroke", "red")
            // .style("stroke-width", lineWidthBlocks)
@@ -884,7 +918,7 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
         //   .attr("dx", 1.3 * generalUseWidth)
            .style("font-size", generalUseWidth * 2.5)
            .style("font-family", "Helvetica")
-           .attr("x", function (d) { return x(d.chemShift); })
+           .attr("x", function (d) { return MyIndex; })
           // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
          //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
            .attr("opacity", 0.0);
