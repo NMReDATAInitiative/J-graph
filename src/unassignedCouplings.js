@@ -11,7 +11,8 @@ export class UnassignedCouplings {
     for (var i = 0; i < indexArray1.length; i++) {
       const index1 = indexArray1[i];
       const index2 = indexArray2[i];
-      if (label[i] == "noAssignement") {
+      const condition = (label[i] != "noAssignement");
+      if (condition) {
         tmp.push({
             Jvalue: +Jvalue[i],
             colNumber1: (index1 - 1),

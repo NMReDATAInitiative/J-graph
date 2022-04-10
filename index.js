@@ -104,7 +104,8 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    var bottomJGraphYposition = heightJscale;
    var pointingLineColum = bottomJGraphYposition + 20;
    const nbHzPerPoint = maxScaleJ / heightJscale;
-   const minSpaceBetweekBlocks = nbHzPerPoint * (2 * halfBlockHeight + 0.0 * lineWidthBlocks / 2.0);
+   const minSpaceBetweekBlocks = nbHzPerPoint * (2 * halfBlockHeight + 1.0 * lineWidthBlocks / 2.0);
+   const minSpaceBetweekCircles = nbHzPerPoint * (2 * circleRadius + 2.0 * lineWidthBlocks / 2.0);
 
    /*
        const jcccol = getJgraphColor(11.2, darkMode);
@@ -171,9 +172,10 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
        // populate J's assigned J
        var listOfJs=[];
        for (var i1 = 0; i1 < jGraphData.length; i1++) {
+         const condition = jGraphData[i1].Label != "noAssignement";
          if (i + 1  == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
             listOfJs.push({
-              isAssigned: (jGraphData[i1].Label != "noAssignement"),
+              isAssigned: condition,
               indexInAssignementList: i1,
               isFirstInAssignmentIndex : true,
               Jvalue : jGraphData[i1].Jvalue,
@@ -182,7 +184,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          }
          if (i + 1 == jGraphData[i1].indexColumn2) { // almost SAME BLOCK
             listOfJs.push({
-              isAssigned: (jGraphData[i1].Label != "noAssignement"),
+              isAssigned: condition,
               indexInAssignementList: i1,
               isFirstInAssignmentIndex : false,
               Jvalue : jGraphData[i1].Jvalue,
@@ -197,7 +199,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
         for (var index1 = 1; index1 < listOfJs.length; index1++ ) {
           var minSpace = minSpaceBetweekBlocks;
           if (!listOfJs[index1].isAssigned) {
-            minSpace = circleRadius / 2.0;
+            minSpace = minSpaceBetweekCircles;
           }
           const ref = listOfJs[index1 - 1].JlevelAvoidContact + minSpace;
           if (listOfJs[index1].JlevelAvoidContact < ref) {
@@ -866,7 +868,8 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
            .on("click", highlightDot)
            ;
 
-           
+          var theTextDots2 = "";
+           /*
          // .on("mouseleave", doNotHighlightDot)
           var theTextDots2 = svg.selectAll("textt")
            .data(dataUnassignedCoupCircles)
@@ -888,6 +891,7 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
         //   .transition().duration(100).delay(3000);
           // .remove();
          // Dots
+          */
 
          var theBlocks = svg.selectAll("dots")
            .data(dataAssignedCoupBlocks)

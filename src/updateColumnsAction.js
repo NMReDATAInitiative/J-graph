@@ -40,12 +40,12 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .transition().duration(timeAnimation)
              .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
              ;
-
+/*
            theTextDots2
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
             ;
-
+*/
            theBlocks
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); });
