@@ -366,7 +366,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
           // What are the directly bound atoms of the two selected hydrogen (we don't test 1J) 
         const at1 = d.indexInMolFile1;
         const at2 = d.indexInMolFile2;  
-        var textToDisplay = jmolGetInfo(at1, at2, d);
+        var textToDisplay = jmolGetInfo(at1, at2, d.lineText);
        // const nbBond = jmolGetNBbonds(at1, at2);
         document.getElementById("textMainPage").innerHTML = textToDisplay;
 
@@ -424,31 +424,73 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
        // specific to those matching the condition of similarity of J's
        var numberCandidate = 0;
        const deltaSearchJ = 0.5;
+       var partner;
        d3.selectAll(".circleL")
          .filter(function (p) {
-           if (Math.abs(d.value - p.value) <= deltaSearchJ)
-             if (d.uniqIndex != p.uniqIndex)
-               numberCandidate++;
+           const test = 
+           (Math.abs(d.value - p.value) <= deltaSearchJ) && 
+           (d.uniqIndex != p.uniqIndex) && 
+           (d.MyIndex != p.MyIndex) && 
+           (jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 || jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3) &&
+           true; 
+           if (test){
+                numberCandidate++;
+                partner = p.indexAtomMol;
+           }
          });
 
-        // pointed atom 
-        jmolSelectAtom(d.indexAtomMol, [255,0,127]);// pink
+           document.getElementById("textMainPage").innerHTML = "guess J empty";
 
+        // pointed atom 
+        const curColHighligh = [0, 0, 0];
+        jmolSelectAtom(d.indexAtomMol, curColHighligh);
+        if (numberCandidate == 1) {
+           const at1 = d.indexAtomMol;
+           const at2 = partner; 
+          document.getElementById("textMainPage").innerHTML = at1 + " & " + at2;
+ 
+           var textToDisplay = jmolGetInfo(at1, at2, "J");
+           document.getElementById("textMainPage").innerHTML = "? " + textToDisplay;
+        }
 
        // select color when only one candidate, or more ...
        var highColor = "green";
-       if (numberCandidate > 1)
-         highColor = "red";
+       if (numberCandidate != 1)
+        highColor = "red";
 
-       d3.selectAll(".circleL")
+        // wrong distance dots
+        d3.selectAll(".circleL")
          .transition().duration(10).delay(300)
-         .filter(function (p) { const test = (Math.abs(d.value - p.value) <= deltaSearchJ) && (d.uniqIndex != p.uniqIndex); 
-         if(test) jmolSelectAtom(p.indexAtomMol, [127,0,255]);// pink
+         .filter(function (p) { 
+            const test = 
+           (Math.abs(d.value - p.value) <= deltaSearchJ) && 
+           (d.uniqIndex != p.uniqIndex) && 
+           (d.MyIndex != p.MyIndex) && 
+           (!(jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 || jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3)) &&
+           true; 
+         if(test) jmolSelectAtom(p.indexAtomMol, [255,0,50]);// pink
          return test; })
-         .style("stroke", highColor)
+         .style("stroke", "red")
          .style("opacity", "1.0")
          .style("stroke-width", lineWidth * 2.0);
 
+        // right distance dots
+        d3.selectAll(".circleL")
+         .transition().duration(10).delay(310)
+         .filter(function (p) { 
+           const test = 
+           (Math.abs(d.value - p.value) <= deltaSearchJ) && 
+           (d.uniqIndex != p.uniqIndex) && 
+           (d.MyIndex != p.MyIndex) && 
+           (jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 || jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3) &&
+           true; 
+           if(test) jmolSelectAtom(p.indexAtomMol, [0,255,50]);// dunno
+           return test; })
+         .style("stroke", highColor)
+         .style("opacity", "1.0")
+         .style("stroke-width", lineWidth * 2.0);
+ 
+       // all will get back to normal
        d3.selectAll(".circleL")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .style("stroke", "black")
@@ -470,14 +512,20 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
        d3.select(this)
          .transition(10).duration(200)
          .style("opacity", "1.0")
-         .style("stroke", "black")
-         .style("stroke-width", lineWidth);
+        // .style("stroke", "yellow")
+         .style("stroke-width", lineWidth * 2)
+           .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
+          //  .style("stroke", "black")
+         .style("stroke-width", lineWidth)
+;
 
        var selectedCicle = "textCircle" + d.uniqIndex;
        d3.selectAll("." + selectedCicle)
          .transition().duration(100).delay(10)
+          .style("stroke", curColHighligh)
          .style("opacity", "1.0")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
+        .style("stroke", "black")
          .style("opacity", "0.0");
 
 

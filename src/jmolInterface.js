@@ -85,7 +85,7 @@ atomInfo[0].formalCharge=0
   return returnedNumberBonds;
 	
 }
-export function jmolGetInfo(at1, at2, d) 
+export function jmolGetInfo(at1, at2, lineText) 
 
 {
 
@@ -131,14 +131,14 @@ atomInfo[0].formalCharge=0
     if (at1 == at2to && at2 == at1to) { // is a 1J
        // var distance = Jmol.evaluateVar(JmolAppletA, "distance(@" + at1 + ", @" + at2 + ")") 
        // console.log("2J, angle H-X-H : " + distance.toFixed(2));
-       textToDisplay = "1" + d.lineText ;
+       textToDisplay = "1" + lineText ;
     } else {
       if (at1to == at2to) { // is a 2J
          const elementNumber = atomInfo[at1to - 1].elemno;
          const numberOfBonds = atomInfo[at1to - 1].bondCount;
          // const partialCharge = atomInfo[at1to - 1].partialCharge;
          var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2 + ")");
-         textToDisplay = ("<sup>2</sup>" + d.lineText + " angle H-X-H : " + theta.toFixed(2));
+         textToDisplay = ("<sup>2</sup>" + lineText + " angle H-X-H : " + theta.toFixed(2));
          if (elementNumber == 6 && numberOfBonds == 4) { // is sp3
             textToDisplay += " sp3 carbon";
          }
@@ -163,7 +163,8 @@ atomInfo[0].formalCharge=0
             const elementNumber2 = atomInfo[at2to - 1].elemno;
             const numberOfBonds2 = atomInfo[at2to - 1].bondCount;
             var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2to + ", @" + at2 + ")"); 
-            textToDisplay = ("<sup>3</sup>" + d.lineText + " dihedral angle H-X-X-H : " + theta.toFixed(2));
+            const tmp = theta.toFixed(2);
+            textToDisplay = ("<sup>3</sup>" + lineText + " dihedral angle H-X-X-H : " + tmp);
             if (elementNumber1 == 6 && numberOfBonds1 == 4 && elementNumber2 == 6 && numberOfBonds2 == 4) {
               textToDisplay += " on C-C bond";
             }
@@ -179,7 +180,7 @@ atomInfo[0].formalCharge=0
             if (bondInfo[i].atom2.atomno == at1to && bondInfo[j].atom2.atomno == at2to && bondInfo[i].atom1.atomno == bondInfo[j].atom1.atomno) middleAtomFro4J = bondInfo[i].atom1.atomno;
           }
           if (middleAtomFro4J > -1) { // is a 4J
-            textToDisplay = ("<sup>4</sup>" + d.lineText + " via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
+            textToDisplay = ("<sup>4</sup>" + lineText + " via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
             // here don't break in case a 4J is replaced with a 3J such as in cyclopropane...
           }
         }
