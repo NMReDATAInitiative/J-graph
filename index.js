@@ -9,6 +9,9 @@ import { AssignedCouplings } from './src/assignedCouplings.js';
 import { UnassignedCouplings } from './src/unassignedCouplings.js';
 import { jmolGetInfo } from './src/jmolInterface.js';
 import { jmolGetNBbonds } from './src/jmolInterface.js';
+import { jmolUnselectAll } from './src/jmolInterface.js';
+import { jmolSelectAtom } from './src/jmolInterface.js';
+import { jmolSelectPair } from './src/jmolInterface.js';
 
 /*
 import { nmredata } from 'nmredata-data-test';
@@ -302,11 +305,12 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
        .call(d3.axisLeft(yJs).ticks(3));
 
       var highlightColumn = function (d) {
-				Jmol.script(JmolAppletA, "select hydrogen; color white");
+				jmolUnselectAll();
 				const number = d.atomIndexMol;
-				Jmol.script(JmolAppletA,"select atomno = " + number + ";color [127,255,127];spacefill 80");
+        const atomColorHighlightSingle = [127,255,127];
+        jmolSelectAtom(number, atomColorHighlightSingle);
 				setTimeout(function () {
-					Jmol.script(JmolAppletA, "select hydrogen; color white");
+				jmolUnselectAll();
 				}, 3200);
 			};
 
@@ -353,10 +357,9 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          .remove();
 
        var toto = function (d) { return d.lineText; };
-
-         Jmol.script(JmolAppletA,"select hydrogen; color white");
-         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile1 + ";color [127,255,127];spacefill 80");
-         Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
+         jmolUnselectAll();
+         const atomColorHighlightPairs = [127,255,127];
+         jmolSelectPair(d.indexInMolFile1, d.indexInMolFile2, atomColorHighlightPairs);
       
           //https://chemapps.stolaf.edu/jmol/docs/#getproperty
           // What are the directly bound atoms of the two selected hydrogen (we don't test 1J) 
@@ -367,7 +370,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
         document.getElementById("textMainPage").innerHTML = textToDisplay;
 
         setTimeout(function () {
-					Jmol.script(JmolAppletA, "select hydrogen; color white");
+        jmolUnselectAll();
         //  document.getElementById("textMainPage").innerHTML = defaultText;
 				}, 3200);
      };
@@ -377,7 +380,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
      var doNotHighlightLines = function (toto) {
 
-    //  Jmol.script(JmolAppletA,"select hydrogen; color white");
+    //           jmolUnselectAll();
 
         d3.selectAll(".line")
           .transition().duration(200).delay(300)
@@ -400,7 +403,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
       var spreadPositionsNew = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
        //unselect hydrogens
-       Jmol.script(JmolAppletA,"select hydrogen; color white");
+       jmolUnselectAll();
 
        d3.selectAll(".line")
          .transition().duration(200)

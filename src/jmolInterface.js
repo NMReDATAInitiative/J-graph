@@ -1,3 +1,16 @@
+export function jmolUnselectAll() {
+	Jmol.script(JmolAppletA,"select hydrogen; color white");
+}
+
+export function jmolSelectAtom(number, col){
+	Jmol.script(JmolAppletA,"select atomno = " + number + ";color [" + col + "];spacefill 80");
+}
+
+export function jmolSelectPair(a1, a2, col){
+         Jmol.script(JmolAppletA,"select atomno = " + a1 + ";color [" + col + "];spacefill 80");
+         Jmol.script(JmolAppletA,"select atomno = " + a2 + ";color [" + col + "];spacefill 80");
+}
+
 export function jmolGetNBbonds(at1, at2) {
 	// the two functions are ugly copy/paste plus editing....
 
