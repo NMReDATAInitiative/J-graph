@@ -7,6 +7,8 @@ import { updateColumnsPositions } from './src/updateColumnsPositions.js';
 import { updateColumnsAction } from './src/updateColumnsAction.js';
 import { AssignedCouplings } from './src/assignedCouplings.js';
 import { UnassignedCouplings } from './src/unassignedCouplings.js';
+import { jmolGetInfo } from './src/jmolInterface.js';
+import { jmolGetNBbonds } from './src/jmolInterface.js';
 
 /*
 import { nmredata } from 'nmredata-data-test';
@@ -335,8 +337,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          //   .style("stroke", function (d) { return (color(d.Label)) })
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
          .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
-         .style("opacity", "1");;
-
+         .style("opacity", "1");
 
        var theTextLine2 = svg
          .append("text")
@@ -358,105 +359,11 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          Jmol.script(JmolAppletA,"select atomno = " + d.indexInMolFile2 + ";color [127,255,127];spacefill 80");
       
           //https://chemapps.stolaf.edu/jmol/docs/#getproperty
-          // What are the directly bound atoms of the two selected hydrogen (we don't test 1J)   
-          const at1 = d.indexInMolFile1;
-          const at2 = d.indexInMolFile2;
-          var at1to = -1;
-          var at2to = -1;
-          var bondInfo = Jmol.getPropertyAsArray(JmolAppletA, "bondInfo");
-          var atomInfo = Jmol.getPropertyAsArray(JmolAppletA, "atomInfo");
-
-/*
-https://chemapps.stolaf.edu/jmol/docs/#getproperty
-
-https://chemapps.stolaf.edu/jmol/docs/misc/bondInfo.txt
-
-https://chemapps.stolaf.edu/jmol/docs/misc/atomInfo.txt
-atomInfo[0].bondCount=1
-atomInfo[0].atomno=1
-atomInfo[0].elemno=1
-atomInfo[0].z=0
-atomInfo[0].y=-0.8425599
-atomInfo[0].x=1.0406722
-atomInfo[0].partialCharge=0.1744213
-atomInfo[0].sym="H"
-atomInfo[0].colix=-32767
-atomInfo[0].info="H 1/1 #1"
-atomInfo[0]._ipt=0
-atomInfo[0].formalCharge=0
-*/
-
-          for (var i = 0; i < bondInfo.length; i++) {
-            const atom1 = bondInfo[i].atom1.atomno;
-            const atom2 = bondInfo[i].atom2.atomno;
-            if (atom1 == at1) at1to = atom2;
-            if (atom1 == at2) at2to = atom2;
-            if (atom2 == at1) at1to = atom1;
-            if (atom2 == at2) at2to = atom1; 
-          }
-          const defaultText = "More than 4 bonds apart!";
-          var textToDisplay = defaultText;
-          if (at1to > -1 && at2to > -1) {
-            // Is this 2J, 3J, 4J ?
-            // Important note: A pair may be both 3J and 4J (think of cyclopropane)
-            if (at1 == at2to && at2 == at1to) { // is a 1J
-               // var distance = Jmol.evaluateVar(JmolAppletA, "distance(@" + at1 + ", @" + at2 + ")") 
-               // console.log("2J, angle H-X-H : " + distance.toFixed(2));
-               textToDisplay = "1" + d.lineText ;
-            } else {
-              if (at1to == at2to) { // is a 2J
-                 const elementNumber = atomInfo[at1to - 1].elemno;
-                 const numberOfBonds = atomInfo[at1to - 1].bondCount;
-                 // const partialCharge = atomInfo[at1to - 1].partialCharge;
-                 var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2 + ")");
-                 textToDisplay = ("<sup>2</sup>" + d.lineText + " angle H-X-H : " + theta.toFixed(2));
-                 if (elementNumber == 6 && numberOfBonds == 4) { // is sp3
-                    textToDisplay += " sp3 carbon";
-                 }
-                 if (elementNumber == 6 && numberOfBonds == 3) { // is sp2
-                    textToDisplay += " sp2 carbon";
-                 }
-                 if (elementNumber == 6 && numberOfBonds == 2) { // is sp1
-                    textToDisplay += " sp1 carbon";
-                 }
-              } else {
-                var tmps = at1to;
-                var tmpl = at2to;
-                if (tmps > tmpl) {const tmpz = tmps; tmps = tmpl; tmpl = tmpz;}
-                var middleAtomFro4J = -1;
-                for (var i = 0; i < bondInfo.length; i++) {
-                  var atomsi = bondInfo[i].atom1.atomno;
-                  var atomli = bondInfo[i].atom2.atomno;
-                  if (atomsi > atomli) {const tmpz = atomsi; atomsi = atomli; atomli = tmpz;}
-                  if (tmps == atomsi && tmpl == atomli) { // is a 3J
-                    const elementNumber1 = atomInfo[at1to - 1].elemno;
-                    const numberOfBonds1 = atomInfo[at1to - 1].bondCount;
-                    const elementNumber2 = atomInfo[at2to - 1].elemno;
-                    const numberOfBonds2 = atomInfo[at2to - 1].bondCount;
-                    var theta = Jmol.evaluateVar(JmolAppletA, "angle(@" + at1 + ", @" + at1to + ", @" + at2to + ", @" + at2 + ")"); 
-                    textToDisplay = ("<sup>3</sup>" + d.lineText + " dihedral angle H-X-X-H : " + theta.toFixed(2));
-                    if (elementNumber1 == 6 && numberOfBonds1 == 4 && elementNumber2 == 6 && numberOfBonds2 == 4) {
-                      textToDisplay += " on C-C bond";
-                    }
-                    if (elementNumber1 == 6 && numberOfBonds1 == 2 && elementNumber2 == 6 && numberOfBonds2 == 2) {
-                      textToDisplay += " on C=C bond";
-                    }
-                    break;
-                  }
-                  for (var j = 0; j < bondInfo.length; j++) {
-                    if (bondInfo[i].atom1.atomno == at1to && bondInfo[j].atom1.atomno == at2to && bondInfo[i].atom2.atomno == bondInfo[j].atom2.atomno) middleAtomFro4J = bondInfo[i].atom2.atomno;
-                    if (bondInfo[i].atom2.atomno == at1to && bondInfo[j].atom1.atomno == at2to && bondInfo[i].atom1.atomno == bondInfo[j].atom2.atomno) middleAtomFro4J = bondInfo[i].atom1.atomno;
-                    if (bondInfo[i].atom1.atomno == at1to && bondInfo[j].atom2.atomno == at2to && bondInfo[i].atom2.atomno == bondInfo[j].atom1.atomno) middleAtomFro4J = bondInfo[i].atom2.atomno;
-                    if (bondInfo[i].atom2.atomno == at1to && bondInfo[j].atom2.atomno == at2to && bondInfo[i].atom1.atomno == bondInfo[j].atom1.atomno) middleAtomFro4J = bondInfo[i].atom1.atomno;
-                  }
-                  if (middleAtomFro4J > -1) { // is a 4J
-                    textToDisplay = ("<sup>4</sup>" + d.lineText + " via (@" + at1 + ", @" + at1to + ", @" + middleAtomFro4J +", @" + at2to + ", @" + at2 + ")" );
-                    // here don't break in case a 4J is replaced with a 3J such as in cyclopropane...
-                  }
-                }
-              }
-            }
-          }
+          // What are the directly bound atoms of the two selected hydrogen (we don't test 1J) 
+        const at1 = d.indexInMolFile1;
+        const at2 = d.indexInMolFile2;  
+        var textToDisplay = jmolGetInfo(at1, at2, d);
+       // const nbBond = jmolGetNBbonds(at1, at2);
         document.getElementById("textMainPage").innerHTML = textToDisplay;
 
         setTimeout(function () {
