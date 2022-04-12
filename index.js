@@ -254,6 +254,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
              'value': dataColumns[indexList1].listOfJs[i1].Jvalue,
              'MyIndex': indexList1,
              'uniqIndex': dataUnassignedCoupCircles.length,
+             'indexAtomMol': dataColumns[indexList1].atomIndexMol,
              });
           }
         }
@@ -430,18 +431,23 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
                numberCandidate++;
          });
 
+        // pointed atom 
+        jmolSelectAtom(d.indexAtomMol, [255,0,127]);// pink
+
+
        // select color when only one candidate, or more ...
        var highColor = "green";
        if (numberCandidate > 1)
          highColor = "red";
 
-       const highlightWidth = lineWidth * 2.0;
        d3.selectAll(".circleL")
          .transition().duration(10).delay(300)
-         .filter(function (p) { return (Math.abs(d.value - p.value) <= deltaSearchJ) && (d.uniqIndex != p.uniqIndex) })
+         .filter(function (p) { const test = (Math.abs(d.value - p.value) <= deltaSearchJ) && (d.uniqIndex != p.uniqIndex); 
+         if(test) jmolSelectAtom(p.indexAtomMol, [127,0,255]);// pink
+         return test; })
          .style("stroke", highColor)
          .style("opacity", "1.0")
-         .style("stroke-width", highlightWidth);
+         .style("stroke-width", lineWidth * 2.0);
 
        d3.selectAll(".circleL")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
