@@ -398,9 +398,9 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
           colorHideLine : "#EEEEEE00",
           delayBeforeErase : 3000,
         };
-     var highlightDot = function (d) {
+     var highlightDot = function (d, condition) {
+       
       var x = d3.scaleLinear();
-
       var spreadPositionsNew = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
        //unselect hydrogens
@@ -416,9 +416,13 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
        // first every group dimmed
        d3.selectAll(".circleL")
-         .transition().duration(200).delay(0)
+         .transition().duration(10).delay(10)
          .style("stroke", "black")
          .style("opacity", "0.1")
+         .style("stroke-width", lineWidth)
+        .transition().duration(200).delay(1.2*jGraphParameters.delayBeforeErase)
+         .style("stroke", "black")
+         .style("opacity", "1.0")
          .style("stroke-width", lineWidth);
 
        // specific to those matching the condition of similarity of J's
@@ -437,9 +441,9 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
                 numberCandidate++;
                 partner = p.indexAtomMol;
            }
-         });
+        });
 
-           document.getElementById("textMainPage").innerHTML = "guess J empty";
+        document.getElementById("textMainPage").innerHTML = "No guess!";
 
         // pointed atom 
         const curColHighligh = [0, 0, 0];
@@ -447,11 +451,11 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
         if (numberCandidate == 1) {
            const at1 = d.indexAtomMol;
            const at2 = partner; 
-          document.getElementById("textMainPage").innerHTML = at1 + " & " + at2;
- 
            var textToDisplay = jmolGetInfo(at1, at2, "J");
            document.getElementById("textMainPage").innerHTML = "? " + textToDisplay;
         }
+
+ 
 
        // select color when only one candidate, or more ...
        var highColor = "green";
@@ -460,7 +464,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
         // wrong distance dots
         d3.selectAll(".circleL")
-         .transition().duration(10).delay(300)
+         .transition().duration(20).delay(300)
          .filter(function (p) { 
             const test = 
            (Math.abs(d.value - p.value) <= deltaSearchJ) && 
@@ -472,11 +476,12 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          return test; })
          .style("stroke", "red")
          .style("opacity", "1.0")
-         .style("stroke-width", lineWidth * 2.0);
+         .style("stroke-width", lineWidth * 2.0)
+         ;
 
         // right distance dots
         d3.selectAll(".circleL")
-         .transition().duration(10).delay(310)
+         .transition().duration(20).delay(300)
          .filter(function (p) { 
            const test = 
            (Math.abs(d.value - p.value) <= deltaSearchJ) && 
@@ -488,9 +493,19 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
            return test; })
          .style("stroke", highColor)
          .style("opacity", "1.0")
-         .style("stroke-width", lineWidth * 2.0);
- 
-       // all will get back to normal
+         .style("stroke-width", lineWidth * 2.0)
+         ;
+
+// starting dots
+        d3.selectAll(".circleL")
+         .transition().duration(20).delay(310)
+         .filter(function (p) { 
+           return (d.uniqIndex == p.uniqIndex); })
+         .style("opacity", "1.0")
+         .style("stroke-width", lineWidth * 2.0)
+         ;
+       
+     // all will get back to normal
        d3.selectAll(".circleL")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .style("stroke", "black")
@@ -507,17 +522,8 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          .attr("y1", yJs(Math.abs(d.value)))
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '0.0')
-         .style("stroke", "black");
-
-       d3.select(this)
-         .transition(10).duration(200)
-         .style("opacity", "1.0")
-        // .style("stroke", "yellow")
-         .style("stroke-width", lineWidth * 2)
-           .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
-          //  .style("stroke", "black")
-         .style("stroke-width", lineWidth)
-;
+         .style("stroke", "black")
+         ;
 
        var selectedCicle = "textCircle" + d.uniqIndex;
        d3.selectAll("." + selectedCicle)
@@ -862,8 +868,9 @@ console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
            .style("fill",  function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircle)
-           .on("mouseover", highlightDot)
-           .on("click", highlightDot)
+           .on("mouseover",d => {d3.event.preventDefault(); highlightDot(d,false);})
+           .on("click",d => {d3.event.preventDefault(); highlightDot(d,false);})
+           .on("dblclick",d => {d3.event.preventDefault(); highlightDot(d,true);})
            ;
 
           var theTextDots2 = "";
