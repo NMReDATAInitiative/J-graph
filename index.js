@@ -93,7 +93,6 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    var blockWidth = Math.round(generalUseWidth * 0.9);
    var halfBlockHeight = generalUseWidth / 3.0;
 
-   var width = bodyWidth - margin.left - margin.right;
    var widthOfThePlot = bodyWidth - margin.left - margin.right;
    var height = bodyHeight - margin.top - margin.bottom;
    var heightJscale = height * ratioOccupyJgraph;
@@ -120,7 +119,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    // append the svg object to the body of the page
    var svg = d3.select("#my_dataviz")
      .append("svg")
-     .attr("width", width + margin.left + margin.right)
+     .attr("width", widthOfThePlot + margin.left + margin.right)
      .attr("height", height + margin.top + margin.bottom)
      .append("g")
      .attr("transform",
@@ -283,7 +282,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
-     var smallSpace = width / (numberItem + 1); // five items, six spaces
+     var smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
      if (smallSpace > preferedDistanceInPtBetweenColumns) {
        smallSpace = preferedDistanceInPtBetweenColumns;
      }
@@ -292,7 +291,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      var rightPosColumns = [];
      for (i = 0; i < numberItem; i++) {
        const curPosLeft = (i + 0.5) * smallSpace;
-       const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
+       const curPosRight = widthOfThePlot - ((numberItem - i) - 0.5) * smallSpace;
        leftPosColumns.push(curPosLeft);
        rightPosColumns.push(curPosRight);
      }
@@ -931,7 +930,7 @@ var jgraphObj = {
              theBlocks : theBlocks,
            };
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
 
          // Add the brushing
          lineSpectrum
@@ -978,7 +977,7 @@ var jgraphObj = {
             )
 
           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)
