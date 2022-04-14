@@ -13,6 +13,8 @@ import { jmolUnselectAll } from './src/jmolInterface.js';
 import { jmolSelectAtom } from './src/jmolInterface.js';
 import { jmolSelectPair } from './src/jmolInterface.js';
 
+//require('nmredata-data-test');
+//require('nmredata');
 /*
 import { nmredata } from 'nmredata-data-test';
 import { readNmrRecord, NmrRecord } from 'nmredata';
@@ -40,8 +42,10 @@ npm install nmredata-data-test --save
 npm install nmredata --save
 node_modules/.bin/browserify client.js > client.bundle.js 
 */
-/*
+
 //readNmrRecord(nmredata['menthol_1D_1H_assigned_J.zip'], {
+
+  /*
 readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_assigned_J.zip'], {
   zipOptions: { base64: true },
 }).then(async (nmrRecord) => {
