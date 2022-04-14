@@ -1,6 +1,7 @@
-export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, generalUseWidth, x, width, theColumns, theDots, theTextDots2, theBlocks, blockWidth) {
+export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, generalUseWidth, x, width, jgraphObj, blockWidth) {
  
-            theColumns.theColumnsConnectColumnToSpectrumPosition
+
+            jgraphObj.theColumns.theColumnsConnectColumnToSpectrumPosition
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("x2", function (d) { return x(d.chemShift); })
@@ -10,7 +11,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                } else { return colorHideLine; }
              });
 
-           theColumns.theColumnsVerticalInSpectrum
+           jgraphObj.theColumns.theColumnsVerticalInSpectrum
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return x(d.chemShift); })
              .attr("x2", function (d) { return x(d.chemShift); })
@@ -20,7 +21,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                } else { return colorHideLine; }
              });
 
-           theColumns.theColumnsMainVerticalLine
+           jgraphObj.theColumns.theColumnsMainVerticalLine
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("x2", function (d) { return spreadPositions[d.MyIndex]; })
@@ -28,7 +29,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                return "black";
              });
 
-           theColumns.theColumnsBase
+           jgraphObj.theColumns.theColumnsBase
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex] + generalUseWidth; })
              .attr("x2", function (d) { return spreadPositions[d.MyIndex] - generalUseWidth; })
@@ -36,7 +37,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                return "black";
              });
 
-           theDots
+           jgraphObj.theDots
              .transition().duration(timeAnimation)
              .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
              ;
@@ -46,7 +47,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
             ;
 */
-           theBlocks
+           jgraphObj.theBlocks
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); });
 
@@ -57,7 +58,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
 
 
 
-           theColumns.theColumnLabel
+           jgraphObj.theColumns.theColumnLabel
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("transform", function (d) {

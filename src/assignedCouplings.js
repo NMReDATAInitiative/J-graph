@@ -1,4 +1,9 @@
 /*jshint esversion: 6 */
+import { getJisOK } from './getJisOK.js';
+import { getJgraphColor } from './getJgraphColor.js';
+import { jmolGetInfo } from './jmolInterface.js';
+import { jmolUnselectAll } from './jmolInterface.js';
+import { jmolSelectPair } from './jmolInterface.js';
 export class AssignedCouplings {
   constructor(dataColumns) {
     var theAssignedCouplings = [];
@@ -360,4 +365,251 @@ export class AssignedCouplings {
       }   
     }
   }
+
+  addAssignment(dataColumns, at1, at2, svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun) {
+     const daC1 = dataColumns[at1.dataColIndex1];
+     const daC2 = dataColumns[at2.dataColIndex1];
+     const dataC1 = dataColumns[at1.dataColIndex1].listOfJs[at1.dataColIndex2];
+     const dataC2 = dataColumns[at2.dataColIndex1].listOfJs[at2.dataColIndex2];
+// f1 = {"isAssigned":false,"indexInAssignementList":9,"isFirstInAssignmentIndex":true,"Jvalue":"2.45","JlevelAvoidContact":2.45}
+      if (dataC1.isAssigned == false && dataC1.isAssigned == false) {
+        dataC1.isAssigned = true;
+        dataC2.isAssigned = true;
+        const tmpJvalue = 0.5 * dataC1.Jvalue + 0.5 * dataC2.Jvalue; 
+
+        dataC1.indexInAssignementList = this.content.length;
+        dataC2.indexInAssignementList = this.content.length;
+        dataC1.isFirstInAssignmentIndex = at1.dataColIndex1 > at2.dataColIndex1;
+        dataC2.isFirstInAssignmentIndex = at1.dataColIndex1 < at2.dataColIndex1;
+
+        var theAssignedCouplings = {
+          jOKcolor: "black",
+          Jvalue: tmpJvalue,
+          colNumber1: at1.dataColIndex1,
+          colNumber2: at2.dataColIndex1,
+          Label: "J_" + daC1.labelColumn + "_" + daC2.labelColumn, // used for highlight of lines
+          JvalueAntiOverlap1: +dataC1.JlevelAvoidContact,
+          JvalueAntiOverlap2: +dataC2.JlevelAvoidContact,
+          JvalueShifted: tmpJvalue,
+          indexColumn1: at1.dataColIndex1,
+          indexColumn2: at2.dataColIndex1,
+          chemShift1: +daC1.chemShift,
+          chemShift2: +daC2.chemShift,
+          labelColumn1: daC1.labelColumn,
+          labelColumn2: daC2.labelColumn,
+          lineText: ("J(" + daC1.labelColumn + "," + daC2.labelColumn + ") = " + tmpJvalue + " Hz"),
+          xx: 0.0,
+          indexInMolFile1: daC1.atomIndexMol,
+          indexInMolFile2: daC2.atomIndexMol,
+          iindex: this.content.length,
+        };
+     
+        this.content.push(theAssignedCouplings);
+         this.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun); 
+      }
+      return  svg
+      .selectAll(".lineZ")
+      ;
+  }
+
+     highlightLines(d, darkMode, generalUseWidth, svg, yJs) {
+       d3.selectAll(".toBeHidden")
+         .transition().duration(10).delay(0)
+         .remove();
+
+      var selected_specie = d.Label;
+       // first every group turns grey
+       d3.selectAll(".line")
+         .transition().duration(200)
+         .style("stroke", "black")
+         .style("opacity", "0.2")
+         .transition().duration(200).delay(3000)
+         //   .style("stroke", function (d) { return (color(d.Label)) })
+         // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
+         .style("opacity", "1");
+
+       // Second the hovered specie takes its color
+       d3.selectAll("." + selected_specie)
+         .transition().duration(200)
+         //  .style("stroke", color(selected_specie))
+         //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
+         .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+         .style("opacity", 1.0)
+         .transition().duration(200).delay(3000)
+         //   .style("stroke", function (d) { return (color(d.Label)) })
+         // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
+         .style("opacity", "1");
+
+       var theTextLine2 = svg
+         .append("text")
+         .attr("class", "toBeHidden")
+         .attr("x", d.xx)
+         .attr("y", yJs(Math.abs(d.JvalueShifted)) - 3.0)
+         .text("" + d.lineText)
+         .attr('dx', 1.3 * generalUseWidth)
+         .style("font-size", generalUseWidth * 2.5)
+         .style("font-family", "Helvetica")
+         .style("text-anchor", "middle")
+         .transition().duration(100).delay(3000)
+         .remove();
+
+       var toto = function (d) { return d.lineText; };
+         jmolUnselectAll();
+         const atomColorHighlightPairs = [127,255,127];
+         jmolSelectPair(d.indexInMolFile1, d.indexInMolFile2, atomColorHighlightPairs);
+      
+          //https://chemapps.stolaf.edu/jmol/docs/#getproperty
+          // What are the directly bound atoms of the two selected hydrogen (we don't test 1J) 
+        const at1 = d.indexInMolFile1;
+        const at2 = d.indexInMolFile2;  
+        var textToDisplay = jmolGetInfo(at1, at2, d.lineText);
+       // const nbBond = jmolGetNBbonds(at1, at2);
+        document.getElementById("textMainPage").innerHTML = textToDisplay;
+
+        setTimeout(function () {
+        jmolUnselectAll();
+        //  document.getElementById("textMainPage").innerHTML = defaultText;
+				}, 3200);
+     };
+
+
+  makeGraphic(x, svg, lineWidth, darkMode, generalUseWidth, smallSpace, blockWidth, yJs, pathFun) {
+ 
+/*
+  const toto2 =  svg
+           .selectAll("myPath222")
+           .attr("class", "lineW")
+           //.data(jGraphData)
+           .data(this.content)
+           .enter()
+           .append("path")
+           .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
+           //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
+           //.attr("d", this.pathFun)
+         .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
+        // .attr("d", function (d) { return this.pathFun(d, yJs, smallSpace, blockWidth)})
+          // .attr("d", pathFun)
+           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+           .style("stroke-dasharray",
+             function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth); }
+           )
+           .style("fill", "none")
+           .style("stroke", "grey")
+           .style("opacity", 0.5)
+           .on("click", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);} )
+           .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
+           ;
+          // .on("mouseleave", doNotHighlightLines)}
+                  console.log("toto1 = " + JSON.stringify(toto2));
+*/
+          return svg
+           .selectAll("myPath222")
+           .attr("class", "lineW")
+           //.data(jGraphData)
+           .data(this.content)
+           .enter()
+           .append("path")
+           .attr("class", function (d) { return "lineZ " + d.Label }) // 2 class for each line: 'line' and the group name
+           //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
+          // .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
+           .attr("d", pathFun)
+           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+           .style("stroke-dasharray",
+             function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth); }
+           )
+           .style("fill", "none")
+           .style("stroke", "grey")
+           .style("opacity", 0.5)
+           .on("click", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);} )
+           .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
+           ;
+          // .on("mouseleave", doNotHighlightLines)}
+
+  }
+
+
+addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun) {
+  var tmpCOntent = [];
+  tmpCOntent.push(this.content[this.content.length - 1]); // take only last
+
+    return  svg
+           .selectAll("myPath222")
+           .attr("class", "lineW")
+           //.data(jGraphData)
+           .data(tmpCOntent) ///////////////////////
+           .enter()
+           .append("path")
+           .attr("class", function (d) { return "lineZ " + d.Label }) // 2 class for each line: 'line' and the group name
+           //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
+          //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
+          .attr("d", pathFun)
+           //.attr("d", function (d) { return this.pathFun(d, yJs, smallSpace, blockWidth);})
+           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+           .style("stroke-dasharray",
+             function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth) }
+           )
+           /*.attr("d", d3.line()
+             //.x(pathx)
+             .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
+             //.y(pathy)
+             .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
+           )*/
+           .style("fill", "none")
+           .style("stroke", "grey")
+           .style("opacity", 0.5)
+           .on("click", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);} )
+           .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
+           ;
+          // .on("mouseleave", doNotHighlightLines)}
+  }
+  /*
+      pathFun(d, yJs, smallSpace, blockWidth) {
+
+        
+          const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
+          const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
+         // const y2 = yJs(Math.abs(d.JvalueShifted));
+         //const iiidex = d.iindex;
+           //   console.log("iiidex = " + JSON.stringify(d.iindex));
+         //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
+//console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
+// HERE
+//const alterative = dataColumns[0].JvalueAntiOverlap1;//
+//console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
+          const y2 = yJs(Math.abs(this.content[d.iindex].JvalueShifted));
+          //const y2 = yJs(Math.abs(d.JvalueShifted));
+          const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
+          const horizontalShiftSideBlock = blockWidth; // make larger here !
+          var usedHorizontalShiftX = eval(horizontalShiftX);
+          var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
+          const cs1 = this.spreadPositionsZZ[d.indexColumn1];
+          const cs2 = this.spreadPositionsZZ[d.indexColumn2];
+          if (cs1 > cs2) {
+             usedHorizontalShiftX = eval(-usedHorizontalShiftX);
+             usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
+          }
+         
+          const fourPoints = [
+            [cs1 + usedHorizontalShiftSideBlock, y1a],
+            [cs1 + usedHorizontalShiftX, y2], 
+            [cs2 - usedHorizontalShiftX, y2],
+            [cs2 - usedHorizontalShiftSideBlock, y1b]
+          ];   
+          
+
+          d.xx = (cs1 + cs2) / 2.0;
+          var Gen = d3.line();
+
+          return d3.line()(fourPoints);
+        }
+*/
+
+  updateTheLines(yJs, smallSpace, blockWidth, pathFun) {
+    this.theLinesW
+    .transition().duration(1000)
+    .attr("d", pathFun)
+  }
+
 }

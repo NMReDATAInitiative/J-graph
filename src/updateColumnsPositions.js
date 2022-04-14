@@ -1,6 +1,7 @@
 import { getSpread } from './getSpread.js'; 
 
 export function updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace) {
+  
     var spreadPositions = [];
     var spreadDelta = [];
      for (var i = 0; i < dataColumns.length; i++) {
