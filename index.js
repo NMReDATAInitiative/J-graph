@@ -94,6 +94,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    var halfBlockHeight = generalUseWidth / 3.0;
 
    var width = bodyWidth - margin.left - margin.right;
+   var widthOfThePlot = bodyWidth - margin.left - margin.right;
    var height = bodyHeight - margin.top - margin.bottom;
    var heightJscale = height * ratioOccupyJgraph;
    var positionJscale = 20;
@@ -607,7 +608,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
              d3.max(chemShift, function (d) { return +d.chemShift;}),
              d3.min(chemShift, function (d) { return +d.chemShift;})
            ])
-           .range([0, width]);
+           .range([0, widthOfThePlot]);
            var xAxis = svg.append("g")
            .attr("transform", "translate(0," + height + ")")
            .call(d3.axisBottom(x))
@@ -615,7 +616,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          
          // Add Y axis2
          var yAxisn2 = svg.append("g")
-           .attr("transform", function (d) { return "translate(" + (width) + ")"; })
+           .attr("transform", function (d) { return "translate(" + (widthOfThePlot) + ")"; })
            .call(d3.axisRight(yJs).ticks(3))
            ;
         
@@ -627,7 +628,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
            .attr("class", "Grid")
            .attr("x1", lineWidth)
            .attr("y1", function (d) { return yJs(d); })
-           .attr("x2", width)
+           .attr("x2", widthOfThePlot)
            .attr("y2", function (d) { return yJs(d); })
            .attr("stroke", "#EEEEEE")
            .style("stroke-width", lineWidth)
@@ -641,7 +642,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
            .attr("class", "rulerClass")
            .attr("x1", lineWidth)
            .attr("y1", yJs(0.0))
-           .attr("x2", width)
+           .attr("x2", widthOfThePlot)
            .attr("y2", yJs(0.0))
            .attr("stroke", "red")
            .style("stroke-dasharray", [lineWidth * 2, lineWidth * 2])
@@ -671,14 +672,14 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
          var clip = svg.append("defs").append("svg:clipPath")
            .attr("id", "clip")
            .append("svg:rect")
-           .attr("width", width)
+           .attr("width", widthOfThePlot)
            .attr("height", height)
            .attr("x", 0)
            .attr("y", 0);
 
          // Add brushing
          var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-           .extent([[0, 0], [width, height]])  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+           .extent([[0, 0], [widthOfThePlot, height]])  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
            .on("end", updateChart);             // Each time the brush selection changes, trigger the 'updateChart' function
 
          // Create the line variable: where both the line and the brush take place
