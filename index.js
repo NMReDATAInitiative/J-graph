@@ -12,17 +12,15 @@ import { jmolGetNBbonds } from './src/jmolInterface.js';
 import { jmolUnselectAll } from './src/jmolInterface.js';
 import { jmolSelectAtom } from './src/jmolInterface.js';
 import { jmolSelectPair } from './src/jmolInterface.js';
-
-//require('nmredata-data-test');
-//require('nmredata');
-/*
-import { nmredata } from 'nmredata-data-test';
+// npm i --save-dev nmredata
+//declare module 'nmredata';
+//import { nmredata } from 'nmredata-data-test';
 import { readNmrRecord, NmrRecord } from 'nmredata';
-*/
-
+ 
+//const readNmrRecord = require('nmredata');
 //import { nmredata } from './node_modules/nmredata-data-test/index.js';
 //import { readNmrRecord, NmrRecord } from './node_modules/nmredata/src/index.js';
-//import { readNmrRecord } from './node_modules/nmredata/src/reader/readNmrRecord.js';
+//import { readNmrRecord } from nmredata;
 //import { nmredata } from 'nmredata-data-test';
 
 //declare module 'nmredata';
@@ -42,12 +40,8 @@ npm install nmredata-data-test --save
 npm install nmredata --save
 node_modules/.bin/browserify client.js > client.bundle.js 
 */
-
-//readNmrRecord(nmredata['menthol_1D_1H_assigned_J.zip'], {
-
-  /*
-readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_assigned_J.zip'], {
-  zipOptions: { base64: true },
+readNmrRecord(nmredata['./data/menthol/menthol_1D_1H_assigned_J.zip'], {
+  zipOptions: { base64: true }
 }).then(async (nmrRecord) => {
   
   let nbSDFFiles = nmrRecord.nbSamples;
@@ -70,7 +64,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
   //console.log(nmredata);
 
 });
-*/
+
 
    //
    // set the dimensions and margins of the graph
@@ -97,7 +91,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    var blockWidth = Math.round(generalUseWidth * 0.9);
    var halfBlockHeight = generalUseWidth / 3.0;
 
-   var widthOfThePlot = bodyWidth - margin.left - margin.right;
+   var width = bodyWidth - margin.left - margin.right;
    var height = bodyHeight - margin.top - margin.bottom;
    var heightJscale = height * ratioOccupyJgraph;
    var positionJscale = 20;
@@ -123,7 +117,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
    // append the svg object to the body of the page
    var svg = d3.select("#my_dataviz")
      .append("svg")
-     .attr("width", widthOfThePlot + margin.left + margin.right)
+     .attr("width", width + margin.left + margin.right)
      .attr("height", height + margin.top + margin.bottom)
      .append("g")
      .attr("transform",
@@ -257,8 +251,6 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
              'valueOnBar': dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
              'value': dataColumns[indexList1].listOfJs[i1].Jvalue,
              'MyIndex': indexList1,
-             'dataColIndex1': indexList1,
-             'dataColIndex2': i1,
              'uniqIndex': dataUnassignedCoupCircles.length,
              'indexAtomMol': dataColumns[indexList1].atomIndexMol,
              });
@@ -288,7 +280,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
      // Make list of positions according to size of jGraphData
      const numberItem = arrayColumns.length;
-     var smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
+     var smallSpace = width / (numberItem + 1); // five items, six spaces
      if (smallSpace > preferedDistanceInPtBetweenColumns) {
        smallSpace = preferedDistanceInPtBetweenColumns;
      }
@@ -297,7 +289,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      var rightPosColumns = [];
      for (i = 0; i < numberItem; i++) {
        const curPosLeft = (i + 0.5) * smallSpace;
-       const curPosRight = widthOfThePlot - ((numberItem - i) - 0.5) * smallSpace;
+       const curPosRight = width - ((numberItem - i) - 0.5) * smallSpace;
        leftPosColumns.push(curPosLeft);
        rightPosColumns.push(curPosRight);
      }
@@ -308,11 +300,8 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      var yJs = d3.scaleLinear()
        .domain([0, maxScaleJ])
        .range([heightJscale + positionJscale, positionJscale]);
-
-
      var yAxisn = svg.append("g")
        .call(d3.axisLeft(yJs).ticks(3));
-
 
       var highlightColumn = function (d) {
 				jmolUnselectAll();
@@ -324,7 +313,66 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 				}, 3200);
 			};
 
+     var highlightLines = function (d) {
+       d3.selectAll(".toBeHidden")
+         .transition().duration(10).delay(0)
+         .remove();
+      var selected_specie = d.Label;
+       // first every group turns grey
+       d3.selectAll(".line")
+         .transition().duration(200)
+         .style("stroke", "black")
+         .style("opacity", "0.2")
+         .transition().duration(200).delay(3000)
+         //   .style("stroke", function (d) { return (color(d.Label)) })
+         // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
+         .style("opacity", "1");
 
+       // Second the hovered specie takes its color
+       d3.selectAll("." + selected_specie)
+         .transition().duration(200)
+         //  .style("stroke", color(selected_specie))
+         //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
+         .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+         .style("opacity", 1.0)
+         .transition().duration(200).delay(3000)
+         //   .style("stroke", function (d) { return (color(d.Label)) })
+         // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
+         .style("opacity", "1");
+
+       var theTextLine2 = svg
+         .append("text")
+         .attr("class", "toBeHidden")
+         .attr("x", d.xx)
+         .attr("y", yJs(Math.abs(d.JvalueShifted)) - 3.0)
+         .text("" + d.lineText)
+         .attr('dx', 1.3 * generalUseWidth)
+         .style("font-size", generalUseWidth * 2.5)
+         .style("font-family", "Helvetica")
+         .style("text-anchor", "middle")
+         .transition().duration(100).delay(3000)
+         .remove();
+
+       var toto = function (d) { return d.lineText; };
+         jmolUnselectAll();
+         const atomColorHighlightPairs = [127,255,127];
+         jmolSelectPair(d.indexInMolFile1, d.indexInMolFile2, atomColorHighlightPairs);
+      
+          //https://chemapps.stolaf.edu/jmol/docs/#getproperty
+          // What are the directly bound atoms of the two selected hydrogen (we don't test 1J) 
+        const at1 = d.indexInMolFile1;
+        const at2 = d.indexInMolFile2;  
+        var textToDisplay = jmolGetInfo(at1, at2, d.lineText);
+       // const nbBond = jmolGetNBbonds(at1, at2);
+        document.getElementById("textMainPage").innerHTML = textToDisplay;
+
+        setTimeout(function () {
+        jmolUnselectAll();
+        //  document.getElementById("textMainPage").innerHTML = defaultText;
+				}, 3200);
+     };
 
      // Unhighlight
             /*
@@ -348,118 +396,13 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
           colorHideLine : "#EEEEEE00",
           delayBeforeErase : 3000,
         };
-
-
-
-        function pathFun(d) {
-          /*
-          The four points for assignment lines  
-           | __ |
-           |/  \|
-           O    O
-           |    |
-          */
-
-          const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
-          const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
-         // const y2 = yJs(Math.abs(d.JvalueShifted));
-         //const iiidex = d.iindex;
-           //   console.log("iiidex = " + JSON.stringify(d.iindex));
-         //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
-// HERE
-//const alterative = dataColumns[0].JvalueAntiOverlap1;//
-//console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
-          const y2 = yJs(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted));
-          //const y2 = yJs(Math.abs(d.JvalueShifted));
-          const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
-          const horizontalShiftSideBlock = blockWidth; // make larger here !
-          var usedHorizontalShiftX = eval(horizontalShiftX);
-          var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-          const cs1 = assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-          const cs2 = assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-          if (cs1 > cs2) {
-             usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-             usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-          }
-         
-          const combine = [
-            [cs1 + usedHorizontalShiftSideBlock, y1a],
-            [cs1 + usedHorizontalShiftX, y2], 
-            [cs2 - usedHorizontalShiftX, y2],
-            [cs2 - usedHorizontalShiftSideBlock, y1b]
-          ];
-          d.xx = (cs1 + cs2) / 2.0;
-          var Gen = d3.line();
-
-          return Gen(combine);
-        }
-
-
-var jgraphObj= {};
-
+     var highlightDot = function (d) {
       var x = d3.scaleLinear();
 
-     var highlightDot = function (d, wasDoubleClicked) {
-
-      assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
       var spreadPositionsNew = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
-       // specific to those matching the condition of similarity of J's
-       var numberCandidate = 0;
-       const deltaSearchJ = 0.5;
-       const referenceSpinMol = d.indexAtomMol;
-       const referenceSpin = d;
-       var partnerSpinNumberMol;
-       var partnerSpinObj;
-       d3.selectAll(".circleL")
-         .filter(function (p) {
-           const test = 
-           (Math.abs(d.value - p.value) <= deltaSearchJ) && 
-           (d.uniqIndex != p.uniqIndex) && 
-           (d.MyIndex != p.MyIndex) && 
-           (jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 2 || jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 3) &&
-           true; 
-           if (test){
-                numberCandidate++;
-                partnerSpinNumberMol = p.indexAtomMol;
-                partnerSpinObj = p;
-           }
-        });
-
- // Add assignment
-      if (numberCandidate == 1) {
-         if (wasDoubleClicked) {
-          document.getElementById("textMainPage").innerHTML = "TMP Info :  " + referenceSpinMol + " " +  partnerSpinNumberMol;
-          assignedCouplings.theLinesW = assignedCouplings.addAssignment(dataColumns, referenceSpin, partnerSpinObj, svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun);
-          assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-         
-          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
-              assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
-
-          assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
-
-        }
-      }
-  jmolUnselectAll();
-        // pointed atom 
-        const curColHighligh = [0, 0, 0]; // black
-        jmolSelectAtom(referenceSpinMol, curColHighligh);
-        if (numberCandidate == 1) {
-           var textToDisplay = jmolGetInfo(referenceSpinMol, partnerSpinNumberMol, "J");
-           document.getElementById("textMainPage").innerHTML = "? " + textToDisplay;
-        } else {
-           document.getElementById("textMainPage").innerHTML = "No guess!";
-        }
-
-       // select color when only one candidate, or more ...
-       var highColor = "green";
-       if (numberCandidate != 1) {
-          highColor = "red";
-       } 
-
-       // Work on view
-       // Unselect hydrogens
-     
+       //unselect hydrogens
+       jmolUnselectAll();
 
        d3.selectAll(".line")
          .transition().duration(200)
@@ -471,19 +414,51 @@ var jgraphObj= {};
 
        // first every group dimmed
        d3.selectAll(".circleL")
-         .transition().duration(10).delay(10)
+         .transition().duration(200).delay(0)
          .style("stroke", "black")
          .style("opacity", "0.1")
-         .style("stroke-width", lineWidth)
-        .transition().duration(200).delay(1.2*jGraphParameters.delayBeforeErase)
-         .style("stroke", "black")
-         .style("opacity", "1.0")
          .style("stroke-width", lineWidth);
 
+       // specific to those matching the condition of similarity of J's
+       var numberCandidate = 0;
+       const deltaSearchJ = 0.5;
+       var partner;
+       d3.selectAll(".circleL")
+         .filter(function (p) {
+           const test = 
+           (Math.abs(d.value - p.value) <= deltaSearchJ) && 
+           (d.uniqIndex != p.uniqIndex) && 
+           (d.MyIndex != p.MyIndex) && 
+           (jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 || jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3) &&
+           true; 
+           if (test){
+                numberCandidate++;
+                partner = p.indexAtomMol;
+           }
+         });
+
+           document.getElementById("textMainPage").innerHTML = "guess J empty";
+
+        // pointed atom 
+        const curColHighligh = [0, 0, 0];
+        jmolSelectAtom(d.indexAtomMol, curColHighligh);
+        if (numberCandidate == 1) {
+           const at1 = d.indexAtomMol;
+           const at2 = partner; 
+          document.getElementById("textMainPage").innerHTML = at1 + " & " + at2;
+ 
+           var textToDisplay = jmolGetInfo(at1, at2, "J");
+           document.getElementById("textMainPage").innerHTML = "? " + textToDisplay;
+        }
+
+       // select color when only one candidate, or more ...
+       var highColor = "green";
+       if (numberCandidate != 1)
+        highColor = "red";
 
         // wrong distance dots
         d3.selectAll(".circleL")
-         .transition().duration(20).delay(300)
+         .transition().duration(10).delay(300)
          .filter(function (p) { 
             const test = 
            (Math.abs(d.value - p.value) <= deltaSearchJ) && 
@@ -491,17 +466,15 @@ var jgraphObj= {};
            (d.MyIndex != p.MyIndex) && 
            (!(jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 || jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3)) &&
            true; 
-            if (test) jmolSelectAtom(p.indexAtomMol, [255,0,50]);// pink
-              return test; 
-          })
+         if(test) jmolSelectAtom(p.indexAtomMol, [255,0,50]);// pink
+         return test; })
          .style("stroke", "red")
          .style("opacity", "1.0")
-         .style("stroke-width", lineWidth * 2.0)
-         ;
+         .style("stroke-width", lineWidth * 2.0);
 
         // right distance dots
         d3.selectAll(".circleL")
-         .transition().duration(20).delay(300)
+         .transition().duration(10).delay(310)
          .filter(function (p) { 
            const test = 
            (Math.abs(d.value - p.value) <= deltaSearchJ) && 
@@ -513,26 +486,14 @@ var jgraphObj= {};
            return test; })
          .style("stroke", highColor)
          .style("opacity", "1.0")
-         .style("stroke-width", lineWidth * 2.0)
-         ;
-
-      // starting dots
-        d3.selectAll(".circleL")
-         .transition().duration(20).delay(310)
-         .filter(function (p) {
-           return (d.uniqIndex == p.uniqIndex); })
-         .style("opacity", "1.0")
-         .style("stroke-width", lineWidth * 2.0)
-         .style("stroke", curColHighligh)
-         ;
-       
-     // all will get back to normal
+         .style("stroke-width", lineWidth * 2.0);
+ 
+       // all will get back to normal
        d3.selectAll(".circleL")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
          .style("stroke", "black")
          .style("opacity", "1.0")
-         .style("stroke-width", lineWidth)
-         ;
+         .style("stroke-width", lineWidth);
 
        d3.selectAll(".rulerClass")
          .transition().duration(200).delay(0)
@@ -544,8 +505,17 @@ var jgraphObj= {};
          .attr("y1", yJs(Math.abs(d.value)))
          .attr("y2", yJs(Math.abs(d.value)))
          .style("opacity", '0.0')
-         .style("stroke", "black")
-         ;
+         .style("stroke", "black");
+
+       d3.select(this)
+         .transition(10).duration(200)
+         .style("opacity", "1.0")
+        // .style("stroke", "yellow")
+         .style("stroke-width", lineWidth * 2)
+           .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
+          //  .style("stroke", "black")
+         .style("stroke-width", lineWidth)
+;
 
        var selectedCicle = "textCircle" + d.uniqIndex;
        d3.selectAll("." + selectedCicle)
@@ -554,8 +524,7 @@ var jgraphObj= {};
          .style("opacity", "1.0")
          .transition().duration(200).delay(jGraphParameters.delayBeforeErase)
         .style("stroke", "black")
-         .style("opacity", "0.0")
-         ;
+         .style("opacity", "0.0");
 
 
        var theTextDotNew = svg
@@ -571,8 +540,7 @@ var jgraphObj= {};
          .style("font-family", "Helvetica")
          .style("text-anchor", "middle")
          .transition().duration(100).delay(3000)
-         .remove()
-         ;
+         .remove();
 /*
   var theTextDots2 = svg.selectAll("textt")
            .data(dataUnassignedCoupCircles)
@@ -626,12 +594,12 @@ var jgraphObj= {};
 
        function (chemShift) {
          // Add X axis 
-          x = d3.scaleLinear()
+         var x = d3.scaleLinear()
            .domain([
              d3.max(chemShift, function (d) { return +d.chemShift;}),
              d3.min(chemShift, function (d) { return +d.chemShift;})
            ])
-           .range([0, widthOfThePlot]);
+           .range([0, width]);
            var xAxis = svg.append("g")
            .attr("transform", "translate(0," + height + ")")
            .call(d3.axisBottom(x))
@@ -639,7 +607,7 @@ var jgraphObj= {};
          
          // Add Y axis2
          var yAxisn2 = svg.append("g")
-           .attr("transform", function (d) { return "translate(" + (widthOfThePlot) + ")"; })
+           .attr("transform", function (d) { return "translate(" + (width) + ")"; })
            .call(d3.axisRight(yJs).ticks(3))
            ;
         
@@ -651,7 +619,7 @@ var jgraphObj= {};
            .attr("class", "Grid")
            .attr("x1", lineWidth)
            .attr("y1", function (d) { return yJs(d); })
-           .attr("x2", widthOfThePlot)
+           .attr("x2", width)
            .attr("y2", function (d) { return yJs(d); })
            .attr("stroke", "#EEEEEE")
            .style("stroke-width", lineWidth)
@@ -665,7 +633,7 @@ var jgraphObj= {};
            .attr("class", "rulerClass")
            .attr("x1", lineWidth)
            .attr("y1", yJs(0.0))
-           .attr("x2", widthOfThePlot)
+           .attr("x2", width)
            .attr("y2", yJs(0.0))
            .attr("stroke", "red")
            .style("stroke-dasharray", [lineWidth * 2, lineWidth * 2])
@@ -695,14 +663,14 @@ var jgraphObj= {};
          var clip = svg.append("defs").append("svg:clipPath")
            .attr("id", "clip")
            .append("svg:rect")
-           .attr("width", widthOfThePlot)
+           .attr("width", width)
            .attr("height", height)
            .attr("x", 0)
            .attr("y", 0);
 
          // Add brushing
          var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-           .extent([[0, 0], [widthOfThePlot, height]])  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+           .extent([[0, 0], [width, height]])  // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
            .on("end", updateChart);             // Each time the brush selection changes, trigger the 'updateChart' function
 
          // Create the line variable: where both the line and the brush take place
@@ -727,7 +695,6 @@ var jgraphObj= {};
          // Columns
         
          // oblique
-      //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
          var spreadPositionsUU = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
          var theColumnsConnectColumnToSpectrumPosition = svg.selectAll("columnns")
@@ -808,10 +775,78 @@ var jgraphObj= {};
          //.style("font-weight", "2pt")            
          // Lines
         
-         assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-         var spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
+         function pathFun(d) {
+          /*
+          The four points for assignment lines  
+           | __ |
+           |/  \|
+           O    O
+           |    |
+          */
 
-         assignedCouplings.theLinesW = assignedCouplings.makeGraphic(x, svg, lineWidth, darkMode, generalUseWidth, smallSpace, blockWidth, yJs, pathFun);
+          const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
+          const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
+         // const y2 = yJs(Math.abs(d.JvalueShifted));
+         //const iiidex = d.iindex;
+           //   console.log("iiidex = " + JSON.stringify(d.iindex));
+         //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
+console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
+// HERE
+//const alterative = dataColumns[0].JvalueAntiOverlap1;//
+//console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
+          const y2 = yJs(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted));
+          //const y2 = yJs(Math.abs(d.JvalueShifted));
+          const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
+          const horizontalShiftSideBlock = blockWidth; // make larger here !
+          var usedHorizontalShiftX = eval(horizontalShiftX);
+          var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
+          const cs1 = spreadPositionsZZ[d.indexColumn1];
+          const cs2 = spreadPositionsZZ[d.indexColumn2];
+          if (cs1 > cs2) {
+             usedHorizontalShiftX = eval(-usedHorizontalShiftX);
+             usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
+          }
+         
+          const combine = [
+            [cs1 + usedHorizontalShiftSideBlock, y1a],
+            [cs1 + usedHorizontalShiftX, y2], 
+            [cs2 - usedHorizontalShiftX, y2],
+            [cs2 - usedHorizontalShiftSideBlock, y1b]
+          ];
+          d.xx = (cs1 + cs2) / 2.0;
+          var Gen = d3.line();
+
+          return Gen(combine);
+        }
+
+         var spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
+         var theLinesW = svg
+           .selectAll("myPath222")
+           .attr("class", "lineW")
+           //.data(jGraphData)
+           .data(assignedCouplings.content)
+           .enter()
+           .append("path")
+           .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
+           //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
+           .attr("d", pathFun)
+           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+           .style("stroke-dasharray",
+             function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth) }
+           )
+           /*.attr("d", d3.line()
+             //.x(pathx)
+             .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
+             //.y(pathy)
+             .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
+           )*/
+           .style("fill", "none")
+           .style("stroke", "grey")
+           .style("opacity", 0.5)
+           .on("click", highlightLines)
+           .on("mouseover", highlightLines)
+           ;
+          // .on("mouseleave", doNotHighlightLines)
 
          // Circles
          var theDots = svg.selectAll("dots")
@@ -825,11 +860,11 @@ var jgraphObj= {};
            .style("fill",  function (d) { return getJgraphColor(Math.abs(d.value), darkMode); })
            .attr("stroke", "black")
            .style("stroke-width", lineWidthCircle)
-           .on("mouseover",d => {d3.event.preventDefault(); highlightDot(d,false);})
-           .on("click",d => {d3.event.preventDefault(); highlightDot(d,false);})
-           .on("dblclick",d => {d3.event.preventDefault(); highlightDot(d,true);})
+           .on("mouseover", highlightDot)
+           .on("click", highlightDot)
            ;
 
+          var theTextDots2 = "";
            /*
          // .on("mouseleave", doNotHighlightDot)
           var theTextDots2 = svg.selectAll("textt")
@@ -868,7 +903,7 @@ var jgraphObj= {};
            .style("stroke-width", lineWidthBlocks)
            ;
 
-  jgraphObj = {
+var jgraphObj = {
            yAxisn2 : yAxisn2, 
            theTicksCouplings : theTicksCouplings,
            theGridLinesCouplings : theGridLinesCouplings,
@@ -880,13 +915,13 @@ var jgraphObj= {};
              theColumnsMainVerticalLine : theColumnsMainVerticalLine,
              theColumnsBase : theColumnsBase,
              theColumnLabel : theColumnLabel,
-             },
-             theLinesW : assignedCouplings.theLinesW,
+             } ,
+             theLinesW : theLinesW,
              theDots : theDots,
              theBlocks : theBlocks,
            };
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
 
          // Add the brushing
          lineSpectrum
@@ -932,10 +967,12 @@ var jgraphObj= {};
               .y(function (d) { return y(d.value) })
             )
 
-          assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
-          assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
-           
+          spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
+          theLinesW
+            //.select('.lineW')
+            .transition().duration(1000)
+            .attr("d", pathFun)
         }
 
         // If user double click, reinitialize the chart

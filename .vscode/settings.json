@@ -70,7 +70,8 @@
 	"C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
 	"cSpell.words": [
 		"Androsten",
-		"dataviz"
+		"dataviz",
+		"nmredata"
 	],
 	"liveServer.settings.port": 5501
 }

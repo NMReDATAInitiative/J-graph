@@ -26,7 +26,9 @@
   },
   "homepage": "https://github.com/NMReDATAInitiative/J-graph#readme",
   "dependencies": {
-    "d3": "^7.3.0",
+    "d3": "^7.3.0"
+  },
+  "devDependencies": {
     "nmredata": "^0.6.1"
   }
 }
