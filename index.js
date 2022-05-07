@@ -15,7 +15,7 @@ import { jmolSelectPair } from './src/jmolInterface.js';
 // npm i --save-dev nmredata
 //declare module 'nmredata';
 //import { nmredata } from 'nmredata-data-test';
-import { readNmrRecord, NmrRecord } from 'nmredata';
+//import { readNmrRecord, NmrRecord } from 'nmredata';
  
 //const readNmrRecord = require('nmredata');
 //import { nmredata } from './node_modules/nmredata-data-test/index.js';
@@ -40,6 +40,7 @@ npm install nmredata-data-test --save
 npm install nmredata --save
 node_modules/.bin/browserify client.js > client.bundle.js 
 */
+/*
 readNmrRecord(nmredata['./data/menthol/menthol_1D_1H_assigned_J.zip'], {
   zipOptions: { base64: true }
 }).then(async (nmrRecord) => {
@@ -65,7 +66,7 @@ readNmrRecord(nmredata['./data/menthol/menthol_1D_1H_assigned_J.zip'], {
 
 });
 
-
+*/
    //
    // set the dimensions and margins of the graph
    var margin = { top: 10, right: 30, bottom: 30, left: 60 };
@@ -921,7 +922,7 @@ var jgraphObj = {
              theBlocks : theBlocks,
            };
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
+         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj, blockWidth);
 
          // Add the brushing
          lineSpectrum
@@ -968,7 +969,7 @@ var jgraphObj = {
             )
 
           spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj.theColumns, theDots, theTextDots2, theBlocks, blockWidth);
+          updateColumnsAction(spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, width, jgraphObj, blockWidth);
           theLinesW
             //.select('.lineW')
             .transition().duration(1000)
