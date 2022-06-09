@@ -434,6 +434,12 @@ var jgraphObj= {};
 
           assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
 
+          d3.selectAll(".circleL")
+         .filter(function (p) {
+           const test =  (d.uniqIndex == p.uniqIndex) || (referenceSpinMol == p.uniqIndex); 
+           return test;
+          })
+        .remove();
         }
       }
   jmolUnselectAll();
