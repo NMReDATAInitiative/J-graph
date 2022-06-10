@@ -436,7 +436,7 @@ var jgraphObj= {};
 
           d3.selectAll(".circleL")
          .filter(function (p) {
-           const test =  (d.uniqIndex == p.uniqIndex) || (referenceSpinMol == p.uniqIndex); 
+           const test =  (d.uniqIndex == p.uniqIndex) || (partnerSpinNumberMol == p.indexAtomMol); 
            return test;
           })
         .remove();
