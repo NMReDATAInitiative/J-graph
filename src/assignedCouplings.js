@@ -419,7 +419,7 @@ export class AssignedCouplings {
 
       var selected_specie = d.Label;
        // first every group turns grey
-       d3.selectAll(".line")
+       d3.selectAll(".lineZ")
          .transition().duration(200)
          .style("stroke", "black")
          .style("opacity", "0.2")
@@ -428,7 +428,7 @@ export class AssignedCouplings {
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
          .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
          .style("opacity", "1");
-
+          
        // Second the hovered specie takes its color
        d3.selectAll("." + selected_specie)
          .transition().duration(200)
@@ -544,7 +544,7 @@ addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, bl
            .attr("class", function (d) { return "lineZ " + d.Label }) // 2 class for each line: 'line' and the group name
            //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
           //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
-          .attr("d", pathFun)
+           .attr("d", pathFun)
            //.attr("d", function (d) { return this.pathFun(d, yJs, smallSpace, blockWidth);})
            .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
            .style("stroke-dasharray",
