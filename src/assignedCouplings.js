@@ -426,7 +426,7 @@ export class AssignedCouplings {
          .transition().duration(200).delay(3000)
          //   .style("stroke", function (d) { return (color(d.Label)) })
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-         .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
+         .style("stroke", function (d) { return getJisOK(d.jOKcolor); } )
          .style("opacity", "1");
           
        // Second the hovered specie takes its color
@@ -520,7 +520,7 @@ export class AssignedCouplings {
              function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth); }
            )
            .style("fill", "none")
-           .style("stroke", "grey")
+           .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
            .style("opacity", 0.5)
            .on("click", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);} )
            .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
@@ -557,7 +557,7 @@ addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, bl
              .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
            )*/
            .style("fill", "none")
-           .style("stroke", "grey")
+           .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
            .style("opacity", 0.5)
            .on("click", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);} )
            .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
