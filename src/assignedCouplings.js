@@ -422,13 +422,13 @@ export class AssignedCouplings {
        d3.selectAll(".lineZ")
          .transition().duration(200)
          .style("stroke", "black")
-         .style("opacity", "0.2")
+         .style("opacity", 0.2)
          .transition().duration(200).delay(3000)
          //   .style("stroke", function (d) { return (color(d.Label)) })
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-         .style("stroke", function (d) { return getJisOK(d.jOKcolor); } )
-         .style("opacity", "1");
-          
+          .style("stroke", function (d) { return getJisOK(d.jOKcolor); } )
+          .style("opacity", 0.5)
+          ;
        // Second the hovered specie takes its color
        d3.selectAll("." + selected_specie)
          .transition().duration(200)
@@ -440,7 +440,8 @@ export class AssignedCouplings {
          //   .style("stroke", function (d) { return (color(d.Label)) })
          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
          .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
-         .style("opacity", "1");
+           .style("opacity", 0.5)
+           ;
 
        var theTextLine2 = svg
          .append("text")

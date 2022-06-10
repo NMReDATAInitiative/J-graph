@@ -1,3 +1,3 @@
 export function getJisOK(color) {
-    return (color);
+    return ("grey");
   }
