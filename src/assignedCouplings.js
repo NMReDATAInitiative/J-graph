@@ -402,10 +402,9 @@ export class AssignedCouplings {
           indexInMolFile1: daC1.atomIndexMol,
           indexInMolFile2: daC2.atomIndexMol,
           iindex: this.content.length,
-        };
-     
+        }; 
         this.content.push(theAssignedCouplings);
-         this.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun); 
+        this.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun); 
       }
       return  svg
       .selectAll(".lineZ")
@@ -477,34 +476,6 @@ export class AssignedCouplings {
 
 
   makeGraphic(x, svg, lineWidth, darkMode, generalUseWidth, smallSpace, blockWidth, yJs, pathFun) {
- 
-/*
-  const toto2 =  svg
-           .selectAll("myPath222")
-           .attr("class", "lineW")
-           //.data(jGraphData)
-           .data(this.content)
-           .enter()
-           .append("path")
-           .attr("class", function (d) { return "line " + d.Label }) // 2 class for each line: 'line' and the group name
-           //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
-           //.attr("d", this.pathFun)
-         .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
-        // .attr("d", function (d) { return this.pathFun(d, yJs, smallSpace, blockWidth)})
-          // .attr("d", pathFun)
-           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
-           .style("stroke-dasharray",
-             function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth); }
-           )
-           .style("fill", "none")
-           .style("stroke", "grey")
-           .style("opacity", 0.5)
-           .on("click", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);} )
-           .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
-           ;
-          // .on("mouseleave", doNotHighlightLines)}
-                  console.log("toto1 = " + JSON.stringify(toto2));
-*/
           return svg
            .selectAll("myPath222")
            .attr("class", "lineW")
@@ -516,7 +487,7 @@ export class AssignedCouplings {
            //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
           // .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
            .attr("d", pathFun)
-           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+           .style("stroke-width", lineWidth)
            .style("stroke-dasharray",
              function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth); }
            )
@@ -527,15 +498,12 @@ export class AssignedCouplings {
            .on("mouseover", d => {this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);})
            ;
           // .on("mouseleave", doNotHighlightLines)}
-
   }
-
-
+// REDUNDANCE ABOVE AND BELOW
 addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun) {
   var tmpCOntent = [];
   tmpCOntent.push(this.content[this.content.length - 1]); // take only last
-
-    return  svg
+      return svg
            .selectAll("myPath222")
            .attr("class", "lineW")
            //.data(jGraphData)
@@ -546,17 +514,10 @@ addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, bl
            //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
           //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
            .attr("d", pathFun)
-           //.attr("d", function (d) { return this.pathFun(d, yJs, smallSpace, blockWidth);})
-           .style("stroke-width", lineWidth) // "4.0 * 0.0 * 1000.0 * () "
+           .style("stroke-width", lineWidth)
            .style("stroke-dasharray",
              function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth) }
            )
-           /*.attr("d", d3.line()
-             //.x(pathx)
-             .x(function(d){ listOfChemicalShifts.map(function(p) { return x(p); }); })
-             //.y(pathy)
-             .y(function(d){ listOfChemicalShifts.map(function(p) { return yJs(d[p]); }) })
-           )*/
            .style("fill", "none")
            .style("stroke", function (d) { return getJisOK(d.jOKcolor); })
            .style("opacity", 0.5)

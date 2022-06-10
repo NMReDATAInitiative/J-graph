@@ -178,7 +178,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
        var listOfJs=[];
        for (var i1 = 0; i1 < jGraphData.length; i1++) {
          const condition = jGraphData[i1].Label != "noAssignement";
-         if (i + 1  == jGraphData[i1].indexColumn1) { // almost SAME BLOCK
+         if (i + 1  == jGraphData[i1].indexColumn1) { // SAME BLOCK
             listOfJs.push({
               isAssigned: condition,
               indexInAssignementList: i1,
@@ -187,7 +187,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
               JlevelAvoidContact: Math.abs(jGraphData[i1].Jvalue),
             });
          }
-         if (i + 1 == jGraphData[i1].indexColumn2) { // almost SAME BLOCK
+         if (i + 1 == jGraphData[i1].indexColumn2) { // SAME BLOCK
             listOfJs.push({
               isAssigned: condition,
               indexInAssignementList: i1,
@@ -433,13 +433,45 @@ var jgraphObj= {};
               assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
 
           assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
-
+ // remove the two dots 
           d3.selectAll(".circleL")
          .filter(function (p) {
            const test =  (d.uniqIndex == p.uniqIndex) || (partnerSpinNumberMol == p.indexAtomMol); 
            return test;
           })
         .remove();
+
+        // redraw blocks
+         svg.selectAll(".circleS").remove();
+// This is redundant with other part
+          var dataAssignedCoupBlocks = [];
+                for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+                  for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+                    if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
+                      dataAssignedCoupBlocks.push({
+                       'chemShift': dataColumns[indexList1].chemShift,
+                       'value': dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
+                       'trueValue': dataColumns[indexList1].listOfJs[i1].Jvalue,
+                       'MyIndex': indexList1,
+                       'uniqIndex': dataAssignedCoupBlocks.length,
+                       });
+                    }
+                  }
+                }
+              jgraphObj.theBlocks = svg.selectAll()
+                 .data(dataAssignedCoupBlocks)
+                 .enter()
+                 .append("rect")
+                 .attr("class", "circleS")
+                 .attr("x", function (d) { return x(d.chemShift + blockWidth); })
+                 .attr("y", function (d) { return yJs(Math.abs(d.value )) - halfBlockHeight; })
+                 .attr("width", 2 * blockWidth)
+                 .attr("height", 2 * halfBlockHeight)
+                 .style("fill",function (d) { return getJgraphColor(Math.abs(d.trueValue), darkMode); })
+                 .attr("stroke", "black")
+                 .style("stroke-width", lineWidthBlocks)
+                 ;
+         updateColumnsAction(assignedCouplings.spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
         }
       }
   jmolUnselectAll();
@@ -856,7 +888,7 @@ var jgraphObj= {};
          // Dots
           */
 
-         var theBlocks = svg.selectAll("dots")
+         var theBlocks = svg.selectAll()
            .data(dataAssignedCoupBlocks)
            .enter()
            .append("rect")
@@ -888,7 +920,7 @@ var jgraphObj= {};
              theBlocks : theBlocks,
            };
 
-         updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
+        updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
 
          // Add the brushing
          lineSpectrum
