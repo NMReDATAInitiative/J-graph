@@ -13,6 +13,7 @@ import { jmolUnselectAll } from './src/jmolInterface.js';
 import { jmolSelectAtom } from './src/jmolInterface.js';
 import { jmolSelectPair } from './src/jmolInterface.js';
 
+
 /*
 import { nmredata } from 'nmredata-data-test';
 import { readNmrRecord, NmrRecord } from 'nmredata';
@@ -67,6 +68,8 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
 });
 */
+export function jGraph(fileName, fileName2) {
+  document.getElementById("textMainPage").innerHTML = fileName;
 
    //
    // set the dimensions and margins of the graph
@@ -124,7 +127,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
      .append("g")
      .attr("transform",
        "translate(" + margin.left + "," + margin.top + ")");
-   d3.csv("./androNew.csv", function (jGraphData) {
+   d3.csv(fileName2, function (jGraphData) {
      // get chemical shifts from lines... should come from other source !
      var arrayColumns = [];
      var labelColumnarray = [];
@@ -651,7 +654,7 @@ var jgraphObj= {};
    */
    
 
-     d3.csv("./Androsten_forMult_analysis.csv",
+     d3.csv(fileName,
        // format variables:
        function (d) {
          return { chemShift: d.x, value: d.y};
@@ -990,5 +993,4 @@ var jgraphObj= {};
 
       }) // reading file 1
     }) // reading file 2
-
-
+  }

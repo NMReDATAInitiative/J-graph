@@ -37,9 +37,15 @@
     --> 
    <p id="textMainPage" style="height:20px">J-graph output</p>
  
-    <div id="my_dataviz"></div>
-    <script type="module" src="../index.js">
 
+
+    <div id="my_dataviz"></div>
+    <script type="module">
+      import { jGraph } from "../index.js";
+      var fName1 = "./Androsten_forMult_analysis.csv";
+      var fName2 = "./androNew.csv"
+
+      var ajgraph = jGraph(fName1, fName2)
     </script>
 
     <h2>J Graph</h2>
