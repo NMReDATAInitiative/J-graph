@@ -71,7 +71,7 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 });
 */
 export function jGraph(fileName, fileName2) {
-  document.getElementById("textMainPage").innerHTML = fileName;
+  //document.getElementById("textMainPage").innerHTML = fileName;
 
    //
    // set the dimensions and margins of the graph
