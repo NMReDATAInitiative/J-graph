@@ -11,9 +11,11 @@ import { jmolGetInfo } from './src/jmolInterface.js';
 import { jmolGetNBbonds } from './src/jmolInterface.js';
 import { jmolUnselectAll } from './src/jmolInterface.js';
 import { jmolSelectAtom } from './src/jmolInterface.js';
-import { jmolSelectPair } from './src/jmolInterface.js';
+//import { jmolSelectPair } from './src/jmolInterface.js';
+//import { readNmrRecord, NmrRecord, parseSDF} from 'nmredata3';
+//import { nmredata } from 'nmredata-data-test';
 
-
+//var del= parseSDF("");
 /*
 import { nmredata } from 'nmredata-data-test';
 import { readNmrRecord, NmrRecord } from 'nmredata';
