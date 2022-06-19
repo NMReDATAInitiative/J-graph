@@ -210,7 +210,7 @@ export function jGraph(fileName, fileName2) {
           return a.JlevelAvoidContact > b.JlevelAvoidContact ? 1 : a.JlevelAvoidContact < b.JlevelAvoidContact ? -1 : 0
         });
         
-      updateBlockPosition(listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+      listOfJs = updateBlockPosition(listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
 
         dataColumns.push({
            'chemShift': chemColumnarray[i],
@@ -427,13 +427,13 @@ var jgraphObj= {};
          if (wasDoubleClicked) {
           document.getElementById("textMainPage").innerHTML = "TMP Info :  " + referenceSpinMol + " " +  partnerSpinNumberMol;
           assignedCouplings.theLinesW = assignedCouplings.addAssignment(dataColumns, referenceSpin, partnerSpinObj, svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun);
-         dataColumns[referenceSpin.dataColIndex1].listOfJs[referenceSpin.dataColIndex2].isAssigned = true;
-    dataColumns[partnerSpinObj.dataColIndex1].listOfJs[partnerSpinObj.dataColIndex2].isAssigned = true;
-          updateBlockPosition( dataColumns[referenceSpin.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-          updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-          updateBlockPosition( dataColumns[referenceSpin.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-          updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-     
+          dataColumns[referenceSpin.dataColIndex1].listOfJs[referenceSpin.dataColIndex2].isAssigned = true;
+          dataColumns[partnerSpinObj.dataColIndex1].listOfJs[partnerSpinObj.dataColIndex2].isAssigned = true;
+
+          dataColumns[referenceSpin.dataColIndex1].listOfJs = updateBlockPosition( dataColumns[referenceSpin.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+          dataColumns[partnerSpinObj.dataColIndex1].listOfJs = updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+     //  assignedCouplings.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun); 
+
           assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
           updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);

@@ -152,12 +152,9 @@ export class AssignedCouplings {
     
 
   udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove, circleRadius, dataColumns) {
-    console.log("UUU ZZ starting = " + this.content.length);
 
     for (var indexList = 0; indexList < this.content.length; indexList++) {
       this.content[indexList].JvalueShifted = this.content[indexList].Jvalue;
-      console.log("UUU ZZ init = " + indexList);
-
     }
 
     // parameters 
@@ -180,9 +177,7 @@ export class AssignedCouplings {
         for (var indexList = 0; indexList < this.content.length; indexList++) {
           var fs = this.content[indexList].indexColumn1;
           var fl = this.content[indexList].indexColumn2;
-          //if (fs > fl) {const del = fl; fl = fs; fs = del;} // Swap
-         
-
+          if (fs > fl) {const del = fl; fl = fs; fs = del;} // Swap
           if (fs == first && fl == second) {
             currentJ = this.content[indexList].Jvalue;
             currentShiftedJ = this.content[indexList].JvalueShifted;
@@ -190,17 +185,10 @@ export class AssignedCouplings {
             OK = true;
             break;
           }
-          if (fs == second && fl == first) {
-            currentJ = this.content[indexList].Jvalue;
-            currentShiftedJ = this.content[indexList].JvalueShifted;
-            indexOther = indexList;
-            OK = true;
-            break;
-          }
+          
         }
         //if (hasJ(first, second, currentJ, currentShiftedJ)) {
         if (OK) {
-                   console.log("UUU ZZ ENTERING = ");
 
           const currentJwithTrueSign = currentJ;
           currentJ = Math.abs(currentJ);
@@ -216,7 +204,7 @@ export class AssignedCouplings {
                if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
                 delta = fDeltaDotAbove;
               } else {
-                delta = circleRadius;
+                delta = 0.0 + circleRadius / 2.0;
               }
               const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
               if (currentJ < refValue + delta) {
@@ -274,8 +262,17 @@ export class AssignedCouplings {
                 //if (inside2 <= first && inside1 <= first) continue;
                 //if (inside2 >= second && inside1 >= second) continue;
                 //			std::cerr << "2)           test (" << inside1 << "," << inside2 << ") " << std::endl;
+          var ind1 = this.content[indexOther].indexColumn1;
+          var ind2 = this.content[indexOther].indexJ1;
+          console.log(" III i1 = " + ind1);
+          console.log(" III i2 = " + ind2);
+          console.log(" III si1 = " +  this.content.length);
+          console.log(" III si2 = " + dataColumns[ind1].listOfJs.length);
+          this.content[indexOther].JvalueAntiOverlap1 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
 
-
+            ind1 = this.content[indexOther].indexColumn2;
+           ind2 = this.content[indexOther].indexJ2;
+          this.content[indexOther].JvalueAntiOverlap2 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
               var currentShiftedJ2 = 0.0;
               var currentJ2 = 0.0;
               var OK2 = false;
@@ -386,18 +383,7 @@ export class AssignedCouplings {
      const dataJs2 = dataColumns[at2.dataColIndex1].listOfJs[at2.dataColIndex2];
 // f1 = {"isAssigned":false,"indexInAssignementList":9,"isFirstInAssignmentIndex":true,"Jvalue":"2.45","JlevelAvoidContact":2.45}
       if (dataJs1.isAssigned == false && dataJs2.isAssigned == false) {
-     //   dataColumns[at1.dataColIndex1].listOfJs[at1.dataColIndex2].isAssigned = true;
-     //   dataColumns[at2.dataColIndex1].listOfJs[at2.dataColIndex2].isAssigned = true;
-      /*  updateBlockPosition( dataColumns[referenceSpin.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-        updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-        updateBlockPosition( dataColumns[referenceSpin.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-        updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-     */
-       /* updateBlockPosition( dataColumns[at1.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-        updateBlockPosition( dataColumns[at2.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-        updateBlockPosition( dataColumns[at1.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-        updateBlockPosition( dataColumns[at2.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
-      */
+     
         const tmpJvalue = 0.5 * dataJs1.Jvalue + 0.5 * dataJs2.Jvalue; 
        
         dataJs1.indexInAssignementList = this.content.length;
@@ -425,10 +411,14 @@ export class AssignedCouplings {
           indexInMolFile1: daC1.atomIndexMol,
           indexInMolFile2: daC2.atomIndexMol,
           iindex: this.content.length,
+          indexJ1: at1.dataColIndex2,
+          indexJ2: at2.dataColIndex2,
         }; 
         this.content.push(theAssignedCouplings);
         this.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun); 
       }
+        this.content.sort((a, b) => a.tmpJvalue > b.tmpJvalue ? 1 : -1);  
+
       return  svg
       .selectAll(".lineZ")
       ;
