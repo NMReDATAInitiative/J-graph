@@ -4,6 +4,8 @@ import { getJgraphColor } from './getJgraphColor.js';
 import { jmolGetInfo } from './jmolInterface.js';
 import { jmolUnselectAll } from './jmolInterface.js';
 import { jmolSelectPair } from './jmolInterface.js';
+//import { updateBlockPosition } from './updateBlockPosition.js';
+
 export class AssignedCouplings {
   constructor(dataColumns) {
     var theAssignedCouplings = [];
@@ -150,16 +152,20 @@ export class AssignedCouplings {
     
 
   udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove, circleRadius, dataColumns) {
+    console.log("UUU ZZ starting = " + this.content.length);
 
     for (var indexList = 0; indexList < this.content.length; indexList++) {
       this.content[indexList].JvalueShifted = this.content[indexList].Jvalue;
+      console.log("UUU ZZ init = " + indexList);
+
     }
 
     // parameters 
 
-    const lastColuNumber = this.content.length - 1;// .size() - 1;
+    const lastColuNumber = dataColumns.length - 1;// .size() - 1;
     // from close by pairs to farther appart pairs
     for (var diffIndex = 1; diffIndex < lastColuNumber; diffIndex++) { 
+
       const lastColGigenDiffIndex = lastColuNumber - diffIndex;
       for (var curCol = 0; curCol <= lastColGigenDiffIndex; curCol ++ ) {
 
@@ -175,6 +181,8 @@ export class AssignedCouplings {
           var fs = this.content[indexList].indexColumn1;
           var fl = this.content[indexList].indexColumn2;
           //if (fs > fl) {const del = fl; fl = fs; fs = del;} // Swap
+         
+
           if (fs == first && fl == second) {
             currentJ = this.content[indexList].Jvalue;
             currentShiftedJ = this.content[indexList].JvalueShifted;
@@ -192,7 +200,7 @@ export class AssignedCouplings {
         }
         //if (hasJ(first, second, currentJ, currentShiftedJ)) {
         if (OK) {
-          //t         console.log("ZZ ENTERING = ");
+                   console.log("UUU ZZ ENTERING = ");
 
           const currentJwithTrueSign = currentJ;
           currentJ = Math.abs(currentJ);
@@ -205,15 +213,15 @@ export class AssignedCouplings {
             if (iterator > first && iterator < second) {
               for (var iterJ = 0; iterJ < dataColumns[iterator].listOfJs.length; iterJ++) {
                var  delta = 0;
-                if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
-                  delta = fDeltaDotAbove;
-                } else {
-                  delta = circleRadius;
-                }
-                const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
-                if (currentJ < refValue + delta) {
-                  rangesToAvoidFirst.push(refValue + delta);
-                  rangesToAvoidSecond.push(refValue - delta);
+               if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
+                delta = fDeltaDotAbove;
+              } else {
+                delta = circleRadius;
+              }
+              const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
+              if (currentJ < refValue + delta) {
+                rangesToAvoidFirst.push(refValue + delta);
+                rangesToAvoidSecond.push(refValue - delta);
                 }
               }
             }
@@ -365,22 +373,37 @@ export class AssignedCouplings {
       }   
     }
   }
-
+  
   addAssignment(dataColumns, at1, at2, svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun) {
-     const daC1 = dataColumns[at1.dataColIndex1];
+    console.log("at1 = " + JSON.stringify(at1));
+    console.log("at2 = " + JSON.stringify(at2));
+    if (at1.dataColIndex1 > at2.dataColIndex1) {
+     const at3=at1;at1=at2;at2=at3;//swap
+    }
+    const daC1 = dataColumns[at1.dataColIndex1];
      const daC2 = dataColumns[at2.dataColIndex1];
-     const dataC1 = dataColumns[at1.dataColIndex1].listOfJs[at1.dataColIndex2];
-     const dataC2 = dataColumns[at2.dataColIndex1].listOfJs[at2.dataColIndex2];
+     const dataJs1 = dataColumns[at1.dataColIndex1].listOfJs[at1.dataColIndex2];
+     const dataJs2 = dataColumns[at2.dataColIndex1].listOfJs[at2.dataColIndex2];
 // f1 = {"isAssigned":false,"indexInAssignementList":9,"isFirstInAssignmentIndex":true,"Jvalue":"2.45","JlevelAvoidContact":2.45}
-      if (dataC1.isAssigned == false && dataC1.isAssigned == false) {
-        dataC1.isAssigned = true;
-        dataC2.isAssigned = true;
-        const tmpJvalue = 0.5 * dataC1.Jvalue + 0.5 * dataC2.Jvalue; 
-
-        dataC1.indexInAssignementList = this.content.length;
-        dataC2.indexInAssignementList = this.content.length;
-        dataC1.isFirstInAssignmentIndex = at1.dataColIndex1 > at2.dataColIndex1;
-        dataC2.isFirstInAssignmentIndex = at1.dataColIndex1 < at2.dataColIndex1;
+      if (dataJs1.isAssigned == false && dataJs2.isAssigned == false) {
+     //   dataColumns[at1.dataColIndex1].listOfJs[at1.dataColIndex2].isAssigned = true;
+     //   dataColumns[at2.dataColIndex1].listOfJs[at2.dataColIndex2].isAssigned = true;
+      /*  updateBlockPosition( dataColumns[referenceSpin.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+        updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+        updateBlockPosition( dataColumns[referenceSpin.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+        updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+     */
+       /* updateBlockPosition( dataColumns[at1.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+        updateBlockPosition( dataColumns[at2.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+        updateBlockPosition( dataColumns[at1.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+        updateBlockPosition( dataColumns[at2.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+      */
+        const tmpJvalue = 0.5 * dataJs1.Jvalue + 0.5 * dataJs2.Jvalue; 
+       
+        dataJs1.indexInAssignementList = this.content.length;
+        dataJs2.indexInAssignementList = this.content.length;
+        dataJs1.isFirstInAssignmentIndex = at1.dataColIndex1 > at2.dataColIndex1;
+        dataJs2.isFirstInAssignmentIndex = at1.dataColIndex1 < at2.dataColIndex1;
 
         var theAssignedCouplings = {
           jOKcolor: "black",
@@ -388,8 +411,8 @@ export class AssignedCouplings {
           colNumber1: at1.dataColIndex1,
           colNumber2: at2.dataColIndex1,
           Label: "J_" + daC1.labelColumn + "_" + daC2.labelColumn, // used for highlight of lines
-          JvalueAntiOverlap1: +dataC1.JlevelAvoidContact,
-          JvalueAntiOverlap2: +dataC2.JlevelAvoidContact,
+          JvalueAntiOverlap1: +dataJs1.JlevelAvoidContact,
+          JvalueAntiOverlap2: +dataJs2.JlevelAvoidContact,
           JvalueShifted: tmpJvalue,
           indexColumn1: at1.dataColIndex1,
           indexColumn2: at2.dataColIndex1,

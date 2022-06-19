@@ -11,6 +11,9 @@ import { jmolGetInfo } from './src/jmolInterface.js';
 import { jmolGetNBbonds } from './src/jmolInterface.js';
 import { jmolUnselectAll } from './src/jmolInterface.js';
 import { jmolSelectAtom } from './src/jmolInterface.js';
+import { updateBlockPosition } from './src/updateBlockPosition.js';
+
+
 //import { jmolSelectPair } from './src/jmolInterface.js';
 //import { readNmrRecord, NmrRecord, parseSDF} from 'nmredata3';
 //import { nmredata } from 'nmredata-data-test';
@@ -206,16 +209,9 @@ export function jGraph(fileName, fileName2) {
         listOfJs.sort((a, b) => { // sort over absolute values
           return a.JlevelAvoidContact > b.JlevelAvoidContact ? 1 : a.JlevelAvoidContact < b.JlevelAvoidContact ? -1 : 0
         });
-        for (var index1 = 1; index1 < listOfJs.length; index1++ ) {
-          var minSpace = minSpaceBetweekBlocks;
-          if (!listOfJs[index1].isAssigned) {
-            minSpace = minSpaceBetweekCircles;
-          }
-          const ref = listOfJs[index1 - 1].JlevelAvoidContact + minSpace;
-          if (listOfJs[index1].JlevelAvoidContact < ref) {
-            listOfJs[index1].JlevelAvoidContact = ref;
-          }
-        }
+        
+      updateBlockPosition(listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+
         dataColumns.push({
            'chemShift': chemColumnarray[i],
            'labelColumn': labelColumnarray[i],
@@ -418,8 +414,7 @@ var jgraphObj= {};
            (Math.abs(d.value - p.value) <= deltaSearchJ) && 
            (d.uniqIndex != p.uniqIndex) && 
            (d.MyIndex != p.MyIndex) && 
-           (jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 2 || jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 3) &&
-           true; 
+           (jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 2 || jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 3); 
            if (test){
                 numberCandidate++;
                 partnerSpinNumberMol = p.indexAtomMol;
@@ -432,16 +427,25 @@ var jgraphObj= {};
          if (wasDoubleClicked) {
           document.getElementById("textMainPage").innerHTML = "TMP Info :  " + referenceSpinMol + " " +  partnerSpinNumberMol;
           assignedCouplings.theLinesW = assignedCouplings.addAssignment(dataColumns, referenceSpin, partnerSpinObj, svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun);
+         dataColumns[referenceSpin.dataColIndex1].listOfJs[referenceSpin.dataColIndex2].isAssigned = true;
+    dataColumns[partnerSpinObj.dataColIndex1].listOfJs[partnerSpinObj.dataColIndex2].isAssigned = true;
+          updateBlockPosition( dataColumns[referenceSpin.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+          updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+          updateBlockPosition( dataColumns[referenceSpin.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+          updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex2].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
+     
           assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-         
-          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
-              assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
 
+          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
+          assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
           assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
+
+
+          
  // remove the two dots 
           d3.selectAll(".circleL")
          .filter(function (p) {
-           const test =  (d.uniqIndex == p.uniqIndex) || (partnerSpinNumberMol == p.indexAtomMol); 
+           const test =  (d.uniqIndex == p.uniqIndex) || (partnerSpinObj.uniqIndex == p.uniqIndex); 
            return test;
           })
         .remove();
