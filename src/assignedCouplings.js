@@ -189,21 +189,21 @@ export class AssignedCouplings {
           const currentJwithTrueSign = currentJ;
           currentJ = Math.abs(currentJ);
 
-          var rangesToAvoidFirst= [];
-          var rangesToAvoidSecond= [];
+          var rangesToAvoidFirst = [];
+          var rangesToAvoidSecond = [];
 
           // look for stuff in between
           for (var iterator = 0; iterator < dataColumns.length; iterator++) {
-            if (iterator > first && iterator < second) { 
+            if (iterator > first && iterator < second) {
               for (var iterJ = 0; iterJ < dataColumns[iterator].listOfJs.length; iterJ++) {
-               var delta = 0.0 + circleRadius / 2.0;
-               if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
-                delta = fDeltaDotAbove;
-              }
-              const refValue = (dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact);
-              if (currentJ < refValue + delta) {
-                rangesToAvoidFirst.push(refValue + delta);
-                rangesToAvoidSecond.push(refValue - delta);
+                var delta = 0.0 + circleRadius / 2.0;
+                if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
+                  delta = fDeltaDotAbove;
+                }
+                const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
+                if (currentJ < refValue + delta) {
+                  rangesToAvoidFirst.push(refValue + delta);
+                  rangesToAvoidSecond.push(refValue - delta);
                 }
               }
             }
@@ -213,15 +213,12 @@ export class AssignedCouplings {
           var ind1 = this.content[indexOther].indexColumn1;
           var ind2 = this.content[indexOther].indexJ1;
           this.content[indexOther].JvalueAntiOverlap1 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
-          console.log("ZZ0a     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap1));
 
           ind1 = this.content[indexOther].indexColumn2;
           ind2 = this.content[indexOther].indexJ2;
           this.content[indexOther].JvalueAntiOverlap2 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
-          console.log("ZZ0b     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap2));
 
           currentShiftedJ = currentJ;
-          console.log("ZZ0      ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
 
           for (var inside1 = first + 1; inside1 <= second - 1; inside1 ++) { // includes current
             var from = 0;
@@ -230,10 +227,6 @@ export class AssignedCouplings {
             if (inside1 + diffIndex < lastColuNumber) to = inside1 + diffIndex;
             for (var inside2 = from; inside2 <= to; inside2 ++) { // includes current
               if (inside1 == inside2) continue;
-                //if (inside2 <= first && inside1 <= first) continue;
-                //if (inside2 >= second && inside1 >= second) continue;
-                //			std::cerr << "2)           test (" << inside1 << "," << inside2 << ") " << std::endl;
-        
               var currentShiftedJ2 = 0.0;
               var currentJ2 = 0.0;
               var OK2 = false;
@@ -276,30 +269,23 @@ export class AssignedCouplings {
             var it1 = rangesToAvoidFirst [indices[item]];
             var it2 = rangesToAvoidSecond[indices[item]];
 
-                console.log("ZZ1     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
-
             if ((currentShiftedJ < (it1)) && (currentShiftedJ > (it2))) {
                 currentShiftedJ = it1;
-                                console.log("ZZ2     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
 
 
             } 
           }
-                console.log("ZZ     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
-          
+          for (var item = 0; item < rangesToAvoidFirst.length; item++) {
+            var it1 = rangesToAvoidFirst [indices[item]];
+            var it2 = rangesToAvoidSecond[indices[item]];
 
+            if ((currentShiftedJ < (it1)) && (currentShiftedJ > (it2))) {
+                currentShiftedJ = it1;
+            } 
+          }
           this.content[indexOther].JvalueShifted = currentShiftedJ;
-          
-
-
- console.log("ZZ0a     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap1));
-
-        
-          console.log("ZZ0b     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap2));
-  console.log("ZZ0c     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueShifted));
-
         }
-      }   
+      }
     }
   }
   
@@ -516,7 +502,9 @@ addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, bl
   updateTheLines(yJs, smallSpace, blockWidth, pathFun) {
     this.theLinesW
     .transition().duration(1000)
-    .attr("d", pathFun)
+    .attr("d", pathFun);
+    
   }
 
 }
+

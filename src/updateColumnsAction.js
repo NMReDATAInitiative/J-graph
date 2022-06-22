@@ -1,4 +1,4 @@
-export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, generalUseWidth, x, width, jgraphObj, blockWidth) {
+export function updateColumnsAction(spreadPositions, timeAnimation, positionJscale, topJGraphYposition, colorShowLine, colorHideLine, generalUseWidth, x, width, jgraphObj, blockWidth, yJs) {
  
 
             jgraphObj.theColumns.theColumnsConnectColumnToSpectrumPosition
@@ -40,6 +40,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
            jgraphObj.theDots
              .transition().duration(timeAnimation)
              .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
+             .attr("cy", function (d) { return yJs(d.valueOnBar); })
              ;
 /*
            theTextDots2
@@ -49,7 +50,9 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
 */
            jgraphObj.theBlocks
              .transition().duration(timeAnimation)
-             .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); });
+             .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); })
+         //    .attr("y", function (d) { return yJs(Math.abs(d.value )) - halfBlockHeight; })
+            ;
 
 
            //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })

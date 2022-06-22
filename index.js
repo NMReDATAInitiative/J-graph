@@ -119,6 +119,8 @@ export function jGraph(fileName, fileName2) {
    const nbHzPerPoint = maxScaleJ / heightJscale;
    const minSpaceBetweekBlocks = nbHzPerPoint * (2 * halfBlockHeight + 1.0 * lineWidthBlocks / 2.0);
    const minSpaceBetweekCircles = nbHzPerPoint * (2 * circleRadius + 2.0 * lineWidthBlocks / 2.0);
+   const spaceBlock =  (halfBlockHeight + lineWidthBlocks / 2.0 +  + 1.0)* nbHzPerPoint;
+   const spaceCircle =  (2.0 * circleRadius + lineWidthBlocks / 2.0 + lineWidth + 1.0)* nbHzPerPoint;
 
    /*
        const jcccol = getJgraphColor(11.2, darkMode);
@@ -279,8 +281,7 @@ export function jGraph(fileName, fileName2) {
           }
         }
       }
-      
-     assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
+     assignedCouplings.udateLineTrajectory(spaceBlock , 2.0 * lineWidth * nbHzPerPoint, spaceCircle, dataColumns);
      //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
      // Make list of positions according to size of jGraphData
@@ -433,11 +434,27 @@ var jgraphObj= {};
           dataColumns[referenceSpin.dataColIndex1].listOfJs = updateBlockPosition( dataColumns[referenceSpin.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
           dataColumns[partnerSpinObj.dataColIndex1].listOfJs = updateBlockPosition( dataColumns[partnerSpinObj.dataColIndex1].listOfJs, minSpaceBetweekCircles, minSpaceBetweekBlocks);
      //  assignedCouplings.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun); 
+     
+// UGLY FIX TO BE MOVED OUT
+      for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+        for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+          if (!dataColumns[indexList1].listOfJs[i1].isAssigned) {
+              for (var iloo = 0; iloo < dataUnassignedCoupCircles.length; iloo++) {
+                if (dataUnassignedCoupCircles[iloo].dataColIndex1 == indexList1) {
+                  if (dataUnassignedCoupCircles[iloo].dataColIndex2 == i1) {
+                  dataUnassignedCoupCircles[iloo].valueOnBar =  dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact;
+                  }
+                }
+              }
+            }
+          }
+        }
 
           assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
 
-          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
-          assignedCouplings.udateLineTrajectory((halfBlockHeight + lineWidthBlocks / 2.0 + lineWidth)* nbHzPerPoint , 2.0 * lineWidth * nbHzPerPoint, minSpaceBetweekCircles, dataColumns);
+          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth, yJs);
+          assignedCouplings.udateLineTrajectory(spaceBlock , 2.0 * lineWidth * nbHzPerPoint, spaceCircle, dataColumns);
+
           assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
 
 
@@ -480,7 +497,7 @@ var jgraphObj= {};
                  .attr("stroke", "black")
                  .style("stroke-width", lineWidthBlocks)
                  ;
-         updateColumnsAction(assignedCouplings.spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
+         updateColumnsAction(assignedCouplings.spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth, yJs);
         }
       }
   jmolUnselectAll();
@@ -929,7 +946,7 @@ var jgraphObj= {};
              theBlocks : theBlocks,
            };
 
-        updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
+        updateColumnsAction(spreadPositionsZZ, 0, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth, yJs);
 
          // Add the brushing
          lineSpectrum
@@ -976,7 +993,7 @@ var jgraphObj= {};
             )
 
           assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
-          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth);
+          updateColumnsAction(assignedCouplings.spreadPositionsZZ, 1000, positionJscale, topJGraphYposition, jGraphParameters.colorShowLine, jGraphParameters.colorHideLine, generalUseWidth, x, widthOfThePlot, jgraphObj, blockWidth, yJs);
           assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
            
         }
