@@ -17,9 +17,9 @@ export function getJgraphColor(Jcoupling, darkmode) {
     const baseColorIndex = 3 * baseColorInt; // 3 because RGB
 
     // the loop is language dependent, lets drop it...
-    const r = Math.floor(+255.0 * colormap[baseColorIndex + 0] + adjust * (colormap[baseColorIndex + 3 + 0] - colormap[baseColorIndex + 0]));
-    const g = Math.floor(+255.0 * colormap[baseColorIndex + 1] + adjust * (colormap[baseColorIndex + 3 + 1] - colormap[baseColorIndex + 1]));
-    const b = Math.floor(+255.0 * colormap[baseColorIndex + 2] + adjust * (colormap[baseColorIndex + 3 + 2] - colormap[baseColorIndex + 2]));
+    const r = Math.floor(+255.0 * (colormap[baseColorIndex + 0] + adjust * (colormap[baseColorIndex + 3 + 0] - colormap[baseColorIndex + 0])));
+    const g = Math.floor(+255.0 * (colormap[baseColorIndex + 1] + adjust * (colormap[baseColorIndex + 3 + 1] - colormap[baseColorIndex + 1])));
+    const b = Math.floor(+255.0 * (colormap[baseColorIndex + 2] + adjust * (colormap[baseColorIndex + 3 + 2] - colormap[baseColorIndex + 2])));
 
     //const negExpVal = (Jcoupling < 0.0); // used to change line type for negative values.                   
 
