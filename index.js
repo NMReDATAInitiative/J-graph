@@ -366,7 +366,7 @@ export function jGraph(fileName, fileName2) {
 // HERE
 //const alterative = dataColumns[0].JvalueAntiOverlap1;//
 //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
-          const y2 = yJs(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted));
+          const y2 = yJs(Math.abs(d.JvalueShifted));
           //const y2 = yJs(Math.abs(d.JvalueShifted));
           const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
           const horizontalShiftSideBlock = blockWidth; // make larger here !

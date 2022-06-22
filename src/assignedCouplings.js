@@ -154,22 +154,21 @@ export class AssignedCouplings {
   udateLineTrajectory(fDeltaDotAbove, fDeltaLineAbove, circleRadius, dataColumns) {
 
     for (var indexList = 0; indexList < this.content.length; indexList++) {
-      this.content[indexList].JvalueShifted = this.content[indexList].Jvalue;
+      this.content[indexList].JvalueShifted = Math.abs(this.content[indexList].Jvalue);
     }
 
     // parameters 
 
     const lastColuNumber = dataColumns.length - 1;// .size() - 1;
-    // from close by pairs to farther appart pairs
+    // from close by pairs to farther apart pairs
     for (var diffIndex = 1; diffIndex < lastColuNumber; diffIndex++) { 
-
       const lastColGigenDiffIndex = lastColuNumber - diffIndex;
       for (var curCol = 0; curCol <= lastColGigenDiffIndex; curCol ++ ) {
 
         const first = curCol;
         const second = curCol + diffIndex;
 
-        //	double currentShiftedJlast = 0.0;
+        // look for the coupling between the first/second pair
         var currentShiftedJ = 0.0;
         var currentJ = 0.0;
         var indexOther = 0;
@@ -179,34 +178,29 @@ export class AssignedCouplings {
           var fl = this.content[indexList].indexColumn2;
           if (fs > fl) {const del = fl; fl = fs; fs = del;} // Swap
           if (fs == first && fl == second) {
-            currentJ = this.content[indexList].Jvalue;
-            currentShiftedJ = this.content[indexList].JvalueShifted;
             indexOther = indexList;
             OK = true;
             break;
           }
-          
         }
-        //if (hasJ(first, second, currentJ, currentShiftedJ)) {
-        if (OK) {
 
+        if (OK) { // There is a pair
+          currentJ = this.content[indexOther].Jvalue;
           const currentJwithTrueSign = currentJ;
           currentJ = Math.abs(currentJ);
-          currentShiftedJ = Math.abs(currentShiftedJ);
 
           var rangesToAvoidFirst= [];
           var rangesToAvoidSecond= [];
 
+          // look for stuff in between
           for (var iterator = 0; iterator < dataColumns.length; iterator++) {
-            if (iterator > first && iterator < second) {
+            if (iterator > first && iterator < second) { 
               for (var iterJ = 0; iterJ < dataColumns[iterator].listOfJs.length; iterJ++) {
-               var  delta = 0;
+               var delta = 0.0 + circleRadius / 2.0;
                if (dataColumns[iterator].listOfJs[iterJ].isAssigned) {
                 delta = fDeltaDotAbove;
-              } else {
-                delta = 0.0 + circleRadius / 2.0;
               }
-              const refValue = dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact;
+              const refValue = (dataColumns[iterator].listOfJs[iterJ].JlevelAvoidContact);
               if (currentJ < refValue + delta) {
                 rangesToAvoidFirst.push(refValue + delta);
                 rangesToAvoidSecond.push(refValue - delta);
@@ -214,44 +208,21 @@ export class AssignedCouplings {
               }
             }
           }
-          // list all ranges of dots for which top is above currentJ 
-         /* for (var iter = 0; iter < this.content.length; iter++) {
-            if (iter != indexOther ) {
-              const it = this.content[iter];
-              var itfs = it.indexColumn1;
-              var itfl = it.indexColumn2;
-              var itfsVertPositionHz = dataColumns[it.indexColumn1].listOfJs[it.indexJ1].JlevelAvoidContact;
-              var itflVertPositionHz = dataColumns[it.indexColumn2].listOfJs[it.indexJ2].JlevelAvoidContact;
-              it.JvalueAntiOverlap1 = itfsVertPositionHz;
-              it.JvalueAntiOverlap2 = itflVertPositionHz;
-              if (itfs > itfl) { // swap
-                  const del = itfl; itfl = itfs; itfs = del;
-                  const del2 = itfsVertPositionHz; itfsVertPositionHz = itflVertPositionHz; itflVertPositionHz = del2;
-               } // Swap
-              
-              // avoid lines
-              
-             
-              // avoid itfs
-              
-              if (itfs > first && itfs < second) {
-                if (currentJ < (it.Jvalue + fDeltaDotAbove)) {
-                  rangesToAvoidFirst.push(itfsVertPositionHz + fDeltaDotAbove);
-                  rangesToAvoidSecond.push(itfsVertPositionHz - fDeltaDotAbove);
-                }
-              }
-                  // avoid itfs
-              if (itfl > first && itfl < second) {
-                if (currentJ < (it.Jvalue + fDeltaDotAbove)) {
-                  rangesToAvoidFirst.push(it.Jvalue + fDeltaDotAbove);
-                  rangesToAvoidSecond.push(it.Jvalue - fDeltaDotAbove);
-                }
-              }
-            }
-          }
-          */
-         // list all ranges of lines for which top is above currentJ 
-    
+       
+          // list all ranges of lines for which top is above currentJ 
+          var ind1 = this.content[indexOther].indexColumn1;
+          var ind2 = this.content[indexOther].indexJ1;
+          this.content[indexOther].JvalueAntiOverlap1 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
+          console.log("ZZ0a     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap1));
+
+          ind1 = this.content[indexOther].indexColumn2;
+          ind2 = this.content[indexOther].indexJ2;
+          this.content[indexOther].JvalueAntiOverlap2 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
+          console.log("ZZ0b     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap2));
+
+          currentShiftedJ = currentJ;
+          console.log("ZZ0      ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
+
           for (var inside1 = first + 1; inside1 <= second - 1; inside1 ++) { // includes current
             var from = 0;
             if (inside1 > diffIndex) from = inside1 - diffIndex;
@@ -262,17 +233,7 @@ export class AssignedCouplings {
                 //if (inside2 <= first && inside1 <= first) continue;
                 //if (inside2 >= second && inside1 >= second) continue;
                 //			std::cerr << "2)           test (" << inside1 << "," << inside2 << ") " << std::endl;
-          var ind1 = this.content[indexOther].indexColumn1;
-          var ind2 = this.content[indexOther].indexJ1;
-          console.log(" III i1 = " + ind1);
-          console.log(" III i2 = " + ind2);
-          console.log(" III si1 = " +  this.content.length);
-          console.log(" III si2 = " + dataColumns[ind1].listOfJs.length);
-          this.content[indexOther].JvalueAntiOverlap1 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
-
-            ind1 = this.content[indexOther].indexColumn2;
-           ind2 = this.content[indexOther].indexJ2;
-          this.content[indexOther].JvalueAntiOverlap2 = dataColumns[ind1].listOfJs[ind2].JlevelAvoidContact;
+        
               var currentShiftedJ2 = 0.0;
               var currentJ2 = 0.0;
               var OK2 = false;
@@ -281,15 +242,11 @@ export class AssignedCouplings {
                 const fs = this.content[indexList].indexColumn1;
                 const fl = this.content[indexList].indexColumn2;
                 //if (fs > fl) {const del = fl; fl = fs; fs = del;} // Swap
-                if (fs == inside1 && fl == inside2) {
-                  currentJ2 = this.content[indexList].Jvalue;
-                  currentShiftedJ2 = this.content[indexList].JvalueShifted;
-                  OK2 = true;
-                  break;
-                }
-                if (fs == inside2 && fl == inside1) {
-                  currentJ2 = this.content[indexList].Jvalue;
-                  currentShiftedJ2 = this.content[indexList].JvalueShifted;
+                if (
+                  (fs == inside1 && fl == inside2) || 
+                  (fs == inside2 && fl == inside1) ) {
+                  currentJ2 = (this.content[indexList].Jvalue);
+                  currentShiftedJ2 = (this.content[indexList].JvalueShifted);
                   OK2 = true;
                   break;
                 }
@@ -313,59 +270,34 @@ export class AssignedCouplings {
           indices.sort(function (a, b) {
             return rangesToAvoidFirst[a] > rangesToAvoidFirst[b] ? 1 : rangesToAvoidFirst[a] < rangesToAvoidFirst[b] ? -1 : 0; 
           });
-          // var indicesSorted = new Array(rangesToAvoidFirst.length);
-          // for (i = 0; i < rangesToAvoidFirst.length; ++i) indicesSorted[indices[i]] = i;
-          //  console.log("ZZ                   indices " + JSON.stringify(indices));
-          //t                      console.log("ZZ  ===========currentJ " + JSON.stringify(currentJ));
-          //t                      console.log("ZZ  ===========currentShiftedJ " + JSON.stringify(currentShiftedJ));
-          const delBefore = currentShiftedJ;
+         
           for (var item = 0; item < rangesToAvoidFirst.length; item++) {
 
             var it1 = rangesToAvoidFirst [indices[item]];
             var it2 = rangesToAvoidSecond[indices[item]];
-             //t        console.log("ZZ                   it1 " + JSON.stringify(it1)  + "   it2 " + JSON.stringify(it2));
+
+                console.log("ZZ1     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
 
             if ((currentShiftedJ < (it1)) && (currentShiftedJ > (it2))) {
                 currentShiftedJ = it1;
-                 //t                       console.log("ZZ          currentShiftedJ " + JSON.stringify(currentShiftedJ));
+                                console.log("ZZ2     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
+
 
             } 
           }
-          // if (delBefore > currentShiftedJ )
-          //t      console.log("ZZ     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
-          // if (currentJ > currentShiftedJ ) {
-          //t   console.log("ZZ    currentJ ????????????????????????????????? " + JSON.stringify(currentJ));
-          //t  console.log("ZZ    currentShiftedJ ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
-          //}
-          //t    console.log("ZZ AA i = " + JSON.stringify(i));
-
-          //if (Math.abs(currentShiftedJ - currentJ)> 0.00001) {
-          //t     console.log("before = this.content[first].JvalueShifted " + JSON.stringify(this.content[indexOther].JvalueShifted));
-          //t    console.log("before = curthis.content[first].Jvalue " + JSON.stringify(this.content[indexOther].Jvalue));
+                console.log("ZZ     ????????????????????????????????? " + JSON.stringify(currentShiftedJ));
+          
 
           this.content[indexOther].JvalueShifted = currentShiftedJ;
-          //t       console.log("ZZZZAAAA  this.content[second].JvalueShifted = " + JSON.stringify(currentShiftedJ));
+          
 
-          //setShiftedJ(first, second, currentShiftedJ);
-          //	setShiftedJ(second, first, currentShiftedJ);
-          //std::cerr << "For (" << first << "," << second << ") shifted to " << currentShiftedJ << " for " <<  currentJ << " Hz" << std::endl;
-          //} else {
-          //	std::cerr << "For (" << first << "," << second << ") Not shifted to " << currentShiftedJ << " (for " <<  currentJ << " Hz)" << std::endl;
-          //		}
-          //  "chemShift1,chemShift2,indexColumn1,indexColumn2,Jvalue,JvalueShifted,Label"
-          /*
-          std::cout
-          << this->fColumns[first].chemicalShift << ","
-          << this->fColumns[second].chemicalShift << ","
-          << first << "," << second << ","
-          << currentJwithTrueSign << "," << currentShiftedJ << ",";
-          */
 
-          // else{
-          //	std::cout << "NO J for (" << first << "," << second << ") NO J " << std::endl;
-          // }
-      
-      
+ console.log("ZZ0a     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap1));
+
+        
+          console.log("ZZ0b     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueAntiOverlap2));
+  console.log("ZZ0c     ????????????????????????????????? " + JSON.stringify(this.content[indexOther].JvalueShifted));
+
         }
       }   
     }
