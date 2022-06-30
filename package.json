@@ -2,12 +2,24 @@
   "name": "j-graph",
   "version": "0.1.0",
   "description": "Plot asigned NMR scalar couplings on NMR spectra ",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "index.js",
+  "files": [
+    "lib",
+    "src"
+  ],
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "eslint src",
+    "eslint-fix": "npm run eslint -- --fix",
+    "prepack": "rollup -c",
+    "prettier": "prettier --check src",
+    "prettier-write": "prettier --write src",
+    "test": "npm run test-coverage && npm run eslint && npm run prettier",
+    "test-coverage": "jest --coverage",
+    "test-only": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,6 +37,16 @@
     "url": "https://github.com/NMReDATAInitiative/J-graph/issues"
   },
   "homepage": "https://github.com/NMReDATAInitiative/J-graph#readme",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all"
+  },
   "dependencies": {
     "d3": "^7.3.0"
   },
