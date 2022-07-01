@@ -19,3 +19,7 @@ More [details](./details.md).
 ### See also 
 
 For two-dimensional COSY cross-peaks, a two-dimensional representation of coupling constants was introduced. This work is inspired by it. (D. Jeannerat, PhD thesis, Group G. Bodenhausen).
+
+Installation 
+npm install -g browserify
+browserify src/nodeModules.js > src/browserifiedModules.js

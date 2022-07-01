@@ -40,10 +40,21 @@
     <script type="module">
       //import { readNmrRecord, NmrRecord, parseSDF} from 'nmredata';
       //import { readNmrRecord, NmrRecord, parseSDF} from '../node_modules/nmredata/src/index.js';
-      import { jGraph } from "../src/index.js";
+      //import { del } from ;
+    //  var del2= parseSDF(); 
+      import * as all from "../src/browserifiedModules.js"; 
+     // import { parseSDF } from "../src/browserifiedModules.js"; 
+      import { jGraph } from "../src/index.js"; 
       var fName1 = "./Androsten_spectrum.csv";
       var fName2 = "./androTwoMissingAssignments.csv"
-      var ajgraph = jGraph(fName1, fName2)
+      var text = all.del;
+               console.log("text del4 " + JSON.stringify(all.myForm));
+               console.log("text all.del " + JSON.stringify(all.del));
+               console.log("text all " + JSON.stringify(all));
+               console.log("text del3 " + all.del);
+               console.log("text parseSDF " + all.parseSDF);
+
+      var ajgraph = jGraph(fName1, fName2, text)
     </script>
 
     <h2>J Graph</h2>
