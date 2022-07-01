@@ -14,7 +14,6 @@ import { jmolSelectAtom } from './jmolInterface.js';
 import { updateBlockPosition } from './updateBlockPosition.js';
 
 
-
 //import { jmolSelectPair } from './src/jmolInterface.js';
 //import { readNmrRecord, NmrRecord, parseSDF} from 'nmredata3';
 //import { nmredata } from 'nmredata-data-test';
