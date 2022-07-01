@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Plot asigned NMR scalar couplings on NMR spectra ",
   "main": "lib/index.js",
-  "module": "index.js",
+  "module": "src/index.js",
   "files": [
     "lib",
     "src"
@@ -48,7 +48,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "d3": "^7.3.0"
+    "d3": "^7.5.0"
   },
   "devDependencies": {
     "nmredata": "^0.6.1"

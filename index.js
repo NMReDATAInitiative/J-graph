@@ -1,17 +1,17 @@
 /*jshint esversion: 6 */
 
 //import * as d3 from "d3"; // 
-import { getJgraphColor } from './src/getJgraphColor.js';
+import { getJgraphColor } from './getJgraphColor.js';
 import { getJisOK } from './src/getJisOK.js';
-import { updateColumnsPositions } from './src/updateColumnsPositions.js';
-import { updateColumnsAction } from './src/updateColumnsAction.js';
-import { AssignedCouplings } from './src/assignedCouplings.js';
-import { UnassignedCouplings } from './src/unassignedCouplings.js';
-import { jmolGetInfo } from './src/jmolInterface.js';
-import { jmolGetNBbonds } from './src/jmolInterface.js';
-import { jmolUnselectAll } from './src/jmolInterface.js';
-import { jmolSelectAtom } from './src/jmolInterface.js';
-import { updateBlockPosition } from './src/updateBlockPosition.js';
+import { updateColumnsPositions } from './updateColumnsPositions.js';
+import { updateColumnsAction } from './updateColumnsAction.js';
+import { AssignedCouplings } from './assignedCouplings.js';
+import { UnassignedCouplings } from './unassignedCouplings.js';
+import { jmolGetInfo } from './jmolInterface.js';
+import { jmolGetNBbonds } from './jmolInterface.js';
+import { jmolUnselectAll } from './jmolInterface.js';
+import { jmolSelectAtom } from './jmolInterface.js';
+import { updateBlockPosition } from './updateBlockPosition.js';
 
 
 //import { jmolSelectPair } from './src/jmolInterface.js';
