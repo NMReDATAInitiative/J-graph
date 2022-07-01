@@ -5,20 +5,15 @@
 //import { jmolSelectPair } from './src/jmolInterface.js';
 //import { , , } from 'nmredata3';
 //var jGraph = require('./src/index.js');
-var readNmrRecord = require('nmredata');
-var NmrRecord = require('nmredata');
-var parseSDF = require('nmredata');
+//var d3 = require('d3');
+var nmredata = require('nmredata');
 
-exports.parseSDF = parseSDF;
-var del = "safds";
-
-var myForm = { 
-  returnS: function() { return("sdfff") },
-  getData: function() { ; },
-  callChart: function() { ; }
-};
-myForm.returnS();
-module.exports = myForm;
+/*
+var readNmrRecord = require('nmredata/readNmrRecord');
+var NmrRecord = require('nmredata/NmrRecord');
+var parseSDF = require('nmredata/parseSDF');
+*/
+   
 
 /*
 var myForm = { 

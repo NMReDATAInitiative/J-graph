@@ -74,10 +74,11 @@ readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_as
 
 });
 */
-export function jGraph(fileName, fileName2, del) {
-         console.log("sfd del ");
-         console.log("sfd del : " + del);
+export function jGraph(fileName, fileName2, parseSDF, readNmrRecord, NmrRecord) {
 
+               console.log("text parseSDF 2 " + (parseSDF));
+               console.log("text readNmrRecord 2 " + (readNmrRecord));
+               console.log("text NmrRecord 2 " + (NmrRecord));
   //document.getElementById("textMainPage").innerHTML = fileName;
 
    //

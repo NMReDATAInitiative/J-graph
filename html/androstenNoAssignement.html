@@ -11,6 +11,7 @@
   <p>This demo is still under development... The assignement is incorrect to faciliate tests of different features.</p>
   <img style="border:1px black;" src="../images/androsten.png" width="200" alt="androsten" />
   <script type="text/javascript" src="src/JSmol.min.js"></script>
+  <script type="text/javascript" src="../src/browserifiedModules.js"></script>
   <script>
     Cholest = {
       script: "set antialiasDisplay true;load ../data/androsten/Androsten_forMult_analysis_3d_fromAvogadro.mol;cartoon on;color cartoon structure; rotate z 45.0;rotate x 80;",
@@ -25,10 +26,15 @@
   <p id="textMainPage" style="height:20px">J-graph output</p>
   <div id="my_dataviz"></div>
   <script type="module">
-    import { jGraph } from "../src/index.js";
-    var fName1 = "./Androsten_spectrum.csv";
-    var fName2 = "./androstenNoAssignment.csv"
-    var ajgraph = jGraph(fName1, fName2)
+  var nmredata = require('nmredata');
+      var parseSDF = nmredata.parseSDF;
+      var readNmrRecord = nmredata.readNmrRecord;
+      var NmrRecord = nmredata.NmrRecord;
+ import { jGraph } from "../src/index.js"; 
+      var fName1 = "./Androsten_spectrum.csv";
+      var fName2 = "./androstenNoAssignment.csv"
+      var ajgraph = jGraph(fName1, fName2, parseSDF, readNmrRecord, NmrRecord)
+  
   </script>
 
   <h2>J Graph</h2>
