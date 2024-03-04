@@ -996,12 +996,10 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         ]) // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on('end', function (event) {
           updateChart(event);
-        }); 
+        });
 
       // Create the line variable: where both the line and the brush take place
-      var lineSpectrum = svg
-      .append('g')
-      .attr('clip-path', 'url(#clip)');
+      var lineSpectrum = svg.append('g').attr('clip-path', 'url(#clip)');
 
       // Add the spectrum
       lineSpectrum
@@ -1301,24 +1299,27 @@ export function jGraph(fileNameSpectrum, fileNameData) {
 
       function updateChart(event) {
         // Access the selection from the event object
+
         var extent = event.selection;
+                console.log("updateCharting updateChart with event " + extent)
+
         if (!extent) {
           if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
           // No selection, reset the idleTimeout
           x.domain([
-            d3.min(spectrumData, function (d) {
+            d3.max(spectrumData, function (d) {
               return +d.chemShift;
             }),
-            d3.max(spectrumData, function (d) {
+            d3.min(spectrumData, function (d) {
               return +d.chemShift;
             }),
           ]);
           // Reset x domain
         } else {
           x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-           // Update x domain based on brush selection
+          // Update x domain based on brush selection
           lineSpectrum.select('.brush').call(brush.move, null);
-           // Clear the brush area
+          // Clear the brush area
         }
 
         // Update axis and line position
@@ -1366,18 +1367,22 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       }
 
       // If user double click, reinitialize the chart
-      svg.on('dblclick', function () {
+      if (false) svg.on('dblclick', function () {
+        /*
+        // Reset x domain to the full data range
         x.domain([
-          d3.max(chemShift, function (d) {
-            return +d.chemShift;
-          }),
-          d3.min(chemShift, function (d) {
-            return +d.chemShift;
+          d3.max(spectrumData, function (d) {
+            return d.chemShift;
+          }), // Ensure this matches the initial domain setup
+          d3.min(spectrumData, function (d) {
+            return d.chemShift;
           }),
         ]);
+        // Update x-axis
         xAxis.transition().call(d3.axisBottom(x));
+        // Recalculate and update the line path to reflect the full data range
         lineSpectrum
-          .select('.line')
+          .select('.lineG')
           .transition()
           .attr(
             'd',
@@ -1385,11 +1390,32 @@ export function jGraph(fileNameSpectrum, fileNameData) {
               .line()
               .x(function (d) {
                 return x(d.chemShift);
-              })
+              }) // Use updated x scale for new x values
               .y(function (d) {
                 return y(d.value);
-              }),
+              }), // Keep y the same
           );
+*/
+        // If using a brush, clear the current selection
+        // This is optional and depends on whether you want to clear the brush upon resetting the zoom
+        // lineSpectrum.select('.brush').call(brush.move, null);
+
+var originalDomain = [
+    d3.min(spectrumData, function(d) { return +d.chemShift; }),
+    d3.max(spectrumData, function(d) { return +d.chemShift; })
+  ];
+console.log("original " + originalDomain)
+
+  // Simulate an event with a selection that covers the full x scale range
+  var simulatedEvent = {
+    selection: [x(originalDomain[1]), x(originalDomain[0])]
+  };
+   var simulatedEvent2 = {
+    selection: [4.0, 3.0]
+  };
+  // Call updateChart with the simulated event
+  //updateChart(simulatedEvent2);
+
       });
     }
 
