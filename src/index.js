@@ -995,7 +995,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
           [widthOfThePlot, height],
         ]) // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on('end', function (event) {
-          updateChart(event); 
+          updateChart(event);
         }); 
 
       // Create the line variable: where both the line and the brush take place
@@ -1302,26 +1302,30 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       function updateChart(event) {
         // Access the selection from the event object
         var extent = event.selection;
-
         if (!extent) {
           if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
+          // No selection, reset the idleTimeout
           x.domain([
-            d3.max(chemShift, function (d) {
+            d3.min(spectrumData, function (d) {
               return +d.chemShift;
             }),
-            d3.min(chemShift, function (d) {
+            d3.max(spectrumData, function (d) {
               return +d.chemShift;
             }),
           ]);
+          // Reset x domain
         } else {
           x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-          d3.select(this).select('.brush').call(brush.move, null); // Use 'this' to refer to the element the brush is applied to
+           // Update x domain based on brush selection
+          lineSpectrum.select('.brush').call(brush.move, null);
+           // Clear the brush area
         }
 
         // Update axis and line position
         xAxis.transition().duration(1000).call(d3.axisBottom(x));
 
-        d3.select(this) 
+        // Recalculate and update the line path
+        lineSpectrum
           .select('.lineG')
           .transition()
           .duration(1000)
