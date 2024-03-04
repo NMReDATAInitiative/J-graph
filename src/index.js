@@ -259,61 +259,80 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     });
     var indicesSorted = new Array(len);
     for (i = 0; i < len; ++i) indicesSorted[indices[i]] = i;
-    let dataColumns = [];
 
-    for (let i = 0; i < processedData.arrayColumns.length; i++) {
-      // Loop over columns
-      let listOfJs = [];
+    function populateDataColumns(
+      processedData,
+      jGraphData,
+      chemColumnArray,
+      labelColumnArray,
+      indicesSorted,
+      indexAtomMol,
+      updateBlockPosition,
+      minSpaceBetweekCircles,
+      minSpaceBetweekBlocks,
+    ) {
+      let dataColumns = [];
+      for (let i = 0; i < processedData.arrayColumns.length; i++) {
+        let listOfJs = [];
 
-      jGraphData.forEach((d, i1) => {
-        const condition = d.Label !== 'noAssignement';
+        jGraphData.forEach((d, i1) => {
+          const condition = d.Label !== 'noAssignement';
 
-        if (i + 1 === +d.indexColumn1) {
-          // SAME BLOCK, converting string to number
-          listOfJs.push({
-            isAssigned: condition,
-            indexInAssignmentList: i1,
-            isFirstInAssignmentIndex: true,
-            Jvalue: +d.Jvalue, // Ensuring numerical value
-            JlevelAvoidContact: Math.abs(+d.Jvalue),
-          });
-        }
-        if (i + 1 === +d.indexColumn2) {
-          // SAME BLOCK, converting string to number
+          if (i + 1 === +d.indexColumn1) {
+            listOfJs.push({
+              isAssigned: condition,
+              indexInAssignmentList: i1,
+              isFirstInAssignmentIndex: true,
+              Jvalue: +d.Jvalue,
+              JlevelAvoidContact: Math.abs(+d.Jvalue),
+            });
+          }
+          if (i + 1 === +d.indexColumn2) {
+            listOfJs.push({
+              isAssigned: condition,
+              indexInAssignmentList: i1,
+              isFirstInAssignmentIndex: false,
+              Jvalue: +d.Jvalue,
+              JlevelAvoidContact: Math.abs(+d.Jvalue),
+            });
+          }
+        });
 
-          listOfJs.push({
-            isAssigned: condition,
-            indexInAssignmentList: i1,
-            isFirstInAssignmentIndex: false,
-            Jvalue: +d.Jvalue, // Ensuring numerical value
-            JlevelAvoidContact: Math.abs(+d.Jvalue),
-          });
-        }
-      });
+        listOfJs.sort((a, b) => a.JlevelAvoidContact - b.JlevelAvoidContact);
 
-      // Sort listOfJs based on absolute values of JlevelAvoidContact
-      listOfJs.sort((a, b) => a.JlevelAvoidContact - b.JlevelAvoidContact);
+        listOfJs = updateBlockPosition(
+          listOfJs,
+          minSpaceBetweekCircles,
+          minSpaceBetweekBlocks,
+        );
 
-      // Add to dataColumns
-      listOfJs = updateBlockPosition(
-        listOfJs,
-        minSpaceBetweekCircles,
-        minSpaceBetweekBlocks,
+        dataColumns.push({
+          chemShift: chemColumnArray[i],
+          labelColumn: labelColumnArray[i],
+          MyIndex: indicesSorted[i],
+          atomIndexMol: indexAtomMol[i],
+          listOfJs: listOfJs,
+        });
+      }
+
+      dataColumns.sort((a, b) =>
+        a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0,
       );
 
-      dataColumns.push({
-        chemShift: chemColumnArray[i],
-        labelColumn: labelColumnArray[i],
-        MyIndex: indicesSorted[i],
-        atomIndexMol: indexAtomMol[i],
-        listOfJs: listOfJs,
-      });
+      return dataColumns;
     }
 
-    // HERE ADD
-    dataColumns.sort((a, b) => {
-      return a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0;
-    });
+    let dataColumns = populateDataColumns(
+      processedData,
+      jGraphData,
+      chemColumnArray,
+      labelColumnArray,
+      indicesSorted,
+      indexAtomMol,
+      updateBlockPosition,
+      minSpaceBetweekCircles,
+      minSpaceBetweekBlocks,
+    );
 
     var assignedCouplings = new AssignedCouplings(dataColumns);
     //assignedCouplings.consconstructFromJgraphtructor(jGraph);  // obsolete
@@ -335,38 +354,49 @@ export function jGraph(fileNameSpectrum, fileNameData) {
          'uniqIndex': dataUnassignedCoupCircles.length,
        });
      }*/
-    var dataUnassignedCoupCircles = [];
-    for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
-      for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
-        if (!dataColumns[indexList1].listOfJs[i1].isAssigned) {
-          dataUnassignedCoupCircles.push({
-            chemShift: dataColumns[indexList1].chemShift,
-            valueOnBar: dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
-            value: dataColumns[indexList1].listOfJs[i1].Jvalue,
-            MyIndex: indexList1,
-            dataColIndex1: indexList1,
-            dataColIndex2: i1,
-            uniqIndex: dataUnassignedCoupCircles.length,
-            indexAtomMol: dataColumns[indexList1].atomIndexMol,
-          });
+    function populateDataUnassignedCoupCircles(dataColumns) {
+      let dataUnassignedCoupCircles = [];
+      for (let indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+        for (let i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+          if (!dataColumns[indexList1].listOfJs[i1].isAssigned) {
+            dataUnassignedCoupCircles.push({
+              chemShift: dataColumns[indexList1].chemShift,
+              valueOnBar: dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
+              value: dataColumns[indexList1].listOfJs[i1].Jvalue,
+              MyIndex: indexList1,
+              dataColIndex1: indexList1,
+              dataColIndex2: i1,
+              uniqIndex: dataUnassignedCoupCircles.length,
+              indexAtomMol: dataColumns[indexList1].atomIndexMol,
+            });
+          }
         }
       }
+      return dataUnassignedCoupCircles;
+    }
+    let dataUnassignedCoupCircles =
+      populateDataUnassignedCoupCircles(dataColumns);
+
+    function populateDataAssignedCoupBlocks(dataColumns) {
+      let dataAssignedCoupBlocks = [];
+      for (let indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
+        for (let i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
+          if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
+            dataAssignedCoupBlocks.push({
+              chemShift: dataColumns[indexList1].chemShift,
+              value: dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
+              trueValue: dataColumns[indexList1].listOfJs[i1].Jvalue,
+              MyIndex: indexList1,
+              uniqIndex: dataAssignedCoupBlocks.length,
+            });
+          }
+        }
+      }
+      return dataAssignedCoupBlocks;
     }
 
-    var dataAssignedCoupBlocks = [];
-    for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
-      for (var i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
-        if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
-          dataAssignedCoupBlocks.push({
-            chemShift: dataColumns[indexList1].chemShift,
-            value: dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
-            trueValue: dataColumns[indexList1].listOfJs[i1].Jvalue,
-            MyIndex: indexList1,
-            uniqIndex: dataAssignedCoupBlocks.length,
-          });
-        }
-      }
-    }
+    let dataAssignedCoupBlocks = populateDataAssignedCoupBlocks(dataColumns);
+
     assignedCouplings.udateLineTrajectory(
       spaceBlock,
       2.0 * lineWidth * nbHzPerPoint,
@@ -897,8 +927,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
              .style("opacity", '0.0')
          }
    */
-
-    function afterReadSpectrum(chemShift) {
+    function visualizeSpectrum(chemShift) {
       // Add X axis
       x = d3
         .scaleLinear()
@@ -911,60 +940,8 @@ export function jGraph(fileNameSpectrum, fileNameData) {
           }),
         ])
         .range([0, widthOfThePlot]);
-      var xAxis = svg
-        .append('g')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(d3.axisBottom(x));
-      // Add Y axis2
-      var yAxisn2 = svg
-        .append('g')
-        .attr('transform', function (d) {
-          return 'translate(' + widthOfThePlot + ')';
-        })
-        .call(d3.axisRight(yJs).ticks(3));
-      var theTicksCouplings = svg
-        .selectAll('tickLines')
-        .data(jGraphParameters.dataTicksCouplings)
-        .enter()
-        .append('line')
-        .attr('class', 'Grid')
-        .attr('x1', lineWidth)
-        .attr('y1', function (d) {
-          return yJs(d);
-        })
-        .attr('x2', widthOfThePlot)
-        .attr('y2', function (d) {
-          return yJs(d);
-        })
-        .attr('stroke', '#EEEEEE')
-        .style('stroke-width', lineWidth);
-      var theGridLinesCouplings = svg
-        .selectAll('theRuler')
-        .data(jGraphParameters.dataTicksCouplings)
-        .enter()
-        .append('line')
-        .attr('class', 'rulerClass')
-        .attr('x1', lineWidth)
-        .attr('y1', yJs(0.0))
-        .attr('x2', widthOfThePlot)
-        .attr('y2', yJs(0.0))
-        .attr('stroke', 'red')
-        .style('stroke-dasharray', [lineWidth * 2, lineWidth * 2])
-        .style('stroke-width', lineWidth)
-        .style('opacity', '0.0');
-      /*
-         var dimensions = [1, 1.2, 1.3, 2, 3, 5];
-         var yn = {};
-         for (i in dimensions) {
-           var name = dimensions[i];
-           yn[name] = d3.scaleLinear()
-             .domain([0.0, 22.0]) // --> Same axis range for each group
-             // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
-             .range([height / 3.0, height / 6.0]);
-         }
-         */
-
-      // Add Y axis
+    
+     // Add Y axis
       var y = d3
         .scaleLinear()
         .domain([
@@ -976,7 +953,8 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         .range([height, 0]);
       //yAxis = svg.append("g") .call(d3.axisLeft(y));
 
-      // Add a clipPath: everything out of this area won't be drawn.
+
+   // Add a clipPath: everything out of this area won't be drawn.
       var clip = svg
         .append('defs')
         .append('svg:clipPath')
@@ -1021,7 +999,156 @@ export function jGraph(fileNameSpectrum, fileNameData) {
               return y(d.value);
             }),
         );
+  // Add the brushing
+      lineSpectrum.append('g').attr('class', 'brush').call(brush);
 
+      var xAxis = svg
+        .append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(d3.axisBottom(x));
+      // Add Y axis2
+
+
+      // A function that set idleTimeOut to null
+      var idleTimeout;
+      function idled() {
+        idleTimeout = null;
+      }
+
+      function updateChart(event) {
+        // Access the selection from the event object
+
+        var extent = event.selection;
+        console.log('updateCharting updateChart with event ' + extent);
+
+        if (!extent) {
+          if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
+          // No selection, reset the idleTimeout
+          x.domain([
+            d3.max(spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+            d3.min(spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+          ]);
+          // Reset x domain
+        } else {
+          x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+          // Update x domain based on brush selection
+          lineSpectrum.select('.brush').call(brush.move, null);
+          // Clear the brush area
+        }
+
+        // Update axis and line position
+        xAxis.transition().duration(1000).call(d3.axisBottom(x));
+
+        // Recalculate and update the line path
+        lineSpectrum
+          .select('.lineG')
+          .transition()
+          .duration(1000)
+          .attr(
+            'd',
+            d3
+              .line()
+              .x(function (d) {
+                return x(d.chemShift);
+              })
+              .y(function (d) {
+                return y(d.value);
+              }),
+          );
+
+        assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
+          dataColumns,
+          leftPosColumns,
+          x,
+          rightPosColumns,
+          smallSpace,
+        );
+        updateColumnsAction(
+          assignedCouplings.spreadPositionsZZ,
+          1000,
+          positionJscale,
+          topJGraphYposition,
+          jGraphParameters.colorShowLine,
+          jGraphParameters.colorHideLine,
+          generalUseWidth,
+          x,
+          widthOfThePlot,
+          jgraphObj,
+          blockWidth,
+          yJs,
+        );
+        assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
+      }
+
+  jgraphObj = {}; // demo code
+      jgraphObj = {
+        ...jgraphObj, // Copy all existing properties of jgraphObj
+        y: y,
+        lineSpectrum: lineSpectrum,
+        brush: brush,
+        xAxis: xAxis,
+      };
+
+return jgraphObj
+    }
+
+    function visualizeJgraph(chemShift) {
+  
+      var yAxisn2 = svg
+        .append('g')
+        .attr('transform', function (d) {
+          return 'translate(' + widthOfThePlot + ')';
+        })
+        .call(d3.axisRight(yJs).ticks(3));
+
+      var theTicksCouplings = svg
+        .selectAll('tickLines')
+        .data(jGraphParameters.dataTicksCouplings)
+        .enter()
+        .append('line')
+        .attr('class', 'Grid')
+        .attr('x1', lineWidth)
+        .attr('y1', function (d) {
+          return yJs(d);
+        })
+        .attr('x2', widthOfThePlot)
+        .attr('y2', function (d) {
+          return yJs(d);
+        })
+        .attr('stroke', '#EEEEEE')
+        .style('stroke-width', lineWidth);
+      var theGridLinesCouplings = svg
+        .selectAll('theRuler')
+        .data(jGraphParameters.dataTicksCouplings)
+        .enter()
+        .append('line')
+        .attr('class', 'rulerClass')
+        .attr('x1', lineWidth)
+        .attr('y1', yJs(0.0))
+        .attr('x2', widthOfThePlot)
+        .attr('y2', yJs(0.0))
+        .attr('stroke', 'red')
+        .style('stroke-dasharray', [lineWidth * 2, lineWidth * 2])
+        .style('stroke-width', lineWidth)
+        .style('opacity', '0.0');
+      /*
+         var dimensions = [1, 1.2, 1.3, 2, 3, 5];
+         var yn = {};
+         for (i in dimensions) {
+           var name = dimensions[i];
+           yn[name] = d3.scaleLinear()
+             .domain([0.0, 22.0]) // --> Same axis range for each group
+             // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
+             .range([height / 3.0, height / 6.0]);
+         }
+         */
+
+    
+      
       // Columns
 
       // oblique
@@ -1253,11 +1380,10 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         .attr('stroke', 'black')
         .style('stroke-width', lineWidthBlocks);
       jgraphObj = {
+        ...jgraphObj, // Copy all existing properties of jgraphObj
         yAxisn2: yAxisn2,
         theTicksCouplings: theTicksCouplings,
         theGridLinesCouplings: theGridLinesCouplings,
-        y: y,
-        brush: brush,
         theColumns: {
           theColumnsConnectColumnToSpectrumPosition:
             theColumnsConnectColumnToSpectrumPosition,
@@ -1286,89 +1412,16 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         yJs,
       );
 
-      // Add the brushing
-      lineSpectrum.append('g').attr('class', 'brush').call(brush);
+    
 
-      // A function that set idleTimeOut to null
-      var idleTimeout;
-      function idled() {
-        idleTimeout = null;
-      }
 
       // A function that update the chart for given boundaries
 
-      function updateChart(event) {
-        // Access the selection from the event object
-
-        var extent = event.selection;
-                console.log("updateCharting updateChart with event " + extent)
-
-        if (!extent) {
-          if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
-          // No selection, reset the idleTimeout
-          x.domain([
-            d3.max(spectrumData, function (d) {
-              return +d.chemShift;
-            }),
-            d3.min(spectrumData, function (d) {
-              return +d.chemShift;
-            }),
-          ]);
-          // Reset x domain
-        } else {
-          x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-          // Update x domain based on brush selection
-          lineSpectrum.select('.brush').call(brush.move, null);
-          // Clear the brush area
-        }
-
-        // Update axis and line position
-        xAxis.transition().duration(1000).call(d3.axisBottom(x));
-
-        // Recalculate and update the line path
-        lineSpectrum
-          .select('.lineG')
-          .transition()
-          .duration(1000)
-          .attr(
-            'd',
-            d3
-              .line()
-              .x(function (d) {
-                return x(d.chemShift);
-              })
-              .y(function (d) {
-                return y(d.value);
-              }),
-          );
-
-        assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-          dataColumns,
-          leftPosColumns,
-          x,
-          rightPosColumns,
-          smallSpace,
-        );
-        updateColumnsAction(
-          assignedCouplings.spreadPositionsZZ,
-          1000,
-          positionJscale,
-          topJGraphYposition,
-          jGraphParameters.colorShowLine,
-          jGraphParameters.colorHideLine,
-          generalUseWidth,
-          x,
-          widthOfThePlot,
-          jgraphObj,
-          blockWidth,
-          yJs,
-        );
-        assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
-      }
 
       // If user double click, reinitialize the chart
-      if (false) svg.on('dblclick', function () {
-        /*
+      if (false)
+        svg.on('dblclick', function () {
+          /*
         // Reset x domain to the full data range
         x.domain([
           d3.max(spectrumData, function (d) {
@@ -1396,30 +1449,33 @@ export function jGraph(fileNameSpectrum, fileNameData) {
               }), // Keep y the same
           );
 */
-        // If using a brush, clear the current selection
-        // This is optional and depends on whether you want to clear the brush upon resetting the zoom
-        // lineSpectrum.select('.brush').call(brush.move, null);
+          // If using a brush, clear the current selection
+          // This is optional and depends on whether you want to clear the brush upon resetting the zoom
+          // lineSpectrum.select('.brush').call(brush.move, null);
 
-var originalDomain = [
-    d3.min(spectrumData, function(d) { return +d.chemShift; }),
-    d3.max(spectrumData, function(d) { return +d.chemShift; })
-  ];
-console.log("original " + originalDomain)
+          var originalDomain = [
+            d3.min(spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+            d3.max(spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+          ];
+          console.log('original ' + originalDomain);
 
-  // Simulate an event with a selection that covers the full x scale range
-  var simulatedEvent = {
-    selection: [x(originalDomain[1]), x(originalDomain[0])]
-  };
-   var simulatedEvent2 = {
-    selection: [4.0, 3.0]
-  };
-  // Call updateChart with the simulated event
-  //updateChart(simulatedEvent2);
-
-      });
+          // Simulate an event with a selection that covers the full x scale range
+          var simulatedEvent = {
+            selection: [x(originalDomain[1]), x(originalDomain[0])],
+          };
+          var simulatedEvent2 = {
+            selection: [4.0, 3.0],
+          };
+          // Call updateChart with the simulated event
+          //updateChart(simulatedEvent2);
+        });
     }
-
-    afterReadSpectrum(spectrumData);
+    jgraphObj = visualizeSpectrum(spectrumData);
+    visualizeJgraph(spectrumData);
   }
 
   // Main call
