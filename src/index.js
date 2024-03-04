@@ -140,7 +140,12 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   const spaceCircle =
     (2.0 * circleRadius + lineWidthBlocks / 2.0 + lineWidth + 1.0) *
     nbHzPerPoint;
-
+ var jGraphParameters = {
+      dataTicksCouplings: [0, 5, 10, 15, 20],
+      colorShowLine: '#CCCCCC',
+      colorHideLine: '#EEEEEE00',
+      delayBeforeErase: 3000,
+    };
   /*
        const jcccol = getJgraphColor(11.2, darkMode);
        console.log("getJgraphColor :jcccol " + jcccol);
@@ -153,6 +158,51 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+var smallSpace = 1;
+    function pathFun(d) {
+      /*
+          The four points for assignment lines  
+           | __ |
+           |/  \|
+           O    O
+           |    |
+          */
+
+      const y1a = jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
+      const y1b = jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
+      // const y2 = yJs(Math.abs(d.JvalueShifted));
+      //const iiidex = d.iindex;
+      //   console.log("iiidex = " + JSON.stringify(d.iindex));
+      //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
+      // HERE
+      //const alterative = dataColumns[0].JvalueAntiOverlap1;//
+      //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
+      const y2 = jgraphObj.yJs(Math.abs(d.JvalueShifted));
+      //const y2 = yJs(Math.abs(d.JvalueShifted));
+      const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
+      const horizontalShiftSideBlock = blockWidth; // make larger here !
+      var usedHorizontalShiftX = eval(horizontalShiftX);
+      var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
+      const cs1 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
+      const cs2 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
+      if (cs1 > cs2) {
+        usedHorizontalShiftX = eval(-usedHorizontalShiftX);
+        usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
+      }
+
+      const combine = [
+        [cs1 + usedHorizontalShiftSideBlock, y1a],
+        [cs1 + usedHorizontalShiftX, y2],
+        [cs2 - usedHorizontalShiftX, y2],
+        [cs2 - usedHorizontalShiftSideBlock, y1b],
+      ];
+      d.xx = (cs1 + cs2) / 2.0;
+      var Gen = d3.line();
+
+      return Gen(combine);
+    }
+
 
   function processCSVData(jGraphData) {
     return jGraphData.reduce(
@@ -221,8 +271,102 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       console.error('Error processing or visualizing the data ', error);
     }
   }
-  function visualizeData(jGraphData, spectrumData) {
 
+var jgraphObj = {};
+ // A function that set idleTimeOut to null
+      var idleTimeout;
+      function idled() {
+        idleTimeout = null;
+      }
+
+      function updateChart(event) {
+        // Access the selection from the event object
+
+        var extent = event.selection;
+        console.log('updateCharting updateChart with event ' + extent);
+
+        if (!extent) {
+          if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
+          // No selection, reset the idleTimeout
+         
+          jgraphObj.x.domain([
+            d3.max(jgraphObj.spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+            d3.min(jgraphObj.spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+          ]);
+          // Reset x domain
+        } else {
+          jgraphObj.x.domain([jgraphObj.x.invert(extent[0]), jgraphObj.x.invert(extent[1])]);
+          // Update x domain based on brush selection
+          jgraphObj.lineSpectrum.select('.brush').call(jgraphObj.brush.move, null);
+          // Clear the brush area
+        }
+
+        // Update axis and line position
+        jgraphObj.xAxis.transition().duration(1000).call(d3.axisBottom(jgraphObj.x));
+
+        // Recalculate and update the line path
+        jgraphObj.lineSpectrum
+          .select('.lineG')
+          .transition()
+          .duration(1000)
+          .attr(
+            'd',
+            d3
+              .line()
+              .x(function (d) {
+                return jgraphObj.x(d.chemShift);
+              })
+              .y(function (d) {
+                return jgraphObj.y(d.value);
+              }),
+          );
+        var numberItem = 1;
+        if ('dataColumns' in jgraphObj && 'theColumns' in jgraphObj) {
+          jgraphObj.dataColumns.length;
+           smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
+          if (smallSpace > preferedDistanceInPtBetweenColumns) {
+            smallSpace = preferedDistanceInPtBetweenColumns;
+          }
+          jgraphObj.assignedCouplings.spreadPositionsZZ =
+            updateColumnsPositions(
+              jgraphObj.dataColumns,
+              jgraphObj.leftPosColumns,
+              jgraphObj.x,
+              jgraphObj.rightPosColumns,
+              smallSpace,
+            );
+          updateColumnsAction(
+            jgraphObj.assignedCouplings.spreadPositionsZZ,
+            1000,
+            positionJscale,
+            topJGraphYposition,
+            jGraphParameters.colorShowLine,
+            jGraphParameters.colorHideLine,
+            generalUseWidth,
+            jgraphObj.x,
+            widthOfThePlot,
+            jgraphObj,
+            blockWidth,
+            jgraphObj.yJs,
+          );
+        } else {
+          console.log("no dataColumns && theColumns in jgraphObj");
+          console.log(" dataColumns  in jgraphObj" +  jgraphObj.dataColumns);
+          console.log(" theColumns  in jgraphObj" +  jgraphObj.theColumns);
+        }
+        if ('assignedCouplings' in jgraphObj) {
+          jgraphObj.assignedCouplings.updateTheLines(
+            jgraphObj.yJs,
+            smallSpace,
+            blockWidth,
+            pathFun,
+          );
+        }
+      }
 function visualizeSpectrum(chemShift) {
 
       // Add X axis
@@ -306,95 +450,21 @@ function visualizeSpectrum(chemShift) {
       // Add Y axis2
 
 
-      // A function that set idleTimeOut to null
-      var idleTimeout;
-      function idled() {
-        idleTimeout = null;
-      }
-
-      function updateChart(event) {
-        // Access the selection from the event object
-
-        var extent = event.selection;
-        console.log('updateCharting updateChart with event ' + extent);
-
-        if (!extent) {
-          if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
-          // No selection, reset the idleTimeout
-          x.domain([
-            d3.max(spectrumData, function (d) {
-              return +d.chemShift;
-            }),
-            d3.min(spectrumData, function (d) {
-              return +d.chemShift;
-            }),
-          ]);
-          // Reset x domain
-        } else {
-          x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-          // Update x domain based on brush selection
-          jgraphObj.lineSpectrum.select('.brush').call(brush.move, null);
-          // Clear the brush area
-        }
-
-        // Update axis and line position
-        jgraphObj.xAxis.transition().duration(1000).call(d3.axisBottom(x));
-
-        // Recalculate and update the line path
-        jgraphObj.lineSpectrum
-          .select('.lineG')
-          .transition()
-          .duration(1000)
-          .attr(
-            'd',
-            d3
-              .line()
-              .x(function (d) {
-                return x(d.chemShift);
-              })
-              .y(function (d) {
-                return y(d.value);
-              }),
-          );
-
-        assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-          dataColumns,
-          leftPosColumns,
-          x,
-          rightPosColumns,
-          smallSpace,
-        );
-        updateColumnsAction(
-          assignedCouplings.spreadPositionsZZ,
-          1000,
-          positionJscale,
-          topJGraphYposition,
-          jGraphParameters.colorShowLine,
-          jGraphParameters.colorHideLine,
-          generalUseWidth,
-          x,
-          widthOfThePlot,
-          jgraphObj,
-          blockWidth,
-          yJs,
-        );
-        assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
-      }
-
-  jgraphObj = {}; // demo code
-      jgraphObj = {
+       jgraphObj = {
         ...jgraphObj, // Copy all existing properties of jgraphObj
         x: x,
         y: y,
         lineSpectrum: lineSpectrum,
         brush: brush,
         xAxis: xAxis,
+        spectrumData: chemShift,
       };
 
-return jgraphObj
     }
-    var jgraphObj = visualizeSpectrum(spectrumData);
 
+  function visualizeData(jGraphData, spectrumData) {
+
+    visualizeSpectrum(spectrumData);
 
 
     const processedData = processCSVData(jGraphData);
@@ -497,7 +567,7 @@ return jgraphObj
       return dataColumns;
     }
 
-    let dataColumns = populateDataColumns(
+    jgraphObj.dataColumns = populateDataColumns(
       processedData,
       jGraphData,
       chemColumnArray,
@@ -509,7 +579,7 @@ return jgraphObj
       minSpaceBetweekBlocks,
     );
 
-    var assignedCouplings = new AssignedCouplings(dataColumns);
+    jgraphObj.assignedCouplings = new AssignedCouplings(jgraphObj.dataColumns);
     //assignedCouplings.consconstructFromJgraphtructor(jGraph);  // obsolete
 
     /*  var dataUnassignedCoupCircles = [];
@@ -550,7 +620,7 @@ return jgraphObj
       return dataUnassignedCoupCircles;
     }
     let dataUnassignedCoupCircles =
-      populateDataUnassignedCoupCircles(dataColumns);
+      populateDataUnassignedCoupCircles(jgraphObj.dataColumns);
 
     function populateDataAssignedCoupBlocks(dataColumns) {
       let dataAssignedCoupBlocks = [];
@@ -570,19 +640,19 @@ return jgraphObj
       return dataAssignedCoupBlocks;
     }
 
-    let dataAssignedCoupBlocks = populateDataAssignedCoupBlocks(dataColumns);
+    let dataAssignedCoupBlocks = populateDataAssignedCoupBlocks(jgraphObj.dataColumns);
 
-    assignedCouplings.udateLineTrajectory(
+    jgraphObj.assignedCouplings.udateLineTrajectory(
       spaceBlock,
       2.0 * lineWidth * nbHzPerPoint,
       spaceCircle,
-      dataColumns,
+      jgraphObj.dataColumns,
     );
     //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
     // Make list of positions according to size of jGraphData
     const numberItem = arrayColumns.length;
-    var smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
+     smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
     if (smallSpace > preferedDistanceInPtBetweenColumns) {
       smallSpace = preferedDistanceInPtBetweenColumns;
     }
@@ -595,17 +665,16 @@ return jgraphObj
       leftPosColumns.push(curPosLeft);
       rightPosColumns.push(curPosRight);
     }
+jgraphObj.leftPosColumns = leftPosColumns;
+jgraphObj.rightPosColumns = rightPosColumns;
 
-    // console.log("Left pos :" + JSON.stringify(leftPosColumns));
-    // console.log("Right pos :" + JSON.stringify(rightPosColumns));
-
-    var yJs = d3
+    jgraphObj.yJs = d3
       .scaleLinear()
       .domain([0, maxScaleJ])
       .range([heightJscale + positionJscale, positionJscale]);
 
 
-    var highlightColumn = function (event, d) {
+    jgraphObj.highlightColumn = function (event, d) {
       jmolUnselectAll();
       const number = d.atomIndexMol; // Assuming 'atomIndexMol' is a property of 'd'
       const atomColorHighlightSingle = [127, 255, 127];
@@ -631,71 +700,30 @@ return jgraphObj
      };
 */
 
-    var jGraphParameters = {
-      dataTicksCouplings: [0, 5, 10, 15, 20],
-      colorShowLine: '#CCCCCC',
-      colorHideLine: '#EEEEEE00',
-      delayBeforeErase: 3000,
-    };
+   
 
-    function pathFun(d) {
-      /*
-          The four points for assignment lines  
-           | __ |
-           |/  \|
-           O    O
-           |    |
-          */
-
-      const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
-      const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
-      // const y2 = yJs(Math.abs(d.JvalueShifted));
-      //const iiidex = d.iindex;
-      //   console.log("iiidex = " + JSON.stringify(d.iindex));
-      //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
-      // HERE
-      //const alterative = dataColumns[0].JvalueAntiOverlap1;//
-      //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
-      const y2 = yJs(Math.abs(d.JvalueShifted));
-      //const y2 = yJs(Math.abs(d.JvalueShifted));
-      const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
-      const horizontalShiftSideBlock = blockWidth; // make larger here !
-      var usedHorizontalShiftX = eval(horizontalShiftX);
-      var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-      const cs1 = assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-      const cs2 = assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-      if (cs1 > cs2) {
-        usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-        usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-      }
-
-      const combine = [
-        [cs1 + usedHorizontalShiftSideBlock, y1a],
-        [cs1 + usedHorizontalShiftX, y2],
-        [cs2 - usedHorizontalShiftX, y2],
-        [cs2 - usedHorizontalShiftSideBlock, y1b],
-      ];
-      d.xx = (cs1 + cs2) / 2.0;
-      var Gen = d3.line();
-
-      return Gen(combine);
-    }
 
  
 
     var highlightDot = function (d, wasDoubleClicked) {
-      assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-        dataColumns,
-        leftPosColumns,
+      if ('assignedCouplings' in jgraphObj) {
+              if ('spreadPositionsZZ' in jgraphObj.assignedCouplings) {
+
+      jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
+        jgraphObj.dataColumns,
+        jgraphObj.leftPosColumns,
         jgraphObj.x,
-        rightPosColumns,
+        jgraphObj.rightPosColumns,
         smallSpace,
       );
+              }
+              }
+
       var spreadPositionsNew = updateColumnsPositions(
-        dataColumns,
-        leftPosColumns,
+        jgraphObj.dataColumns,
+        jgraphObj.leftPosColumns,
         jgraphObj.x,
-        rightPosColumns,
+        jgraphObj.rightPosColumns,
         smallSpace,
       );
 
@@ -725,35 +753,35 @@ return jgraphObj
         if (wasDoubleClicked) {
           document.getElementById('textMainPage').innerHTML =
             'TMP Info :  ' + referenceSpinMol + ' ' + partnerSpinNumberMol;
-          assignedCouplings.theLinesW = assignedCouplings.addAssignment(
-            dataColumns,
+          jgraphObj.assignedCouplings.theLinesW = jgraphObj.assignedCouplings.addAssignment(
+            jgraphObj.dataColumns,
             referenceSpin,
             partnerSpinObj,
             svg,
             lineWidth,
             darkMode,
             generalUseWidth,
-            yJs,
+            jgraphObj.yJs,
             smallSpace,
             blockWidth,
             pathFun,
           );
-          dataColumns[referenceSpin.dataColIndex1].listOfJs[
+          jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs[
             referenceSpin.dataColIndex2
           ].isAssigned = true;
-          dataColumns[partnerSpinObj.dataColIndex1].listOfJs[
+          jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs[
             partnerSpinObj.dataColIndex2
           ].isAssigned = true;
 
-          dataColumns[referenceSpin.dataColIndex1].listOfJs =
+          jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs =
             updateBlockPosition(
-              dataColumns[referenceSpin.dataColIndex1].listOfJs,
+              jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs,
               minSpaceBetweekCircles,
               minSpaceBetweekBlocks,
             );
-          dataColumns[partnerSpinObj.dataColIndex1].listOfJs =
+          jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs =
             updateBlockPosition(
-              dataColumns[partnerSpinObj.dataColIndex1].listOfJs,
+              jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs,
               minSpaceBetweekCircles,
               minSpaceBetweekBlocks,
             );
@@ -762,15 +790,15 @@ return jgraphObj
           // UGLY FIX TO BE MOVED OUT
           for (
             var indexList1 = 0;
-            indexList1 < dataColumns.length;
+            indexList1 < jgraphObj.dataColumns.length;
             indexList1++
           ) {
             for (
               var i1 = 0;
-              i1 < dataColumns[indexList1].listOfJs.length;
+              i1 < jgraphObj.dataColumns[indexList1].listOfJs.length;
               i1++
             ) {
-              if (!dataColumns[indexList1].listOfJs[i1].isAssigned) {
+              if (!jgraphObj.dataColumns[indexList1].listOfJs[i1].isAssigned) {
                 for (
                   var iloo = 0;
                   iloo < dataUnassignedCoupCircles.length;
@@ -781,7 +809,7 @@ return jgraphObj
                   ) {
                     if (dataUnassignedCoupCircles[iloo].dataColIndex2 == i1) {
                       dataUnassignedCoupCircles[iloo].valueOnBar =
-                        dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact;
+                        jgraphObj.dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact;
                     }
                   }
                 }
@@ -789,16 +817,16 @@ return jgraphObj
             }
           }
 
-          assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-            dataColumns,
-            leftPosColumns,
+          jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
+            jgraphObj.dataColumns,
+            jgraphObj.leftPosColumns,
             jgraphObj.x,
-            rightPosColumns,
+            jgraphObj.rightPosColumns,
             smallSpace,
           );
 
           updateColumnsAction(
-            assignedCouplings.spreadPositionsZZ,
+            jgraphObj.assignedCouplings.spreadPositionsZZ,
             1000,
             positionJscale,
             topJGraphYposition,
@@ -809,17 +837,17 @@ return jgraphObj
             widthOfThePlot,
             jgraphObj,
             blockWidth,
-            yJs,
+            jgraphObj.yJs,
           );
-          assignedCouplings.udateLineTrajectory(
+          jgraphObj.assignedCouplings.udateLineTrajectory(
             spaceBlock,
             2.0 * lineWidth * nbHzPerPoint,
             spaceCircle,
-            dataColumns,
+            jgraphObj.dataColumns,
           );
 
-          assignedCouplings.updateTheLines(
-            yJs,
+          jgraphObj.assignedCouplings.updateTheLines(
+            jgraphObj.yJs,
             smallSpace,
             blockWidth,
             pathFun,
@@ -841,20 +869,20 @@ return jgraphObj
           var dataAssignedCoupBlocks = [];
           for (
             var indexList1 = 0;
-            indexList1 < dataColumns.length;
+            indexList1 < jgraphObj.dataColumns.length;
             indexList1++
           ) {
             for (
               var i1 = 0;
-              i1 < dataColumns[indexList1].listOfJs.length;
+              i1 < jgraphObj.dataColumns[indexList1].listOfJs.length;
               i1++
             ) {
-              if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
+              if (jgraphObj.dataColumns[indexList1].listOfJs[i1].isAssigned) {
                 dataAssignedCoupBlocks.push({
-                  chemShift: dataColumns[indexList1].chemShift,
+                  chemShift: jgraphObj.dataColumns[indexList1].chemShift,
                   value:
-                    dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
-                  trueValue: dataColumns[indexList1].listOfJs[i1].Jvalue,
+                    jgraphObj.dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
+                  trueValue: jgraphObj.dataColumns[indexList1].listOfJs[i1].Jvalue,
                   MyIndex: indexList1,
                   uniqIndex: dataAssignedCoupBlocks.length,
                 });
@@ -871,7 +899,7 @@ return jgraphObj
               return jgraphObj.x(d.chemShift + blockWidth);
             })
             .attr('y', function (d) {
-              return yJs(Math.abs(d.value)) - halfBlockHeight;
+              return jgraphObj.yJs(Math.abs(d.value)) - halfBlockHeight;
             })
             .attr('width', 2 * blockWidth)
             .attr('height', 2 * halfBlockHeight)
@@ -881,7 +909,7 @@ return jgraphObj
             .attr('stroke', 'black')
             .style('stroke-width', lineWidthBlocks);
           updateColumnsAction(
-            assignedCouplings.spreadPositionsZZ,
+            jgraphObj.assignedCouplings.spreadPositionsZZ,
             0,
             positionJscale,
             topJGraphYposition,
@@ -892,7 +920,7 @@ return jgraphObj
             widthOfThePlot,
             jgraphObj,
             blockWidth,
-            yJs,
+            jgraphObj.yJs,
           );
         }
       }
@@ -1016,15 +1044,15 @@ return jgraphObj
         .transition()
         .duration(200)
         .delay(0)
-        .attr('y1', yJs(Math.abs(d.value)))
-        .attr('y2', yJs(Math.abs(d.value)))
+        .attr('y1', jgraphObj.yJs(Math.abs(d.value)))
+        .attr('y2', jgraphObj.yJs(Math.abs(d.value)))
         .style('opacity', '1.0')
         .style('stroke', highColor)
         .transition()
         .duration(200)
         .delay(jGraphParameters.delayBeforeErase)
-        .attr('y1', yJs(Math.abs(d.value)))
-        .attr('y2', yJs(Math.abs(d.value)))
+        .attr('y1', jgraphObj.yJs(Math.abs(d.value)))
+        .attr('y2', jgraphObj.yJs(Math.abs(d.value)))
         .style('opacity', '0.0')
         .style('stroke', 'black');
 
@@ -1046,7 +1074,7 @@ return jgraphObj
         //   .attr("class", "toBesgdfgfsgdHidden")
         .attr('x', spreadPositionsNew[d.MyIndex])
         // .attr("x",  x(d.chemShift))
-        .attr('y', yJs(Math.abs(d.valueOnBar) + 3.0))
+        .attr('y', jgraphObj.yJs(Math.abs(d.valueOnBar) + 3.0))
         //  .text( "J = " + d.value + "val " + (Math.abs(d.valueOnBar + 3.0)) + " pos:" + spreadPositionsNew[d.MyIndex])
         .text('J = ' + d.value)
         // .attr('dx', 1.3 * generalUseWidth)
@@ -1104,14 +1132,14 @@ return jgraphObj
      function visualizeJgraph() {
       var yAxisn = svg
       .append('g')
-      .call(d3.axisLeft(yJs).ticks(3));
+      .call(d3.axisLeft(jgraphObj.yJs).ticks(3));
 
       var yAxisn2 = svg
         .append('g')
         .attr('transform', function (d) {
           return 'translate(' + widthOfThePlot + ')';
         })
-        .call(d3.axisRight(yJs).ticks(3));
+        .call(d3.axisRight(jgraphObj.yJs).ticks(3));
 
       var theTicksCouplings = svg
         .selectAll('tickLines')
@@ -1121,11 +1149,11 @@ return jgraphObj
         .attr('class', 'Grid')
         .attr('x1', lineWidth)
         .attr('y1', function (d) {
-          return yJs(d);
+          return jgraphObj.yJs(d);
         })
         .attr('x2', widthOfThePlot)
         .attr('y2', function (d) {
-          return yJs(d);
+          return jgraphObj.yJs(d);
         })
         .attr('stroke', '#EEEEEE')
         .style('stroke-width', lineWidth);
@@ -1136,9 +1164,9 @@ return jgraphObj
         .append('line')
         .attr('class', 'rulerClass')
         .attr('x1', lineWidth)
-        .attr('y1', yJs(0.0))
+        .attr('y1', jgraphObj.yJs(0.0))
         .attr('x2', widthOfThePlot)
-        .attr('y2', yJs(0.0))
+        .attr('y2', jgraphObj.yJs(0.0))
         .attr('stroke', 'red')
         .style('stroke-dasharray', [lineWidth * 2, lineWidth * 2])
         .style('stroke-width', lineWidth)
@@ -1162,16 +1190,16 @@ return jgraphObj
       // oblique
       //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
       var spreadPositionsUU = updateColumnsPositions(
-        dataColumns,
-        leftPosColumns,
+        jgraphObj.dataColumns,
+        jgraphObj.leftPosColumns,
         jgraphObj.x,
-        rightPosColumns,
+        jgraphObj.rightPosColumns,
         smallSpace,
       );
 
       var theColumnsConnectColumnToSpectrumPosition = svg
         .selectAll('columnns')
-        .data(dataColumns)
+        .data(jgraphObj.dataColumns)
         .enter()
         .append('line')
         .attr('class', 'ColunnSegment1')
@@ -1189,12 +1217,12 @@ return jgraphObj
         })
         .attr('stroke', jGraphParameters.colorHideLine) // just sketched... update wil fix colors
         .style('stroke-width', lineWidthCircle)
-        .on('click', highlightColumn)
-        .on('mouseover', highlightColumn);
+        .on('click', jgraphObj.highlightColumn)
+        .on('mouseover', jgraphObj.highlightColumn);
       // streight down
       var theColumnsVerticalInSpectrum = svg
         .selectAll('ColunnSegment2')
-        .data(dataColumns)
+        .data(jgraphObj.dataColumns)
         .enter()
         .append('line')
         .attr('class', 'Colunn')
@@ -1212,11 +1240,11 @@ return jgraphObj
         })
         .attr('stroke', jGraphParameters.colorHideLine) // just sketched... update wil fix colors
         .style('stroke-width', lineWidthCircle)
-        .on('click', highlightColumn)
-        .on('mouseover', highlightColumn);
+        .on('click', jgraphObj.highlightColumn)
+        .on('mouseover', jgraphObj.highlightColumn);
       var theColumnsMainVerticalLine = svg
         .selectAll('ColunnSegment3')
-        .data(dataColumns)
+        .data(jgraphObj.dataColumns)
         .enter()
         .append('line')
         .attr('class', 'Colunn')
@@ -1234,12 +1262,12 @@ return jgraphObj
         })
         .attr('stroke', 'black') // just sketched... update wil fix colors
         .style('stroke-width', lineWidthColumn)
-        .on('click', highlightColumn)
-        .on('mouseover', highlightColumn);
+        .on('click', jgraphObj.highlightColumn)
+        .on('mouseover', jgraphObj.highlightColumn);
 
       var theColumnsBase = svg
         .selectAll('ColunnSegment4')
-        .data(dataColumns)
+        .data(jgraphObj.dataColumns)
         .enter()
         .append('line')
         .attr('class', 'Colunn')
@@ -1257,12 +1285,12 @@ return jgraphObj
         })
         .attr('stroke', 'black') // just sketched... update wil fix colors
         .style('stroke-width', lineWidthCircle)
-        .on('click', highlightColumn)
-        .on('mouseover', highlightColumn);
+        .on('click', jgraphObj.highlightColumn)
+        .on('mouseover', jgraphObj.highlightColumn);
 
       var theColumnLabel = svg
         .selectAll('textc')
-        .data(dataColumns)
+        .data(jgraphObj.dataColumns)
         .enter()
         .append('text')
         .attr('class', function (d) {
@@ -1281,27 +1309,27 @@ return jgraphObj
         .attr('dx', -1.0 * generalUseWidth)
         .style('font-size', generalUseWidth * 2.5)
         .style('font-family', 'Helvetica')
-        .on('click', highlightColumn)
-        .on('mouseover', highlightColumn);
+        .on('click', jgraphObj.highlightColumn)
+        .on('mouseover', jgraphObj.highlightColumn);
       //.style("font-weight", "2pt")
       // Lines
 
-      assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-        dataColumns,
-        leftPosColumns,
+      jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
+        jgraphObj.dataColumns,
+        jgraphObj.leftPosColumns,
         jgraphObj.x,
-        rightPosColumns,
+        jgraphObj.rightPosColumns,
         smallSpace,
       );
       var spreadPositionsZZ = updateColumnsPositions(
-        dataColumns,
-        leftPosColumns,
+        jgraphObj.dataColumns,
+        jgraphObj.leftPosColumns,
         jgraphObj.x,
-        rightPosColumns,
+        jgraphObj.rightPosColumns,
         smallSpace,
       );
-
-      assignedCouplings.theLinesW = assignedCouplings.makeGraphic(
+      if ('assignedCouplings' in jgraphObj) {
+      jgraphObj.assignedCouplings.theLinesW = jgraphObj.assignedCouplings.makeGraphic(
         jgraphObj.x,
         svg,
         lineWidth,
@@ -1309,10 +1337,10 @@ return jgraphObj
         generalUseWidth,
         smallSpace,
         blockWidth,
-        yJs,
+        jgraphObj.yJs,
         pathFun,
       );
-
+      }
       // Circles
       var theDots = svg
         .selectAll('dots')
@@ -1324,7 +1352,7 @@ return jgraphObj
           return jgraphObj.x(d.chemShift);
         })
         .attr('cy', function (d) {
-          return yJs(Math.abs(d.valueOnBar));
+          return jgraphObj.yJs(Math.abs(d.valueOnBar));
         })
         .attr('r', circleRadius)
         .style('fill', function (d) {
@@ -1351,7 +1379,7 @@ return jgraphObj
            .enter()
            .append("text")
            .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-           .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar + 3.0)); })
+           .attr("y", function (d) { return jgraphObj.yJs(Math.abs(d.valueOnBar + 3.0)); })
            // .style("fill", "gray")
            //   .attr("stroke", "red")
            // .style("stroke-width", lineWidthBlocks)
@@ -1361,7 +1389,7 @@ return jgraphObj
            .style("font-family", "Helvetica")
            .attr("x", function (d) { return MyIndex; })
           // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
-         //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
+         //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + jgraphObj.yJs(Math.abs(d.value)) + ")"; })
            .attr("opacity", 0.0);
         //   .transition().duration(100).delay(3000);
           // .remove();
@@ -1378,7 +1406,7 @@ return jgraphObj
           return x(d.chemShift + blockWidth);
         })
         .attr('y', function (d) {
-          return yJs(Math.abs(d.value)) - halfBlockHeight;
+          return jgraphObj.yJs(Math.abs(d.value)) - halfBlockHeight;
         })
         .attr('width', 2 * blockWidth)
         .attr('height', 2 * halfBlockHeight)
@@ -1401,7 +1429,6 @@ return jgraphObj
           theColumnsBase: theColumnsBase,
           theColumnLabel: theColumnLabel,
         },
-        theLinesW: assignedCouplings.theLinesW,
         theDots: theDots,
         theBlocks: theBlocks,
       };
@@ -1418,7 +1445,7 @@ return jgraphObj
         widthOfThePlot,
         jgraphObj,
         blockWidth,
-        yJs,
+        jgraphObj.yJs,
       );
 
     
