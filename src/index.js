@@ -222,6 +222,181 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     }
   }
   function visualizeData(jGraphData, spectrumData) {
+
+function visualizeSpectrum(chemShift) {
+
+      // Add X axis
+      var x = d3
+        .scaleLinear()
+        .domain([
+          d3.max(chemShift, function (d) {
+            return +d.chemShift;
+          }),
+          d3.min(chemShift, function (d) {
+            return +d.chemShift;
+          }),
+        ])
+        .range([0, widthOfThePlot]);
+    
+     // Add Y axis
+      var y = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(chemShift, function (d) {
+            return +d.value;
+          }),
+        ])
+        .range([height, 0]);
+      //yAxis = svg.append("g") .call(d3.axisLeft(y));
+
+
+   // Add a clipPath: everything out of this area won't be drawn.
+      var clip = svg
+        .append('defs')
+        .append('svg:clipPath')
+        .attr('id', 'clip')
+        .append('svg:rect')
+        .attr('width', widthOfThePlot)
+        .attr('height', height)
+        .attr('x', 0)
+        .attr('y', 0);
+
+      // Add brushing
+      var brush = d3
+        .brushX() // Add the brush feature using the d3.brush function
+        .extent([
+          [0, 0],
+          [widthOfThePlot, height],
+        ]) // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .on('end', function (event) {
+          updateChart(event);
+        });
+
+      // Create the line variable: where both the line and the brush take place
+      var lineSpectrum = svg.append('g').attr('clip-path', 'url(#clip)');
+
+      // Add the spectrum
+      lineSpectrum
+        .append('path')
+        .datum(chemShift)
+        .attr('class', 'lineG') // add the class line to be able to modify this line later on.
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        // .attr("stroke", "red")
+        .attr('stroke-width', lineWidth)
+        .attr(
+          'd',
+          d3
+            .line()
+            .x(function (d) {
+              return x(d.chemShift);
+            })
+            .y(function (d) {
+              return y(d.value);
+            }),
+        );
+  // Add the brushing
+      lineSpectrum.append('g').attr('class', 'brush').call(brush);
+
+      var xAxis = svg
+        .append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(d3.axisBottom(x));
+      // Add Y axis2
+
+
+      // A function that set idleTimeOut to null
+      var idleTimeout;
+      function idled() {
+        idleTimeout = null;
+      }
+
+      function updateChart(event) {
+        // Access the selection from the event object
+
+        var extent = event.selection;
+        console.log('updateCharting updateChart with event ' + extent);
+
+        if (!extent) {
+          if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
+          // No selection, reset the idleTimeout
+          x.domain([
+            d3.max(spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+            d3.min(spectrumData, function (d) {
+              return +d.chemShift;
+            }),
+          ]);
+          // Reset x domain
+        } else {
+          x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+          // Update x domain based on brush selection
+          jgraphObj.lineSpectrum.select('.brush').call(brush.move, null);
+          // Clear the brush area
+        }
+
+        // Update axis and line position
+        jgraphObj.xAxis.transition().duration(1000).call(d3.axisBottom(x));
+
+        // Recalculate and update the line path
+        jgraphObj.lineSpectrum
+          .select('.lineG')
+          .transition()
+          .duration(1000)
+          .attr(
+            'd',
+            d3
+              .line()
+              .x(function (d) {
+                return x(d.chemShift);
+              })
+              .y(function (d) {
+                return y(d.value);
+              }),
+          );
+
+        assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
+          dataColumns,
+          leftPosColumns,
+          x,
+          rightPosColumns,
+          smallSpace,
+        );
+        updateColumnsAction(
+          assignedCouplings.spreadPositionsZZ,
+          1000,
+          positionJscale,
+          topJGraphYposition,
+          jGraphParameters.colorShowLine,
+          jGraphParameters.colorHideLine,
+          generalUseWidth,
+          x,
+          widthOfThePlot,
+          jgraphObj,
+          blockWidth,
+          yJs,
+        );
+        assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
+      }
+
+  jgraphObj = {}; // demo code
+      jgraphObj = {
+        ...jgraphObj, // Copy all existing properties of jgraphObj
+        x: x,
+        y: y,
+        lineSpectrum: lineSpectrum,
+        brush: brush,
+        xAxis: xAxis,
+      };
+
+return jgraphObj
+    }
+    var jgraphObj = visualizeSpectrum(spectrumData);
+
+
+
     const processedData = processCSVData(jGraphData);
     // const unassignedCouplings = new UnassignedCouplings(processedData); // Adjust based on actual data needs
     let arrayColumns = [];
@@ -429,7 +604,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       .domain([0, maxScaleJ])
       .range([heightJscale + positionJscale, positionJscale]);
 
-    var yAxisn = svg.append('g').call(d3.axisLeft(yJs).ticks(3));
 
     var highlightColumn = function (event, d) {
       jmolUnselectAll();
@@ -507,22 +681,20 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       return Gen(combine);
     }
 
-    var jgraphObj = {};
-
-    var x = d3.scaleLinear();
+ 
 
     var highlightDot = function (d, wasDoubleClicked) {
       assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
         dataColumns,
         leftPosColumns,
-        x,
+        jgraphObj.x,
         rightPosColumns,
         smallSpace,
       );
       var spreadPositionsNew = updateColumnsPositions(
         dataColumns,
         leftPosColumns,
-        x,
+        jgraphObj.x,
         rightPosColumns,
         smallSpace,
       );
@@ -620,7 +792,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
           assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
             dataColumns,
             leftPosColumns,
-            x,
+            jgraphObj.x,
             rightPosColumns,
             smallSpace,
           );
@@ -633,7 +805,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
             jGraphParameters.colorShowLine,
             jGraphParameters.colorHideLine,
             generalUseWidth,
-            x,
+            jgraphObj.x,
             widthOfThePlot,
             jgraphObj,
             blockWidth,
@@ -696,7 +868,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
             .append('rect')
             .attr('class', 'circleS')
             .attr('x', function (d) {
-              return x(d.chemShift + blockWidth);
+              return jgraphObj.x(d.chemShift + blockWidth);
             })
             .attr('y', function (d) {
               return yJs(Math.abs(d.value)) - halfBlockHeight;
@@ -716,7 +888,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
             jGraphParameters.colorShowLine,
             jGraphParameters.colorHideLine,
             generalUseWidth,
-            x,
+            jgraphObj.x,
             widthOfThePlot,
             jgraphObj,
             blockWidth,
@@ -927,177 +1099,13 @@ export function jGraph(fileNameSpectrum, fileNameData) {
              .style("opacity", '0.0')
          }
    */
-    function visualizeSpectrum(chemShift) {
-      // Add X axis
-      x = d3
-        .scaleLinear()
-        .domain([
-          d3.max(chemShift, function (d) {
-            return +d.chemShift;
-          }),
-          d3.min(chemShift, function (d) {
-            return +d.chemShift;
-          }),
-        ])
-        .range([0, widthOfThePlot]);
-    
-     // Add Y axis
-      var y = d3
-        .scaleLinear()
-        .domain([
-          0,
-          d3.max(chemShift, function (d) {
-            return +d.value;
-          }),
-        ])
-        .range([height, 0]);
-      //yAxis = svg.append("g") .call(d3.axisLeft(y));
+   
 
+     function visualizeJgraph() {
+      var yAxisn = svg
+      .append('g')
+      .call(d3.axisLeft(yJs).ticks(3));
 
-   // Add a clipPath: everything out of this area won't be drawn.
-      var clip = svg
-        .append('defs')
-        .append('svg:clipPath')
-        .attr('id', 'clip')
-        .append('svg:rect')
-        .attr('width', widthOfThePlot)
-        .attr('height', height)
-        .attr('x', 0)
-        .attr('y', 0);
-
-      // Add brushing
-      var brush = d3
-        .brushX() // Add the brush feature using the d3.brush function
-        .extent([
-          [0, 0],
-          [widthOfThePlot, height],
-        ]) // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-        .on('end', function (event) {
-          updateChart(event);
-        });
-
-      // Create the line variable: where both the line and the brush take place
-      var lineSpectrum = svg.append('g').attr('clip-path', 'url(#clip)');
-
-      // Add the spectrum
-      lineSpectrum
-        .append('path')
-        .datum(chemShift)
-        .attr('class', 'lineG') // add the class line to be able to modify this line later on.
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        // .attr("stroke", "red")
-        .attr('stroke-width', lineWidth)
-        .attr(
-          'd',
-          d3
-            .line()
-            .x(function (d) {
-              return x(d.chemShift);
-            })
-            .y(function (d) {
-              return y(d.value);
-            }),
-        );
-  // Add the brushing
-      lineSpectrum.append('g').attr('class', 'brush').call(brush);
-
-      var xAxis = svg
-        .append('g')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(d3.axisBottom(x));
-      // Add Y axis2
-
-
-      // A function that set idleTimeOut to null
-      var idleTimeout;
-      function idled() {
-        idleTimeout = null;
-      }
-
-      function updateChart(event) {
-        // Access the selection from the event object
-
-        var extent = event.selection;
-        console.log('updateCharting updateChart with event ' + extent);
-
-        if (!extent) {
-          if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
-          // No selection, reset the idleTimeout
-          x.domain([
-            d3.max(spectrumData, function (d) {
-              return +d.chemShift;
-            }),
-            d3.min(spectrumData, function (d) {
-              return +d.chemShift;
-            }),
-          ]);
-          // Reset x domain
-        } else {
-          x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-          // Update x domain based on brush selection
-          lineSpectrum.select('.brush').call(brush.move, null);
-          // Clear the brush area
-        }
-
-        // Update axis and line position
-        xAxis.transition().duration(1000).call(d3.axisBottom(x));
-
-        // Recalculate and update the line path
-        lineSpectrum
-          .select('.lineG')
-          .transition()
-          .duration(1000)
-          .attr(
-            'd',
-            d3
-              .line()
-              .x(function (d) {
-                return x(d.chemShift);
-              })
-              .y(function (d) {
-                return y(d.value);
-              }),
-          );
-
-        assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-          dataColumns,
-          leftPosColumns,
-          x,
-          rightPosColumns,
-          smallSpace,
-        );
-        updateColumnsAction(
-          assignedCouplings.spreadPositionsZZ,
-          1000,
-          positionJscale,
-          topJGraphYposition,
-          jGraphParameters.colorShowLine,
-          jGraphParameters.colorHideLine,
-          generalUseWidth,
-          x,
-          widthOfThePlot,
-          jgraphObj,
-          blockWidth,
-          yJs,
-        );
-        assignedCouplings.updateTheLines(yJs, smallSpace, blockWidth, pathFun);
-      }
-
-  jgraphObj = {}; // demo code
-      jgraphObj = {
-        ...jgraphObj, // Copy all existing properties of jgraphObj
-        y: y,
-        lineSpectrum: lineSpectrum,
-        brush: brush,
-        xAxis: xAxis,
-      };
-
-return jgraphObj
-    }
-
-    function visualizeJgraph(chemShift) {
-  
       var yAxisn2 = svg
         .append('g')
         .attr('transform', function (d) {
@@ -1156,7 +1164,7 @@ return jgraphObj
       var spreadPositionsUU = updateColumnsPositions(
         dataColumns,
         leftPosColumns,
-        x,
+        jgraphObj.x,
         rightPosColumns,
         smallSpace,
       );
@@ -1281,20 +1289,20 @@ return jgraphObj
       assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
         dataColumns,
         leftPosColumns,
-        x,
+        jgraphObj.x,
         rightPosColumns,
         smallSpace,
       );
       var spreadPositionsZZ = updateColumnsPositions(
         dataColumns,
         leftPosColumns,
-        x,
+        jgraphObj.x,
         rightPosColumns,
         smallSpace,
       );
 
       assignedCouplings.theLinesW = assignedCouplings.makeGraphic(
-        x,
+        jgraphObj.x,
         svg,
         lineWidth,
         darkMode,
@@ -1313,7 +1321,7 @@ return jgraphObj
         .append('circle')
         .attr('class', 'circleL')
         .attr('cx', function (d) {
-          return x(d.chemShift);
+          return jgraphObj.x(d.chemShift);
         })
         .attr('cy', function (d) {
           return yJs(Math.abs(d.valueOnBar));
@@ -1381,6 +1389,7 @@ return jgraphObj
         .style('stroke-width', lineWidthBlocks);
       jgraphObj = {
         ...jgraphObj, // Copy all existing properties of jgraphObj
+        yAxisn: yAxisn,
         yAxisn2: yAxisn2,
         theTicksCouplings: theTicksCouplings,
         theGridLinesCouplings: theGridLinesCouplings,
@@ -1405,7 +1414,7 @@ return jgraphObj
         jGraphParameters.colorShowLine,
         jGraphParameters.colorHideLine,
         generalUseWidth,
-        x,
+        jgraphObj.x,
         widthOfThePlot,
         jgraphObj,
         blockWidth,
@@ -1474,8 +1483,7 @@ return jgraphObj
           //updateChart(simulatedEvent2);
         });
     }
-    jgraphObj = visualizeSpectrum(spectrumData);
-    visualizeJgraph(spectrumData);
+    visualizeJgraph();
   }
 
   // Main call
