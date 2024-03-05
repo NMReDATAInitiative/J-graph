@@ -79,9 +79,6 @@ export function jGraphNmredata(
   readNmrRecord,
   NmrRecord,
 ) {
-  console.log('text parseSDF 2 ' + parseSDF);
-  console.log('text readNmrRecord 2 ' + readNmrRecord);
-  console.log('text NmrRecord 2 ' + NmrRecord);
   jGraph(fileNameSpectrum, fileNameData);
 }
 export function jGraph(fileNameSpectrum, fileNameData) {
@@ -89,74 +86,130 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   // set the dimensions and margins of the graph
   //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
- 
-function initializeSettings(overrideSettings = {}) {
-  const smallScreen = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  function initializeSettings(overrideSettings = {}) {
+    const smallScreen =
+      /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      );
 
-  // Default settings
-  let defaultSettings = {
-    spectrum: {
-      margin: smallScreen ? { top: 50, right: 10, bottom: 30, left: 10 } : { top: 10, right: 30, bottom: 30, left: 60 },
-      bodyWidth: 800,
-      bodyHeight: smallScreen ? 1000 : 450,
-      lineWidth: smallScreen ? 5 : 1.5,
-      darkMode: false,
-    },
-    jGraph: {
-      ratioOccupyJgraph: smallScreen ? 0.5 : 0.25,
-      spaceBetweenColumns: smallScreen ? 5 : 10,
-      maxScaleJ: 22.0,
-      generalUseWidth: smallScreen ? 15.0 : 5.0,
-      jGraphParameters: {
-        dataTicksCouplings: [0, 5, 10, 15, 20],
-        colorShowLine: '#CCCCCC',
-        colorHideLine: '#EEEEEE00',
-        delayBeforeErase: 3000,
-      }
-    }
-  };
+    // Default settings
+    let defaultSettings = {
+      spectrum: {
+        margin: smallScreen
+          ? { top: 50, right: 10, bottom: 30, left: 10 }
+          : { top: 10, right: 30, bottom: 30, left: 60 },
+        bodyWidth: 800,
+        bodyHeight: smallScreen ? 1000 : 450,
+        lineWidth: smallScreen ? 5 : 1.5,
+        darkMode: false,
+      },
+      jGraph: {
+        ratioOccupyJgraph: smallScreen ? 0.5 : 0.25,
+        spaceBetweenColumns: smallScreen ? 5 : 10,
+        maxScaleJ: 22.0,
+        generalUseWidth: smallScreen ? 15.0 : 5.0,
+        jGraphParameters: {
+          dataTicksCouplings: [0, 5, 10, 15, 20],
+          colorShowLine: '#CCCCCC',
+          colorHideLine: '#EEEEEE00',
+          delayBeforeErase: 3000,
+        },
+      },
+    };
 
-  // Merge default settings with overrides
-  let settings = { ...defaultSettings, ...overrideSettings };
+    // Merge default settings with overrides
+    let settings = { ...defaultSettings, ...overrideSettings };
 
-  // Calculate derived values
-settings.spectrum.widthOfThePlot = settings.spectrum.bodyWidth - settings.spectrum.margin.left - settings.spectrum.margin.right;
-settings.spectrum.height = settings.spectrum.bodyHeight - settings.spectrum.margin.top - settings.spectrum.margin.bottom;
+    // Calculate derived values
+    settings.spectrum.widthOfThePlot =
+      settings.spectrum.bodyWidth -
+      settings.spectrum.margin.left -
+      settings.spectrum.margin.right;
+    settings.spectrum.height =
+      settings.spectrum.bodyHeight -
+      settings.spectrum.margin.top -
+      settings.spectrum.margin.bottom;
 
-settings.jGraph.circleRadius = Math.round(settings.jGraph.generalUseWidth * 0.8);
-settings.jGraph.blockWidth = Math.round(settings.jGraph.generalUseWidth * 0.9);
-settings.jGraph.halfBlockHeight = Math.round(settings.jGraph.generalUseWidth / 3.0);
-settings.jGraph.lineWidthCircle = settings.spectrum.lineWidth;
-settings.jGraph.lineWidthColumn = Math.round(settings.spectrum.lineWidth / 2.0);
-settings.jGraph.lineWidthBlocks = Math.round(settings.spectrum.lineWidth / 2.0);
-settings.jGraph.heightJscale = settings.spectrum.height * settings.jGraph.ratioOccupyJgraph;
-settings.jGraph.positionJscale = 20;
-settings.jGraph.topJGraphYposition = 0;
-settings.jGraph.bottomJGraphYposition = settings.jGraph.heightJscale;
-settings.jGraph.pointingLineColum = settings.jGraph.bottomJGraphYposition + 20;
-settings.jGraph.nbHzPerPoint = settings.jGraph.maxScaleJ / settings.jGraph.heightJscale;
-settings.jGraph.minSpaceBetweekBlocks = settings.jGraph.nbHzPerPoint * (2 * settings.jGraph.halfBlockHeight + (1.0 * settings.jGraph.lineWidthBlocks) / 2.0);
-settings.jGraph.minSpaceBetweekCircles = settings.jGraph.nbHzPerPoint * (2 * settings.jGraph.circleRadius + (2.0 * settings.jGraph.lineWidthBlocks) / 2.0);
-settings.jGraph.spaceBlock = (settings.jGraph.halfBlockHeight + settings.jGraph.lineWidthBlocks / 2.0 + +1.0) * settings.jGraph.nbHzPerPoint;
-settings.jGraph.spaceCircle = (2.0 * settings.jGraph.circleRadius + settings.jGraph.lineWidthBlocks / 2.0 + settings.spectrum.lineWidth + 1.0) * settings.jGraph.nbHzPerPoint;
-settings.jGraph.preferedDistanceInPtBetweenColumns =2.0 * settings.jGraph.generalUseWidth + settings.jGraph.lineWidthCircle + settings.jGraph.spaceBetweenColumns;
+    settings.jGraph.circleRadius = Math.round(
+      settings.jGraph.generalUseWidth * 0.8,
+    );
+    settings.jGraph.blockWidth = Math.round(
+      settings.jGraph.generalUseWidth * 0.9,
+    );
+    settings.jGraph.halfBlockHeight = Math.round(
+      settings.jGraph.generalUseWidth / 3.0,
+    );
+    settings.jGraph.lineWidthCircle = settings.spectrum.lineWidth;
+    settings.jGraph.lineWidthColumn = Math.round(
+      settings.spectrum.lineWidth / 2.0,
+    );
+    settings.jGraph.lineWidthBlocks = Math.round(
+      settings.spectrum.lineWidth / 2.0,
+    );
+    settings.jGraph.heightJscale =
+      settings.spectrum.height * settings.jGraph.ratioOccupyJgraph;
+    settings.jGraph.positionJscale = 20;
+    settings.jGraph.topJGraphYposition = 0;
+    settings.jGraph.bottomJGraphYposition = settings.jGraph.heightJscale;
+    settings.jGraph.pointingLineColum =
+      settings.jGraph.bottomJGraphYposition + 20;
+    settings.jGraph.nbHzPerPoint =
+      settings.jGraph.maxScaleJ / settings.jGraph.heightJscale;
+    settings.jGraph.minSpaceBetweekBlocks =
+      settings.jGraph.nbHzPerPoint *
+      (2 * settings.jGraph.halfBlockHeight +
+        (1.0 * settings.jGraph.lineWidthBlocks) / 2.0);
+    settings.jGraph.minSpaceBetweekCircles =
+      settings.jGraph.nbHzPerPoint *
+      (2 * settings.jGraph.circleRadius +
+        (2.0 * settings.jGraph.lineWidthBlocks) / 2.0);
+    settings.jGraph.spaceBlock =
+      (settings.jGraph.halfBlockHeight +
+        settings.jGraph.lineWidthBlocks / 2.0 +
+        +1.0) *
+      settings.jGraph.nbHzPerPoint;
+    settings.jGraph.spaceCircle =
+      (2.0 * settings.jGraph.circleRadius +
+        settings.jGraph.lineWidthBlocks / 2.0 +
+        settings.spectrum.lineWidth +
+        1.0) *
+      settings.jGraph.nbHzPerPoint;
+    settings.jGraph.preferedDistanceInPtBetweenColumns =
+      2.0 * settings.jGraph.generalUseWidth +
+      settings.jGraph.lineWidthCircle +
+      settings.jGraph.spaceBetweenColumns;
 
-  return settings;
-}
+    return settings;
+  }
 
-// Example usage with overriding default values
-const settings = initializeSettings({});
-console.log("settings " + settings)
-console.log("settings 2 " + JSON.stringify(settings))
+  // Example usage with overriding default values
+  const settings = initializeSettings({});
 
   // append the svg object to the body of the page
   var svg = d3
     .select('#my_dataviz')
     .append('svg')
-    .attr('width', settings.spectrum.widthOfThePlot + settings.spectrum.margin.left + settings.spectrum.margin.right)
-    .attr('height', settings.spectrum.height + settings.spectrum.margin.top + settings.spectrum.margin.bottom)
+    .attr(
+      'width',
+      settings.spectrum.widthOfThePlot +
+        settings.spectrum.margin.left +
+        settings.spectrum.margin.right,
+    )
+    .attr(
+      'height',
+      settings.spectrum.height +
+        settings.spectrum.margin.top +
+        settings.spectrum.margin.bottom,
+    )
     .append('g')
-    .attr('transform', 'translate(' + settings.spectrum.margin.left + ',' + settings.spectrum.margin.top + ')');
+    .attr(
+      'transform',
+      'translate(' +
+        settings.spectrum.margin.left +
+        ',' +
+        settings.spectrum.margin.top +
+        ')',
+    );
 
   var jgraphObj = {};
   jgraphObj.smallSpace = 1;
@@ -186,7 +239,8 @@ console.log("settings 2 " + JSON.stringify(settings))
     //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
     const y2 = jgraphObj.yJs(Math.abs(d.JvalueShifted));
     //const y2 = yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX = jgraphObj.smallSpace - settings.jGraph.blockWidth - 1.5; // make larger here !
+    const horizontalShiftX =
+      jgraphObj.smallSpace - settings.jGraph.blockWidth - 1.5; // make larger here !
     const horizontalShiftSideBlock = settings.jGraph.blockWidth; // make larger here !
     var usedHorizontalShiftX = eval(horizontalShiftX);
     var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
@@ -253,7 +307,7 @@ console.log("settings 2 " + JSON.stringify(settings))
     try {
       // Ensure d3.csv properly loads the data
       const jGraphData = await d3.csv(fileNameData);
-      console.log('Loaded data from ' + fileNameData + ' : ', jGraphData);
+      console.log('Loaded data from ' + fileNameData);
       if (!Array.isArray(jGraphData)) {
         throw new Error('Data loaded ' + fileNameData + ' is not an array.');
       } else {
@@ -321,9 +375,14 @@ console.log("settings 2 " + JSON.stringify(settings))
     var numberItem = 1;
     if ('dataColumns' in jgraphObj && 'theColumns' in jgraphObj) {
       jgraphObj.dataColumns.length;
-      jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
-      if (jgraphObj.smallSpace > settings.jGraph.preferedDistanceInPtBetweenColumns) {
-        jgraphObj.smallSpace = settings.jGraph.preferedDistanceInPtBetweenColumns;
+      jgraphObj.smallSpace =
+        settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
+      if (
+        jgraphObj.smallSpace >
+        settings.jGraph.preferedDistanceInPtBetweenColumns
+      ) {
+        jgraphObj.smallSpace =
+          settings.jGraph.preferedDistanceInPtBetweenColumns;
       }
       jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
         jgraphObj.dataColumns,
@@ -348,8 +407,6 @@ console.log("settings 2 " + JSON.stringify(settings))
       );
     } else {
       console.log('no dataColumns && theColumns in jgraphObj');
-      console.log(' dataColumns  in jgraphObj' + jgraphObj.dataColumns);
-      console.log(' theColumns  in jgraphObj' + jgraphObj.theColumns);
     }
     if ('assignedCouplings' in jgraphObj) {
       jgraphObj.assignedCouplings.updateTheLines(
@@ -643,7 +700,9 @@ console.log("settings 2 " + JSON.stringify(settings))
     // Make list of positions according to size of jGraphData
     const numberItem = arrayColumns.length;
     jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
-    if (jgraphObj.smallSpace > settings.jGraph.preferedDistanceInPtBetweenColumns) {
+    if (
+      jgraphObj.smallSpace > settings.jGraph.preferedDistanceInPtBetweenColumns
+    ) {
       jgraphObj.smallSpace = settings.jGraph.preferedDistanceInPtBetweenColumns;
     }
 
@@ -651,7 +710,9 @@ console.log("settings 2 " + JSON.stringify(settings))
     var rightPosColumns = [];
     for (let i = 0; i < numberItem; i++) {
       const curPosLeft = (i + 0.5) * jgraphObj.smallSpace;
-      const curPosRight = settings.spectrum.widthOfThePlot - (numberItem - i - 0.5) * jgraphObj.smallSpace;
+      const curPosRight =
+        settings.spectrum.widthOfThePlot -
+        (numberItem - i - 0.5) * jgraphObj.smallSpace;
       leftPosColumns.push(curPosLeft);
       rightPosColumns.push(curPosRight);
     }
@@ -661,7 +722,10 @@ console.log("settings 2 " + JSON.stringify(settings))
     jgraphObj.yJs = d3
       .scaleLinear()
       .domain([0, settings.jGraph.maxScaleJ])
-      .range([settings.jGraph.heightJscale + settings.jGraph.positionJscale, settings.jGraph.positionJscale]);
+      .range([
+        settings.jGraph.heightJscale + settings.jGraph.positionJscale,
+        settings.jGraph.positionJscale,
+      ]);
 
     jgraphObj.highlightColumn = function (event, d) {
       jmolUnselectAll();
@@ -689,7 +753,6 @@ console.log("settings 2 " + JSON.stringify(settings))
      };
 */
 
-
     //  Unhighlight
     /*    var doNotHighlightDot = function (d) {
            d3.selectAll(".circleL")
@@ -710,174 +773,185 @@ console.log("settings 2 " + JSON.stringify(settings))
          }
    */
 
-   
-//////////////////////////////////////////////////
+    //////////////////////////////////////////////////
 
-//////////////////////////////////////////////////
+    //////////////////////////////////////////////////
   }
 
-function visualizeAssignment() {
+  function visualizeAssignment() {
+    jgraphObj.spreadPositionsUU = updateColumnsPositions(
+      jgraphObj.dataColumns,
+      jgraphObj.leftPosColumns,
+      jgraphObj.x,
+      jgraphObj.rightPosColumns,
+      jgraphObj.smallSpace,
+    );
 
+    var theColumnsConnectColumnToSpectrumPosition = svg
+      .selectAll('columnns')
+      .data(jgraphObj.dataColumns)
+      .enter()
+      .append('line')
+      .attr('class', 'ColunnSegment1')
+      .attr('x1', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('x2', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('y1', function (d) {
+        return (
+          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('y2', function (d) {
+        return (
+          settings.jGraph.pointingLineColum + settings.jGraph.positionJscale
+        );
+      })
+      .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
+      .style('stroke-width', settings.jGraph.lineWidthColumn)
+      .on('click', jgraphObj.highlightColumn)
+      .on('mouseover', jgraphObj.highlightColumn);
+    // streight down
+    var theColumnsVerticalInSpectrum = svg
+      .selectAll('ColunnSegment2')
+      .data(jgraphObj.dataColumns)
+      .enter()
+      .append('line')
+      .attr('class', 'Colunn')
+      .attr('x1', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('x2', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('y1', function (d) {
+        return (
+          settings.jGraph.pointingLineColum + settings.jGraph.positionJscale
+        );
+      })
+      .attr('y2', function (d) {
+        return settings.spectrum.height;
+      })
+      .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
+      .style('stroke-width', settings.jGraph.lineWidthColumn)
+      .on('click', jgraphObj.highlightColumn)
+      .on('mouseover', jgraphObj.highlightColumn);
 
- jgraphObj.spreadPositionsUU = updateColumnsPositions(
-        jgraphObj.dataColumns,
-        jgraphObj.leftPosColumns,
-        jgraphObj.x,
-        jgraphObj.rightPosColumns,
-        jgraphObj.smallSpace,
-      );
+    var theColumnsMainVerticalBackLine = svg
+      .selectAll('ColunnSegment9')
+      .data(jgraphObj.dataColumns)
+      .enter()
+      .append('line')
+      .attr('class', 'Colunn')
+      .attr('x1', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('x2', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('y1', function (d) {
+        return (
+          settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('y2', function (d) {
+        return (
+          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
+      .style('stroke-width', settings.jGraph.lineWidthColumn)
+      .on('click', jgraphObj.highlightColumn)
+      .on('mouseover', jgraphObj.highlightColumn);
 
-   var theColumnsConnectColumnToSpectrumPosition = svg
-        .selectAll('columnns')
-        .data(jgraphObj.dataColumns)
-        .enter()
-        .append('line')
-        .attr('class', 'ColunnSegment1')
-        .attr('x1', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('x2', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('y1', function (d) {
-          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('y2', function (d) {
-          return settings.jGraph.pointingLineColum + settings.jGraph.positionJscale;
-        })
-        .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-        .style('stroke-width', settings.jGraph.lineWidthColumn)
-        .on('click', jgraphObj.highlightColumn)
-        .on('mouseover', jgraphObj.highlightColumn);
-      // streight down
-      var theColumnsVerticalInSpectrum = svg
-        .selectAll('ColunnSegment2')
-        .data(jgraphObj.dataColumns)
-        .enter()
-        .append('line')
-        .attr('class', 'Colunn')
-        .attr('x1', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('x2', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('y1', function (d) {
-          return settings.jGraph.pointingLineColum + settings.jGraph.positionJscale;
-        })
-        .attr('y2', function (d) {
-          return settings.spectrum.height;
-        })
-        .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-        .style('stroke-width', settings.jGraph.lineWidthColumn)
-        .on('click', jgraphObj.highlightColumn)
-        .on('mouseover', jgraphObj.highlightColumn);
+    var theColumnLabel = svg
+      .selectAll('textc')
+      .data(jgraphObj.dataColumns)
+      .enter()
+      .append('text')
+      .attr('class', function (d) {
+        return 'textColumn' + d.uniqIndex;
+      })
+      .attr('x', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('y', function (d) {
+        return (
+          -3 +
+          settings.jGraph.topJGraphYposition +
+          settings.jGraph.positionJscale
+        );
+      })
+      // .text(function (d) { return "" + d.chemShift; })
+      .text(function (d) {
+        return '' + d.labelColumn;
+      })
+      .attr('dx', -1.0 * settings.jGraph.generalUseWidth)
+      .style('font-size', settings.jGraph.generalUseWidth * 2.5)
+      .style('font-family', 'Helvetica')
+      .on('click', jgraphObj.highlightColumn)
+      .on('mouseover', jgraphObj.highlightColumn);
 
-  var theColumnsMainVerticalBackLine = svg
-        .selectAll('ColunnSegment9')
-        .data(jgraphObj.dataColumns)
-        .enter()
-        .append('line')
-        .attr('class', 'Colunn')
-        .attr('x1', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('x2', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('y1', function (d) {
-          return settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('y2', function (d) {
-          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-        .style('stroke-width', settings.jGraph.lineWidthColumn)
-        .on('click', jgraphObj.highlightColumn)
-        .on('mouseover', jgraphObj.highlightColumn);
-
-
-      var theColumnLabel = svg
-        .selectAll('textc')
-        .data(jgraphObj.dataColumns)
-        .enter()
-        .append('text')
-        .attr('class', function (d) {
-          return 'textColumn' + d.uniqIndex;
-        })
-        .attr('x', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('y', function (d) {
-          return -3 + settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale;
-        })
-        // .text(function (d) { return "" + d.chemShift; })
-        .text(function (d) {
-          return '' + d.labelColumn;
-        })
-        .attr('dx', -1.0 * settings.jGraph.generalUseWidth)
-        .style('font-size', settings.jGraph.generalUseWidth * 2.5)
-        .style('font-family', 'Helvetica')
-        .on('click', jgraphObj.highlightColumn)
-        .on('mouseover', jgraphObj.highlightColumn);
-
-
-      
-      //.style("font-weight", "2pt")
-      // Lines
-      jgraphObj = {
-        ...jgraphObj, // Copy all existing properties of jgraphObj
-        theColumns: {
-          theColumnsConnectColumnToSpectrumPosition: theColumnsConnectColumnToSpectrumPosition,
-          theColumnsVerticalInSpectrum: theColumnsVerticalInSpectrum,
-          theColumnLabel: theColumnLabel,
-          theColumnsMainVerticalBackLine: theColumnsMainVerticalBackLine,
-        },
-      };
+    //.style("font-weight", "2pt")
+    // Lines
+    jgraphObj = {
+      ...jgraphObj, // Copy all existing properties of jgraphObj
+      theColumns: {
+        theColumnsConnectColumnToSpectrumPosition:
+          theColumnsConnectColumnToSpectrumPosition,
+        theColumnsVerticalInSpectrum: theColumnsVerticalInSpectrum,
+        theColumnLabel: theColumnLabel,
+        theColumnsMainVerticalBackLine: theColumnsMainVerticalBackLine,
+      },
+    };
   }
 
- function visualizeJgraph() {
+  function visualizeJgraph() {
+    var yAxisn = svg.append('g').call(d3.axisLeft(jgraphObj.yJs).ticks(3));
 
-      var yAxisn = svg.append('g').call(d3.axisLeft(jgraphObj.yJs).ticks(3));
+    var yAxisn2 = svg
+      .append('g')
+      .attr('transform', function (d) {
+        return 'translate(' + settings.spectrum.widthOfThePlot + ')';
+      })
+      .call(d3.axisRight(jgraphObj.yJs).ticks(3));
 
-      var yAxisn2 = svg
-        .append('g')
-        .attr('transform', function (d) {
-          return 'translate(' + settings.spectrum.widthOfThePlot + ')';
-        })
-        .call(d3.axisRight(jgraphObj.yJs).ticks(3));
-
-      var theTicksCouplings = svg
-        .selectAll('tickLines')
-        .data(settings.jGraph.jGraphParameters.dataTicksCouplings)
-        .enter()
-        .append('line')
-        .attr('class', 'Grid')
-        .attr('x1', settings.spectrum.lineWidth)
-        .attr('y1', function (d) {
-          return jgraphObj.yJs(d);
-        })
-        .attr('x2', settings.spectrum.widthOfThePlot)
-        .attr('y2', function (d) {
-          return jgraphObj.yJs(d);
-        })
-        .attr('stroke', '#EEEEEE')
-        .style('stroke-width', settings.spectrum.lineWidth);
-      var theGridLinesCouplings = svg
-        .selectAll('theRuler')
-        .data(settings.jGraph.jGraphParameters.dataTicksCouplings)
-        .enter()
-        .append('line')
-        .attr('class', 'rulerClass')
-        .attr('x1', settings.spectrum.lineWidth)
-        .attr('y1', jgraphObj.yJs(0.0))
-        .attr('x2', settings.spectrum.widthOfThePlot)
-        .attr('y2', jgraphObj.yJs(0.0))
-        .attr('stroke', 'red')
-        .style('stroke-dasharray', [settings.spectrum.lineWidth * 2, settings.spectrum.lineWidth * 2])
-        .style('stroke-width', settings.spectrum.lineWidth)
-        .style('opacity', '0.0');
-      /*
+    var theTicksCouplings = svg
+      .selectAll('tickLines')
+      .data(settings.jGraph.jGraphParameters.dataTicksCouplings)
+      .enter()
+      .append('line')
+      .attr('class', 'Grid')
+      .attr('x1', settings.spectrum.lineWidth)
+      .attr('y1', function (d) {
+        return jgraphObj.yJs(d);
+      })
+      .attr('x2', settings.spectrum.widthOfThePlot)
+      .attr('y2', function (d) {
+        return jgraphObj.yJs(d);
+      })
+      .attr('stroke', '#EEEEEE')
+      .style('stroke-width', settings.spectrum.lineWidth);
+    var theGridLinesCouplings = svg
+      .selectAll('theRuler')
+      .data(settings.jGraph.jGraphParameters.dataTicksCouplings)
+      .enter()
+      .append('line')
+      .attr('class', 'rulerClass')
+      .attr('x1', settings.spectrum.lineWidth)
+      .attr('y1', jgraphObj.yJs(0.0))
+      .attr('x2', settings.spectrum.widthOfThePlot)
+      .attr('y2', jgraphObj.yJs(0.0))
+      .attr('stroke', 'red')
+      .style('stroke-dasharray', [
+        settings.spectrum.lineWidth * 2,
+        settings.spectrum.lineWidth * 2,
+      ])
+      .style('stroke-width', settings.spectrum.lineWidth)
+      .style('opacity', '0.0');
+    /*
          var dimensions = [1, 1.2, 1.3, 2, 3, 5];
          var yn = {};
          for (i in dimensions) {
@@ -889,89 +963,100 @@ function visualizeAssignment() {
          }
          */
 
-      // Columns
+    // Columns
 
-      // oblique
-      //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, jgraphObj.smallSpace);
-      jgraphObj.spreadPositionsUU = updateColumnsPositions(
-        jgraphObj.dataColumns,
-        jgraphObj.leftPosColumns,
-        jgraphObj.x,
-        jgraphObj.rightPosColumns,
-        jgraphObj.smallSpace,
-      );
+    // oblique
+    //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, jgraphObj.smallSpace);
+    jgraphObj.spreadPositionsUU = updateColumnsPositions(
+      jgraphObj.dataColumns,
+      jgraphObj.leftPosColumns,
+      jgraphObj.x,
+      jgraphObj.rightPosColumns,
+      jgraphObj.smallSpace,
+    );
 
-     
-      var theColumnsMainVerticalLine = svg
-        .selectAll('ColunnSegment3')
-        .data(jgraphObj.dataColumns)
-        .enter()
-        .append('line')
-        .attr('class', 'Colunn')
-        .attr('x1', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('x2', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex];
-        })
-        .attr('y1', function (d) {
-          return settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('y2', function (d) {
-          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('stroke', 'black') // just sketched... update wil fix colors
-        .style('stroke-width', settings.jGraph.lineWidthColumn)
-        .on('click', jgraphObj.highlightColumn)
-        .on('mouseover', jgraphObj.highlightColumn);
+    var theColumnsMainVerticalLine = svg
+      .selectAll('ColunnSegment3')
+      .data(jgraphObj.dataColumns)
+      .enter()
+      .append('line')
+      .attr('class', 'Colunn')
+      .attr('x1', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('x2', function (d) {
+        return jgraphObj.spreadPositionsUU[d.MyIndex];
+      })
+      .attr('y1', function (d) {
+        return (
+          settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('y2', function (d) {
+        return (
+          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('stroke', 'black') // just sketched... update wil fix colors
+      .style('stroke-width', settings.jGraph.lineWidthColumn)
+      .on('click', jgraphObj.highlightColumn)
+      .on('mouseover', jgraphObj.highlightColumn);
 
-      var theColumnsBase = svg
-        .selectAll('ColunnSegment4')
-        .data(jgraphObj.dataColumns)
-        .enter()
-        .append('line')
-        .attr('class', 'Colunn')
-        .attr('x1', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex] + settings.jGraph.generalUseWidth;
-        })
-        .attr('x2', function (d) {
-          return jgraphObj.spreadPositionsUU[d.MyIndex] - settings.jGraph.generalUseWidth;
-        })
-        .attr('y1', function (d) {
-          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('y2', function (d) {
-          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
-        })
-        .attr('stroke', 'black') // just sketched... update wil fix colors
-        .style('stroke-width', settings.jGraph.lineWidthCircle)
-        .on('click', jgraphObj.highlightColumn)
-        .on('mouseover', jgraphObj.highlightColumn);
+    var theColumnsBase = svg
+      .selectAll('ColunnSegment4')
+      .data(jgraphObj.dataColumns)
+      .enter()
+      .append('line')
+      .attr('class', 'Colunn')
+      .attr('x1', function (d) {
+        return (
+          jgraphObj.spreadPositionsUU[d.MyIndex] +
+          settings.jGraph.generalUseWidth
+        );
+      })
+      .attr('x2', function (d) {
+        return (
+          jgraphObj.spreadPositionsUU[d.MyIndex] -
+          settings.jGraph.generalUseWidth
+        );
+      })
+      .attr('y1', function (d) {
+        return (
+          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('y2', function (d) {
+        return (
+          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
+        );
+      })
+      .attr('stroke', 'black') // just sketched... update wil fix colors
+      .style('stroke-width', settings.jGraph.lineWidthCircle)
+      .on('click', jgraphObj.highlightColumn)
+      .on('mouseover', jgraphObj.highlightColumn);
 
+    jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
+      jgraphObj.dataColumns,
+      jgraphObj.leftPosColumns,
+      jgraphObj.x,
+      jgraphObj.rightPosColumns,
+      jgraphObj.smallSpace,
+    );
 
-      jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-        jgraphObj.dataColumns,
-        jgraphObj.leftPosColumns,
-        jgraphObj.x,
-        jgraphObj.rightPosColumns,
-        jgraphObj.smallSpace,
-      );
-      
-      if ('assignedCouplings' in jgraphObj) {
-        jgraphObj.assignedCouplings.theLinesW =
-          jgraphObj.assignedCouplings.makeGraphic(
-            jgraphObj.x,
-            svg,
-            settings.spectrum.lineWidth,
-            settings.jGraph.darkMode,
-            settings.jGraph.generalUseWidth,
-            jgraphObj.smallSpace,
-            settings.jGraph.blockWidth,
-            jgraphObj.yJs,
-            pathFun,
-          );
-      }
-
+    if ('assignedCouplings' in jgraphObj) {
+      jgraphObj.assignedCouplings.theLinesW =
+        jgraphObj.assignedCouplings.makeGraphic(
+          jgraphObj.x,
+          svg,
+          settings.spectrum.lineWidth,
+          settings.jGraph.darkMode,
+          settings.jGraph.generalUseWidth,
+          jgraphObj.smallSpace,
+          settings.jGraph.blockWidth,
+          jgraphObj.yJs,
+          pathFun,
+        );
+    }
 
     var highlightDot = function (d, wasDoubleClicked) {
       if ('assignedCouplings' in jgraphObj) {
@@ -1074,9 +1159,13 @@ function visualizeAssignment() {
                   iloo++
                 ) {
                   if (
-                    jgraphObj.dataUnassignedCoupCircles[iloo].dataColIndex1 == indexList1
+                    jgraphObj.dataUnassignedCoupCircles[iloo].dataColIndex1 ==
+                    indexList1
                   ) {
-                    if (jgraphObj.dataUnassignedCoupCircles[iloo].dataColIndex2 == i1) {
+                    if (
+                      jgraphObj.dataUnassignedCoupCircles[iloo].dataColIndex2 ==
+                      i1
+                    ) {
                       jgraphObj.dataUnassignedCoupCircles[iloo].valueOnBar =
                         jgraphObj.dataColumns[indexList1].listOfJs[
                           i1
@@ -1173,12 +1262,18 @@ function visualizeAssignment() {
               return jgraphObj.x(d.chemShift + settings.jGraph.blockWidth);
             })
             .attr('y', function (d) {
-              return jgraphObj.yJs(Math.abs(d.value)) - settings.jGraph.halfBlockHeight;
+              return (
+                jgraphObj.yJs(Math.abs(d.value)) -
+                settings.jGraph.halfBlockHeight
+              );
             })
             .attr('width', 2 * settings.jGraph.blockWidth)
             .attr('height', 2 * settings.jGraph.halfBlockHeight)
             .style('fill', function (d) {
-              return getJgraphColor(Math.abs(d.trueValue), settings.jGraph.darkMode);
+              return getJgraphColor(
+                Math.abs(d.trueValue),
+                settings.jGraph.darkMode,
+              );
             })
             .attr('stroke', 'black')
             .style('stroke-width', settings.jGraph.lineWidthBlocks);
@@ -1382,38 +1477,38 @@ function visualizeAssignment() {
        */
     };
 
-      // Circles
-      var theDots = svg
-        .selectAll('dots')
-        .data(jgraphObj.dataUnassignedCoupCircles)
-        .enter()
-        .append('circle')
-        .attr('class', 'circleL')
-        .attr('cx', function (d) {
-          return jgraphObj.x(d.chemShift);
-        })
-        .attr('cy', function (d) {
-          return jgraphObj.yJs(Math.abs(d.valueOnBar));
-        })
-        .attr('r', settings.jGraph.circleRadius)
-        .style('fill', function (d) {
-          return getJgraphColor(Math.abs(d.value), settings.jGraph.darkMode);
-        })
-        .attr('stroke', 'black')
-        .style('stroke-width', settings.jGraph.lineWidthCircle)
-        .on('mouseover', (event, d) => {
-          event.preventDefault();
-          highlightDot(d, false);
-        })
-        .on('click', (event, d) => {
-          event.preventDefault();
-          highlightDot(d, false);
-        })
-        .on('dblclick', (event, d) => {
-          event.preventDefault();
-          highlightDot(d, true);
-        });
-      /*
+    // Circles
+    var theDots = svg
+      .selectAll('dots')
+      .data(jgraphObj.dataUnassignedCoupCircles)
+      .enter()
+      .append('circle')
+      .attr('class', 'circleL')
+      .attr('cx', function (d) {
+        return jgraphObj.x(d.chemShift);
+      })
+      .attr('cy', function (d) {
+        return jgraphObj.yJs(Math.abs(d.valueOnBar));
+      })
+      .attr('r', settings.jGraph.circleRadius)
+      .style('fill', function (d) {
+        return getJgraphColor(Math.abs(d.value), settings.jGraph.darkMode);
+      })
+      .attr('stroke', 'black')
+      .style('stroke-width', settings.jGraph.lineWidthCircle)
+      .on('mouseover', (event, d) => {
+        event.preventDefault();
+        highlightDot(d, false);
+      })
+      .on('click', (event, d) => {
+        event.preventDefault();
+        highlightDot(d, false);
+      })
+      .on('dblclick', (event, d) => {
+        event.preventDefault();
+        highlightDot(d, true);
+      });
+    /*
          // .on("mouseleave", doNotHighlightDot)
           var theTextDots2 = svg.selectAll("textt")
            .data(dataUnassignedCoupCircles)
@@ -1437,68 +1532,67 @@ function visualizeAssignment() {
          // Dots
           */
 
-      var theBlocks = svg
-        .selectAll()
-        .data(jgraphObj.dataAssignedCoupBlocks)
-        .enter()
-        .append('rect')
-        .attr('class', 'circleS')
-        .attr('x', function (d) {
-          return x(d.chemShift + settings.jGraph.blockWidth);
-        })
-        .attr('y', function (d) {
-          return jgraphObj.yJs(Math.abs(d.value)) - settings.jGraph.halfBlockHeight;
-        })
-        .attr('width', 2 * settings.jGraph.blockWidth)
-        .attr('height', 2 * settings.jGraph.halfBlockHeight)
-        .style('fill', function (d) {
-          return getJgraphColor(Math.abs(d.trueValue), settings.jGraph.darkMode);
-        })
-        .attr('stroke', 'black')
-        .style('stroke-width', settings.jGraph.lineWidthBlocks);
-      jgraphObj = {
-        ...jgraphObj, // Copy all existing properties of jgraphObj
-        yAxisn: yAxisn,
-        yAxisn2: yAxisn2,
-        theTicksCouplings: theTicksCouplings,
-        theGridLinesCouplings: theGridLinesCouplings,
-        theColumnsMainVerticalLine: theColumnsMainVerticalLine,
-        theColumnsBase: theColumnsBase,
-        theDots: theDots,
-        theBlocks: theBlocks,
-      };
-     
+    var theBlocks = svg
+      .selectAll()
+      .data(jgraphObj.dataAssignedCoupBlocks)
+      .enter()
+      .append('rect')
+      .attr('class', 'circleS')
+      .attr('x', function (d) {
+        return x(d.chemShift + settings.jGraph.blockWidth);
+      })
+      .attr('y', function (d) {
+        return (
+          jgraphObj.yJs(Math.abs(d.value)) - settings.jGraph.halfBlockHeight
+        );
+      })
+      .attr('width', 2 * settings.jGraph.blockWidth)
+      .attr('height', 2 * settings.jGraph.halfBlockHeight)
+      .style('fill', function (d) {
+        return getJgraphColor(Math.abs(d.trueValue), settings.jGraph.darkMode);
+      })
+      .attr('stroke', 'black')
+      .style('stroke-width', settings.jGraph.lineWidthBlocks);
+    jgraphObj = {
+      ...jgraphObj, // Copy all existing properties of jgraphObj
+      yAxisn: yAxisn,
+      yAxisn2: yAxisn2,
+      theTicksCouplings: theTicksCouplings,
+      theGridLinesCouplings: theGridLinesCouplings,
+      theColumnsMainVerticalLine: theColumnsMainVerticalLine,
+      theColumnsBase: theColumnsBase,
+      theDots: theDots,
+      theBlocks: theBlocks,
+    };
+  }
+  function updateVisu() {
+    var spreadPositionsZZ = updateColumnsPositions(
+      jgraphObj.dataColumns,
+      jgraphObj.leftPosColumns,
+      jgraphObj.x,
+      jgraphObj.rightPosColumns,
+      jgraphObj.smallSpace,
+    );
+    updateColumnsAction(
+      spreadPositionsZZ,
+      0,
+      settings.jGraph.positionJscale,
+      settings.jGraph.topJGraphYposition,
+      settings.jGraph.jGraphParameters.colorShowLine,
+      settings.jGraph.jGraphParameters.colorHideLine,
+      settings.jGraph.generalUseWidth,
+      jgraphObj.x,
+      settings.spectrum.widthOfThePlot,
+      jgraphObj,
+      settings.jGraph.blockWidth,
+      jgraphObj.yJs,
+    );
+    // A function that update the chart for given boundaries
 
- }
- function updateVisu() {
-   var spreadPositionsZZ = updateColumnsPositions(
-        jgraphObj.dataColumns,
-        jgraphObj.leftPosColumns,
-        jgraphObj.x,
-        jgraphObj.rightPosColumns,
-        jgraphObj.smallSpace,
-      );
-      updateColumnsAction(
-        spreadPositionsZZ,
-        0,
-        settings.jGraph.positionJscale,
-        settings.jGraph.topJGraphYposition,
-        settings.jGraph.jGraphParameters.colorShowLine,
-        settings.jGraph.jGraphParameters.colorHideLine,
-        settings.jGraph.generalUseWidth,
-        jgraphObj.x,
-        settings.spectrum.widthOfThePlot,
-        jgraphObj,
-        settings.jGraph.blockWidth,
-        jgraphObj.yJs,
-      );
-      // A function that update the chart for given boundaries
-
-      // If user double click, reinitialize the chart
-    }
+    // If user double click, reinitialize the chart
+  }
   async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
     try {
-
       const spectrumData = await loadSpectrum(fileNameSpectrum);
       visualizeSpectrum(spectrumData);
 
@@ -1507,7 +1601,6 @@ function visualizeAssignment() {
       visualizeAssignment();
       visualizeJgraph();
       updateVisu();
-
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);
     }
