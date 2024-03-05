@@ -138,7 +138,7 @@ settings.jGraph.nbHzPerPoint = settings.jGraph.maxScaleJ / settings.jGraph.heigh
 settings.jGraph.minSpaceBetweekBlocks = settings.jGraph.nbHzPerPoint * (2 * settings.jGraph.halfBlockHeight + (1.0 * settings.jGraph.lineWidthBlocks) / 2.0);
 settings.jGraph.minSpaceBetweekCircles = settings.jGraph.nbHzPerPoint * (2 * settings.jGraph.circleRadius + (2.0 * settings.jGraph.lineWidthBlocks) / 2.0);
 settings.jGraph.spaceBlock = (settings.jGraph.halfBlockHeight + settings.jGraph.lineWidthBlocks / 2.0 + +1.0) * settings.jGraph.nbHzPerPoint;
-settings.jGraph.spaceCircle = (2.0 * settings.jGraph.circleRadius + settings.jGraph.lineWidthBlocks / 2.0 + settings.jGraph.lineWidth + 1.0) * settings.jGraph.nbHzPerPoint;
+settings.jGraph.spaceCircle = (2.0 * settings.jGraph.circleRadius + settings.jGraph.lineWidthBlocks / 2.0 + settings.spectrum.lineWidth + 1.0) * settings.jGraph.nbHzPerPoint;
 settings.jGraph.preferedDistanceInPtBetweenColumns =2.0 * settings.jGraph.generalUseWidth + settings.jGraph.lineWidthCircle + settings.jGraph.spaceBetweenColumns;
 
   return settings;
@@ -147,6 +147,7 @@ settings.jGraph.preferedDistanceInPtBetweenColumns =2.0 * settings.jGraph.genera
 // Example usage with overriding default values
 const settings = initializeSettings({});
 console.log("settings " + settings)
+console.log("settings 2 " + JSON.stringify(settings))
 
   // append the svg object to the body of the page
   var svg = d3
