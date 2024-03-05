@@ -21,7 +21,18 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                } else { return colorHideLine; }
              });
 
-           jgraphObj.theColumns.theColumnsMainVerticalLine
+           jgraphObj.theColumns.theColumnsMainVerticalBackLine
+             .transition().duration(timeAnimation)
+             .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
+             .attr("x2", function (d) { return spreadPositions[d.MyIndex]; })
+             .attr("stroke", function (d) {
+               if ((x(d.chemShift) > 0.0) && (x(d.chemShift) < width)) {
+                 return colorShowLine;
+               } else { return colorHideLine; }
+             });
+
+            if ('theColumnsMainVerticalLine' in jgraphObj)
+            jgraphObj.theColumnsMainVerticalLine
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex]; })
              .attr("x2", function (d) { return spreadPositions[d.MyIndex]; })
@@ -29,7 +40,8 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                return "black";
              });
 
-           jgraphObj.theColumns.theColumnsBase
+            if ('theColumnsBase' in jgraphObj)
+           jgraphObj.theColumnsBase
              .transition().duration(timeAnimation)
              .attr("x1", function (d) { return spreadPositions[d.MyIndex] + generalUseWidth; })
              .attr("x2", function (d) { return spreadPositions[d.MyIndex] - generalUseWidth; })
@@ -37,6 +49,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
                return "black";
              });
 
+            if ('theDots' in jgraphObj)
            jgraphObj.theDots
              .transition().duration(timeAnimation)
              .attr("cx", function (d) { return spreadPositions[d.MyIndex]; })
@@ -48,6 +61,7 @@ export function updateColumnsAction(spreadPositions, timeAnimation, positionJsca
              .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
             ;
 */
+           if ('theBlocks' in jgraphObj)
            jgraphObj.theBlocks
              .transition().duration(timeAnimation)
              .attr("x", function (d) { return eval(spreadPositions[d.MyIndex] - blockWidth); })
