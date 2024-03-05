@@ -89,60 +89,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   // set the dimensions and margins of the graph
   //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
-  const smallScreen =  /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent,
-    );
-
-  // spectrum  
-  const margin = smallScreen ? { top: 50, right: 10, bottom: 30, left: 10 } : { top: 10, right: 30, bottom: 30, left: 60 };
-  const bodyWidth = smallScreen ? 800 : 800 ;
-  const bodyHeight = smallScreen ? 1000 : 450 ;
-  const lineWidth = smallScreen ? 5 : 1.5 ;
-  const darkMode = false; // True not implemented
-  const widthOfThePlot = bodyWidth - margin.left - margin.right;
-  const height = bodyHeight - margin.top - margin.bottom;
-
-  // J-graph
-  const ratioOccupyJgraph = smallScreen ? (1.0 / 2.0) : (1.0 / 4.0) ;
-  const spaceBetweenColumns = smallScreen ? 5 : 10 ;        
-  const maxScaleJ = 22.0;
-
-  const generalUseWidth = smallScreen ? 15.0 : 5.0 ;
-  const circleRadius = generalUseWidth * 0.8;
-  const blockWidth = Math.round(generalUseWidth * 0.9);
-  const halfBlockHeight = generalUseWidth / 3.0;
-
-  const lineWidthCircle = lineWidth;
-  const lineWidthColumn = lineWidth / 2.0;
-  const lineWidthBlocks = lineWidth / 2.0;
-  const heightJscale = height * ratioOccupyJgraph;
-  const positionJscale = 20;
-
-  const preferedDistanceInPtBetweenColumns =
-    2.0 * generalUseWidth + lineWidthCircle + spaceBetweenColumns; // In pt
-
-  const topJGraphYposition = 0;
-  const bottomJGraphYposition = heightJscale;
-  const pointingLineColum = bottomJGraphYposition + 20;
-  const nbHzPerPoint = maxScaleJ / heightJscale;
-  const minSpaceBetweekBlocks =
-    nbHzPerPoint * (2 * halfBlockHeight + (1.0 * lineWidthBlocks) / 2.0);
-  const minSpaceBetweekCircles =
-    nbHzPerPoint * (2 * circleRadius + (2.0 * lineWidthBlocks) / 2.0);
-  const spaceBlock =
-    (halfBlockHeight + lineWidthBlocks / 2.0 + +1.0) * nbHzPerPoint;
-  const spaceCircle =
-    (2.0 * circleRadius + lineWidthBlocks / 2.0 + lineWidth + 1.0) *
-    nbHzPerPoint;
-
-  const jGraphParameters = {
-    dataTicksCouplings: [0, 5, 10, 15, 20],
-    colorShowLine: '#CCCCCC',
-    colorHideLine: '#EEEEEE00',
-    delayBeforeErase: 3000,
-  };
-  
-
+ 
 function initializeSettings(overrideSettings = {}) {
   const smallScreen = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -173,8 +120,9 @@ function initializeSettings(overrideSettings = {}) {
   let settings = { ...defaultSettings, ...overrideSettings };
 
   // Calculate derived values
- settings.spectrum.widthOfThePlot = settings.spectrum.bodyWidth - settings.spectrum.margin.left - settings.spectrum.margin.right;
+settings.spectrum.widthOfThePlot = settings.spectrum.bodyWidth - settings.spectrum.margin.left - settings.spectrum.margin.right;
 settings.spectrum.height = settings.spectrum.bodyHeight - settings.spectrum.margin.top - settings.spectrum.margin.bottom;
+
 settings.jGraph.circleRadius = Math.round(settings.jGraph.generalUseWidth * 0.8);
 settings.jGraph.blockWidth = Math.round(settings.jGraph.generalUseWidth * 0.9);
 settings.jGraph.halfBlockHeight = Math.round(settings.jGraph.generalUseWidth / 3.0);
@@ -191,27 +139,26 @@ settings.jGraph.minSpaceBetweekBlocks = settings.jGraph.nbHzPerPoint * (2 * sett
 settings.jGraph.minSpaceBetweekCircles = settings.jGraph.nbHzPerPoint * (2 * settings.jGraph.circleRadius + (2.0 * settings.jGraph.lineWidthBlocks) / 2.0);
 settings.jGraph.spaceBlock = (settings.jGraph.halfBlockHeight + settings.jGraph.lineWidthBlocks / 2.0 + +1.0) * settings.jGraph.nbHzPerPoint;
 settings.jGraph.spaceCircle = (2.0 * settings.jGraph.circleRadius + settings.jGraph.lineWidthBlocks / 2.0 + settings.jGraph.lineWidth + 1.0) * settings.jGraph.nbHzPerPoint;
-
+settings.jGraph.preferedDistanceInPtBetweenColumns =2.0 * settings.jGraph.generalUseWidth + settings.jGraph.lineWidthCircle + settings.jGraph.spaceBetweenColumns;
 
   return settings;
 }
 
 // Example usage with overriding default values
-const customSettings = initializeSettings({});
-
+const settings = initializeSettings({});
+console.log("settings " + settings)
 
   // append the svg object to the body of the page
   var svg = d3
     .select('#my_dataviz')
     .append('svg')
-    .attr('width', widthOfThePlot + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
+    .attr('width', settings.spectrum.widthOfThePlot + settings.spectrum.margin.left + settings.spectrum.margin.right)
+    .attr('height', settings.spectrum.height + settings.spectrum.margin.top + settings.spectrum.margin.bottom)
     .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-  var smallSpace = 1; // will be changed
+    .attr('transform', 'translate(' + settings.spectrum.margin.left + ',' + settings.spectrum.margin.top + ')');
 
   var jgraphObj = {};
+  jgraphObj.smallSpace = 1;
   // A function that set idleTimeOut to null
   var idleTimeout;
   function idled() {
@@ -238,8 +185,8 @@ const customSettings = initializeSettings({});
     //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
     const y2 = jgraphObj.yJs(Math.abs(d.JvalueShifted));
     //const y2 = yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
-    const horizontalShiftSideBlock = blockWidth; // make larger here !
+    const horizontalShiftX = jgraphObj.smallSpace - settings.jGraph.blockWidth - 1.5; // make larger here !
+    const horizontalShiftSideBlock = settings.jGraph.blockWidth; // make larger here !
     var usedHorizontalShiftX = eval(horizontalShiftX);
     var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
     const cs1 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
@@ -373,29 +320,29 @@ const customSettings = initializeSettings({});
     var numberItem = 1;
     if ('dataColumns' in jgraphObj && 'theColumns' in jgraphObj) {
       jgraphObj.dataColumns.length;
-      smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
-      if (smallSpace > preferedDistanceInPtBetweenColumns) {
-        smallSpace = preferedDistanceInPtBetweenColumns;
+      jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
+      if (jgraphObj.smallSpace > settings.jGraph.preferedDistanceInPtBetweenColumns) {
+        jgraphObj.smallSpace = settings.jGraph.preferedDistanceInPtBetweenColumns;
       }
       jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
         jgraphObj.dataColumns,
         jgraphObj.leftPosColumns,
         jgraphObj.x,
         jgraphObj.rightPosColumns,
-        smallSpace,
+        jgraphObj.smallSpace,
       );
       updateColumnsAction(
         jgraphObj.assignedCouplings.spreadPositionsZZ,
         1000,
-        positionJscale,
-        topJGraphYposition,
-        jGraphParameters.colorShowLine,
-        jGraphParameters.colorHideLine,
-        generalUseWidth,
+        settings.jGraph.positionJscale,
+        settings.jGraph.topJGraphYposition,
+        settings.jGraph.jGraphParameters.colorShowLine,
+        settings.jGraph.jGraphParameters.colorHideLine,
+        settings.jGraph.generalUseWidth,
         jgraphObj.x,
-        widthOfThePlot,
+        settings.spectrum.widthOfThePlot,
         jgraphObj,
-        blockWidth,
+        settings.jGraph.blockWidth,
         jgraphObj.yJs,
       );
     } else {
@@ -406,8 +353,8 @@ const customSettings = initializeSettings({});
     if ('assignedCouplings' in jgraphObj) {
       jgraphObj.assignedCouplings.updateTheLines(
         jgraphObj.yJs,
-        smallSpace,
-        blockWidth,
+        jgraphObj.smallSpace,
+        settings.jGraph.blockWidth,
         pathFun,
       );
     }
@@ -425,7 +372,7 @@ const customSettings = initializeSettings({});
           return +d.chemShift;
         }),
       ])
-      .range([0, widthOfThePlot]);
+      .range([0, settings.spectrum.widthOfThePlot]);
 
     // Add Y axis
     var y = d3
@@ -436,7 +383,7 @@ const customSettings = initializeSettings({});
           return +d.value;
         }),
       ])
-      .range([height, 0]);
+      .range([settings.spectrum.height, 0]);
     //yAxis = svg.append("g") .call(d3.axisLeft(y));
 
     // Add a clipPath: everything out of this area won't be drawn.
@@ -445,8 +392,8 @@ const customSettings = initializeSettings({});
       .append('svg:clipPath')
       .attr('id', 'clip')
       .append('svg:rect')
-      .attr('width', widthOfThePlot)
-      .attr('height', height)
+      .attr('width', settings.spectrum.widthOfThePlot)
+      .attr('height', settings.spectrum.height)
       .attr('x', 0)
       .attr('y', 0);
 
@@ -455,8 +402,8 @@ const customSettings = initializeSettings({});
       .brushX() // Add the brush feature using the d3.brush function
       .extent([
         [0, 0],
-        [widthOfThePlot, height],
-      ]) // initialize the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        [settings.spectrum.widthOfThePlot, settings.spectrum.height],
+      ]) // initialize the brush area: start at 0,0 and finishes at width,settings.spectrum.height: it means I select the whole graph area
       .on('end', function (event) {
         updateChart(event);
       });
@@ -472,7 +419,7 @@ const customSettings = initializeSettings({});
       .attr('fill', 'none')
       .attr('stroke', 'steelblue')
       // .attr("stroke", "red")
-      .attr('stroke-width', lineWidth)
+      .attr('stroke-width', settings.spectrum.lineWidth)
       .attr(
         'd',
         d3
@@ -489,7 +436,7 @@ const customSettings = initializeSettings({});
 
     var xAxis = svg
       .append('g')
-      .attr('transform', 'translate(0,' + height + ')')
+      .attr('transform', 'translate(0,' + settings.spectrum.height + ')')
       .call(d3.axisBottom(x));
     // Add Y axis2
 
@@ -613,8 +560,8 @@ const customSettings = initializeSettings({});
       indicesSorted,
       indexAtomMol,
       updateBlockPosition,
-      minSpaceBetweekCircles,
-      minSpaceBetweekBlocks,
+      settings.jGraph.minSpaceBetweekCircles,
+      settings.jGraph.minSpaceBetweekBlocks,
     );
 
     jgraphObj.assignedCouplings = new AssignedCouplings(jgraphObj.dataColumns);
@@ -685,25 +632,25 @@ const customSettings = initializeSettings({});
     );
 
     jgraphObj.assignedCouplings.udateLineTrajectory(
-      spaceBlock,
-      2.0 * lineWidth * nbHzPerPoint,
-      spaceCircle,
+      settings.jGraph.spaceBlock,
+      2.0 * settings.spectrum.lineWidth * settings.jGraph.nbHzPerPoint,
+      settings.jGraph.spaceCircle,
       jgraphObj.dataColumns,
     );
     //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
 
     // Make list of positions according to size of jGraphData
     const numberItem = arrayColumns.length;
-    smallSpace = widthOfThePlot / (numberItem + 1); // five items, six spaces
-    if (smallSpace > preferedDistanceInPtBetweenColumns) {
-      smallSpace = preferedDistanceInPtBetweenColumns;
+    jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
+    if (jgraphObj.smallSpace > settings.jGraph.preferedDistanceInPtBetweenColumns) {
+      jgraphObj.smallSpace = settings.jGraph.preferedDistanceInPtBetweenColumns;
     }
 
     var leftPosColumns = [];
     var rightPosColumns = [];
     for (let i = 0; i < numberItem; i++) {
-      const curPosLeft = (i + 0.5) * smallSpace;
-      const curPosRight = widthOfThePlot - (numberItem - i - 0.5) * smallSpace;
+      const curPosLeft = (i + 0.5) * jgraphObj.smallSpace;
+      const curPosRight = settings.spectrum.widthOfThePlot - (numberItem - i - 0.5) * jgraphObj.smallSpace;
       leftPosColumns.push(curPosLeft);
       rightPosColumns.push(curPosRight);
     }
@@ -712,8 +659,8 @@ const customSettings = initializeSettings({});
 
     jgraphObj.yJs = d3
       .scaleLinear()
-      .domain([0, maxScaleJ])
-      .range([heightJscale + positionJscale, positionJscale]);
+      .domain([0, settings.jGraph.maxScaleJ])
+      .range([settings.jGraph.heightJscale + settings.jGraph.positionJscale, settings.jGraph.positionJscale]);
 
     jgraphObj.highlightColumn = function (event, d) {
       jmolUnselectAll();
@@ -735,8 +682,8 @@ const customSettings = initializeSettings({});
         d3.selectAll(".line")
           .transition().duration(200).delay(300)
           //   .style("stroke", function (d) { return (color(d.Label)) })
-          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), darkMode); })
+          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, settings.jGraph.darkMode) })
+          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), settings.jGraph.darkMode); })
           .style("opacity", "1")
      };
 */
@@ -750,7 +697,7 @@ const customSettings = initializeSettings({});
               jgraphObj.leftPosColumns,
               jgraphObj.x,
               jgraphObj.rightPosColumns,
-              smallSpace,
+              jgraphObj.smallSpace,
             );
         }
       }
@@ -760,7 +707,7 @@ const customSettings = initializeSettings({});
         jgraphObj.leftPosColumns,
         jgraphObj.x,
         jgraphObj.rightPosColumns,
-        smallSpace,
+        jgraphObj.smallSpace,
       );
 
       // specific to those matching the condition of similarity of J's
@@ -795,12 +742,12 @@ const customSettings = initializeSettings({});
               referenceSpin,
               partnerSpinObj,
               svg,
-              lineWidth,
-              darkMode,
-              generalUseWidth,
+              settings.spectrum.lineWidth,
+              settings.jGraph.darkMode,
+              settings.jGraph.generalUseWidth,
               jgraphObj.yJs,
-              smallSpace,
-              blockWidth,
+              jgraphObj.smallSpace,
+              settings.jGraph.blockWidth,
               pathFun,
             );
           jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs[
@@ -813,16 +760,16 @@ const customSettings = initializeSettings({});
           jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs =
             updateBlockPosition(
               jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs,
-              minSpaceBetweekCircles,
-              minSpaceBetweekBlocks,
+              settings.jGraph.minSpaceBetweekCircles,
+              settings.jGraph.minSpaceBetweekBlocks,
             );
           jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs =
             updateBlockPosition(
               jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs,
-              minSpaceBetweekCircles,
-              minSpaceBetweekBlocks,
+              settings.jGraph.minSpaceBetweekCircles,
+              settings.jGraph.minSpaceBetweekBlocks,
             );
-          //  assignedCouplings.addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, blockWidth, pathFun);
+          //  assignedCouplings.addGraphicForLast(svg, lineWidth, settings.jGraph.darkMode, settings.jGraph.generalUseWidth, yJs, jgraphObj.smallSpace, settings.jGraph.blockWidth, pathFun);
 
           // UGLY FIX TO BE MOVED OUT
           for (
@@ -862,34 +809,34 @@ const customSettings = initializeSettings({});
               jgraphObj.leftPosColumns,
               jgraphObj.x,
               jgraphObj.rightPosColumns,
-              smallSpace,
+              jgraphObj.smallSpace,
             );
 
           updateColumnsAction(
             jgraphObj.assignedCouplings.spreadPositionsZZ,
             1000,
-            positionJscale,
-            topJGraphYposition,
-            jGraphParameters.colorShowLine,
-            jGraphParameters.colorHideLine,
-            generalUseWidth,
+            settings.jGraph.positionJscale,
+            settings.jGraph.topJGraphYposition,
+            settings.jGraph.jGraphParameters.colorShowLine,
+            settings.jGraph.jGraphParameters.colorHideLine,
+            settings.jGraph.generalUseWidth,
             jgraphObj.x,
-            widthOfThePlot,
+            settings.spectrum.widthOfThePlot,
             jgraphObj,
-            blockWidth,
+            settings.jGraph.blockWidth,
             jgraphObj.yJs,
           );
           jgraphObj.assignedCouplings.udateLineTrajectory(
-            spaceBlock,
-            2.0 * lineWidth * nbHzPerPoint,
-            spaceCircle,
+            settings.jGraph.spaceBlock,
+            2.0 * settings.spectrum.lineWidth * settings.jGraph.nbHzPerPoint,
+            settings.jGraph.spaceCircle,
             jgraphObj.dataColumns,
           );
 
           jgraphObj.assignedCouplings.updateTheLines(
             jgraphObj.yJs,
-            smallSpace,
-            blockWidth,
+            jgraphObj.smallSpace,
+            settings.jGraph.blockWidth,
             pathFun,
           );
 
@@ -938,30 +885,30 @@ const customSettings = initializeSettings({});
             .append('rect')
             .attr('class', 'circleS')
             .attr('x', function (d) {
-              return jgraphObj.x(d.chemShift + blockWidth);
+              return jgraphObj.x(d.chemShift + settings.jGraph.blockWidth);
             })
             .attr('y', function (d) {
-              return jgraphObj.yJs(Math.abs(d.value)) - halfBlockHeight;
+              return jgraphObj.yJs(Math.abs(d.value)) - settings.jGraph.halfBlockHeight;
             })
-            .attr('width', 2 * blockWidth)
-            .attr('height', 2 * halfBlockHeight)
+            .attr('width', 2 * settings.jGraph.blockWidth)
+            .attr('height', 2 * settings.jGraph.halfBlockHeight)
             .style('fill', function (d) {
-              return getJgraphColor(Math.abs(d.trueValue), darkMode);
+              return getJgraphColor(Math.abs(d.trueValue), settings.jGraph.darkMode);
             })
             .attr('stroke', 'black')
-            .style('stroke-width', lineWidthBlocks);
+            .style('stroke-width', settings.jGraph.lineWidthBlocks);
           updateColumnsAction(
             jgraphObj.assignedCouplings.spreadPositionsZZ,
             0,
-            positionJscale,
-            topJGraphYposition,
-            jGraphParameters.colorShowLine,
-            jGraphParameters.colorHideLine,
-            generalUseWidth,
+            settings.jGraph.positionJscale,
+            settings.jGraph.topJGraphYposition,
+            settings.jGraph.jGraphParameters.colorShowLine,
+            settings.jGraph.jGraphParameters.colorHideLine,
+            settings.jGraph.generalUseWidth,
             jgraphObj.x,
-            widthOfThePlot,
+            settings.spectrum.widthOfThePlot,
             jgraphObj,
-            blockWidth,
+            settings.jGraph.blockWidth,
             jgraphObj.yJs,
           );
         }
@@ -998,7 +945,7 @@ const customSettings = initializeSettings({});
         .style('opacity', '0.1')
         .transition()
         .duration(20)
-        .delay(jGraphParameters.delayBeforeErase)
+        .delay(settings.jGraph.jGraphParameters.delayBeforeErase)
         .style('stroke', function (d) {
           return getJisOK(d.jOKcolor);
         })
@@ -1011,13 +958,13 @@ const customSettings = initializeSettings({});
         .delay(10)
         .style('stroke', 'black')
         .style('opacity', '0.1')
-        .style('stroke-width', lineWidth)
+        .style('stroke-width', settings.spectrum.lineWidth)
         .transition()
         .duration(200)
-        .delay(1.2 * jGraphParameters.delayBeforeErase)
+        .delay(1.2 * settings.jGraph.jGraphParameters.delayBeforeErase)
         .style('stroke', 'black')
         .style('opacity', '1.0')
-        .style('stroke-width', lineWidth);
+        .style('stroke-width', settings.spectrum.lineWidth);
 
       // wrong distance dots
       d3.selectAll('.circleL')
@@ -1039,7 +986,7 @@ const customSettings = initializeSettings({});
         })
         .style('stroke', 'red')
         .style('opacity', '1.0')
-        .style('stroke-width', lineWidth * 2.0);
+        .style('stroke-width', settings.spectrum.lineWidth * 2.0);
 
       // right distance dots
       d3.selectAll('.circleL')
@@ -1059,7 +1006,7 @@ const customSettings = initializeSettings({});
         })
         .style('stroke', highColor)
         .style('opacity', '1.0')
-        .style('stroke-width', lineWidth * 2.0);
+        .style('stroke-width', settings.spectrum.lineWidth * 2.0);
 
       // starting dots
       d3.selectAll('.circleL')
@@ -1070,17 +1017,17 @@ const customSettings = initializeSettings({});
           return d.uniqIndex == p.uniqIndex;
         })
         .style('opacity', '1.0')
-        .style('stroke-width', lineWidth * 2.0)
+        .style('stroke-width', settings.spectrum.lineWidth * 2.0)
         .style('stroke', curColHighligh);
 
       // all will get back to normal
       d3.selectAll('.circleL')
         .transition()
         .duration(200)
-        .delay(jGraphParameters.delayBeforeErase)
+        .delay(settings.jGraph.jGraphParameters.delayBeforeErase)
         .style('stroke', 'black')
         .style('opacity', '1.0')
-        .style('stroke-width', lineWidth);
+        .style('stroke-width', settings.spectrum.lineWidth);
 
       d3.selectAll('.rulerClass')
         .transition()
@@ -1092,7 +1039,7 @@ const customSettings = initializeSettings({});
         .style('stroke', highColor)
         .transition()
         .duration(200)
-        .delay(jGraphParameters.delayBeforeErase)
+        .delay(settings.jGraph.jGraphParameters.delayBeforeErase)
         .attr('y1', jgraphObj.yJs(Math.abs(d.value)))
         .attr('y2', jgraphObj.yJs(Math.abs(d.value)))
         .style('opacity', '0.0')
@@ -1107,7 +1054,7 @@ const customSettings = initializeSettings({});
         .style('opacity', '1.0')
         .transition()
         .duration(200)
-        .delay(jGraphParameters.delayBeforeErase)
+        .delay(settings.jGraph.jGraphParameters.delayBeforeErase)
         .style('stroke', 'black')
         .style('opacity', '0.0');
 
@@ -1119,8 +1066,8 @@ const customSettings = initializeSettings({});
         .attr('y', jgraphObj.yJs(Math.abs(d.valueOnBar) + 3.0))
         //  .text( "J = " + d.value + "val " + (Math.abs(d.valueOnBar + 3.0)) + " pos:" + spreadPositionsNew[d.MyIndex])
         .text('J = ' + d.value)
-        // .attr('dx', 1.3 * generalUseWidth)
-        .style('font-size', generalUseWidth * 2.5)
+        // .attr('dx', 1.3 * settings.jGraph.generalUseWidth)
+        .style('font-size', settings.jGraph.generalUseWidth * 2.5)
         .style('font-family', 'Helvetica')
         .style('text-anchor', 'middle')
         .transition()
@@ -1136,10 +1083,10 @@ const customSettings = initializeSettings({});
            .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar + 3.0)); })
            // .style("fill", "gray")
            //   .attr("stroke", "red")
-           // .style("stroke-width", lineWidthBlocks)
+           // .style("stroke-width", settings.jGraph.lineWidthBlocks)
            .text(function (d) { return "J = " + d.value; })
-        //   .attr("dx", 1.3 * generalUseWidth)
-           .style("font-size", generalUseWidth * 2.5)
+        //   .attr("dx", 1.3 * settings.jGraph.generalUseWidth)
+           .style("font-size", settings.jGraph.generalUseWidth * 2.5)
            .style("font-family", "Helvetica")
            .attr("x", function (d) { return x(d.chemShift); })
           // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
@@ -1176,39 +1123,39 @@ const customSettings = initializeSettings({});
       var yAxisn2 = svg
         .append('g')
         .attr('transform', function (d) {
-          return 'translate(' + widthOfThePlot + ')';
+          return 'translate(' + settings.spectrum.widthOfThePlot + ')';
         })
         .call(d3.axisRight(jgraphObj.yJs).ticks(3));
 
       var theTicksCouplings = svg
         .selectAll('tickLines')
-        .data(jGraphParameters.dataTicksCouplings)
+        .data(settings.jGraph.jGraphParameters.dataTicksCouplings)
         .enter()
         .append('line')
         .attr('class', 'Grid')
-        .attr('x1', lineWidth)
+        .attr('x1', settings.spectrum.lineWidth)
         .attr('y1', function (d) {
           return jgraphObj.yJs(d);
         })
-        .attr('x2', widthOfThePlot)
+        .attr('x2', settings.spectrum.widthOfThePlot)
         .attr('y2', function (d) {
           return jgraphObj.yJs(d);
         })
         .attr('stroke', '#EEEEEE')
-        .style('stroke-width', lineWidth);
+        .style('stroke-width', settings.spectrum.lineWidth);
       var theGridLinesCouplings = svg
         .selectAll('theRuler')
-        .data(jGraphParameters.dataTicksCouplings)
+        .data(settings.jGraph.jGraphParameters.dataTicksCouplings)
         .enter()
         .append('line')
         .attr('class', 'rulerClass')
-        .attr('x1', lineWidth)
+        .attr('x1', settings.spectrum.lineWidth)
         .attr('y1', jgraphObj.yJs(0.0))
-        .attr('x2', widthOfThePlot)
+        .attr('x2', settings.spectrum.widthOfThePlot)
         .attr('y2', jgraphObj.yJs(0.0))
         .attr('stroke', 'red')
-        .style('stroke-dasharray', [lineWidth * 2, lineWidth * 2])
-        .style('stroke-width', lineWidth)
+        .style('stroke-dasharray', [settings.spectrum.lineWidth * 2, settings.spectrum.lineWidth * 2])
+        .style('stroke-width', settings.spectrum.lineWidth)
         .style('opacity', '0.0');
       /*
          var dimensions = [1, 1.2, 1.3, 2, 3, 5];
@@ -1218,20 +1165,20 @@ const customSettings = initializeSettings({});
            yn[name] = d3.scaleLinear()
              .domain([0.0, 22.0]) // --> Same axis range for each group
              // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
-             .range([height / 3.0, height / 6.0]);
+             .range([settings.spectrum.height / 3.0, settings.spectrum.height / 6.0]);
          }
          */
 
       // Columns
 
       // oblique
-      //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace);
+      //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, jgraphObj.smallSpace);
       var spreadPositionsUU = updateColumnsPositions(
         jgraphObj.dataColumns,
         jgraphObj.leftPosColumns,
         jgraphObj.x,
         jgraphObj.rightPosColumns,
-        smallSpace,
+        jgraphObj.smallSpace,
       );
 
       var theColumnsConnectColumnToSpectrumPosition = svg
@@ -1247,13 +1194,13 @@ const customSettings = initializeSettings({});
           return spreadPositionsUU[d.MyIndex];
         })
         .attr('y1', function (d) {
-          return bottomJGraphYposition + positionJscale;
+          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
         })
         .attr('y2', function (d) {
-          return pointingLineColum + positionJscale;
+          return settings.jGraph.pointingLineColum + settings.jGraph.positionJscale;
         })
-        .attr('stroke', jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-        .style('stroke-width', lineWidthCircle)
+        .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
+        .style('stroke-width', settings.jGraph.lineWidthCircle)
         .on('click', jgraphObj.highlightColumn)
         .on('mouseover', jgraphObj.highlightColumn);
       // streight down
@@ -1270,13 +1217,13 @@ const customSettings = initializeSettings({});
           return spreadPositionsUU[d.MyIndex];
         })
         .attr('y1', function (d) {
-          return pointingLineColum + positionJscale;
+          return settings.jGraph.pointingLineColum + settings.jGraph.positionJscale;
         })
         .attr('y2', function (d) {
-          return height;
+          return settings.spectrum.height;
         })
-        .attr('stroke', jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-        .style('stroke-width', lineWidthCircle)
+        .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
+        .style('stroke-width', settings.jGraph.lineWidthCircle)
         .on('click', jgraphObj.highlightColumn)
         .on('mouseover', jgraphObj.highlightColumn);
       var theColumnsMainVerticalLine = svg
@@ -1292,13 +1239,13 @@ const customSettings = initializeSettings({});
           return spreadPositionsUU[d.MyIndex];
         })
         .attr('y1', function (d) {
-          return topJGraphYposition + positionJscale;
+          return settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale;
         })
         .attr('y2', function (d) {
-          return bottomJGraphYposition + positionJscale;
+          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
         })
         .attr('stroke', 'black') // just sketched... update wil fix colors
-        .style('stroke-width', lineWidthColumn)
+        .style('stroke-width', settings.jGraph.lineWidthColumn)
         .on('click', jgraphObj.highlightColumn)
         .on('mouseover', jgraphObj.highlightColumn);
 
@@ -1309,19 +1256,19 @@ const customSettings = initializeSettings({});
         .append('line')
         .attr('class', 'Colunn')
         .attr('x1', function (d) {
-          return spreadPositionsUU[d.MyIndex] + generalUseWidth;
+          return spreadPositionsUU[d.MyIndex] + settings.jGraph.generalUseWidth;
         })
         .attr('x2', function (d) {
-          return spreadPositionsUU[d.MyIndex] - generalUseWidth;
+          return spreadPositionsUU[d.MyIndex] - settings.jGraph.generalUseWidth;
         })
         .attr('y1', function (d) {
-          return bottomJGraphYposition + positionJscale;
+          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
         })
         .attr('y2', function (d) {
-          return bottomJGraphYposition + positionJscale;
+          return settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale;
         })
         .attr('stroke', 'black') // just sketched... update wil fix colors
-        .style('stroke-width', lineWidthCircle)
+        .style('stroke-width', settings.jGraph.lineWidthCircle)
         .on('click', jgraphObj.highlightColumn)
         .on('mouseover', jgraphObj.highlightColumn);
 
@@ -1337,14 +1284,14 @@ const customSettings = initializeSettings({});
           return spreadPositionsUU[d.MyIndex];
         })
         .attr('y', function (d) {
-          return -3 + topJGraphYposition + positionJscale;
+          return -3 + settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale;
         })
         // .text(function (d) { return "" + d.chemShift; })
         .text(function (d) {
           return '' + d.labelColumn;
         })
-        .attr('dx', -1.0 * generalUseWidth)
-        .style('font-size', generalUseWidth * 2.5)
+        .attr('dx', -1.0 * settings.jGraph.generalUseWidth)
+        .style('font-size', settings.jGraph.generalUseWidth * 2.5)
         .style('font-family', 'Helvetica')
         .on('click', jgraphObj.highlightColumn)
         .on('mouseover', jgraphObj.highlightColumn);
@@ -1356,25 +1303,25 @@ const customSettings = initializeSettings({});
         jgraphObj.leftPosColumns,
         jgraphObj.x,
         jgraphObj.rightPosColumns,
-        smallSpace,
+        jgraphObj.smallSpace,
       );
       var spreadPositionsZZ = updateColumnsPositions(
         jgraphObj.dataColumns,
         jgraphObj.leftPosColumns,
         jgraphObj.x,
         jgraphObj.rightPosColumns,
-        smallSpace,
+        jgraphObj.smallSpace,
       );
       if ('assignedCouplings' in jgraphObj) {
         jgraphObj.assignedCouplings.theLinesW =
           jgraphObj.assignedCouplings.makeGraphic(
             jgraphObj.x,
             svg,
-            lineWidth,
-            darkMode,
-            generalUseWidth,
-            smallSpace,
-            blockWidth,
+            settings.spectrum.lineWidth,
+            settings.jGraph.darkMode,
+            settings.jGraph.generalUseWidth,
+            jgraphObj.smallSpace,
+            settings.jGraph.blockWidth,
             jgraphObj.yJs,
             pathFun,
           );
@@ -1392,12 +1339,12 @@ const customSettings = initializeSettings({});
         .attr('cy', function (d) {
           return jgraphObj.yJs(Math.abs(d.valueOnBar));
         })
-        .attr('r', circleRadius)
+        .attr('r', settings.jGraph.circleRadius)
         .style('fill', function (d) {
-          return getJgraphColor(Math.abs(d.value), darkMode);
+          return getJgraphColor(Math.abs(d.value), settings.jGraph.darkMode);
         })
         .attr('stroke', 'black')
-        .style('stroke-width', lineWidthCircle)
+        .style('stroke-width', settings.jGraph.lineWidthCircle)
         .on('mouseover', (event, d) => {
           event.preventDefault();
           highlightDot(d, false);
@@ -1420,10 +1367,10 @@ const customSettings = initializeSettings({});
            .attr("y", function (d) { return jgraphObj.yJs(Math.abs(d.valueOnBar + 3.0)); })
            // .style("fill", "gray")
            //   .attr("stroke", "red")
-           // .style("stroke-width", lineWidthBlocks)
+           // .style("stroke-width", settings.jGraph.lineWidthBlocks)
            .text(function (d) { return "J = " + d.value; })
-        //   .attr("dx", 1.3 * generalUseWidth)
-           .style("font-size", generalUseWidth * 2.5)
+        //   .attr("dx", 1.3 * settings.jGraph.generalUseWidth)
+           .style("font-size", settings.jGraph.generalUseWidth * 2.5)
            .style("font-family", "Helvetica")
            .attr("x", function (d) { return MyIndex; })
           // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
@@ -1441,18 +1388,18 @@ const customSettings = initializeSettings({});
         .append('rect')
         .attr('class', 'circleS')
         .attr('x', function (d) {
-          return x(d.chemShift + blockWidth);
+          return x(d.chemShift + settings.jGraph.blockWidth);
         })
         .attr('y', function (d) {
-          return jgraphObj.yJs(Math.abs(d.value)) - halfBlockHeight;
+          return jgraphObj.yJs(Math.abs(d.value)) - settings.jGraph.halfBlockHeight;
         })
-        .attr('width', 2 * blockWidth)
-        .attr('height', 2 * halfBlockHeight)
+        .attr('width', 2 * settings.jGraph.blockWidth)
+        .attr('height', 2 * settings.jGraph.halfBlockHeight)
         .style('fill', function (d) {
-          return getJgraphColor(Math.abs(d.trueValue), darkMode);
+          return getJgraphColor(Math.abs(d.trueValue), settings.jGraph.darkMode);
         })
         .attr('stroke', 'black')
-        .style('stroke-width', lineWidthBlocks);
+        .style('stroke-width', settings.jGraph.lineWidthBlocks);
       jgraphObj = {
         ...jgraphObj, // Copy all existing properties of jgraphObj
         yAxisn: yAxisn,
@@ -1474,15 +1421,15 @@ const customSettings = initializeSettings({});
       updateColumnsAction(
         spreadPositionsZZ,
         0,
-        positionJscale,
-        topJGraphYposition,
-        jGraphParameters.colorShowLine,
-        jGraphParameters.colorHideLine,
-        generalUseWidth,
+        settings.jGraph.positionJscale,
+        settings.jGraph.topJGraphYposition,
+        settings.jGraph.jGraphParameters.colorShowLine,
+        settings.jGraph.jGraphParameters.colorHideLine,
+        settings.jGraph.generalUseWidth,
         jgraphObj.x,
-        widthOfThePlot,
+        settings.spectrum.widthOfThePlot,
         jgraphObj,
-        blockWidth,
+        settings.jGraph.blockWidth,
         jgraphObj.yJs,
       );
 
