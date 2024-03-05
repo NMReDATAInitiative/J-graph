@@ -325,7 +325,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     // Access the selection from the event object
 
     var extent = event.selection;
-    console.log('updateCharting updateChart with event ' + extent);
 
     if (!extent) {
       if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
