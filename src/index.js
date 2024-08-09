@@ -360,6 +360,14 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       const c222 =
         (from >= selectedDomain[1] && to <= selectedDomain[1]) ||
         (from <= selectedDomain[1] && to >= selectedDomain[1]);
+      if (c1 && c2) {
+       const  toAdd = {
+          start: from,
+          end: to,
+        };
+          newDomain.push(toAdd);
+        totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
+      }
       if (c111 && c222) {
        const  toAdd = {
           start: selectedDomain[0],
@@ -741,7 +749,7 @@ updateZigZag(svg,regionsData, scaleData)
         .attr('d', zigzagPath3)
         .attr('class', 'zigzag-path') // Assign a class for easy removal
         .attr('stroke', 'white')
-        .attr('stroke-width', 10)
+        .attr('stroke-width', jgraphObj.gapSizePt)
         .attr('fill', 'none');
 
   svg
@@ -782,7 +790,7 @@ updateZigZag(svg,regionsData, scaleData)
       return +d.chemShift;
     });
 
-    const gapSizePt = 10;
+    const gapSizePt = 6;
     const marginPPM = 0.02;
     const minSpaceBetweenRegions = 0.05;
     const regionsData = getRegionsWithSignal(
