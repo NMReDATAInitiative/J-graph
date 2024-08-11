@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
 //import * as d3 from "d3"; //
+import { NmrSpectrum } from './nmrSpectrum.js';
 import { getJgraphColor } from './getJgraphColor.js';
 import { getJisOK } from './getJisOK.js';
 import { updateColumnsPositions } from './updateColumnsPositions.js';
@@ -182,43 +183,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     return settings;
   }
 
-  // Example usage with overriding default values
-  const settings = initializeSettings({});
-
-  // append the svg object to the body of the page
-  var svg = d3
-    .select('#my_dataviz')
-    .append('svg')
-    .attr(
-      'width',
-      settings.spectrum.widthOfThePlot +
-        settings.spectrum.margin.left +
-        settings.spectrum.margin.right,
-    )
-    .attr(
-      'height',
-      settings.spectrum.height +
-        settings.spectrum.margin.top +
-        settings.spectrum.margin.bottom,
-    )
-    .append('g')
-    .attr(
-      'transform',
-      'translate(' +
-        settings.spectrum.margin.left +
-        ',' +
-        settings.spectrum.margin.top +
-        ')',
-    );
-
-  var jgraphObj = {};
-  jgraphObj.smallSpace = 1;
-  // A function that set idleTimeOut to null
-  var idleTimeout;
-  function idled() {
-    idleTimeout = null;
-  }
-
   function pathFun(d) {
     /*
           The four points for assignment lines  
@@ -321,224 +285,13 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     }
   }
 
-  function getNewRegions(selectedDomain) {
-    var newDomain = [];
-    var from = 0;
-    var to = 0;
-    console.log(
-      'sellu old jgraphObj.originalXDomain ==========',
-      jgraphObj.originalXDomain,
-    );
-    console.log(
-      'sellu old jgraphObj.originalXDomain ==========',
-      jgraphObj.originalXDomain,
-    );
-    var totalCoveredPPM = 0.0;
-    console.log('Zsellu trtr');
-    console.log('Zsellu jgraphObj.regionsData', jgraphObj.regionsData);
-    console.log(
-      'Zsellu jgraphObj.regionsData.regions',
-      jgraphObj.regionsData.regions,
-    );
-
-    jgraphObj.regionsData.regions.forEach(function (d, i) {
-      console.log('Zsellu jgraphObj.regionsData  ttr', d);
-      from = d.start;
-      to = d.end;
-
-      console.log('Zsellu test i = ', i, ' ', from, ' ', to);
-
-      const c1 =
-        (from >= selectedDomain[0] && from <= selectedDomain[1]) ||
-        (from <= selectedDomain[0] && from >= selectedDomain[1]);
-      const c2 =
-        (to >= selectedDomain[0] && to <= selectedDomain[1]) ||
-        (to <= selectedDomain[0] && to >= selectedDomain[1]);
-      const c111 =
-        (from >= selectedDomain[0] && to <= selectedDomain[0]) ||
-        (from <= selectedDomain[0] && to >= selectedDomain[0]);
-      const c222 =
-        (from >= selectedDomain[1] && to <= selectedDomain[1]) ||
-        (from <= selectedDomain[1] && to >= selectedDomain[1]);
-      if (c1 && c2) {
-       const  toAdd = {
-          start: from,
-          end: to,
-        };
-          newDomain.push(toAdd);
-        totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
-      }
-      if (c111 && c222) {
-       const  toAdd = {
-          start: selectedDomain[0],
-          end: selectedDomain[1],
-        };
-      console.log('Zsellu test i = ', i, ' ', from, ' ', to, " IN");
-
-        newDomain.push(toAdd);
-        totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
-      } else {
-        if (c222) {
-          // only
-          const toAdd = {
-            start: from,
-            end: selectedDomain[1],
-          };
-          newDomain.push(toAdd);
-
-          totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
-        }
-        if (c111) {
-          // only
-          const toAdd = {
-            start: selectedDomain[0],
-            end: to,
-          };
-
-          newDomain.push(toAdd);
-          totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
-        }
-      }
-    });
-    
-    console.log('sellu newDomain ==========', newDomain);
-    const obj = {
-      totalCoveredPPM: totalCoveredPPM,
-      regions: newDomain,
-    };
-    return obj;
-  }
-
-  function updateChart(event) {
-    var extent = event.selection;
-
-    if (!extent) {
-      if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350));
-      // Reset the X domain to the original domain for the custom X-axis
-      jgraphObj.x.domain(jgraphObj.originalXDomain).range(jgraphObj.originalXrange);
-    updateZigZag(svg,jgraphObj.originalRegionsData, jgraphObj.originalScaleData);
-
-      // Restore the original tick values
-      jgraphObj.xAxis
-        .transition()
-        .duration(1000)
-        .call(
-          d3.axisBottom(jgraphObj.x).tickValues(jgraphObj.originalTickValues),
-        );
-        console.log("end reset scale")
-    } else {
-      // Update the X domain based on the brush selection
-      var selectedDomain = [
-        jgraphObj.x.invert(extent[0]),
-        jgraphObj.x.invert(extent[1]),
-      ];
-      console.log('sellu selectedDomain ==========', selectedDomain);
-      // Find the corresponding segment of the custom domain
-      const regionsData = getNewRegions(selectedDomain);
-      console.log('sellu newDomain calling ==========', regionsData);
-
-      const scaleData = getScaleData(regionsData, jgraphObj.gapSizePt);
-updateZigZag(svg,regionsData, scaleData) 
-      console.log('sellu new scaleData  ==========', scaleData);
-      console.log('sellu scaleData.xDomain===', scaleData.xDomain);
-      console.log('sellu scaleData.xDomain===', scaleData.xRange);
-
-      jgraphObj.x.domain(scaleData.xDomain).range(scaleData.xRange);
-
-      // var x = d3.scaleLinear().domain(scaleData.xDomain).range(scaleData.xRange);
-
-      console.log('sellu out of domain');
-
-      jgraphObj.lineSpectrum.select('.brush').call(jgraphObj.brush.move, null); // Clear the brush
-      console.log('sellu out of lineSpectrum');
-
-      // Calculate the new ticks based on the new domain
-      var newTickValues = jgraphObj.originalTickValues.filter(function (tick) {
-        return (
-          tick >= regionsData[0] && tick <= regionsData[newDomain.length - 1]
-        );
-      });
-      console.log('sellu out of newTickValues');
-
-      // Update the X axis with the new ticks
-      jgraphObj.xAxis
-        .transition()
-        .duration(1000)
-        //.call(d3.axisBottom(jgraphObj.x).tickValues(newTickValues));
-        .call(d3.axisBottom(jgraphObj.x).tickValues(scaleData.tickValues));
-      console.log('sellu out of updateChart');
-    }
-
-    // Update the line path with a transition
-    jgraphObj.lineSpectrum
-      .select('.lineG')
-      .transition()
-      .duration(1000)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x(function (d) {
-            return jgraphObj.x(d.chemShift);
-          })
-          .y(function (d) {
-            return jgraphObj.y(d.value);
-          }),
-      );
-
- var numberItem = 1;
-    if ('dataColumns' in jgraphObj && 'theColumns' in jgraphObj) {
-      jgraphObj.dataColumns.length;
-      jgraphObj.smallSpace =
-        settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
-      if (
-        jgraphObj.smallSpace >
-        settings.jGraph.preferedDistanceInPtBetweenColumns
-      ) {
-        jgraphObj.smallSpace =
-          settings.jGraph.preferedDistanceInPtBetweenColumns;
-      }
-      jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
-        jgraphObj.dataColumns,
-        jgraphObj.leftPosColumns,
-        jgraphObj.x,
-        jgraphObj.rightPosColumns,
-        jgraphObj.smallSpace,
-      );
-      updateColumnsAction(
-        jgraphObj.assignedCouplings.spreadPositionsZZ,
-        1000,
-        settings.jGraph.positionJscale,
-        settings.jGraph.topJGraphYposition,
-        settings.jGraph.jGraphParameters.colorShowLine,
-        settings.jGraph.jGraphParameters.colorHideLine,
-        settings.jGraph.generalUseWidth,
-        jgraphObj.x,
-        settings.spectrum.widthOfThePlot,
-        jgraphObj,
-        settings.jGraph.blockWidth,
-        jgraphObj.yJs,
-      );
-} else {
-      console.log('no dataColumns && theColumns in jgraphObj');
-    }
-    if ('assignedCouplings' in jgraphObj) {
-      jgraphObj.assignedCouplings.updateTheLines(
-        jgraphObj.yJs,
-        jgraphObj.smallSpace,
-        settings.jGraph.blockWidth,
-        pathFun,
-      );
-    }
-    
-
-  }
-
   function idled3() {
     idleTimeout = null;
 
     // Reset the X domain to the original domain
-    jgraphObj.x.domain(jgraphObj.originalXDomain).range(jgraphObj.originalXrange);
+    jgraphObj.x
+      .domain(jgraphObj.originalXDomain)
+      .range(jgraphObj.originalXrange);
 
     // Restore the original tick values
     jgraphObj.xAxis
@@ -565,6 +318,7 @@ updateZigZag(svg,regionsData, scaleData)
           }),
       );
   }
+
   function getRegionsWithSignal(chemShifts, minSpacePPM, marginPPM) {
     const maxY = d3.max(chemShifts, function (d) {
       return +d.value;
@@ -642,11 +396,10 @@ updateZigZag(svg,regionsData, scaleData)
       }
     });
 
-
     var totalCoveredPPM = 0.0;
-  newRegions.forEach(function (currentRegion, i) {
+    newRegions.forEach(function (currentRegion, i) {
       totalCoveredPPM += Math.abs(currentRegion.start - currentRegion.end);
-  });
+    });
 
     console.log('sellu  newRegions', newRegions);
 
@@ -657,235 +410,6 @@ updateZigZag(svg,regionsData, scaleData)
     };
 
     return obj;
-  }
-
-  function getScaleData(regionsData, gapSizePt) {
-    // Step 2: Create the X axis scale with gaps
-    var tickValues = [];
-    var xDomain = [];
-    var xRange = [];
-    var totalWidthForSpectrum =
-      settings.spectrum.widthOfThePlot - gapSizePt * (regionsData.regions.length - 1);
-    var currentX = 0;
-    const numberTotalTicks = (10.0 / 700) * settings.spectrum.widthOfThePlot;
-    console.log('getScaleData sellu regions ', regionsData.regions);
-
-    regionsData.regions.forEach((region, i1) => {
-      console.log('getScaleData sellu regions ', i1, ' ', region);
-    });
-
-    regionsData.regions.forEach(function (region, i) {
-      const curWidth = Math.abs(region.start - region.end);
-      var regionWidth = totalWidthForSpectrum * (curWidth / regionsData.totalCoveredPPM); // Calculate width per region
-      var numTicksForThisRegion = Math.round(
-        numberTotalTicks * (curWidth / regionsData.totalCoveredPPM),
-      ); // Calculate width per region
-      xDomain.push(region.start, region.end);
-      xRange.push(currentX, currentX + regionWidth);
-      currentX += regionWidth + gapSizePt;
-      console.log(
-        'getScaleData sellu numTicksForThisRegion ',
-        numTicksForThisRegion,
-      );
-      var regionTicks = d3
-        .scaleLinear()
-        .domain([region.start, region.end])
-        .ticks(numTicksForThisRegion);
-
-      tickValues = tickValues.concat(regionTicks);
-    });
-    console.log('getScaleData sellu  tickValues', tickValues);
-    console.log('getScaleData sellu  xDomain', xDomain);
-    console.log('getScaleData sellu  xRange', xRange);
-
-    const objRet = {
-      tickValues: tickValues,
-      xDomain: xDomain,
-      xRange: xRange,
-      totalWidth: totalWidthForSpectrum,
-    };
-    return objRet;
-  }
-  function updateZigZag(svg, regionsData, scaleData) {
-  // Remove any existing zigzag paths before adding new ones
-  svg.selectAll('.zigzag-path').remove();
-
-  regionsData.regions.forEach(function (region, i) {
-    if (i > 0) {
-      console.log('ZZZ v sellu region', region);
-
-      const currentX1 = scaleData.xRange[i * 2 - 1];
-      const currentX2 = scaleData.xRange[i * 2];
-
-      var zigzagHeight = 4; // Height of each zigzag segment
-      var zigzagWidth = 3; // Width of each zigzag segment
-      var numZigs = 3; // Number of zigzag segments
-      var zigzagPath1 = `M${currentX1},${
-        settings.spectrum.height + (numZigs * zigzagHeight) / 2
-      }`;
-      var zigzagPath2 = `M${currentX2},${
-        settings.spectrum.height + (numZigs * zigzagHeight) / 2
-      }`;
-  var zigzagPath3 = `M${currentX1 * 0.5 + currentX2 * 0.5},${
-        settings.spectrum.height + (numZigs * zigzagHeight) / 2
-      }`;
-      for (var j = 0; j < numZigs; j++) {
-        var xOffset = j % 2 === 0 ? zigzagWidth : -zigzagWidth;
-        var yOffset = -zigzagHeight;
-        zigzagPath1 += ` l${xOffset},${yOffset}`;
-        zigzagPath2 += ` l${xOffset},${yOffset}`;
-        zigzagPath3 += ` l${xOffset},${yOffset}`;
-      }
-
-      // Append the zigzag paths to the SVG
-    
-
-
-  svg
-        .append('path')
-        .transition()
-        .duration(20)
-        .delay(310)
-        .attr('d', zigzagPath3)
-        .attr('class', 'zigzag-path') // Assign a class for easy removal
-        .attr('stroke', 'white')
-        .attr('stroke-width', jgraphObj.gapSizePt)
-        .attr('fill', 'none');
-
-  svg
-        .append('path')
-        .transition()
-        .duration(20)
-        .delay(310)
-        .attr('d', zigzagPath1)
-        .attr('class', 'zigzag-path') // Assign a class for easy removal
-        .attr('stroke', 'black')
-        .attr('stroke-width', 1)
-        .attr('fill', 'none');
-
-      svg
-        .append('path')
-        .transition()
-        .duration(20)
-        .delay(310)
-        .attr('d', zigzagPath2)
-        .attr('class', 'zigzag-path') // Assign a class for easy removal
-        .attr('stroke', 'black')
-        .attr('stroke-width', 1)
-        .attr('fill', 'none');
-
-    }
-  });
-}
-
-
-  function visualizeSpectrum(chemShifts) {
-    const maxY = d3.max(chemShifts, function (d) {
-      return +d.value;
-    });
-    const minScale = d3.min(chemShifts, function (d) {
-      return +d.chemShift;
-    });
-    const maxScale = d3.max(chemShifts, function (d) {
-      return +d.chemShift;
-    });
-
-    const gapSizePt = 6;
-    const marginPPM = 0.02;
-    const minSpaceBetweenRegions = 0.05;
-    const regionsData = getRegionsWithSignal(
-      chemShifts,
-      minSpaceBetweenRegions,
-      marginPPM,
-    );
-    const scaleData = getScaleData(regionsData, gapSizePt);
-    console.log('sellu scaleData.xRange', scaleData.xRange);
-    console.log('sellu regionsData.regions', regionsData.regions);
-    
-    console.log('sellu xDomain ', scaleData.xDomain);
-    console.log('sellu xRange ', scaleData.xRange);
-    var x = d3.scaleLinear().domain(scaleData.xDomain).range(scaleData.xRange);
-
-    // Add Y axis
-    var y = d3
-      .scaleLinear()
-      .domain([0, maxY])
-      .range([settings.spectrum.height, 0]);
-    //yAxis = svg.append("g") .call(d3.axisLeft(y));
-
-    // Add a clipPath: everything out of this area won't be drawn.
-    var clip = svg
-      .append('defs')
-      .append('svg:clipPath')
-      .attr('id', 'clip')
-      .append('svg:rect')
-      .attr('width', settings.spectrum.widthOfThePlot)
-      .attr('height', settings.spectrum.height)
-      .attr('x', 0)
-      .attr('y', 0);
-
-    // Add brushing
-    var brush = d3
-      .brushX() // Add the brush feature using the d3.brush function
-      .extent([
-        [0, 0],
-        [settings.spectrum.widthOfThePlot, settings.spectrum.height],
-      ]) // initialize the brush area: start at 0,0 and finishes at width,settings.spectrum.height: it means I select the whole graph area
-      .on('end', function (event) {
-        updateChart(event);
-      });
-
-    // Create the line variable: where both the line and the brush take place
-    var lineSpectrum = svg.append('g').attr('clip-path', 'url(#clip)');
-
-    // Add the spectrum
-    lineSpectrum
-      .append('path')
-      .datum(chemShifts)
-      .attr('class', 'lineG') // add the class line to be able to modify this line later on.
-      .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
-      // .attr("stroke", "red")
-      .attr('stroke-width', settings.spectrum.lineWidth)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x(function (d) {
-            return x(d.chemShift);
-          })
-          .y(function (d) {
-            return y(d.value);
-          }),
-      );
-    // Add the brushing
-    updateZigZag(svg,regionsData, scaleData);
-    lineSpectrum.append('g').attr('class', 'brush').call(brush);
-
-    // Add Y axis2
-    var xAxis = svg
-      .append('g')
-      .attr('transform', 'translate(0,' + settings.spectrum.height + ')')
-      .call(d3.axisBottom(x).tickValues(scaleData.tickValues));
-
-    var x = d3.scaleLinear().domain(scaleData.xDomain).range(scaleData.xRange);
-    jgraphObj.originalRegionsData = regionsData; 
-    jgraphObj.originalScaleData = scaleData; 
-    jgraphObj.totalWidth = scaleData.totalWidth; // Store the original domain for reset
-    jgraphObj.originalXrange = scaleData.xRange.slice(); // Store the original domain for reset
-    jgraphObj.originalXDomain = scaleData.xDomain.slice(); // Store the original domain for reset
-    jgraphObj.originalTickValues = scaleData.tickValues.slice(); // Store the original tick values
-    jgraphObj = {
-      ...jgraphObj, // Copy all existing properties of jgraphObj
-      x: x,
-      y: y,
-      lineSpectrum: lineSpectrum,
-      brush: brush,
-      xAxis: xAxis,
-      spectrumData: chemShifts,
-      regionsData: regionsData,
-      gapSizePt: gapSizePt,
-    };
   }
 
   function prepareVisualisationJgraph(jGraphData) {
@@ -1105,6 +629,7 @@ updateZigZag(svg,regionsData, scaleData)
         settings.jGraph.heightJscale + settings.jGraph.positionJscale,
         settings.jGraph.positionJscale,
       ]);
+    //jgraphObj.pathFun = pathFun;
 
     jgraphObj.highlightColumn = function (event, d) {
       jmolUnselectAll();
@@ -1973,8 +1498,26 @@ updateZigZag(svg,regionsData, scaleData)
   async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
     try {
       const spectrumData = await loadSpectrum(fileNameSpectrum);
-      visualizeSpectrum(spectrumData);
+      //visualizeSpectrum(spectrumData);
 
+      const marginPPM = 0.02;
+      const minSpaceBetweenRegions = 0.05;
+      const regionsData = getRegionsWithSignal(
+        spectrumData,
+        minSpaceBetweenRegions,
+        marginPPM,
+      );
+
+      var spectrum = new NmrSpectrum(
+        spectrumData,
+        regionsData,
+        settings.spectrum,
+        settings.jGraph,
+        svg,
+        jgraphObj,
+      );
+      spectrum.build();
+      jgraphObj = spectrum.jgraphObj;
       const jGraphData = await readDataFile(fileNameData);
       prepareVisualisationJgraph(jGraphData);
       visualizeAssignment();
@@ -1985,6 +1528,39 @@ updateZigZag(svg,regionsData, scaleData)
     }
   }
   // Main call
+
+  // Example usage with overriding default values
+  const settings = initializeSettings({});
+
+  // append the svg object to the body of the page
+  var svg = d3
+    .select('#my_dataviz')
+    .append('svg')
+    .attr(
+      'width',
+      settings.spectrum.widthOfThePlot +
+        settings.spectrum.margin.left +
+        settings.spectrum.margin.right,
+    )
+    .attr(
+      'height',
+      settings.spectrum.height +
+        settings.spectrum.margin.top +
+        settings.spectrum.margin.bottom,
+    )
+    .append('g')
+    .attr(
+      'transform',
+      'translate(' +
+        settings.spectrum.margin.left +
+        ',' +
+        settings.spectrum.margin.top +
+        ')',
+    );
+  var jgraphObj = {};
+  jgraphObj.smallSpace = 1;
+
+  // A function that set idleTimeOut to null
 
   processDataAndVisualize(fileNameSpectrum, fileNameData);
 }
