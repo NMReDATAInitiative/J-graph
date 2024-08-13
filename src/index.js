@@ -2,6 +2,7 @@
 
 //import * as d3 from "d3"; //
 import { NmrSpectrum } from './nmrSpectrum.js';
+import { NmrAssignment } from './nmrAssignement.js';
 import { getJgraphColor } from './getJgraphColor.js';
 import { getJisOK } from './getJisOK.js';
 import { updateColumnsPositions } from './updateColumnsPositions.js';
@@ -683,14 +684,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   }
 
   function visualizeAssignment() {
-    jgraphObj.spreadPositionsUU = updateColumnsPositions(
-      jgraphObj.dataColumns,
-      jgraphObj.leftPosColumns,
-      jgraphObj.x,
-      jgraphObj.rightPosColumns,
-      jgraphObj.smallSpace,
-    );
-
     var theColumnsConnectColumnToSpectrumPosition = svg
       .selectAll('columnns')
       .data(jgraphObj.dataColumns)
@@ -800,15 +793,18 @@ export function jGraph(fileNameSpectrum, fileNameData) {
 
     //.style("font-weight", "2pt")
     // Lines
+
+    var theColumns = {
+      theColumnsConnectColumnToSpectrumPosition:
+        theColumnsConnectColumnToSpectrumPosition,
+      theColumnsVerticalInSpectrum: theColumnsVerticalInSpectrum,
+      theColumnLabel: theColumnLabel,
+      theColumnsMainVerticalBackLine: theColumnsMainVerticalBackLine,
+    };
+
     jgraphObj = {
       ...jgraphObj, // Copy all existing properties of jgraphObj
-      theColumns: {
-        theColumnsConnectColumnToSpectrumPosition:
-          theColumnsConnectColumnToSpectrumPosition,
-        theColumnsVerticalInSpectrum: theColumnsVerticalInSpectrum,
-        theColumnLabel: theColumnLabel,
-        theColumnsMainVerticalBackLine: theColumnsMainVerticalBackLine,
-      },
+      theColumns,
     };
   }
 
@@ -1477,6 +1473,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       jgraphObj.rightPosColumns,
       jgraphObj.smallSpace,
     );
+
     updateColumnsAction(
       spreadPositionsZZ,
       0,
@@ -1516,12 +1513,41 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         svg,
         jgraphObj,
       );
-      spectrum.build();
+      // spectrum.build();
+
       jgraphObj = spectrum.jgraphObj;
+
+      //jgraphObj = { ...jgraphObj, ...spectrum.jgraphObj,}
+
       const jGraphData = await readDataFile(fileNameData);
       prepareVisualisationJgraph(jGraphData);
-      visualizeAssignment();
+
+      jgraphObj.spreadPositionsUU = updateColumnsPositions(
+        jgraphObj.dataColumns,
+        jgraphObj.leftPosColumns,
+        jgraphObj.x,
+        jgraphObj.rightPosColumns,
+        jgraphObj.smallSpace,
+      );
+
+      var nmrAssignment = new NmrAssignment(svg, jgraphObj, settings);
+      console.log('========================================');
+      console.log('========================================');
+      console.log('jgraphObj', nmrAssignment.getTheColumns());
+      console.log('========================================');
+      console.log('========================================');
+      var theColumns = nmrAssignment.getTheColumns();
+      jgraphObj = {
+        ...jgraphObj, // Copy all existing properties of jgraphObj
+        theColumns,
+      };
+
+      //nmrAssignment.updateJgraphObj(jgraphObj);
+      console.log('jgraphObj', jgraphObj.theColumn);
+      console.log('================OOOOOO================');
+
       visualizeJgraph();
+
       updateVisu();
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);

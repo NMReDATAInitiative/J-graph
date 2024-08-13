@@ -1,4 +1,6 @@
-export class NmrSpectrum {
+import { GraphBase } from './graphBase.js';
+
+export class NmrSpectrum extends GraphBase {
   constructor(
     chemShifts,
     regionsData,
@@ -7,6 +9,14 @@ export class NmrSpectrum {
     svg,
     jgraphObj,
   ) {
+
+	// data for base which takes care of communication between classes
+	const name = "nameIsWiredInConstructor_NmrSpectrum1";
+	super(name, {
+      dataTypesSend: ['ptForChemShifts'],
+      dataTypesReceive: ['chemicalShiftWantsPosition'],
+    });
+
     this.svg = svg;
     this.chemShifts = chemShifts;
     this.regionsData = regionsData;
@@ -16,9 +26,7 @@ export class NmrSpectrum {
 
     this.gapSizePt = 6;
     this.idleTimeout = null; // for brush
-  }
-
-  build() {
+  
     const maxY = d3.max(this.chemShifts, function (d) {
       return +d.value;
     });
@@ -103,14 +111,15 @@ export class NmrSpectrum {
       .scaleLinear()
       .domain(this.scaleData.xDomain)
       .range(this.scaleData.xRange);
-    this.jgraphObj.originalRegionsData = this.regionsData;
-    this.jgraphObj.originalScaleData = this.scaleData;
-    this.jgraphObj.totalWidth = this.scaleData.totalWidth; // Store the original domain for reset
-    this.jgraphObj.originalXrange = this.scaleData.xRange.slice(); // Store the original domain for reset
-    this.jgraphObj.originalXDomain = this.scaleData.xDomain.slice(); // Store the original domain for reset
-    this.jgraphObj.originalTickValues = this.scaleData.tickValues.slice(); // Store the original tick values
-    this.jgraphObj = {
-      ...this.jgraphObj, // Copy all existing properties of jgraphObj
+	  
+     jgraphObj.originalRegionsData = this.regionsData;
+    jgraphObj.originalScaleData = this.scaleData;
+    jgraphObj.totalWidth = this.scaleData.totalWidth; // Store the original domain for reset
+    jgraphObj.originalXrange = this.scaleData.xRange.slice(); // Store the original domain for reset
+    jgraphObj.originalXDomain = this.scaleData.xDomain.slice(); // Store the original domain for reset
+    jgraphObj.originalTickValues = this.scaleData.tickValues.slice(); // Store the original tick values
+    jgraphObj = {
+      ...jgraphObj, // Copy all existing properties of jgraphObj
       x: x,
       y: y,
       lineSpectrum: lineSpectrum,
@@ -120,6 +129,7 @@ export class NmrSpectrum {
       regionsData: this.regionsData,
       gapSizePt: this.gapSizePt,
     };
+	this.jgraphObj = jgraphObj;
   }
 
   getScaleData() {
@@ -544,3 +554,4 @@ export class NmrSpectrum {
     return Gen(combine);
   }
 }
+

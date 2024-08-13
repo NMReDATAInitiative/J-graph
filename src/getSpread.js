@@ -1,6 +1,8 @@
 export function getSpread(spreadDelta, smallSpace) {
+
+  shouldd not be used anymore... 
     // determine how to spead objects to avoid contacts
-    // there muss be anough space for this function to work
+    // there muss be enough space for this function to work
     // this is obtained by setting smallSpace to a value below the width/number of items
     for (var i = 0; i < spreadDelta.length; i++) {
       const curDelta = spreadDelta[i];
