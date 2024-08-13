@@ -341,7 +341,9 @@ export class AssignedCouplings {
       .selectAll(".lineZ")
       ;
   }
-
+getAssignedCouplings(){
+  return this.content;
+}
      highlightLines(d, darkMode, generalUseWidth, svg, yJs) {
        d3.selectAll(".toBeHidden")
          .transition().duration(10).delay(0)
@@ -407,6 +409,7 @@ export class AssignedCouplings {
 
 
   makeGraphic(x, svg, lineWidth, darkMode, generalUseWidth, smallSpace, blockWidth, yJs, pathFun) {
+    
           return svg
            .selectAll("myPath222")
            .attr("class", "lineW")
@@ -417,7 +420,9 @@ export class AssignedCouplings {
            .attr("class", function (d) { return "lineZ " + d.Label }) // 2 class for each line: 'line' and the group name
            //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
           // .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
-           .attr("d", pathFun)
+           //.attr("d", pathFun)
+            .attr("d", d => d.pathData) // Use precomputed path data
+
            .style("stroke-width", lineWidth)
            .style("stroke-dasharray",
              function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth); }
@@ -444,7 +449,9 @@ addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, bl
            .attr("class", function (d) { return "lineZ " + d.Label }) // 2 class for each line: 'line' and the group name
            //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
           //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
-           .attr("d", pathFun)
+       //    .attr("d", pathFun)
+                       .attr("d", d => d.pathData) // Use precomputed path data
+
            .style("stroke-width", lineWidth)
            .style("stroke-dasharray",
              function (d) { return ("" + eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) + "," + 2.0 * lineWidth) }
@@ -500,11 +507,65 @@ addGraphicForLast(svg, lineWidth, darkMode, generalUseWidth, yJs, smallSpace, bl
 */
 
   updateTheLines(yJs, smallSpace, blockWidth, pathFun) {
+if (true) {
+       // Precompute the updated paths before the transition
+
+ this.precomputePaths();
+
+    this.theLinesW
+      .transition()
+      .duration(1000)
+            .attr("d", d => d.pathData) // Use precomputed path data
+
+      return; 
+      
+      }
     this.theLinesW
     .transition().duration(1000)
     .attr("d", pathFun);
     
   }
 
+
+  // Precompute paths for all data points
+  precomputePaths() {
+	const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
+    tmp.forEach(d => {
+      d.pathData = this.calculatePath(d); // Store precomputed path data
+    });
+  }
+  // Function to calculate the path data
+  calculatePath(d) {
+    console.log("rrff")
+    console.log("rrff",this.jgraphObj)
+    const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
+    const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
+    const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
+    const horizontalShiftX =
+      this.jgraphObj.smallSpace - this.settings.jGraph.blockWidth - 1.5;
+    const horizontalShiftSideBlock = this.settings.jGraph.blockWidth;
+
+    let usedHorizontalShiftX = eval(horizontalShiftX);
+    let usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
+    const cs1 = this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
+    const cs2 = this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
+
+    if (cs1 > cs2) {
+      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
+      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
+    }
+
+    const combine = [
+      [cs1 + usedHorizontalShiftSideBlock, y1a],
+      [cs1 + usedHorizontalShiftX, y2],
+      [cs2 - usedHorizontalShiftX, y2],
+      [cs2 - usedHorizontalShiftSideBlock, y1b],
+    ];
+
+    d.xx = (cs1 + cs2) / 2.0;
+    const Gen = d3.line();
+
+    return Gen(combine); // Return the path data
+  }
 }
 

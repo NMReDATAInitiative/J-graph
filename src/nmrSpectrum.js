@@ -1,4 +1,6 @@
 import { GraphBase } from './graphBase.js';
+import { updateColumnsPositions } from './updateColumnsPositions.js';
+import { updateColumnsAction } from './updateColumnsAction.js';
 
 export class NmrSpectrum extends GraphBase {
   constructor(
@@ -255,7 +257,9 @@ export class NmrSpectrum extends GraphBase {
   updateChart(event) {
     var extent = event.selection;
     console.log('startP updateChart', extent);
-    console.log('startP updateChart this.idleTimeout', this.idleTimeout);
+    console.log('startP updateChart this.idleTimeout', this.idleTimeout); 
+
+
 
     if (!extent) {
       if (!this.idleTimeout)
@@ -354,17 +358,23 @@ export class NmrSpectrum extends GraphBase {
           }),
       );
 
+
+
+
+
+
+
     var numberItem = 1;
     if ('dataColumns' in this.jgraphObj && 'theColumns' in this.jgraphObj) {
       this.jgraphObj.dataColumns.length;
       this.jgraphObj.smallSpace =
-        settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
+       this.settings.widthOfThePlot / (numberItem + 1); // five items, six spaces
       if (
         this.jgraphObj.smallSpace >
-        settings.jGraph.preferedDistanceInPtBetweenColumns
+        this.settingsjGraph.preferedDistanceInPtBetweenColumns
       ) {
         this.jgraphObj.smallSpace =
-          settings.jGraph.preferedDistanceInPtBetweenColumns;
+          this.settingsjGraph.preferedDistanceInPtBetweenColumns;
       }
       this.jgraphObj.assignedCouplings.spreadPositionsZZ =
         updateColumnsPositions(
@@ -377,28 +387,30 @@ export class NmrSpectrum extends GraphBase {
       updateColumnsAction(
         this.jgraphObj.assignedCouplings.spreadPositionsZZ,
         1000,
-        settings.jGraph.positionJscale,
-        settings.jGraph.topJGraphYposition,
-        settings.jGraph.jGraphParameters.colorShowLine,
-        settings.jGraph.jGraphParameters.colorHideLine,
-        settings.jGraph.generalUseWidth,
+        this.settingsjGraph.positionJscale,
+        this.settingsjGraph.topJGraphYposition,
+        this.settingsjGraph.jGraphParameters.colorShowLine,
+        this.settingsjGraph.jGraphParameters.colorHideLine,
+        this.settingsjGraph.generalUseWidth,
         this.jgraphObj.x,
-        settings.spectrum.widthOfThePlot,
+        this.settings.widthOfThePlot,
         this.jgraphObj,
-        settings.jGraph.blockWidth,
+        this.settingsjGraph.blockWidth,
         this.jgraphObj.yJs,
       );
-      console.log('yes2 dataColumns && theColumns in jgraphObj', settings);
+      console.log('yes2 dataColumns && theColumns in jgraphObj', this.settings);
     } else {
       console.log('no dataColumns && theColumns in jgraphObj');
     }
+    return;
+    this.precomputePaths();
 
     if ('assignedCouplings' in this.jgraphObj) {
       this.jgraphObj.assignedCouplings.updateTheLines(
         this.jgraphObj.yJs,
         this.jgraphObj.smallSpace,
         this.settingsjGraph.blockWidth,
-        this.pathFun,
+        this.pathFun, 
       );
       console.log(
         'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.assignedCouplings',
@@ -510,7 +522,7 @@ export class NmrSpectrum extends GraphBase {
     this.idleTimeout = null;
     console.log('startP                to zeo');
   }
-  pathFun(d) {
+  pathFunDEL(d) {
     /*
           The four points for assignment lines  
            | __ |
@@ -553,5 +565,67 @@ export class NmrSpectrum extends GraphBase {
 
     return Gen(combine);
   }
+
+
+  // Precompute paths for all data points
+  precomputePathsDEL() {
+	
+	console.log("this.content ",this.content)
+	
+    this.content.forEach(d => {
+      d.pathData = this.calculatePath(d); // Store precomputed path data
+    });
+	
+  }
+storeJgraphObj(jgraphObj){
+this.jgraphObj = {
+  ...this.jgraphObj, // Retain existing fields
+  ...jgraphObj      // Update with new fields from jgraphObj
+};
+}
+
+
+
+  // Precompute paths for all data points
+  precomputePathsRRR() {
+	const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
+    tmp.forEach(d => {
+      d.pathData = this.calculatePath(d); // Store precomputed path data
+    });
+  }
+  // Function to calculate the path data
+  calculatePath(d) {
+    console.log("rrff")
+    console.log("rrff",this.jgraphObj)
+    const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
+    const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
+    const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
+    const horizontalShiftX =
+      this.jgraphObj.smallSpace - this.settings.jGraph.blockWidth - 1.5;
+    const horizontalShiftSideBlock = this.settings.jGraph.blockWidth;
+
+    let usedHorizontalShiftX = eval(horizontalShiftX);
+    let usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
+    const cs1 = this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
+    const cs2 = this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
+
+    if (cs1 > cs2) {
+      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
+      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
+    }
+
+    const combine = [
+      [cs1 + usedHorizontalShiftSideBlock, y1a],
+      [cs1 + usedHorizontalShiftX, y2],
+      [cs2 - usedHorizontalShiftX, y2],
+      [cs2 - usedHorizontalShiftSideBlock, y1b],
+    ];
+
+    d.xx = (cs1 + cs2) / 2.0;
+    const Gen = d3.line();
+
+    return Gen(combine); // Return the path data
+  }
+
 }
 
