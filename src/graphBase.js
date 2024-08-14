@@ -68,7 +68,7 @@
       updateResult = this[updateFunctionName](data, sender);
     } else {
       console.log(
-        `The member function ${updateFunctionName} does not exists. Save data as ${data.type} to this`,
+        `The member function ${updateFunctionName} does not exists. Save data as ${data.type} to this.`,
       );
 
       // Store the received data, replacing any existing data for this data type

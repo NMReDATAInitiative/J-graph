@@ -11,12 +11,11 @@ export class NmrSpectrum extends GraphBase {
     svg,
     jgraphObj,
   ) {
-
-	// data for base which takes care of communication between classes
-	const name = "nameIsWiredInConstructor_NmrSpectrum1";
-	super(name, {
-      dataTypesSend: ['ptForChemShifts'],
-      dataTypesReceive: ['chemicalShiftWantsPosition'],
+    // data for base which takes care of communication between classes
+    const name = 'nameIsWiredInConstructor_NmrSpectrum1';
+    super(name, {
+      dataTypesSend: ['xAxisSpectrum'],
+      dataTypesReceive: [],
     });
 
     this.svg = svg;
@@ -28,7 +27,7 @@ export class NmrSpectrum extends GraphBase {
 
     this.gapSizePt = 6;
     this.idleTimeout = null; // for brush
-  
+
     const maxY = d3.max(this.chemShifts, function (d) {
       return +d.value;
     });
@@ -113,8 +112,8 @@ export class NmrSpectrum extends GraphBase {
       .scaleLinear()
       .domain(this.scaleData.xDomain)
       .range(this.scaleData.xRange);
-	  
-     jgraphObj.originalRegionsData = this.regionsData;
+
+    jgraphObj.originalRegionsData = this.regionsData;
     jgraphObj.originalScaleData = this.scaleData;
     jgraphObj.totalWidth = this.scaleData.totalWidth; // Store the original domain for reset
     jgraphObj.originalXrange = this.scaleData.xRange.slice(); // Store the original domain for reset
@@ -131,7 +130,7 @@ export class NmrSpectrum extends GraphBase {
       regionsData: this.regionsData,
       gapSizePt: this.gapSizePt,
     };
-	this.jgraphObj = jgraphObj;
+    this.jgraphObj = jgraphObj;
   }
 
   getScaleData() {
@@ -257,30 +256,57 @@ export class NmrSpectrum extends GraphBase {
   updateChart(event) {
     var extent = event.selection;
     console.log('startP updateChart', extent);
-    console.log('startP updateChart this.idleTimeout', this.idleTimeout); 
-
-
-
+    console.log('startP updateChart this.idleTimeout', this.idleTimeout);
     if (!extent) {
       if (!this.idleTimeout)
         return (this.idleTimeout = setTimeout(this.idled.bind(this), 350));
       console.log('startP reset scale');
+
+      
+      const minScale = d3.min(this.chemShifts, function (d) {
+      return +d.chemShift;
+    });
+    const maxScale = d3.max(this.chemShifts, function (d) {
+      return +d.chemShift;
+    });
       // Reset the X domain to the original domain for the custom X-axis
+   console.log("dddf this.jgraphObj.originalXDomain",this.jgraphObj.originalXDomain)
+   console.log("dddf this.jgraphObj.originalXrange",this.jgraphObj.originalXrange)
+   console.log("dddf minScale",minScale)
+   console.log("dddf minSmaxScalecale",maxScale)
+   
+   const selectedDomain = [maxScale,minScale];
+      
+    
+      console.log('sellu selectedDomain ==========', selectedDomain);
+      // Find the corresponding segment of the custom domain
+      this.regionsData = this.getNewRegions(selectedDomain);
+      console.log('sellu newDomain calling ==========', this.regionsData);
+
+
+
+
+      console.log('dddf newDomain calling ==========', selectedDomain);
+
+   this.scaleData = this.getScaleData();
+      this.updateZigZag(this.regionsData, this.scaleData);
       this.jgraphObj.x
-        .domain(this.jgraphObj.originalXDomain)
-        .range(this.jgraphObj.originalXrange);
+        .domain(this.scaleData.xDomain)
+        .range(this.scaleData.xRange);
       // Restore the original tick values
+      
+          // Update the X axis with the new ticks
       this.jgraphObj.xAxis
         .transition()
         .duration(1000)
+        //.call(d3.axisBottom(jgraphObj.x).tickValues(newTickValues));
         .call(
-          d3
-            .axisBottom(this.jgraphObj.x)
-            .tickValues(this.jgraphObj.originalTickValues),
+          d3.axisBottom(this.jgraphObj.x).tickValues(this.scaleData.tickValues),
         );
-      this.regionsData = this.jgraphObj.originalRegionsData;
+      console.log('sellu out of updateChart');
+    
+    //  this.regionsData = this.jgraphObj.originalRegionsData;
       // this.scaleData = this.getScaleData(this.regionsData, this.jgraphObj.gapSizePt);
-      this.scaleData = this.getScaleData();
 
       //this.updateZigZag(this.scaleData, this.scaleData);
       this.updateZigZag(
@@ -288,15 +314,19 @@ export class NmrSpectrum extends GraphBase {
         this.jgraphObj.originalScaleData,
       );
 
+
+
       console.log('end reset scale');
     } else {
       console.log('startP setnew scale');
 
       // Update the X domain based on the brush selection
-      var selectedDomain = [
+      const selectedDomain = [
         this.jgraphObj.x.invert(extent[0]),
         this.jgraphObj.x.invert(extent[1]),
       ];
+      
+    
       console.log('sellu selectedDomain ==========', selectedDomain);
       // Find the corresponding segment of the custom domain
       this.regionsData = this.getNewRegions(selectedDomain);
@@ -351,83 +381,15 @@ export class NmrSpectrum extends GraphBase {
         d3
           .line()
           .x((d) => {
-            return this.jgraphObj.x(d.chemShift); // `this` refers to the class instance
+            return this.jgraphObj.x(d.chemShift);
           })
           .y((d) => {
-            return this.jgraphObj.y(d.value); // `this` refers to the class instance
+            return this.jgraphObj.y(d.value);
           }),
       );
-
-
-
-
-
-
-
-    var numberItem = 1;
-    if ('dataColumns' in this.jgraphObj && 'theColumns' in this.jgraphObj) {
-      this.jgraphObj.dataColumns.length;
-      this.jgraphObj.smallSpace =
-       this.settings.widthOfThePlot / (numberItem + 1); // five items, six spaces
-      if (
-        this.jgraphObj.smallSpace >
-        this.settingsjGraph.preferedDistanceInPtBetweenColumns
-      ) {
-        this.jgraphObj.smallSpace =
-          this.settingsjGraph.preferedDistanceInPtBetweenColumns;
-      }
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ =
-        updateColumnsPositions(
-          this.jgraphObj.dataColumns,
-          this.jgraphObj.leftPosColumns,
-          this.jgraphObj.x,
-          this.jgraphObj.rightPosColumns,
-          this.jgraphObj.smallSpace,
-        );
-      updateColumnsAction(
-        this.jgraphObj.assignedCouplings.spreadPositionsZZ,
-        1000,
-        this.settingsjGraph.positionJscale,
-        this.settingsjGraph.topJGraphYposition,
-        this.settingsjGraph.jGraphParameters.colorShowLine,
-        this.settingsjGraph.jGraphParameters.colorHideLine,
-        this.settingsjGraph.generalUseWidth,
-        this.jgraphObj.x,
-        this.settings.widthOfThePlot,
-        this.jgraphObj,
-        this.settingsjGraph.blockWidth,
-        this.jgraphObj.yJs,
-      );
-      console.log('yes2 dataColumns && theColumns in jgraphObj', this.settings);
-    } else {
-      console.log('no dataColumns && theColumns in jgraphObj');
-    }
+    console.log('send =======================');
+    this.triggerSendAxis();
     return;
-    this.precomputePaths();
-
-    if ('assignedCouplings' in this.jgraphObj) {
-      this.jgraphObj.assignedCouplings.updateTheLines(
-        this.jgraphObj.yJs,
-        this.jgraphObj.smallSpace,
-        this.settingsjGraph.blockWidth,
-        this.pathFun, 
-      );
-      console.log(
-        'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.assignedCouplings',
-        this.jgraphObj.assignedCouplings,
-      );
-      console.log(
-        'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.smallSpace',
-        this.jgraphObj.smallSpace,
-      );
-      console.log(
-        'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.yJs',
-        this.jgraphObj.yJs,
-      );
-    } else {
-      console.log('no dataColumns assignedCouplings in jgraphObj');
-    }
-    console.log('finished dataColumns ');
   }
 
   getNewRegions(selectedDomain) {
@@ -566,37 +528,32 @@ export class NmrSpectrum extends GraphBase {
     return Gen(combine);
   }
 
-
   // Precompute paths for all data points
   precomputePathsDEL() {
-	
-	console.log("this.content ",this.content)
-	
-    this.content.forEach(d => {
+    console.log('this.content ', this.content);
+
+    this.content.forEach((d) => {
       d.pathData = this.calculatePath(d); // Store precomputed path data
     });
-	
   }
-storeJgraphObj(jgraphObj){
-this.jgraphObj = {
-  ...this.jgraphObj, // Retain existing fields
-  ...jgraphObj      // Update with new fields from jgraphObj
-};
-}
-
-
+  storeJgraphObj(jgraphObj) {
+    this.jgraphObj = {
+      ...this.jgraphObj, // Retain existing fields
+      ...jgraphObj, // Update with new fields from jgraphObj
+    };
+  }
 
   // Precompute paths for all data points
   precomputePathsRRR() {
-	const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
-    tmp.forEach(d => {
+    const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
+    tmp.forEach((d) => {
       d.pathData = this.calculatePath(d); // Store precomputed path data
     });
   }
   // Function to calculate the path data
-  calculatePath(d) {
-    console.log("rrff")
-    console.log("rrff",this.jgraphObj)
+  calculatePathDEL(d) {
+    console.log('rrff');
+    console.log('rrff', this.jgraphObj);
     const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
     const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
     const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
@@ -606,8 +563,10 @@ this.jgraphObj = {
 
     let usedHorizontalShiftX = eval(horizontalShiftX);
     let usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-    const cs1 = this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-    const cs2 = this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
+    const cs1 =
+      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
+    const cs2 =
+      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
 
     if (cs1 > cs2) {
       usedHorizontalShiftX = eval(-usedHorizontalShiftX);
@@ -627,5 +586,28 @@ this.jgraphObj = {
     return Gen(combine); // Return the path data
   }
 
+  triggerSendAxis() {
+    const content = {
+      x: this.jgraphObj.x,
+    }
+
+
+    this.triggerSend('xAxisSpectrum', content);
+  }
+
+  triggerSend(type, content) {
+    if (this.dataTypesSend.includes(type)) {
+      console.log(
+        `${this.name}  tries to send ${type}. It is in the dataTypesSend array`,
+      );
+    } else {
+      console.error(
+        `${this.name}  tries to send ${type}. It is not in the dataTypesSend array`,
+      );
+      return;
+    }
+
+    this.sendData(type, content);
+  }
 }
 

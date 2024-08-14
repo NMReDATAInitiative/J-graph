@@ -658,6 +658,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   }
 
   function visualizeAssignment() {
+    dfgdsfg
     var theColumnsConnectColumnToSpectrumPosition = svg
       .selectAll('columnns')
       .data(jgraphObj.dataColumns)
@@ -767,19 +768,19 @@ export function jGraph(fileNameSpectrum, fileNameData) {
 
     //.style("font-weight", "2pt")
     // Lines
-
+sdfgd
     var theColumns = {
       theColumnsConnectColumnToSpectrumPosition:
         theColumnsConnectColumnToSpectrumPosition,
       theColumnsVerticalInSpectrum: theColumnsVerticalInSpectrum,
-      theColumnLabel: theColumnLabel,
+      theColumnLabel,
       theColumnsMainVerticalBackLine: theColumnsMainVerticalBackLine,
     };
 
-    jgraphObj = {
+   /* this.jgraphObj = {
       ...jgraphObj, // Copy all existing properties of jgraphObj
-      theColumns,
-    };
+      this.theColumns,
+    };*/
   }
 
   function updateVisuDisabled() {
@@ -790,7 +791,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       jgraphObj.rightPosColumns,
       jgraphObj.smallSpace,
     );
-
+fsd
     updateColumnsAction(
       spreadPositionsZZ,
       0,
@@ -831,7 +832,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       );
       // spectrum.build();
 
-      jgraphObj = spectrum.jgraphObj;
+    //  jgraphObj = spectrum.jgraphObj;
 
       //jgraphObj = { ...jgraphObj, ...spectrum.jgraphObj,}
 
@@ -839,12 +840,37 @@ export function jGraph(fileNameSpectrum, fileNameData) {
      // prepareVisualisationJgraph(jGraphData);
  var nmrAssignment = new NmrAssignment(jGraphData, svg, jgraphObj, settings);
       
+
+
+  // Register each class as a receiver for every other class based on data type compatibility
+  const classes = [spectrum, nmrAssignment];
+  classes.forEach((sender) => {
+    classes.forEach((receiver) => {
+      if (sender !== receiver) {
+        sender.getExportTypes().forEach((sendType) => {
+          if (receiver.getImportTypes().includes(sendType)) {
+            sender.registerReceiver(receiver, sendType);
+          }
+        });
+      }
+    });
+  });
+
+
+
+spectrum.triggerSendAxis();
+
+nmrAssignment.build()
+nmrAssignment.visualizeJgraph()
+nmrAssignment.updateVisu();
+
+
       console.log('========================================');
       console.log('========================================');
-      console.log('jgraphObj', nmrAssignment.getTheColumns());
+    //  console.log('jgraphObj', nmrAssignment.getTheColumns());
       console.log('========================================');
       console.log('========================================');
-      var theColumns = nmrAssignment.getTheColumns();
+    /*  var theColumns = nmrAssignment.getTheColumns();
       jgraphObj = {
         ...jgraphObj, // Copy all existing properties of jgraphObj
         theColumns,
@@ -853,15 +879,15 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       nmrAssignment.updateJgraphObj(jgraphObj);
       console.log('jgraphObj', jgraphObj.theColumn);
       console.log('================OOOOOO================');
-
+*/
      //jgraphObj = visualizeJgraph();
-nmrAssignment.visualizeJgraph()
+////nmrAssignment.visualizeJgraph()
 
-nmrAssignment.updateVisu();
+//nmrAssignment.updateVisu();
 
 
-spectrum.storeJgraphObj(jgraphObj);
-spectrum.storeNmrAssignment(nmrAssignment);
+//spectrum.storeJgraphObj(jgraphObj);
+//spectrum.storeNmrAssignment(nmrAssignment);
     //  updateVisuDisabled();
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);

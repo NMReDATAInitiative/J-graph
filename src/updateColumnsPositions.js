@@ -66,12 +66,15 @@
 
 export function updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, smallSpace) {
 
+const curChemShiftList = dataColumns.map(function (d) { return d.chemShift; })
 var spreadPositions = [];
 var spreadDelta = [];
- for (var i = 0; i < dataColumns.length; i++) {
+
+ for (var i = 0; i < curChemShiftList.length; i++) {
    var returnValue = 0.0;
-   const curChemShift = dataColumns.map(function (d) { return d.chemShift; })
-   const curChem = curChemShift[i];
+   const curChem = curChemShiftList[i];
+   //const curChem = dataColumns[i].chemShift;
+  
    if (leftPosColumns[i] < x(curChem)) {
      if (rightPosColumns[i] > x(curChem)) {
        returnValue = x(curChem);
@@ -90,5 +93,7 @@ var spreadDelta = [];
  for (i = 0; i < spreadDelta.length; i++) {
    spreadPositions[i + 1] = spreadPositions[i] + spreadDelta[i];
  }
+  console.log(   'uui spreadPositions ', spreadPositions);
+
  return spreadPositions;
 }
