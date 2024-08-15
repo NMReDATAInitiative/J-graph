@@ -1,6 +1,4 @@
 /*jshint esversion: 6 */
-import { GraphBase } from './graphBase.js';
-
 import { getJisOK } from './getJisOK.js';
 import { getJgraphColor } from './getJgraphColor.js';
 import { jmolGetInfo } from './jmolInterface.js';

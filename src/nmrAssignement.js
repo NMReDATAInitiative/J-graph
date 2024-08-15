@@ -394,7 +394,6 @@ export class NmrAssignment extends GraphBase {
       this.jgraphObj.rightPosColumns,
       this.jgraphObj.smallSpace,
     );
-    console.log('now theColumnsConnectColumnToSpectrumPosition');
     // this.settings = settings;
     var theColumnsConnectColumnToSpectrumPosition = this.svg
       .selectAll('columnns')
@@ -424,7 +423,6 @@ export class NmrAssignment extends GraphBase {
       .style('stroke-width', this.settings.jGraph.lineWidthColumn)
       .on('click', this.jgraphObj.highlightColumn)
       .on('mouseover', this.jgraphObj.highlightColumn);
-    console.log('now theColumnsVerticalInSpectrum');
 
     // streight down
     var theColumnsVerticalInSpectrum = this.svg
@@ -520,7 +518,8 @@ export class NmrAssignment extends GraphBase {
       theColumns,
     };
 
-    console.log('this.jgraphObj.theColumns :', this.jgraphObj.theColumns);
+    this.visualizeJgraph();
+    this.updateVisu();
   }
 
   xAxisSpectrum_UpdateFunction(data, sender) {
@@ -532,7 +531,6 @@ export class NmrAssignment extends GraphBase {
     };
 
     this.updateAfterChangeScale();
-    console.log('updateAfterChangeScale after ');
 
     var inContent = null;
     inContent = { reception: 'NMROK' };
@@ -571,9 +569,6 @@ export class NmrAssignment extends GraphBase {
         this.settings.jGraph.blockWidth,
         this.jgraphObj.yJs,
       );
-      console.log('yes2 dataColumns && theColumns in jgraphObj', this.settings);
-    } else {
-      console.log('no dataColumns && theColumns in jgraphObj');
     }
 
     this.precomputePaths();
@@ -586,22 +581,7 @@ export class NmrAssignment extends GraphBase {
         this.blockWidth,
         this.pathFun,
       );
-      console.log(
-        'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.assignedCouplings',
-        this.jgraphObj.assignedCouplings,
-      );
-      console.log(
-        'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.smallSpace',
-        this.jgraphObj.smallSpace,
-      );
-      console.log(
-        'yes3 dataColumns assignedCouplings in jgraphObj this.jgraphObj.yJs',
-        this.jgraphObj.yJs,
-      );
-    } else {
-      console.log('no dataColumns assignedCouplings in jgraphObj');
     }
-    console.log('finished dataColumns ');
   }
 
   getTheColumns() {

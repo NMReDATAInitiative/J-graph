@@ -4,10 +4,6 @@
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
 
-import { jmolUnselectAll } from './jmolInterface.js';
-import { jmolSelectAtom } from './jmolInterface.js';
-import { updateBlockPosition } from './updateBlockPosition.js';
-
 //import { jmolSelectPair } from './src/jmolInterface.js';
 //import { readNmrRecord, NmrRecord, parseSDF} from 'nmredata3';
 //import { nmredata } from 'nmredata-data-test';
@@ -39,33 +35,6 @@ npm install nmredata-data-test --save
 npm install nmredata --save
 node_modules/.bin/browserify client.js > client.bundle.js 
 */
-/*
-//readNmrRecord(nmredata['menthol_1D_1H_assigned_J.zip'], {
-readNmrRecord(nmredata['../node_modules/nmredata-data-test/data/menthol_1D_1H_assigned_J.zip'], {
-  zipOptions: { base64: true },
-}).then(async (nmrRecord) => {
-  
-  let nbSDFFiles = nmrRecord.nbSamples;
-  let sdfList = nmrRecord.getSDFList(); // it's return ["wild_JCH_coupling","only_one_HH_coupling_in_Jtag","compound1.nmredata","compound1_with_jcamp.nmredata","with_char_10","compound1_special_labels.nmredata copy"]
- 
-  let activeElement = nmrRecord.getActiveElement(); //should return 'wild_JCH_coupling'
-  nmrRecord.setActiveElement('only_one_HH_coupling_in_Jtag');
-
-  
-  let allTags = nmrRecord.getNMReDataTags(); //return the tags of 'only_one_HH_coupling_in_Jtag'
-  // you can get a specific tag
-  let solvent = allTags['SOLVENT'];
-  // To get one list with the current's tags
-  let tagsList = Object.keys(allTags);
- 
-  let nmredata = nmrRecord.getNMReData();
-
-  
-  var json = await nmrRecord.toJSON();
-  //
-
-});
-*/
 
 export function jGraphNmredata(
   fileNameSpectrum,
@@ -76,14 +45,13 @@ export function jGraphNmredata(
 ) {
   jGraph(fileNameSpectrum, fileNameData);
 }
+
 export function jGraph(fileNameSpectrum, fileNameData) {
   //
   // set the dimensions and margins of the graph
   //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
   function initializeSettings(smallScreen, overrideSettings = {}) {
-    
-
     // Default settings
     let defaultSettings = {
       spectrum: {
@@ -96,8 +64,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         darkMode: false,
         smallScreen: smallScreen,
       },
-      
-     
     };
 
     // Merge default settings with overrides
@@ -114,50 +80,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       settings.spectrum.margin.bottom;
 
     return settings;
-  }
-
-  function pathFun(d) {
-    /*
-          The four points for assignment lines  
-           | __ |
-           |/  \|
-           O    O
-           |    |
-          */
-
-    const y1a = jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
-    const y1b = jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
-    // const y2 = yJs(Math.abs(d.JvalueShifted));
-    //const iiidex = d.iindex;
-    //   console.log("iiidex = " + JSON.stringify(d.iindex));
-    //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
-    // HERE
-    //const alterative = dataColumns[0].JvalueAntiOverlap1;//
-    //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
-    const y2 = jgraphObj.yJs(Math.abs(d.JvalueShifted));
-    //const y2 = yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX =
-      jgraphObj.smallSpace - settings.jGraph.blockWidth - 1.5; // make larger here !
-    const horizontalShiftSideBlock = settings.jGraph.blockWidth; // make larger here !
-    var usedHorizontalShiftX = eval(horizontalShiftX);
-    var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-    const cs1 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-    const cs2 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-    if (cs1 > cs2) {
-      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-    }
-
-    const combine = [
-      [cs1 + usedHorizontalShiftSideBlock, y1a],
-      [cs1 + usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftSideBlock, y1b],
-    ];
-    d.xx = (cs1 + cs2) / 2.0;
-    var Gen = d3.line();
-
-    return Gen(combine);
   }
 
   async function loadSpectrum(fileName) {
@@ -191,40 +113,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         error,
       );
     }
-  }
-
-  function idled3() {
-    idleTimeout = null;
-
-    // Reset the X domain to the original domain
-    jgraphObj.x
-      .domain(jgraphObj.originalXDomain)
-      .range(jgraphObj.originalXrange);
-
-    // Restore the original tick values
-    jgraphObj.xAxis
-      .transition()
-      .duration(1000)
-      .call(
-        d3.axisBottom(jgraphObj.x).tickValues(jgraphObj.originalTickValues),
-      );
-
-    // Restore the line path
-    jgraphObj.lineSpectrum
-      .select('.lineG')
-      .transition()
-      .duration(1000)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x(function (d) {
-            return jgraphObj.x(d.chemShift);
-          })
-          .y(function (d) {
-            return jgraphObj.y(d.value);
-          }),
-      );
   }
 
   function getRegionsWithSignal(chemShifts, minSpacePPM, marginPPM) {
@@ -319,279 +207,41 @@ export function jGraph(fileNameSpectrum, fileNameData) {
 
     return obj;
   }
-
-  function prepareVisualisationJgraphDELLLLE(jGraphData) {
-    const processedData = processCSVData(jGraphData);
-    // const unassignedCouplings = new UnassignedCouplings(processedData); // Adjust based on actual data needs
-    let arrayColumns = [];
-    let labelColumnArray = [];
-    let chemColumnArray = [];
-    let indexAtomMol = []; // atom index in the mol structure
-
-    // Mapping fields from each row to new arrays
-    jGraphData.forEach((d) => {
-      const index1 = d.indexColumn1 - 1; // Adjusting index to 0-based
-      const index2 = d.indexColumn2 - 1;
-
-      arrayColumns[index1] = d.chemShift1;
-      arrayColumns[index2] = d.chemShift2;
-
-      labelColumnArray[index1] = d.labelColumn1;
-      labelColumnArray[index2] = d.labelColumn2;
-
-      indexAtomMol[index1] = d.indexInMolFile1;
-      indexAtomMol[index2] = d.indexInMolFile2;
-
-      chemColumnArray[index1] = d.chemShift1;
-      chemColumnArray[index2] = d.chemShift2;
-    });
-    // sort arrayColumns by decreasing values of chemical shift
-    var len = arrayColumns.length;
-    var indices = new Array(len);
-    for (var i = 0; i < len; ++i) indices[i] = i;
-    indices.sort(function (a, b) {
-      return arrayColumns[a] < arrayColumns[b]
-        ? 1
-        : arrayColumns[a] > arrayColumns[b]
-        ? -1
-        : 0;
-    });
-    var indicesSorted = new Array(len);
-    for (i = 0; i < len; ++i) indicesSorted[indices[i]] = i;
-
-    function populateDataColumns(
-      processedData,
-      jGraphData,
-      chemColumnArray,
-      labelColumnArray,
-      indicesSorted,
-      indexAtomMol,
-      updateBlockPosition,
-      minSpaceBetweekCircles,
-      minSpaceBetweekBlocks,
-    ) {
-      let dataColumns = [];
-      for (let i = 0; i < processedData.arrayColumns.length; i++) {
-        let listOfJs = [];
-
-        jGraphData.forEach((d, i1) => {
-          const condition = d.Label !== 'noAssignement';
-
-          if (i + 1 === +d.indexColumn1) {
-            listOfJs.push({
-              isAssigned: condition,
-              indexInAssignmentList: i1,
-              isFirstInAssignmentIndex: true,
-              Jvalue: +d.Jvalue,
-              JlevelAvoidContact: Math.abs(+d.Jvalue),
-            });
-          }
-          if (i + 1 === +d.indexColumn2) {
-            listOfJs.push({
-              isAssigned: condition,
-              indexInAssignmentList: i1,
-              isFirstInAssignmentIndex: false,
-              Jvalue: +d.Jvalue,
-              JlevelAvoidContact: Math.abs(+d.Jvalue),
-            });
-          }
-        });
-
-        listOfJs.sort((a, b) => a.JlevelAvoidContact - b.JlevelAvoidContact);
-
-        listOfJs = updateBlockPosition(
-          listOfJs,
-          minSpaceBetweekCircles,
-          minSpaceBetweekBlocks,
-        );
-
-        dataColumns.push({
-          chemShift: chemColumnArray[i],
-          labelColumn: labelColumnArray[i],
-          MyIndex: indicesSorted[i],
-          atomIndexMol: indexAtomMol[i],
-          listOfJs: listOfJs,
-        });
-      }
-
-      dataColumns.sort((a, b) =>
-        a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0,
-      );
-
-      return dataColumns;
-    }
-
-    jgraphObj.dataColumns = populateDataColumns(
-      processedData,
-      jGraphData,
-      chemColumnArray,
-      labelColumnArray,
-      indicesSorted,
-      indexAtomMol,
-      updateBlockPosition,
-      settings.jGraph.minSpaceBetweekCircles,
-      settings.jGraph.minSpaceBetweekBlocks,
-    );
-
-    jgraphObj.assignedCouplings = new AssignedCouplings(jgraphObj.dataColumns);
-    //assignedCouplings.consconstructFromJgraphtructor(jGraph);  // obsolete
-
-    /*  var dataUnassignedCoupCircles = [];
-     for (i = 0; i < unassignedCouplings.content.length; i++) {
-       const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
-       const inInd2 = indicesSorted[unassignedCouplings.content[i].colNumber2];
-       dataUnassignedCoupCircles.push({
-         'chemShift': arrayColumns[inInd1],
-         'value': unassignedCouplings.content[i].Jvalue,
-         'MyIndex': inInd1,
-         'uniqIndex': dataUnassignedCoupCircles.length,
-       });
-       dataUnassignedCoupCircles.push({
-         'chemShift': arrayColumns[inInd2],
-         'value': unassignedCouplings.content[i].Jvalue,
-         'MyIndex': inInd2,
-         'uniqIndex': dataUnassignedCoupCircles.length,
-       });
-     }*/
-    function populateDataUnassignedCoupCircles(dataColumns) {
-      let dataUnassignedCoupCircles = [];
-      for (let indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
-        for (let i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
-          if (!dataColumns[indexList1].listOfJs[i1].isAssigned) {
-            dataUnassignedCoupCircles.push({
-              chemShift: dataColumns[indexList1].chemShift,
-              valueOnBar:
-                dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
-              value: dataColumns[indexList1].listOfJs[i1].Jvalue,
-              MyIndex: indexList1,
-              dataColIndex1: indexList1,
-              dataColIndex2: i1,
-              uniqIndex: dataUnassignedCoupCircles.length,
-              indexAtomMol: dataColumns[indexList1].atomIndexMol,
-            });
-          }
-        }
-      }
-      return dataUnassignedCoupCircles;
-    }
-    jgraphObj.dataUnassignedCoupCircles = populateDataUnassignedCoupCircles(
-      jgraphObj.dataColumns,
-    );
-
-    function populateDataAssignedCoupBlocks(dataColumns) {
-      let dataAssignedCoupBlocks = [];
-      for (let indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
-        for (let i1 = 0; i1 < dataColumns[indexList1].listOfJs.length; i1++) {
-          if (dataColumns[indexList1].listOfJs[i1].isAssigned) {
-            dataAssignedCoupBlocks.push({
-              chemShift: dataColumns[indexList1].chemShift,
-              value: dataColumns[indexList1].listOfJs[i1].JlevelAvoidContact,
-              trueValue: dataColumns[indexList1].listOfJs[i1].Jvalue,
-              MyIndex: indexList1,
-              uniqIndex: dataAssignedCoupBlocks.length,
-            });
-          }
-        }
-      }
-      return dataAssignedCoupBlocks;
-    }
-
-    jgraphObj.dataAssignedCoupBlocks = populateDataAssignedCoupBlocks(
-      jgraphObj.dataColumns,
-    );
-
-    jgraphObj.assignedCouplings.udateLineTrajectory(
-      settings.jGraph.spaceBlock,
-      2.0 * settings.spectrum.lineWidth * settings.jGraph.nbHzPerPoint,
-      settings.jGraph.spaceCircle,
-      jgraphObj.dataColumns,
-    );
-    //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
-
-    // Make list of positions according to size of jGraphData
-    const numberItem = arrayColumns.length;
-    jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
-    if (
-      jgraphObj.smallSpace > settings.jGraph.preferedDistanceInPtBetweenColumns
-    ) {
-      jgraphObj.smallSpace = settings.jGraph.preferedDistanceInPtBetweenColumns;
-    }
-
-    var leftPosColumns = [];
-    var rightPosColumns = [];
-    for (let i = 0; i < numberItem; i++) {
-      const curPosLeft = (i + 0.5) * jgraphObj.smallSpace;
-      const curPosRight =
-        settings.spectrum.widthOfThePlot -
-        (numberItem - i - 0.5) * jgraphObj.smallSpace;
-      leftPosColumns.push(curPosLeft);
-      rightPosColumns.push(curPosRight);
-    }
-    jgraphObj.leftPosColumns = leftPosColumns;
-    jgraphObj.rightPosColumns = rightPosColumns;
-
-    jgraphObj.yJs = d3
-      .scaleLinear()
-      .domain([0, settings.jGraph.maxScaleJ])
-      .range([
-        settings.jGraph.heightJscale + settings.jGraph.positionJscale,
-        settings.jGraph.positionJscale,
-      ]);
-    //jgraphObj.pathFun = pathFun;
-
-    jgraphObj.highlightColumn = function (event, d) {
-      jmolUnselectAll();
-      const number = d.atomIndexMol; // Assuming 'atomIndexMol' is a property of 'd'
-      const atomColorHighlightSingle = [127, 255, 127];
-      jmolSelectAtom(number, atomColorHighlightSingle);
-      setTimeout(function () {
-        jmolUnselectAll();
-      }, 3200);
-    };
-
-    // Unhighlight
-    /*
-
-     var doNotHighlightLines = function (toto) {
-
-    //           jmolUnselectAll();
-
-        d3.selectAll(".line")
-          .transition().duration(200).delay(300)
-          //   .style("stroke", function (d) { return (color(d.Label)) })
-          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, settings.jGraph.darkMode) })
-          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), settings.jGraph.darkMode); })
-          .style("opacity", "1")
-     };
-*/
-
-    //  Unhighlight
-    /*    var doNotHighlightDot = function (d) {
-           d3.selectAll(".circleL")
-             .transition().duration(200).delay(300)
-             .style("opacity", "1")
-           selected_specie = "textCircle" + d.uniqIndex;
-   
-           d3.selectAll("." + selected_specie)
-             .transition().duration(200).delay(3000)
-             // .style("stroke", color(selected_specie))
-             .style("opacity", "0")
-   
-           d3.selectAll(".rulerClass")
-             .transition().duration(200).delay(3000)
-             .attr("y1", yJs(0.0))
-             .attr("y2", yJs(0.0))
-             .style("opacity", '0.0')
-         }
-   */
-
-    //////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////
-  }
-
   async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
     try {
+      const smallScreen =
+        /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent,
+        );
+      // Example usage with overriding default values
+      const settings = initializeSettings(smallScreen, {});
+
+      // append the svg object to the body of the page
+      var svg = d3
+        .select('#my_dataviz')
+        .append('svg')
+        .attr(
+          'width',
+          settings.spectrum.widthOfThePlot +
+            settings.spectrum.margin.left +
+            settings.spectrum.margin.right,
+        )
+        .attr(
+          'height',
+          settings.spectrum.height +
+            settings.spectrum.margin.top +
+            settings.spectrum.margin.bottom,
+        )
+        .append('g')
+        .attr(
+          'transform',
+          'translate(' +
+            settings.spectrum.margin.left +
+            ',' +
+            settings.spectrum.margin.top +
+            ')',
+        );
+
       const spectrumData = await loadSpectrum(fileNameSpectrum);
 
       const marginPPM = 0.02;
@@ -601,7 +251,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         minSpaceBetweenRegions,
         marginPPM,
       );
-  var jgraphObjEmpty = {};
 
       var spectrum = new NmrSpectrum(
         spectrumData,
@@ -610,108 +259,40 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         svg,
         settings,
       );
+
       const settings_with_spectrum_settings = spectrum.getSettings();
-      // spectrum.build();
-
-    //  jgraphObj = spectrum.jgraphObj;
-
-      //jgraphObj = { ...jgraphObj, ...spectrum.jgraphObj,}
 
       const jGraphData = await readDataFile(fileNameData);
-     // prepareVisualisationJgraph(jGraphData);
- var nmrAssignment = new NmrAssignment(jGraphData, svg, smallScreen, settings_with_spectrum_settings);
-      
 
+      var nmrAssignment = new NmrAssignment(
+        jGraphData,
+        svg,
+        smallScreen,
+        settings_with_spectrum_settings,
+      );
 
-  // Register each class as a receiver for every other class based on data type compatibility
-  const classes = [spectrum, nmrAssignment];
-  classes.forEach((sender) => {
-    classes.forEach((receiver) => {
-      if (sender !== receiver) {
-        sender.getExportTypes().forEach((sendType) => {
-          if (receiver.getImportTypes().includes(sendType)) {
-            sender.registerReceiver(receiver, sendType);
+      // Register each class as a receiver for every other class based on data type compatibility
+      const classes = [spectrum, nmrAssignment];
+      classes.forEach((sender) => {
+        classes.forEach((receiver) => {
+          if (sender !== receiver) {
+            sender.getExportTypes().forEach((sendType) => {
+              if (receiver.getImportTypes().includes(sendType)) {
+                sender.registerReceiver(receiver, sendType);
+              }
+            });
           }
         });
-      }
-    });
-  });
+      });
 
+      spectrum.triggerSendAxis();
 
-
-spectrum.triggerSendAxis();
-
-nmrAssignment.build()
-nmrAssignment.visualizeJgraph()
-nmrAssignment.updateVisu();
-
-
-      console.log('========================================');
-      console.log('========================================');
-    //  console.log('jgraphObj', nmrAssignment.getTheColumns());
-      console.log('========================================');
-      console.log('========================================');
-    /*  var theColumns = nmrAssignment.getTheColumns();
-      jgraphObj = {
-        ...jgraphObj, // Copy all existing properties of jgraphObj
-        theColumns,
-      };
-
-      nmrAssignment.updateJgraphObj(jgraphObj);
-      console.log('jgraphObj', jgraphObj.theColumn);
-      console.log('================OOOOOO================');
-*/
-     //jgraphObj = visualizeJgraph();
-////nmrAssignment.visualizeJgraph()
-
-//nmrAssignment.updateVisu();
-
-
-//spectrum.storeJgraphObj(jgraphObj);
-//spectrum.storeNmrAssignment(nmrAssignment);
-    //  updateVisuDisabled();
+      nmrAssignment.build();
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);
     }
   }
 
-
   // Main call
-const smallScreen =
-      /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent,
-      );
-  // Example usage with overriding default values
-  const settings = initializeSettings(smallScreen,{});
-
-  // append the svg object to the body of the page
-  var svg = d3
-    .select('#my_dataviz')
-    .append('svg')
-    .attr(
-      'width',
-      settings.spectrum.widthOfThePlot +
-        settings.spectrum.margin.left +
-        settings.spectrum.margin.right,
-    )
-    .attr(
-      'height',
-      settings.spectrum.height +
-        settings.spectrum.margin.top +
-        settings.spectrum.margin.bottom,
-    )
-    .append('g')
-    .attr(
-      'transform',
-      'translate(' +
-        settings.spectrum.margin.left +
-        ',' +
-        settings.spectrum.margin.top +
-        ')',
-    );
-  //jgraphObj.smallSpace = 1;
-
-  // A function that set idleTimeOut to null
-
   processDataAndVisualize(fileNameSpectrum, fileNameData);
 }

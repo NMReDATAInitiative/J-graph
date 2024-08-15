@@ -267,12 +267,9 @@ export class NmrSpectrum extends GraphBase {
 
   updateChart(event) {
     var extent = event.selection;
-    console.log('startP updateChart', extent);
-    console.log('startP updateChart this.idleTimeout', this.idleTimeout);
     if (!extent) {
       if (!this.idleTimeout)
         return (this.idleTimeout = setTimeout(this.idled.bind(this), 350));
-      console.log('startP reset scale');
 
       const minScale = d3.min(this.chemShifts, function (d) {
         return +d.chemShift;
@@ -281,25 +278,11 @@ export class NmrSpectrum extends GraphBase {
         return +d.chemShift;
       });
       // Reset the X domain to the original domain for the custom X-axis
-      console.log(
-        'dddf this.jgraphObj.originalXDomain',
-        this.jgraphObj.originalXDomain,
-      );
-      console.log(
-        'dddf this.jgraphObj.originalXrange',
-        this.jgraphObj.originalXrange,
-      );
-      console.log('dddf minScale', minScale);
-      console.log('dddf minSmaxScalecale', maxScale);
 
       const selectedDomain = [maxScale, minScale];
 
-      console.log('sellu selectedDomain ==========', selectedDomain);
       // Find the corresponding segment of the custom domain
       this.regionsData = this.getNewRegions(selectedDomain);
-      console.log('sellu newDomain calling ==========', this.regionsData);
-
-      console.log('dddf newDomain calling ==========', selectedDomain);
 
       this.scaleData = this.getScaleData();
       this.updateZigZag(this.regionsData, this.scaleData);
@@ -316,7 +299,6 @@ export class NmrSpectrum extends GraphBase {
         .call(
           d3.axisBottom(this.jgraphObj.x).tickValues(this.scaleData.tickValues),
         );
-      console.log('sellu out of updateChart');
 
       //  this.regionsData = this.jgraphObj.originalRegionsData;
       // this.scaleData = this.getScaleData(this.regionsData, this.jgraphObj.gapSizePt);
@@ -326,55 +308,32 @@ export class NmrSpectrum extends GraphBase {
         this.jgraphObj.originalRegionsData,
         this.jgraphObj.originalScaleData,
       );
-
-      console.log('end reset scale');
     } else {
-      console.log('startP setnew scale');
-
       // Update the X domain based on the brush selection
       const selectedDomain = [
         this.jgraphObj.x.invert(extent[0]),
         this.jgraphObj.x.invert(extent[1]),
       ];
 
-      console.log('sellu selectedDomain ==========', selectedDomain);
       // Find the corresponding segment of the custom domain
       this.regionsData = this.getNewRegions(selectedDomain);
-      console.log('sellu newDomain calling ==========', this.regionsData);
 
       // this.scaleData = this.getScaleData(this.regionsData, this.jgraphObj.gapSizePt);
       this.scaleData = this.getScaleData();
       this.updateZigZag(this.regionsData, this.scaleData);
-      console.log('sellu new scaleData  ==========', this.scaleData);
-      console.log('sellu scaleData.xDomain===', this.scaleData.xDomain);
-      console.log('sellu scaleData.xDomain===', this.scaleData.xRange);
 
       this.jgraphObj.x
         .domain(this.scaleData.xDomain)
         .range(this.scaleData.xRange);
 
-      // var x = d3.scaleLinear().domain(scaleData.xDomain).range(scaleData.xRange);
-
-      console.log('sellu out of domain');
-
       this.jgraphObj.lineSpectrum
         .select('.brush')
         .call(this.jgraphObj.brush.move, null); // Clear the brush
-      console.log('sellu out of lineSpectrum');
-
-      // Calculate the new ticks based on the new domain
-      /*var newTickValues = this.jgraphObj.originalTickValues.filter(function (tick) {
-        return (
-          tick >= this.regionsData[0] && tick <= this.regionsData[newDomain.length - 1]
-        );
-      });*/
-      console.log('sellu out of newTickValues');
 
       // Update the X axis with the new ticks
       this.jgraphObj.xAxis
         .transition()
         .duration(1000)
-        //.call(d3.axisBottom(jgraphObj.x).tickValues(newTickValues));
         .call(
           d3.axisBottom(this.jgraphObj.x).tickValues(this.scaleData.tickValues),
         );
@@ -406,28 +365,12 @@ export class NmrSpectrum extends GraphBase {
     var newDomain = [];
     var from = 0;
     var to = 0;
-    console.log(
-      'sellu old jgraphObj.originalXDomain ==========',
-      this.jgraphObj.originalXDomain,
-    );
-    console.log(
-      'sellu old jgraphObj.originalXDomain ==========',
-      this.jgraphObj.originalXDomain,
-    );
+
     var totalCoveredPPM = 0.0;
-    console.log('Zsellu trtr');
-    console.log('Zsellu jgraphObj.regionsData', this.jgraphObj.regionsData);
-    console.log(
-      'Zsellu jgraphObj.regionsData.regions',
-      this.jgraphObj.regionsData.regions,
-    );
 
     this.jgraphObj.regionsData.regions.forEach(function (d, i) {
-      console.log('Zsellu jgraphObj.regionsData  ttr', d);
       from = d.start;
       to = d.end;
-
-      console.log('Zsellu test i = ', i, ' ', from, ' ', to);
 
       const c1 =
         (from >= selectedDomain[0] && from <= selectedDomain[1]) ||
@@ -454,7 +397,6 @@ export class NmrSpectrum extends GraphBase {
           start: selectedDomain[0],
           end: selectedDomain[1],
         };
-        console.log('Zsellu test i = ', i, ' ', from, ' ', to, ' IN');
 
         newDomain.push(toAdd);
         totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
@@ -482,7 +424,6 @@ export class NmrSpectrum extends GraphBase {
       }
     });
 
-    console.log('sellu newDomain ==========', newDomain);
     const obj = {
       totalCoveredPPM: totalCoveredPPM,
       regions: newDomain,
@@ -492,60 +433,8 @@ export class NmrSpectrum extends GraphBase {
 
   idled() {
     this.idleTimeout = null;
-    console.log('startP                to zeo');
-  }
-  pathFunDEL(d) {
-    /*
-          The four points for assignment lines  
-           | __ |
-           |/  \|
-           O    O
-           |    |
-          */
-
-    const y1a = jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
-    const y1b = jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
-    // const y2 = yJs(Math.abs(d.JvalueShifted));
-    //const iiidex = d.iindex;
-    //   console.log("iiidex = " + JSON.stringify(d.iindex));
-    //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
-    // HERE
-    //const alterative = dataColumns[0].JvalueAntiOverlap1;//
-    //console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
-    const y2 = jgraphObj.yJs(Math.abs(d.JvalueShifted));
-    //const y2 = yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX =
-      jgraphObj.smallSpace - settings.jGraph.blockWidth - 1.5; // make larger here !
-    const horizontalShiftSideBlock = settings.jGraph.blockWidth; // make larger here !
-    var usedHorizontalShiftX = eval(horizontalShiftX);
-    var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-    const cs1 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-    const cs2 = jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-    if (cs1 > cs2) {
-      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-    }
-
-    const combine = [
-      [cs1 + usedHorizontalShiftSideBlock, y1a],
-      [cs1 + usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftSideBlock, y1b],
-    ];
-    d.xx = (cs1 + cs2) / 2.0;
-    var Gen = d3.line();
-
-    return Gen(combine);
   }
 
-  // Precompute paths for all data points
-  precomputePathsDEL() {
-    console.log('this.content ', this.content);
-
-    this.content.forEach((d) => {
-      d.pathData = this.calculatePath(d); // Store precomputed path data
-    });
-  }
   storeJgraphObj(jgraphObj) {
     this.jgraphObj = {
       ...this.jgraphObj, // Retain existing fields
@@ -562,8 +451,6 @@ export class NmrSpectrum extends GraphBase {
   }
   // Function to calculate the path data
   calculatePathDEL(d) {
-    console.log('rrff');
-    console.log('rrff', this.jgraphObj);
     const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
     const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
     const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
