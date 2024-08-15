@@ -12,6 +12,8 @@ if (typeof generalUseWidth === 'undefined') {
 } 
 if (typeof colorShowLine === 'undefined') {
   console.error("zzh  colorShowLine is undefined")
+}if (typeof blockWidth === 'undefined') {
+  console.error("zzh  blockWidth is undefined")
 }
 
 
@@ -96,7 +98,6 @@ if (typeof colorShowLine === 'undefined') {
            //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
            //.attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
            //  .attr("opacity", 0.0)
-    console.log("GOING TO theColumnLabel");
 
 
            if (true) jgraphObj.theColumns.theColumnLabel

@@ -1,16 +1,7 @@
 import { GraphBase } from './graphBase.js';
-import { updateColumnsPositions } from './updateColumnsPositions.js';
-import { updateColumnsAction } from './updateColumnsAction.js';
 
 export class NmrSpectrum extends GraphBase {
-  constructor(
-    chemShifts,
-    regionsData,
-    settings,
-    settingsjGraph,
-    svg,
-    jgraphObj,
-  ) {
+  constructor(chemShifts, regionsData, smallScreen, svg, settingsInput) {
     // data for base which takes care of communication between classes
     const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
@@ -18,12 +9,13 @@ export class NmrSpectrum extends GraphBase {
       dataTypesReceive: [],
     });
 
+    this.fullSettings = this.initializeSettings(settingsInput);
+
     this.svg = svg;
     this.chemShifts = chemShifts;
     this.regionsData = regionsData;
-    this.settingsjGraph = settingsjGraph;
-    this.settings = settings;
-    this.jgraphObj = jgraphObj;
+    this.settings = this.fullSettings.spectrum;
+    this.jgraphObj = {};
 
     this.gapSizePt = 6;
     this.idleTimeout = null; // for brush
@@ -101,7 +93,7 @@ export class NmrSpectrum extends GraphBase {
     // Add the brushing
     this.updateZigZag(this.regionsData, this.scaleData);
     lineSpectrum.append('g').attr('class', 'brush').call(brush);
-
+    console.log('calling_constructor');
     // Add Y axis2
     var xAxis = this.svg
       .append('g')
@@ -113,6 +105,7 @@ export class NmrSpectrum extends GraphBase {
       .domain(this.scaleData.xDomain)
       .range(this.scaleData.xRange);
 
+    var jgraphObj = {};
     jgraphObj.originalRegionsData = this.regionsData;
     jgraphObj.originalScaleData = this.scaleData;
     jgraphObj.totalWidth = this.scaleData.totalWidth; // Store the original domain for reset
@@ -131,6 +124,25 @@ export class NmrSpectrum extends GraphBase {
       gapSizePt: this.gapSizePt,
     };
     this.jgraphObj = jgraphObj;
+  }
+  getSettings() {
+    return this.fullSettings;
+  }
+  initializeSettings(overrideSettings = {}) {
+    // Default settings
+    /*let defaultSettings = {
+      spectrum: {
+        lineWidth: smallScreen ? 5 : 1.5,
+      }
+    };*/
+
+    // Merge default settings with overrides
+    //let settings = { ...defaultSettings, ...overrideSettings };
+    let settings = overrideSettings;
+
+    // Calculate derived values
+
+    return settings;
   }
 
   getScaleData() {
@@ -262,40 +274,41 @@ export class NmrSpectrum extends GraphBase {
         return (this.idleTimeout = setTimeout(this.idled.bind(this), 350));
       console.log('startP reset scale');
 
-      
       const minScale = d3.min(this.chemShifts, function (d) {
-      return +d.chemShift;
-    });
-    const maxScale = d3.max(this.chemShifts, function (d) {
-      return +d.chemShift;
-    });
+        return +d.chemShift;
+      });
+      const maxScale = d3.max(this.chemShifts, function (d) {
+        return +d.chemShift;
+      });
       // Reset the X domain to the original domain for the custom X-axis
-   console.log("dddf this.jgraphObj.originalXDomain",this.jgraphObj.originalXDomain)
-   console.log("dddf this.jgraphObj.originalXrange",this.jgraphObj.originalXrange)
-   console.log("dddf minScale",minScale)
-   console.log("dddf minSmaxScalecale",maxScale)
-   
-   const selectedDomain = [maxScale,minScale];
-      
-    
+      console.log(
+        'dddf this.jgraphObj.originalXDomain',
+        this.jgraphObj.originalXDomain,
+      );
+      console.log(
+        'dddf this.jgraphObj.originalXrange',
+        this.jgraphObj.originalXrange,
+      );
+      console.log('dddf minScale', minScale);
+      console.log('dddf minSmaxScalecale', maxScale);
+
+      const selectedDomain = [maxScale, minScale];
+
       console.log('sellu selectedDomain ==========', selectedDomain);
       // Find the corresponding segment of the custom domain
       this.regionsData = this.getNewRegions(selectedDomain);
       console.log('sellu newDomain calling ==========', this.regionsData);
 
-
-
-
       console.log('dddf newDomain calling ==========', selectedDomain);
 
-   this.scaleData = this.getScaleData();
+      this.scaleData = this.getScaleData();
       this.updateZigZag(this.regionsData, this.scaleData);
       this.jgraphObj.x
         .domain(this.scaleData.xDomain)
         .range(this.scaleData.xRange);
       // Restore the original tick values
-      
-          // Update the X axis with the new ticks
+
+      // Update the X axis with the new ticks
       this.jgraphObj.xAxis
         .transition()
         .duration(1000)
@@ -304,8 +317,8 @@ export class NmrSpectrum extends GraphBase {
           d3.axisBottom(this.jgraphObj.x).tickValues(this.scaleData.tickValues),
         );
       console.log('sellu out of updateChart');
-    
-    //  this.regionsData = this.jgraphObj.originalRegionsData;
+
+      //  this.regionsData = this.jgraphObj.originalRegionsData;
       // this.scaleData = this.getScaleData(this.regionsData, this.jgraphObj.gapSizePt);
 
       //this.updateZigZag(this.scaleData, this.scaleData);
@@ -313,8 +326,6 @@ export class NmrSpectrum extends GraphBase {
         this.jgraphObj.originalRegionsData,
         this.jgraphObj.originalScaleData,
       );
-
-
 
       console.log('end reset scale');
     } else {
@@ -325,8 +336,7 @@ export class NmrSpectrum extends GraphBase {
         this.jgraphObj.x.invert(extent[0]),
         this.jgraphObj.x.invert(extent[1]),
       ];
-      
-    
+
       console.log('sellu selectedDomain ==========', selectedDomain);
       // Find the corresponding segment of the custom domain
       this.regionsData = this.getNewRegions(selectedDomain);
@@ -589,8 +599,7 @@ export class NmrSpectrum extends GraphBase {
   triggerSendAxis() {
     const content = {
       x: this.jgraphObj.x,
-    }
-
+    };
 
     this.triggerSend('xAxisSpectrum', content);
   }
@@ -610,4 +619,3 @@ export class NmrSpectrum extends GraphBase {
     this.sendData(type, content);
   }
 }
-

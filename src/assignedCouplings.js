@@ -8,9 +8,8 @@ import { jmolUnselectAll } from './jmolInterface.js';
 import { jmolSelectPair } from './jmolInterface.js';
 //import { updateBlockPosition } from './updateBlockPosition.js';
 
-export class AssignedCouplings  {
+export class AssignedCouplings {
   constructor(dataColumns) {
-   
     var theAssignedCouplings = [];
     var counter = 0;
     for (var indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
@@ -111,7 +110,6 @@ export class AssignedCouplings  {
     }
     this.content = theAssignedCouplings;
   }
-
 
   consconstructFromJgraphtructor(jGraphData) {
     var theAssignedCouplings = [];
@@ -216,7 +214,6 @@ export class AssignedCouplings  {
       }
       */
 
- 
   addAssignment(
     dataColumns,
     at1,
@@ -521,7 +518,7 @@ export class AssignedCouplings  {
           return d3.line()(fourPoints);
         }
 */
- udateLineTrajectory(
+  udateLineTrajectory(
     fDeltaDotAbove,
     fDeltaLineAbove,
     circleRadius,
@@ -683,7 +680,4 @@ export class AssignedCouplings  {
       }
     }
   }
-
-  
 }
-

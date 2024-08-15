@@ -3,13 +3,7 @@
 //import * as d3 from "d3"; //
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
-import { getJgraphColor } from './getJgraphColor.js';
-import { getJisOK } from './getJisOK.js';
-import { updateColumnsPositions } from './updateColumnsPositions.js';
-import { updateColumnsAction } from './updateColumnsAction.js';
-import { UnassignedCouplings } from './unassignedCouplings.js';
-import { jmolGetInfo } from './jmolInterface.js';
-import { jmolGetNBbonds } from './jmolInterface.js';
+
 import { jmolUnselectAll } from './jmolInterface.js';
 import { jmolSelectAtom } from './jmolInterface.js';
 import { updateBlockPosition } from './updateBlockPosition.js';
@@ -87,11 +81,8 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   // set the dimensions and margins of the graph
   //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
-  function initializeSettings(overrideSettings = {}) {
-    const smallScreen =
-      /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent,
-      );
+  function initializeSettings(smallScreen, overrideSettings = {}) {
+    
 
     // Default settings
     let defaultSettings = {
@@ -103,19 +94,10 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         bodyHeight: smallScreen ? 1000 : 450,
         lineWidth: smallScreen ? 5 : 1.5,
         darkMode: false,
+        smallScreen: smallScreen,
       },
-      jGraph: {
-        ratioOccupyJgraph: smallScreen ? 0.5 : 0.25,
-        spaceBetweenColumns: smallScreen ? 5 : 10,
-        maxScaleJ: 22.0,
-        generalUseWidth: smallScreen ? 15.0 : 5.0,
-        jGraphParameters: {
-          dataTicksCouplings: [0, 5, 10, 15, 20],
-          colorShowLine: '#CCCCCC',
-          colorHideLine: '#EEEEEE00',
-          delayBeforeErase: 3000,
-        },
-      },
+      
+     
     };
 
     // Merge default settings with overrides
@@ -130,55 +112,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       settings.spectrum.bodyHeight -
       settings.spectrum.margin.top -
       settings.spectrum.margin.bottom;
-
-    settings.jGraph.circleRadius = Math.round(
-      settings.jGraph.generalUseWidth * 0.8,
-    );
-    settings.jGraph.blockWidth = Math.round(
-      settings.jGraph.generalUseWidth * 0.9,
-    );
-    settings.jGraph.halfBlockHeight = Math.round(
-      settings.jGraph.generalUseWidth / 3.0,
-    );
-    settings.jGraph.lineWidthCircle = settings.spectrum.lineWidth;
-    settings.jGraph.lineWidthColumn = Math.round(
-      settings.spectrum.lineWidth / 2.0,
-    );
-    settings.jGraph.lineWidthBlocks = Math.round(
-      settings.spectrum.lineWidth / 2.0,
-    );
-    settings.jGraph.heightJscale =
-      settings.spectrum.height * settings.jGraph.ratioOccupyJgraph;
-    settings.jGraph.positionJscale = 20;
-    settings.jGraph.topJGraphYposition = 0;
-    settings.jGraph.bottomJGraphYposition = settings.jGraph.heightJscale;
-    settings.jGraph.pointingLineColum =
-      settings.jGraph.bottomJGraphYposition + 20;
-    settings.jGraph.nbHzPerPoint =
-      settings.jGraph.maxScaleJ / settings.jGraph.heightJscale;
-    settings.jGraph.minSpaceBetweekBlocks =
-      settings.jGraph.nbHzPerPoint *
-      (2 * settings.jGraph.halfBlockHeight +
-        (1.0 * settings.jGraph.lineWidthBlocks) / 2.0);
-    settings.jGraph.minSpaceBetweekCircles =
-      settings.jGraph.nbHzPerPoint *
-      (2 * settings.jGraph.circleRadius +
-        (2.0 * settings.jGraph.lineWidthBlocks) / 2.0);
-    settings.jGraph.spaceBlock =
-      (settings.jGraph.halfBlockHeight +
-        settings.jGraph.lineWidthBlocks / 2.0 +
-        +1.0) *
-      settings.jGraph.nbHzPerPoint;
-    settings.jGraph.spaceCircle =
-      (2.0 * settings.jGraph.circleRadius +
-        settings.jGraph.lineWidthBlocks / 2.0 +
-        settings.spectrum.lineWidth +
-        1.0) *
-      settings.jGraph.nbHzPerPoint;
-    settings.jGraph.preferedDistanceInPtBetweenColumns =
-      2.0 * settings.jGraph.generalUseWidth +
-      settings.jGraph.lineWidthCircle +
-      settings.jGraph.spaceBetweenColumns;
 
     return settings;
   }
@@ -387,7 +320,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     return obj;
   }
 
-  function prepareVisualisationJgraph(jGraphData) {
+  function prepareVisualisationJgraphDELLLLE(jGraphData) {
     const processedData = processCSVData(jGraphData);
     // const unassignedCouplings = new UnassignedCouplings(processedData); // Adjust based on actual data needs
     let arrayColumns = [];
@@ -657,162 +590,9 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     //////////////////////////////////////////////////
   }
 
-  function visualizeAssignment() {
-    dfgdsfg
-    var theColumnsConnectColumnToSpectrumPosition = svg
-      .selectAll('columnns')
-      .data(jgraphObj.dataColumns)
-      .enter()
-      .append('line')
-      .attr('class', 'ColunnSegment1')
-      .attr('x1', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('x2', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('y1', function (d) {
-        return (
-          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
-        );
-      })
-      .attr('y2', function (d) {
-        return (
-          settings.jGraph.pointingLineColum + settings.jGraph.positionJscale
-        );
-      })
-      .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-      .style('stroke-width', settings.jGraph.lineWidthColumn)
-      .on('click', jgraphObj.highlightColumn)
-      .on('mouseover', jgraphObj.highlightColumn);
-    // streight down
-    var theColumnsVerticalInSpectrum = svg
-      .selectAll('ColunnSegment2')
-      .data(jgraphObj.dataColumns)
-      .enter()
-      .append('line')
-      .attr('class', 'Colunn')
-      .attr('x1', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('x2', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('y1', function (d) {
-        return (
-          settings.jGraph.pointingLineColum + settings.jGraph.positionJscale
-        );
-      })
-      .attr('y2', function (d) {
-        return settings.spectrum.height;
-      })
-      .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-      .style('stroke-width', settings.jGraph.lineWidthColumn)
-      .on('click', jgraphObj.highlightColumn)
-      .on('mouseover', jgraphObj.highlightColumn);
-
-    var theColumnsMainVerticalBackLine = svg
-      .selectAll('ColunnSegment9')
-      .data(jgraphObj.dataColumns)
-      .enter()
-      .append('line')
-      .attr('class', 'Colunn')
-      .attr('x1', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('x2', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('y1', function (d) {
-        return (
-          settings.jGraph.topJGraphYposition + settings.jGraph.positionJscale
-        );
-      })
-      .attr('y2', function (d) {
-        return (
-          settings.jGraph.bottomJGraphYposition + settings.jGraph.positionJscale
-        );
-      })
-      .attr('stroke', settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update wil fix colors
-      .style('stroke-width', settings.jGraph.lineWidthColumn)
-      .on('click', jgraphObj.highlightColumn)
-      .on('mouseover', jgraphObj.highlightColumn);
-
-    var theColumnLabel = svg
-      .selectAll('textc')
-      .data(jgraphObj.dataColumns)
-      .enter()
-      .append('text')
-      .attr('class', function (d) {
-        return 'textColumn' + d.uniqIndex;
-      })
-      .attr('x', function (d) {
-        return jgraphObj.spreadPositionsUU[d.MyIndex];
-      })
-      .attr('y', function (d) {
-        return (
-          -3 +
-          settings.jGraph.topJGraphYposition +
-          settings.jGraph.positionJscale
-        );
-      })
-      // .text(function (d) { return "" + d.chemShift; })
-      .text(function (d) {
-        return '' + d.labelColumn;
-      })
-      .attr('dx', -1.0 * settings.jGraph.generalUseWidth)
-      .style('font-size', settings.jGraph.generalUseWidth * 2.5)
-      .style('font-family', 'Helvetica')
-      .on('click', jgraphObj.highlightColumn)
-      .on('mouseover', jgraphObj.highlightColumn);
-
-    //.style("font-weight", "2pt")
-    // Lines
-sdfgd
-    var theColumns = {
-      theColumnsConnectColumnToSpectrumPosition:
-        theColumnsConnectColumnToSpectrumPosition,
-      theColumnsVerticalInSpectrum: theColumnsVerticalInSpectrum,
-      theColumnLabel,
-      theColumnsMainVerticalBackLine: theColumnsMainVerticalBackLine,
-    };
-
-   /* this.jgraphObj = {
-      ...jgraphObj, // Copy all existing properties of jgraphObj
-      this.theColumns,
-    };*/
-  }
-
-  function updateVisuDisabled() {
-    var spreadPositionsZZ = updateColumnsPositions(
-      jgraphObj.dataColumns,
-      jgraphObj.leftPosColumns,
-      jgraphObj.x,
-      jgraphObj.rightPosColumns,
-      jgraphObj.smallSpace,
-    );
-fsd
-    updateColumnsAction(
-      spreadPositionsZZ,
-      0,
-      settings.jGraph.positionJscale,
-      settings.jGraph.topJGraphYposition,
-      settings.jGraph.jGraphParameters.colorShowLine,
-      settings.jGraph.jGraphParameters.colorHideLine,
-      settings.jGraph.generalUseWidth,
-      jgraphObj.x,
-      settings.spectrum.widthOfThePlot,
-      jgraphObj,
-      settings.jGraph.blockWidth,
-      jgraphObj.yJs,
-    );
-
-  }
-
   async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
     try {
       const spectrumData = await loadSpectrum(fileNameSpectrum);
-      //visualizeSpectrum(spectrumData);
 
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
@@ -821,15 +601,16 @@ fsd
         minSpaceBetweenRegions,
         marginPPM,
       );
+  var jgraphObjEmpty = {};
 
       var spectrum = new NmrSpectrum(
         spectrumData,
         regionsData,
-        settings.spectrum,
-        settings.jGraph,
+        smallScreen,
         svg,
-        jgraphObj,
+        settings,
       );
+      const settings_with_spectrum_settings = spectrum.getSettings();
       // spectrum.build();
 
     //  jgraphObj = spectrum.jgraphObj;
@@ -838,7 +619,7 @@ fsd
 
       const jGraphData = await readDataFile(fileNameData);
      // prepareVisualisationJgraph(jGraphData);
- var nmrAssignment = new NmrAssignment(jGraphData, svg, jgraphObj, settings);
+ var nmrAssignment = new NmrAssignment(jGraphData, svg, smallScreen, settings_with_spectrum_settings);
       
 
 
@@ -893,10 +674,15 @@ nmrAssignment.updateVisu();
       console.error('Error processing or visualizing the data ', error);
     }
   }
-  // Main call
 
+
+  // Main call
+const smallScreen =
+      /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      );
   // Example usage with overriding default values
-  const settings = initializeSettings({});
+  const settings = initializeSettings(smallScreen,{});
 
   // append the svg object to the body of the page
   var svg = d3
@@ -923,8 +709,7 @@ nmrAssignment.updateVisu();
         settings.spectrum.margin.top +
         ')',
     );
-  var jgraphObj = {};
-  jgraphObj.smallSpace = 1;
+  //jgraphObj.smallSpace = 1;
 
   // A function that set idleTimeOut to null
 
