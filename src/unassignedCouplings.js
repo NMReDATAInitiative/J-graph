@@ -1,7 +1,9 @@
 export class UnassignedCouplings {
+
+  fadsd UNU
   constructor(jGraphData) {
     let tmp = [];
-    // Process jGraphData to populate tmp...
+    // Process jGraphData to populate this.content...
     jGraphData.forEach(d => {
       const condition = d.Label !== 'noAssignement';
       if (condition) {
@@ -12,6 +14,7 @@ export class UnassignedCouplings {
         });
       }
     });
+    
     this.content = tmp;
   }
 }

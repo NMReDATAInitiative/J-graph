@@ -16,7 +16,7 @@ export class AssignedCouplings {
           if (dataColumns[indexList1].listOfJs[i1].isFirstInAssignmentIndex) {
             // Otherwise will come twice - once for each partner
             const number1 =
-              dataColumns[indexList1].listOfJs[i1].indexInAssignementList;
+              dataColumns[indexList1].listOfJs[i1].indexInAssignmentList;
             // doubling the loop...
             var foundPartner = false;
             //  var log = "";
@@ -31,7 +31,7 @@ export class AssignedCouplings {
                 i2++
               ) {
                 const number2 =
-                  dataColumns[indexList2].listOfJs[i2].indexInAssignementList;
+                  dataColumns[indexList2].listOfJs[i2].indexInAssignmentList;
 
                 //   log += " " + indexList2 + "!=" + indexList1 + "." + " :" + i2 + "!=" + i1 + ":" + number2 + "=" + number1 + dataColumns[indexList2].listOfJs[i2].isFirstInAssignmentIndex + "=false true=" +dataColumns[indexList1].listOfJs[i1].isFirstInAssignmentIndex;
 
@@ -94,6 +94,7 @@ export class AssignedCouplings {
                       });
                       counter++;
                       foundPartner = true;
+                      console.log("asssigned avJcoupling : ",avJcoupling," number1 ",number1, " number2 ",number2);
                     }
                   }
                 }
@@ -109,7 +110,7 @@ export class AssignedCouplings {
     this.content = theAssignedCouplings;
   }
 
-  consconstructFromJgraphtructor(jGraphData) {
+  consconstructFromJgraphtructorUNUSED(jGraphData) {
     var theAssignedCouplings = [];
     // var curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
     // var curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; });
@@ -294,11 +295,21 @@ export class AssignedCouplings {
   getAssignedCouplings() {
     return this.content;
   }
+       
   highlightLines(d, darkMode, generalUseWidth, svg, yJs) {
+   const element = d3.select(d.target);
+    const data = element.datum();
+    var selected_specie = data.Label;
+
+    // Retrieve the data bound to this element
+   console.log("highlightdfd...AT  d.d.Datum :",d.Datum);
+   console.log("highlightdfd...AT d :",d);
+
     d3.selectAll('.toBeHidden').transition().duration(10).delay(0).remove();
 
-    var selected_specie = d.Label;
     // first every group turns grey
+     
+
     d3.selectAll('.lineZ')
       .transition()
       .duration(200)
@@ -310,16 +321,20 @@ export class AssignedCouplings {
       //   .style("stroke", function (d) { return (color(d.Label)) })
       // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
       .style('stroke', function (d) {
+
         return getJisOK(d.jOKcolor);
       })
       .style('opacity', 0.5);
     // Second the hovered specie takes its color
+
     d3.selectAll('.' + selected_specie)
       .transition()
       .duration(200)
       //  .style("stroke", color(selected_specie))
       //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
       .style('stroke', function (d) {
+                        console.log("highlightdfd... selected_specie d", d, "color", getJisOK(d.jOKcolor));
+
         return getJgraphColor(Math.abs(d.Jvalue), darkMode);
       })
       .style('opacity', 1.0)
@@ -371,9 +386,55 @@ export class AssignedCouplings {
       jmolUnselectAll();
       //  document.getElementById("textMainPage").innerHTML = defaultText;
     }, 3200);
+
+        console.log("highlightdfd... ie last");
+
   }
 
-  makeGraphic(
+
+// Method that creates the SVG paths
+makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
+    console.log("zzzop2", this.content);
+  return (
+    svg
+      .selectAll('myPath222')
+      .data(this.content) // Pass data as a separate parameter
+      .enter()
+      .append('path')
+      .attr('class', (d) => 'lineZ ' + d.Label)
+       .attr('d', (d) => {
+    if (d.pathData) {
+      return d.pathData;
+    } else {
+      console.warn();(`zzzop3 Missing or invalid pathData for item with Label: ${d.Label}`);
+      return null; // or you can handle it differently
+    }
+  })
+      .style('stroke-width', lineWidth)
+      .style('stroke-dasharray', (d) => {
+        return (
+          '' +
+          eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) +
+          ',' +
+          2.0 * lineWidth
+        );
+      })
+      .style('fill', 'none')
+      .style('stroke', (d) => getJisOK(d.jOKcolor))
+      .style('opacity', 0.5)
+      .on('click', (d) => {
+         
+    
+        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
+      })
+      .on('mouseover', (d) => {
+       
+        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
+      })
+  );
+}
+
+  makeGraphicOLD(
     x,
     svg,
     lineWidth,
@@ -384,6 +445,7 @@ export class AssignedCouplings {
     yJs,
     pathFun,
   ) {
+    console.log("zzzop ", this.content);
     return (
       svg
         .selectAll('myPath222')
@@ -398,7 +460,14 @@ export class AssignedCouplings {
         //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
         // .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
         //.attr("d", pathFun)
-        .attr('d', (d) => d.pathData) // Use precomputed path data
+        .attr('d', (d) => {
+    if (d.pathData) {
+      return d.pathData;
+    } else {
+      console.error(`zzzop Missing or invalid pathData for item with Label: ${d.Label}`);
+      return null; // or you can handle it differently
+    }
+  })
 
         .style('stroke-width', lineWidth)
         .style('stroke-dasharray', function (d) {
@@ -435,7 +504,9 @@ export class AssignedCouplings {
     pathFun,
   ) {
     var tmpCOntent = [];
+
     tmpCOntent.push(this.content[this.content.length - 1]); // take only last
+
     return (
       svg
         .selectAll('myPath222')
@@ -450,7 +521,14 @@ export class AssignedCouplings {
         //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
         //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
         //    .attr("d", pathFun)
-        .attr('d', (d) => d.pathData) // Use precomputed path data
+        .attr('d', (d) => {
+    if (d.pathData) {
+      return d.pathData;
+    } else {
+      console.error(`Missing or invalid pathData for item with Label: ${d.Label}`);
+      return null; // or you can handle it differently
+    }
+  }) // Use precomputed path data
 
         .style('stroke-width', lineWidth)
         .style('stroke-dasharray', function (d) {

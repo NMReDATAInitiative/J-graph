@@ -31,7 +31,7 @@ export class NmrAssignment extends GraphBase {
 
     //prepareVisualisationJgraph() {
     const processedData = this.processCSVData(jGraphData);
-    // const unassignedCouplings = new UnassignedCouplings(processedData); // Adjust based on actual data needs
+
     let arrayColumns = [];
     let labelColumnArray = [];
     let chemColumnArray = [];
@@ -85,7 +85,6 @@ export class NmrAssignment extends GraphBase {
 
         jGraphData.forEach((d, i1) => {
           const condition = d.Label !== 'noAssignement';
-
           if (i + 1 === +d.indexColumn1) {
             listOfJs.push({
               isAssigned: condition,
@@ -520,6 +519,9 @@ export class NmrAssignment extends GraphBase {
 
     this.visualizeJgraph();
     this.updateVisu();
+    this.precomputePaths();
+
+    this.updateTheLines();
   }
 
   xAxisSpectrum_UpdateFunction(data, sender) {
@@ -790,8 +792,25 @@ export class NmrAssignment extends GraphBase {
     );
 
     if ('assignedCouplings' in this.jgraphObj) {
+      // Example of generating pathData for each item in data
+  
+ 
+  this.jgraphObj.assignedCouplings.udateLineTrajectory(
+    this.settings.jGraph.spaceBlock,
+    2.0 * this.settings.spectrum.lineWidth * this.settings.jGraph.nbHzPerPoint,
+    this.settings.jGraph.spaceCircle,
+    this.jgraphObj.dataColumns,
+  );
+// Now call the method, passing in the calculated pathData
+ this.jgraphObj.assignedCouplings.theLinesW = this.jgraphObj.assignedCouplings.makeGraphic(
+  this.svg, 
+  this.settings.spectrum.lineWidth, 
+  this.settings.jGraph.darkMode, 
+  this.settings.jGraph.generalUseWidth, 
+  this.jgraphObj.yJs);
+if (false)
       this.jgraphObj.assignedCouplings.theLinesW =
-        this.jgraphObj.assignedCouplings.makeGraphic(
+        this.jgraphObj.assignedCouplings.makeGraphicOLD(
           this.jgraphObj.x,
           this.svg,
           this.settings.spectrum.lineWidth,
@@ -1327,8 +1346,7 @@ export class NmrAssignment extends GraphBase {
 
   // Function to calculate the path data
   calculatePath(d) {
-    console.log('rrff');
-    console.log('rrff', this.jgraphObj);
+    
     const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
     const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
     const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
@@ -1361,15 +1379,9 @@ export class NmrAssignment extends GraphBase {
     return Gen(combine); // Return the path data
   }
 
-  // Precompute paths for all data points
-  precomputePaths4() {
-    const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
-    tmp.forEach((d) => {
-      d.pathData = this.calculatePath(d); // Store precomputed path data
-    });
-  }
   // Function to calculate the path data
-  calculatePath(d) {
+  calculatePath2fdsfd(d) {
+    asdf
     console.log('rrff');
     console.log('rrff', this.jgraphObj);
     const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
@@ -1431,7 +1443,8 @@ export class NmrAssignment extends GraphBase {
     }
   }
   // Function to calculate the path data
-  calculatePath(d) {
+  calculatePath3(d) {
+    asdf
     console.log('rrff');
     console.log('rrff', this.jgraphObj);
     console.log('rrff', this.jgraphObj.yJs);

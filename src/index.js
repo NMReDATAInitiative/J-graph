@@ -232,6 +232,8 @@ export function jGraph(fileNameSpectrum, fileNameData) {
             settings.spectrum.margin.top +
             settings.spectrum.margin.bottom,
         )
+       //           .style('border', '1px solid black') // Add a black border around the SVG
+ // .style('background-color', 'lightblue') // Set the background color
         .append('g')
         .attr(
           'transform',
@@ -241,6 +243,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
             settings.spectrum.margin.top +
             ')',
         );
+
 
       const spectrumData = await loadSpectrum(fileNameSpectrum);
 
