@@ -174,6 +174,51 @@ export class NmrSpectrum extends GraphBase {
 
     return settings;
   }
+  getScaleDataShuldSetFormatTicksNOtDoingIt() {
+    const gapSizePt = this.gapSizePt;
+    let tickValues = [];
+    let xDomain = [];
+    let xRange = [];
+    let totalWidthForSpectrum = this.settings.widthOfThePlot;
+    totalWidthForSpectrum =
+      this.settings.widthOfThePlot -
+      gapSizePt * (this.regionsData.regions.length - 1);
+    let currentX = 0;
+    const numberTotalTicks = (10.0 / 700.0) * this.settings.widthOfThePlot;
+
+    const totalCoveredPPM = this.regionsData.totalCoveredPPM;
+
+    this.regionsData.regions.forEach(function (region, i) {
+      const curWidth = Math.abs(region.start - region.end);
+      const regionWidth = totalWidthForSpectrum * (curWidth / totalCoveredPPM); // Calculate width per region
+      const numTicksForThisRegion = Math.round(
+        numberTotalTicks * (curWidth / totalCoveredPPM),
+      ); // Calculate number of ticks per region
+
+      // Update domain and range
+      xDomain.push(region.start, region.end);
+      xRange.push(currentX, currentX + regionWidth);
+      currentX += regionWidth + gapSizePt;
+
+      // Create the scale and generate ticks
+      const regionScale = d3.scaleLinear().domain([region.start, region.end]);
+
+      const regionTicks = regionScale.ticks(numTicksForThisRegion);
+
+      // Format ticks
+      const formattedRegionTicks = regionTicks.map(d3.format('.1f'));
+
+      // Concatenate formatted ticks to the tickValues array
+      tickValues = tickValues.concat(formattedRegionTicks);
+    });
+
+    return {
+      tickValues: tickValues,
+      xDomain: xDomain,
+      xRange: xRange,
+      totalWidth: totalWidthForSpectrum,
+    };
+  }
 
   getScaleData() {
     const gapSizePt = this.gapSizePt;
@@ -202,7 +247,6 @@ export class NmrSpectrum extends GraphBase {
         .scaleLinear()
         .domain([region.start, region.end])
         .ticks(numTicksForThisRegion);
-
       tickValues = tickValues.concat(regionTicks);
     });
 
