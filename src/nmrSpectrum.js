@@ -1,7 +1,7 @@
 import { GraphBase } from './graphBase.js';
 
 export class NmrSpectrum extends GraphBase {
-  constructor(chemShifts, regionsData, smallScreen, svg, settingsInput) {
+  constructor(chemShifts, svg, settingsInput, smallScreen = false, regionsData = {}) {
     // data for base which takes care of communication between classes
     const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
@@ -13,7 +13,17 @@ export class NmrSpectrum extends GraphBase {
 
     this.svg = svg;
     this.chemShifts = chemShifts;
-    this.regionsData = regionsData;
+
+    if (
+      typeof regionsData === 'object' &&
+      regionsData !== null &&
+      Object.keys(regionsData).length === 0
+    ) {
+      this.regionsData = this.getRegionFullSpectrum();
+    } else {
+      this.regionsData = regionsData;
+    }
+
     this.settings = this.fullSettings.spectrum;
     this.jgraphObj = {};
 
@@ -125,6 +135,24 @@ export class NmrSpectrum extends GraphBase {
     };
     this.jgraphObj = jgraphObj;
   }
+
+  getRegionFullSpectrum() {
+    const minScale = d3.min(this.chemShifts, (d) => +d.chemShift);
+    const maxScale = d3.max(this.chemShifts, (d) => +d.chemShift);
+
+    const regions = [{ start: maxScale, end: minScale }];
+
+    var totalCoveredPPM = 0.0;
+    regions.forEach(function (currentRegion, i) {
+      totalCoveredPPM += Math.abs(currentRegion.start - currentRegion.end);
+    });
+
+    return {
+      totalCoveredPPM,
+      regions,
+    };
+  }
+
   getSettings() {
     return this.fullSettings;
   }
@@ -151,16 +179,13 @@ export class NmrSpectrum extends GraphBase {
     var tickValues = [];
     var xDomain = [];
     var xRange = [];
-    var totalWidthForSpectrum =
+    var totalWidthForSpectrum = this.settings.widthOfThePlot;
+    totalWidthForSpectrum =
       this.settings.widthOfThePlot -
       gapSizePt * (this.regionsData.regions.length - 1);
     var currentX = 0;
-    const numberTotalTicks = (10.0 / 700) * this.settings.widthOfThePlot;
-    console.log('this.getScaleData sellu regions ', this.regionsData.regions);
+    const numberTotalTicks = (10.0 / 700.0) * this.settings.widthOfThePlot;
 
-    this.regionsData.regions.forEach((region, i1) => {
-      console.log('this.getScaleData sellu regions ', i1, ' ', region);
-    });
     const totalCoveredPPM = this.regionsData.totalCoveredPPM;
     this.regionsData.regions.forEach(function (region, i) {
       const curWidth = Math.abs(region.start - region.end);
@@ -171,10 +196,6 @@ export class NmrSpectrum extends GraphBase {
       xDomain.push(region.start, region.end);
       xRange.push(currentX, currentX + regionWidth);
       currentX += regionWidth + gapSizePt;
-      console.log(
-        'this.getScaleData sellu numTicksForThisRegion ',
-        numTicksForThisRegion,
-      );
       var regionTicks = d3
         .scaleLinear()
         .domain([region.start, region.end])
@@ -282,8 +303,8 @@ export class NmrSpectrum extends GraphBase {
       const selectedDomain = [maxScale, minScale];
 
       // Find the corresponding segment of the custom domain
-      this.regionsData = this.getNewRegions(selectedDomain);
 
+      this.regionsData = this.getNewRegions(selectedDomain);
       this.scaleData = this.getScaleData();
       this.updateZigZag(this.regionsData, this.scaleData);
       this.jgraphObj.x
@@ -371,7 +392,6 @@ export class NmrSpectrum extends GraphBase {
     this.jgraphObj.regionsData.regions.forEach(function (d, i) {
       from = d.start;
       to = d.end;
-
       const c1 =
         (from >= selectedDomain[0] && from <= selectedDomain[1]) ||
         (from <= selectedDomain[0] && from >= selectedDomain[1]);
@@ -391,35 +411,37 @@ export class NmrSpectrum extends GraphBase {
         };
         newDomain.push(toAdd);
         totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
-      }
-      if (c111 && c222) {
-        const toAdd = {
-          start: selectedDomain[0],
-          end: selectedDomain[1],
-        };
-
-        newDomain.push(toAdd);
-        totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
       } else {
-        if (c222) {
-          // only
-          const toAdd = {
-            start: from,
-            end: selectedDomain[1],
-          };
-          newDomain.push(toAdd);
-
-          totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
-        }
-        if (c111) {
-          // only
+        if (c111 && c222) {
           const toAdd = {
             start: selectedDomain[0],
-            end: to,
+            end: selectedDomain[1],
           };
 
           newDomain.push(toAdd);
           totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
+        } else {
+          if (c222) {
+            // only
+            const toAdd = {
+              start: from,
+              end: selectedDomain[1],
+            };
+            newDomain.push(toAdd);
+
+            totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
+          } else {
+            if (c111) {
+              // only
+              const toAdd = {
+                start: selectedDomain[0],
+                end: to,
+              };
+
+              newDomain.push(toAdd);
+              totalCoveredPPM += Math.abs(toAdd.start - toAdd.end);
+            }
+          }
         }
       }
     });
@@ -440,47 +462,6 @@ export class NmrSpectrum extends GraphBase {
       ...this.jgraphObj, // Retain existing fields
       ...jgraphObj, // Update with new fields from jgraphObj
     };
-  }
-
-  // Precompute paths for all data points
-  precomputePathsRRR() {
-    const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
-    tmp.forEach((d) => {
-      d.pathData = this.calculatePath(d); // Store precomputed path data
-    });
-  }
-  // Function to calculate the path data
-  calculatePathDEL(d) {
-    const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
-    const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
-    const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX =
-      this.jgraphObj.smallSpace - this.settings.jGraph.blockWidth - 1.5;
-    const horizontalShiftSideBlock = this.settings.jGraph.blockWidth;
-
-    let usedHorizontalShiftX = eval(horizontalShiftX);
-    let usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-    const cs1 =
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-    const cs2 =
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-
-    if (cs1 > cs2) {
-      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-    }
-
-    const combine = [
-      [cs1 + usedHorizontalShiftSideBlock, y1a],
-      [cs1 + usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftSideBlock, y1b],
-    ];
-
-    d.xx = (cs1 + cs2) / 2.0;
-    const Gen = d3.line();
-
-    return Gen(combine); // Return the path data
   }
 
   triggerSendAxis() {

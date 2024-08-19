@@ -257,10 +257,10 @@ export function jGraph(fileNameSpectrum, fileNameData) {
 
       var spectrum = new NmrSpectrum(
         spectrumData,
-        regionsData,
-        smallScreen,
         svg,
         settings,
+        smallScreen, // default true
+        regionsData, // default {}
       );
 
       const settings_with_spectrum_settings = spectrum.getSettings();
