@@ -420,8 +420,8 @@ export class NmrAssignment extends GraphBase {
       })
       .attr('stroke', this.settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update will fix colors
       .style('stroke-width', this.settings.jGraph.lineWidthColumn)
-      .on('click', this.jgraphObj.highlightColumn)
-      .on('mouseover', this.jgraphObj.highlightColumn);
+      .on('click', (event, d) => this.jgraphObj.highlightColumn(event, d)) // Pass both event and data
+      .on('mouseover', (event, d) => this.jgraphObj.highlightColumn(event, d));
 
     // streight down
     var theColumnsVerticalInSpectrum = this.svg
@@ -469,8 +469,8 @@ export class NmrAssignment extends GraphBase {
       .attr('dx', -1.0 * this.settings.jGraph.generalUseWidth)
       .style('font-size', this.settings.jGraph.generalUseWidth * 2.5)
       .style('font-family', 'Helvetica')
-      .on('click', this.jgraphObj.highlightColumn)
-      .on('mouseover', this.jgraphObj.highlightColumn);
+      .on('click', (event, d) => this.jgraphObj.highlightColumn(event, d)) // Pass both event and data
+      .on('mouseover', (event, d) => this.jgraphObj.highlightColumn(event, d));
 
     var theColumnsMainVerticalBackLine = this.svg
       .selectAll('ColunnSegment9')
@@ -499,8 +499,8 @@ export class NmrAssignment extends GraphBase {
       //.attr('stroke', this.settings.jGraph.jGraphParameters.colorHideLine) // just sketched... update will fix colors
       .attr('stroke', 'red') // just sketched... update will fix colors
       .style('stroke-width', this.settings.jGraph.lineWidthColumn)
-      .on('click', this.jgraphObj.highlightColumn)
-      .on('mouseover', this.jgraphObj.highlightColumn);
+      .on('click', (event, d) => this.jgraphObj.highlightColumn(event, d)) // Pass both event and data
+      .on('mouseover', (event, d) => this.jgraphObj.highlightColumn(event, d));
 
     //.style("font-weight", "2pt")
     // Lines
@@ -780,8 +780,8 @@ export class NmrAssignment extends GraphBase {
       )
       .attr('stroke', 'black') // just sketched... update will fix colors
       .style('stroke-width', this.settings.jGraph.lineWidthCircle)
-      .on('click', (d) => this.jgraphObj.highlightColumn(d))
-      .on('mouseover', (d) => this.jgraphObj.highlightColumn(d));
+      .on('click', (event, d) => this.jgraphObj.highlightColumn(event, d)) // Pass both event and data
+      .on('mouseover', (event, d) => this.jgraphObj.highlightColumn(event, d));
 
     this.jgraphObj.assignedCouplings.spreadPositionsZZ = updateColumnsPositions(
       this.jgraphObj.dataColumns,
@@ -1327,7 +1327,8 @@ if (false)
         getJgraphColor(Math.abs(d.trueValue), this.settings.jGraph.darkMode),
       )
       .attr('stroke', 'black')
-      .style('stroke-width', this.settings.jGraph.lineWidthBlocks);
+      .style('stroke-width', this.settings.jGraph.lineWidthBlocks)
+      ;
 
     this.jgraphObj = {
       ...this.jgraphObj, // Copy all existing properties of jgraphObj

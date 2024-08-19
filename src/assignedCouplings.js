@@ -94,7 +94,14 @@ export class AssignedCouplings {
                       });
                       counter++;
                       foundPartner = true;
-                      console.log("asssigned avJcoupling : ",avJcoupling," number1 ",number1, " number2 ",number2);
+                      console.log(
+                        'asssigned avJcoupling : ',
+                        avJcoupling,
+                        ' number1 ',
+                        number1,
+                        ' number2 ',
+                        number2,
+                      );
                     }
                   }
                 }
@@ -295,20 +302,18 @@ export class AssignedCouplings {
   getAssignedCouplings() {
     return this.content;
   }
-       
+
   highlightLines(d, darkMode, generalUseWidth, svg, yJs) {
-   const element = d3.select(d.target);
+    const element = d3.select(d.target);
     const data = element.datum();
+    const d2 = element.datum();
     var selected_specie = data.Label;
 
     // Retrieve the data bound to this element
-   console.log("highlightdfd...AT  d.d.Datum :",d.Datum);
-   console.log("highlightdfd...AT d :",d);
 
     d3.selectAll('.toBeHidden').transition().duration(10).delay(0).remove();
 
     // first every group turns grey
-     
 
     d3.selectAll('.lineZ')
       .transition()
@@ -320,9 +325,8 @@ export class AssignedCouplings {
       .delay(3000)
       //   .style("stroke", function (d) { return (color(d.Label)) })
       // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-      .style('stroke', function (d) {
-
-        return getJisOK(d.jOKcolor);
+      .style('stroke', function (d6) {
+        return getJisOK(d6.jOKcolor);
       })
       .style('opacity', 0.5);
     // Second the hovered specie takes its color
@@ -332,10 +336,8 @@ export class AssignedCouplings {
       .duration(200)
       //  .style("stroke", color(selected_specie))
       //.style("stroke", getJgraphColor(d.Jvalue, darkMode))
-      .style('stroke', function (d) {
-                        console.log("highlightdfd... selected_specie d", d, "color", getJisOK(d.jOKcolor));
-
-        return getJgraphColor(Math.abs(d.Jvalue), darkMode);
+      .style('stroke', function (d9) {
+        return getJgraphColor(Math.abs(d9.Jvalue), darkMode);
       })
       .style('opacity', 1.0)
       .transition()
@@ -343,17 +345,18 @@ export class AssignedCouplings {
       .delay(3000)
       //   .style("stroke", function (d) { return (color(d.Label)) })
       // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, darkMode) })
-      .style('stroke', function (d) {
-        return getJisOK(d.jOKcolor);
+      .style('stroke', function (d4) {
+        return getJisOK(d4.jOKcolor);
       })
       .style('opacity', 0.5);
 
+    // text above the line
     var theTextLine2 = svg
       .append('text')
       .attr('class', 'toBeHidden')
-      .attr('x', d.xx)
-      .attr('y', yJs(Math.abs(d.JvalueShifted)) - 3.0)
-      .text('' + d.lineText)
+      .attr('x', d2.xx)
+      .attr('y', yJs(Math.abs(d2.JvalueShifted)) - 3.0)
+      .text('' + d2.lineText)
       .attr('dx', 1.3 * generalUseWidth)
       .style('font-size', generalUseWidth * 2.5)
       .style('font-family', 'Helvetica')
@@ -363,53 +366,49 @@ export class AssignedCouplings {
       .delay(3000)
       .remove();
 
-    var toto = function (d) {
-      return d.lineText;
+    var toto = function (d5) {
+      return d5.lineText;
     };
     jmolUnselectAll();
     const atomColorHighlightPairs = [127, 255, 127];
     jmolSelectPair(
-      d.indexInMolFile1,
-      d.indexInMolFile2,
+      d2.indexInMolFile1,
+      d2.indexInMolFile2,
       atomColorHighlightPairs,
     );
 
     //https://chemapps.stolaf.edu/jmol/docs/#getproperty
     // What are the directly bound atoms of the two selected hydrogen (we don't test 1J)
-    const at1 = d.indexInMolFile1;
-    const at2 = d.indexInMolFile2;
-    var textToDisplay = jmolGetInfo(at1, at2, d.lineText);
+    const at1 = d2.indexInMolFile1;
+    const at2 = d2.indexInMolFile2;
+
+    var textToDisplay = jmolGetInfo(at1, at2, d2.lineText);
     // const nbBond = jmolGetNBbonds(at1, at2);
     document.getElementById('textMainPage').innerHTML = textToDisplay;
 
     setTimeout(function () {
       jmolUnselectAll();
-      //  document.getElementById("textMainPage").innerHTML = defaultText;
     }, 3200);
-
-        console.log("highlightdfd... ie last");
-
   }
 
-
-// Method that creates the SVG paths
-makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
-    console.log("zzzop2", this.content);
-  return (
-    svg
+  // Method that creates the SVG paths
+  makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
+    console.log('zzzop2', this.content);
+    return svg
       .selectAll('myPath222')
       .data(this.content) // Pass data as a separate parameter
       .enter()
       .append('path')
       .attr('class', (d) => 'lineZ ' + d.Label)
-       .attr('d', (d) => {
-    if (d.pathData) {
-      return d.pathData;
-    } else {
-      console.warn();(`zzzop3 Missing or invalid pathData for item with Label: ${d.Label}`);
-      return null; // or you can handle it differently
-    }
-  })
+      .attr('d', (d) => {
+        if (d.pathData) {
+          return d.pathData;
+        } else {
+          console.warn();
+          `zzzop3 Missing or invalid pathData for item with Label: ${d.Label}`;
+          return null; // or you can handle it differently
+        }
+      })
       .style('stroke-width', lineWidth)
       .style('stroke-dasharray', (d) => {
         return (
@@ -423,16 +422,12 @@ makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
       .style('stroke', (d) => getJisOK(d.jOKcolor))
       .style('opacity', 0.5)
       .on('click', (d) => {
-         
-    
         this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
       })
       .on('mouseover', (d) => {
-       
         this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
-      })
-  );
-}
+      });
+  }
 
   makeGraphicOLD(
     x,
@@ -445,7 +440,8 @@ makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
     yJs,
     pathFun,
   ) {
-    console.log("zzzop ", this.content);
+    gsdf;
+    console.log('zzzop ', this.content);
     return (
       svg
         .selectAll('myPath222')
@@ -461,13 +457,15 @@ makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
         // .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
         //.attr("d", pathFun)
         .attr('d', (d) => {
-    if (d.pathData) {
-      return d.pathData;
-    } else {
-      console.error(`zzzop Missing or invalid pathData for item with Label: ${d.Label}`);
-      return null; // or you can handle it differently
-    }
-  })
+          if (d.pathData) {
+            return d.pathData;
+          } else {
+            console.error(
+              `zzzop Missing or invalid pathData for item with Label: ${d.Label}`,
+            );
+            return null; // or you can handle it differently
+          }
+        })
 
         .style('stroke-width', lineWidth)
         .style('stroke-dasharray', function (d) {
@@ -522,13 +520,13 @@ makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
         //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
         //    .attr("d", pathFun)
         .attr('d', (d) => {
-    if (d.pathData) {
-      return d.pathData;
-    } else {
-      console.error(`Missing or invalid pathData for item with Label: ${d.Label}`);
-      return null; // or you can handle it differently
-    }
-  }) // Use precomputed path data
+          if (d.pathData) {
+            return d.pathData;
+          } else {// this error occurs... 
+            //console.error( `Missing or invalid pathData for item with Label: ${d.Label}`, );
+            return null; // or you can handle it differently
+          }
+        }) // Use precomputed path data
 
         .style('stroke-width', lineWidth)
         .style('stroke-dasharray', function (d) {
