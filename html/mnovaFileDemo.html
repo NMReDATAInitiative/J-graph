@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+<script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+  <h4>J-graph demonstration page</h4>
+  <p>This demo is still under development... It aims at displaying Mnova json spectra.</p>
+  <script type="text/javascript" src="src/JSmol.min.js"></script>
+  <script>
+    compoundStructure = {
+      script: "set antialiasDisplay true;load ../data/santonin/santonin_twoMAnalzedDeco_correctAssignment_DWchange.mol;cartoon on;color cartoon structure; rotate z 45.0;rotate x 80;",
+      width: 350,
+      height: 200,
+      j2sPath: "src/j2s",
+      disableJ2SLoadMonitor: false,
+      isableInitialConsole: true
+    }
+    Jmol.getApplet("JmolAppletA", compoundStructure);
+  </script>
+  <p id="textMainPage" style="height:20px">J-graph output</p>
+  <div id="my_dataviz"></div>
+  <script type="module">
+ 
+ import { jGraph } from "../src/mnovaReader.js"; 
+      var fName1 = "../data/santonin/santonin_twoMAnalzedDeco_correctAssignment_DWchange.json";
+      var fName2 = "./androstenNoAssignment.csv"
+      var ajgraph = jGraph(fName1, fName2)
+  
+  </script>
+
+  <h2>J Graph</h2>
+  <p>... displayed if available.</p>
+  
+</body>
+
+</html>
