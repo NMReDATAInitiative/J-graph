@@ -1,7 +1,13 @@
 import { GraphBase } from './graphBase.js';
 
 export class NmrSpectrum extends GraphBase {
-  constructor(chemShifts, svg, settingsInput, smallScreen = false, regionsData = {}) {
+  constructor(
+    chemShifts,
+    svg,
+    settingsInput,
+    smallScreen = false,
+    regionsData = {},
+  ) {
     // data for base which takes care of communication between classes
     const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
@@ -41,11 +47,7 @@ export class NmrSpectrum extends GraphBase {
     });
 
     this.scaleData = this.getScaleData();
-    console.log('sellu scaleData.xRange', this.scaleData.xRange);
-    console.log('sellu regionsData.regions', this.regionsData.regions);
 
-    console.log('sellu xDomain ', this.scaleData.xDomain);
-    console.log('sellu xRange ', this.scaleData.xRange);
     var x = d3
       .scaleLinear()
       .domain(this.scaleData.xDomain)
@@ -203,9 +205,6 @@ export class NmrSpectrum extends GraphBase {
 
       tickValues = tickValues.concat(regionTicks);
     });
-    console.log('this.getScaleData sellu  tickValues', tickValues);
-    console.log('this.getScaleData sellu  xDomain', xDomain);
-    console.log('this.getScaleData sellu  xRange', xRange);
 
     const objRet = {
       tickValues: tickValues,
@@ -223,8 +222,6 @@ export class NmrSpectrum extends GraphBase {
     var svg = this.svg;
     regionsData.regions.forEach(function (region, i) {
       if (i > 0) {
-        console.log('ZZZ v sellu region', region);
-
         const currentX1 = scaleData.xRange[i * 2 - 1];
         const currentX2 = scaleData.xRange[i * 2];
 
@@ -358,7 +355,6 @@ export class NmrSpectrum extends GraphBase {
         .call(
           d3.axisBottom(this.jgraphObj.x).tickValues(this.scaleData.tickValues),
         );
-      console.log('sellu out of updateChart');
     }
 
     // Update the line path with a transition

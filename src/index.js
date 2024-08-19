@@ -197,8 +197,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       totalCoveredPPM += Math.abs(currentRegion.start - currentRegion.end);
     });
 
-    console.log('sellu  newRegions', newRegions);
-
     // Create an Object
     const obj = {
       totalCoveredPPM: totalCoveredPPM,
