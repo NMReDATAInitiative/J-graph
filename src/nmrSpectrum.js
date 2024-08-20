@@ -435,7 +435,6 @@ export class NmrSpectrum extends GraphBase {
         );
     });
 
-    console.log('send =======================');
     this.triggerSendAxis();
     return;
   }

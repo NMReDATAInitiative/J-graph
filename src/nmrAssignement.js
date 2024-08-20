@@ -182,25 +182,7 @@ export class NmrAssignment extends GraphBase {
     this.jgraphObj.assignedCouplings = new AssignedCouplings(
       this.jgraphObj.dataColumns,
     );
-    //assignedCouplings.consconstructFromJgraphtructor(jGraph);  // obsolete
-
-    /*  var dataUnassignedCoupCircles = [];
-     for (i = 0; i < unassignedCouplings.content.length; i++) {
-       const inInd1 = indicesSorted[unassignedCouplings.content[i].colNumber1];
-       const inInd2 = indicesSorted[unassignedCouplings.content[i].colNumber2];
-       dataUnassignedCoupCircles.push({
-         'chemShift': arrayColumns[inInd1],
-         'value': unassignedCouplings.content[i].Jvalue,
-         'MyIndex': inInd1,
-         'uniqIndex': dataUnassignedCoupCircles.length,
-       });
-       dataUnassignedCoupCircles.push({
-         'chemShift': arrayColumns[inInd2],
-         'value': unassignedCouplings.content[i].Jvalue,
-         'MyIndex': inInd2,
-         'uniqIndex': dataUnassignedCoupCircles.length,
-       });
-     }*/
+    
     function populateDataUnassignedCoupCircles(dataColumns) {
       let dataUnassignedCoupCircles = [];
       for (let indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
@@ -354,42 +336,6 @@ export class NmrAssignment extends GraphBase {
       console.error('jgraphObj is undefined.');
     }
 
-    // Unhighlight
-    /*
-
-     var doNotHighlightLines = function (toto) {
-
-    //           jmolUnselectAll();
-
-        d3.selectAll(".line")
-          .transition().duration(200).delay(300)
-          //   .style("stroke", function (d) { return (color(d.Label)) })
-          // .style("stroke", function (d) { return getJgraphColor(d.Jvalue, settings.jGraph.darkMode) })
-          .style("stroke", function (d) { return getJgraphColor(Math.abs(d.Jvalue), settings.jGraph.darkMode); })
-          .style("opacity", "1")
-     };
-*/
-
-    //  Unhighlight
-    /*    var doNotHighlightDot = function (d) {
-           d3.selectAll(".circleL")
-             .transition().duration(200).delay(300)
-             .style("opacity", "1")
-           selected_specie = "textCircle" + d.uniqIndex;
-   
-           d3.selectAll("." + selected_specie)
-             .transition().duration(200).delay(3000)
-             // .style("stroke", color(selected_specie))
-             .style("opacity", "0")
-   
-           d3.selectAll(".rulerClass")
-             .transition().duration(200).delay(3000)
-             .attr("y1", yJs(0.0))
-             .attr("y2", yJs(0.0))
-             .style("opacity", '0.0')
-         }
-   */
-
     this.jgraphObj.spreadPositionsUU = updateColumnsPositions(
       this.jgraphObj.dataColumns,
       this.jgraphObj.leftPosColumns,
@@ -526,11 +472,12 @@ export class NmrAssignment extends GraphBase {
     this.precomputePaths();
 
     this.updateTheLines();
+
+
   }
 
   xAxisSpectrum_UpdateFunction(data, sender) {
     // default action
-    // this[data.type] = data.content;
     this.jgraphObj = {
       ...this.jgraphObj, // Copy all existing properties of jgraphObj
       x: data.content.x,
@@ -544,14 +491,9 @@ export class NmrAssignment extends GraphBase {
   }
 
   updateAfterChangeScale() {
-    const numberItem = this.jgraphObj.dataColumns.length;
     if ('dataColumns' in this.jgraphObj && 'theColumns' in this.jgraphObj) {
       this.jgraphObj.dataColumns.length;
-      this.jgraphObj.smallSpace =
-        this.settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
-      if (this.jgraphObj.smallSpace > this.preferedDistanceInPtBetweenColumns) {
-        this.jgraphObj.smallSpace = this.preferedDistanceInPtBetweenColumns;
-      }
+      
       this.jgraphObj.assignedCouplings.spreadPositionsZZ =
         updateColumnsPositions(
           this.jgraphObj.dataColumns,
@@ -607,11 +549,6 @@ export class NmrAssignment extends GraphBase {
       this.jgraphObj.smallSpace,
     );
 
-    console.log('this.jgraphObj.theColumns :', this.jgraphObj.theColumns);
-    console.log(
-      'this.settings.spectrum.widthOfThePlot :',
-      this.settings.spectrum.widthOfThePlot,
-    );
     updateColumnsAction(
       spreadPositionsZZ,
       0,
@@ -664,7 +601,6 @@ export class NmrAssignment extends GraphBase {
         return 'translate(' + this.settings.spectrum.widthOfThePlot + ')';
       })
       .call(d3.axisRight(this.jgraphObj.yJs).ticks(3));
-    console.log('now theColumnsVerticalInSpectrum');
 
     var theTicksCouplings = this.svg
       .selectAll('tickLines')
@@ -682,7 +618,6 @@ export class NmrAssignment extends GraphBase {
       })
       .attr('stroke', '#EEEEEE')
       .style('stroke-width', this.settings.spectrum.lineWidth);
-    console.log('now theGridLinesCouplings');
 
     var theGridLinesCouplings = this.svg
       .selectAll('theRuler')
@@ -702,22 +637,7 @@ export class NmrAssignment extends GraphBase {
       .style('stroke-width', this.settings.spectrum.lineWidth)
       .style('opacity', '0.0');
 
-    /*
-         var dimensions = [1, 1.2, 1.3, 2, 3, 5];
-         var yn = {};
-         for (i in dimensions) {
-           var name = dimensions[i];
-           yn[name] = d3.scaleLinear()
-             .domain([0.0, 22.0]) // --> Same axis range for each group
-             // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
-             .range([settings.spectrum.height / 3.0, settings.spectrum.height / 6.0]);
-         }
-         */
-
-    // Columns
-
     // oblique
-    //    assignedCouplings.spreadPositionsZZ = updateColumnsPositions(dataColumns, leftPosColumns, x, rightPosColumns, jgraphObj.smallSpace);
     this.jgraphObj.spreadPositionsUU = updateColumnsPositions(
       this.jgraphObj.dataColumns,
       this.jgraphObj.leftPosColumns,
@@ -725,7 +645,6 @@ export class NmrAssignment extends GraphBase {
       this.jgraphObj.rightPosColumns,
       this.jgraphObj.smallSpace,
     );
-    console.log('now theColumnsMainVerticalLine');
     var theColumnsMainVerticalLine = this.svg
       .selectAll('ColunnSegment3')
       .data(this.jgraphObj.dataColumns)
@@ -750,7 +669,6 @@ export class NmrAssignment extends GraphBase {
       .style('stroke-width', this.settings.jGraph.lineWidthColumn)
       .on('click', (event, d) => this.jgraphObj.highlightColumn(event, d)) // Pass both event and data
       .on('mouseover', (event, d) => this.jgraphObj.highlightColumn(event, d));
-    console.log('now theColumnsBase');
 
     var theColumnsBase = this.svg
       .selectAll('ColunnSegment4')
@@ -1100,7 +1018,6 @@ export class NmrAssignment extends GraphBase {
 
       // Work on view
       // Unselect hydrogens
-
       d3.selectAll('.line')
         .transition()
         .duration(200)
@@ -1129,7 +1046,6 @@ export class NmrAssignment extends GraphBase {
         .style('opacity', '1.0')
         .style('stroke-width', this.settings.spectrum.lineWidth);
 
-      // wrong distance dots
       d3.selectAll('.circleL')
         .transition()
         .duration(20)
@@ -1171,7 +1087,6 @@ export class NmrAssignment extends GraphBase {
         .style('opacity', '1.0')
         .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
 
-      // starting dots
       d3.selectAll('.circleL')
         .transition()
         .duration(20)
@@ -1223,13 +1138,9 @@ export class NmrAssignment extends GraphBase {
 
       var theTextDotNew = this.svg
         .append('text')
-        //   .attr("class", "toBesgdfgfsgdHidden")
         .attr('x', spreadPositionsNew[d.MyIndex])
-        // .attr("x",  x(d.chemShift))
         .attr('y', this.jgraphObj.yJs(Math.abs(d.valueOnBar) + 3.0))
-        //  .text( "J = " + d.value + "val " + (Math.abs(d.valueOnBar + 3.0)) + " pos:" + spreadPositionsNew[d.MyIndex])
         .text('J = ' + d.value)
-        // .attr('dx', 1.3 * settings.jGraph.generalUseWidth)
         .style('font-size', this.settings.jGraph.generalUseWidth * 2.5)
         .style('font-family', 'Helvetica')
         .style('text-anchor', 'middle')
@@ -1237,27 +1148,6 @@ export class NmrAssignment extends GraphBase {
         .duration(100)
         .delay(3000)
         .remove();
-      /*
-  var theTextDots2 = svg.selectAll("textt")
-           .data(dataUnassignedCoupCircles)
-           .enter()
-           .append("text")
-           .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-           .attr("y", function (d) { return yJs(Math.abs(d.valueOnBar + 3.0)); })
-           // .style("fill", "gray")
-           //   .attr("stroke", "red")
-           // .style("stroke-width", settings.jGraph.lineWidthBlocks)
-           .text(function (d) { return "J = " + d.value; })
-        //   .attr("dx", 1.3 * settings.jGraph.generalUseWidth)
-           .style("font-size", settings.jGraph.generalUseWidth * 2.5)
-           .style("font-family", "Helvetica")
-           .attr("x", function (d) { return x(d.chemShift); })
-          // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
-         //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })
-           .attr("opacity", 0.0);
-        //   .transition().duration(100).delay(3000);
-          // .remove();
-       */
     };
 
     // Circles
@@ -1287,31 +1177,6 @@ export class NmrAssignment extends GraphBase {
         event.preventDefault();
         highlightDot(d, true);
       });
-
-    /*
-         // .on("mouseleave", doNotHighlightDot)
-          var theTextDots2 = svg.selectAll("textt")
-           .data(dataUnassignedCoupCircles)
-           .enter()
-           .append("text")
-           .attr("class", function (d) { return "textCircle" + d.uniqIndex; })
-           .attr("y", function (d) { return jgraphObj.yJs(Math.abs(d.valueOnBar + 3.0)); })
-           // .style("fill", "gray")
-           //   .attr("stroke", "red")
-           // .style("stroke-width", settings.jGraph.lineWidthBlocks)
-           .text(function (d) { return "J = " + d.value; })
-        //   .attr("dx", 1.3 * settings.jGraph.generalUseWidth)
-           .style("font-size", settings.jGraph.generalUseWidth * 2.5)
-           .style("font-family", "Helvetica")
-           .attr("x", function (d) { return MyIndex; })
-          // .attr("x", function (d) { return spreadPositionsNew[d.MyIndex]; })
-         //  .attr("transform", function (d) { return "rotate(-45," + spreadPositionsNew[d.MyIndex] + "," + jgraphObj.yJs(Math.abs(d.value)) + ")"; })
-           .attr("opacity", 0.0);
-        //   .transition().duration(100).delay(3000);
-          // .remove();
-         // Dots
-          */
-    console.log('add a  _block', this.jgraphObj.dataAssignedCoupBlocks.length);
 
     var theBlocks = this.svg
       .selectAll()
@@ -1384,43 +1249,6 @@ export class NmrAssignment extends GraphBase {
     return Gen(combine); // Return the path data
   }
 
-  // Function to calculate the path data
-  calculatePath2fdsfd(d) {
-    asdf;
-    console.log('rrff');
-    console.log('rrff', this.jgraphObj);
-    const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
-    const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
-    const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX =
-      this.jgraphObj.smallSpace - this.settings.jGraph.blockWidth - 1.5;
-    const horizontalShiftSideBlock = this.settings.jGraph.blockWidth;
-
-    let usedHorizontalShiftX = eval(horizontalShiftX);
-    let usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-    const cs1 =
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-    const cs2 =
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-
-    if (cs1 > cs2) {
-      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-    }
-
-    const combine = [
-      [cs1 + usedHorizontalShiftSideBlock, y1a],
-      [cs1 + usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftSideBlock, y1b],
-    ];
-
-    d.xx = (cs1 + cs2) / 2.0;
-    const Gen = d3.line();
-
-    return Gen(combine); // Return the path data
-  }
-
   updateTheLines(yJs, smallSpace, blockWidth, pathFun) {
     // Precompute the updated paths before the transition
 
@@ -1447,41 +1275,5 @@ export class NmrAssignment extends GraphBase {
       });
     }
   }
-  // Function to calculate the path data
-  calculatePath3(d) {
-    asdf;
-    console.log('rrff');
-    console.log('rrff', this.jgraphObj);
-    console.log('rrff', this.jgraphObj.yJs);
-    const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
-    const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
-    const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
-    const horizontalShiftX =
-      this.jgraphObj.smallSpace - this.settings.jGraph.blockWidth - 1.5;
-    const horizontalShiftSideBlock = this.settings.jGraph.blockWidth;
-
-    let usedHorizontalShiftX = eval(horizontalShiftX);
-    let usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-    const cs1 =
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn1];
-    const cs2 =
-      this.jgraphObj.assignedCouplings.spreadPositionsZZ[d.indexColumn2];
-
-    if (cs1 > cs2) {
-      usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-      usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-    }
-
-    const combine = [
-      [cs1 + usedHorizontalShiftSideBlock, y1a],
-      [cs1 + usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftX, y2],
-      [cs2 - usedHorizontalShiftSideBlock, y1b],
-    ];
-
-    d.xx = (cs1 + cs2) / 2.0;
-    const Gen = d3.line();
-
-    return Gen(combine); // Return the path data
-  }
+  
 }
