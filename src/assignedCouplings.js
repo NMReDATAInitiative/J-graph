@@ -117,89 +117,7 @@ export class AssignedCouplings {
     this.content = theAssignedCouplings;
   }
 
-  consconstructFromJgraphtructorUNUSED(jGraphData) {
-    var theAssignedCouplings = [];
-    // var curChemShiftToReplace1 = jGraphData.map(function (d) { return d.chemShift1; });
-    // var curChemShiftToReplace2 = jGraphData.map(function (d) { return d.chemShift2; });
-    var labelColumn1 = jGraphData.map(function (d) {
-      return d.labelColumn1;
-    });
-    var labelColumn2 = jGraphData.map(function (d) {
-      return d.labelColumn2;
-    });
-    var indexArray1 = jGraphData.map(function (d) {
-      return d.indexColumn1;
-    });
-    var indexArray2 = jGraphData.map(function (d) {
-      return d.indexColumn2;
-    });
-    var label = jGraphData.map(function (d) {
-      return d.Label;
-    });
-    var Jvalue = jGraphData.map(function (d) {
-      return d.Jvalue;
-    });
-    var JvalueShifted = jGraphData.map(function (d) {
-      return d.Jvalue;
-    });
-    var indexColumn1 = jGraphData.map(function (d) {
-      return d.indexColumn1;
-    });
-    var indexColumn2 = jGraphData.map(function (d) {
-      return d.indexColumn2;
-    });
-    var chemShift1 = jGraphData.map(function (d) {
-      return d.chemShift1;
-    });
-    var chemShift2 = jGraphData.map(function (d) {
-      return d.chemShift2;
-    });
-    var indexInMolFile1 = jGraphData.map(function (d) {
-      return d.indexInMolFile1;
-    });
-    var indexInMolFile2 = jGraphData.map(function (d) {
-      return d.indexInMolFile2;
-    });
-    //index 1
-    var counter = 0;
-    for (var i = 0; i < chemShift1.length; i++) {
-      const index1 = indexArray1[i];
-      const index2 = indexArray2[i];
-
-      if (label[i] != 'noAssignement') {
-        theAssignedCouplings.push({
-          jOKcolor: 'grey',
-          Jvalue: +Jvalue[i],
-          colNumber1: index1 - 1,
-          colNumber2: index2 - 1,
-          Label: label[i],
-          JvalueAntiOverlap1: +JvalueShifted[i],
-          JvalueAntiOverlap2: +JvalueShifted[i],
-          JvalueShifted: +JvalueShifted[i],
-          indexColumn1: indexColumn1[i],
-          indexColumn2: indexColumn2[i],
-          chemShift1: +chemShift1[i],
-          chemShift2: +chemShift2[i],
-          labelColumn1: labelColumn1[i],
-          labelColumn2: labelColumn2[i],
-          lineText:
-            'J(' +
-            labelColumn1[i] +
-            ',' +
-            labelColumn2[i] +
-            ') = ' +
-            Jvalue[i] +
-            ' Hz',
-          xx: 0.0,
-          indexInMolFile1: indexInMolFile1[i],
-          indexInMolFile2: indexInMolFile2[i],
-          iindex: counter,
-        });
-        counter++;
-      }
-    }
-    this.content = theAssignedCouplings;
-  }
+  
 
   /*for (var indexList = 0; indexList < dataColumns.length; indexList++) {
         for (var i = 0; i < dataColumns[indexList].listOfJs.length; i++) {
@@ -429,67 +347,6 @@ export class AssignedCouplings {
       });
   }
 
-  makeGraphicOLD(
-    x,
-    svg,
-    lineWidth,
-    darkMode,
-    generalUseWidth,
-    smallSpace,
-    blockWidth,
-    yJs,
-    pathFun,
-  ) {
-    gsdf;
-    console.log('zzzop ', this.content);
-    return (
-      svg
-        .selectAll('myPath222')
-        .attr('class', 'lineW')
-        //.data(jGraphData)
-        .data(this.content)
-        .enter()
-        .append('path')
-        .attr('class', function (d) {
-          return 'lineZ ' + d.Label;
-        }) // 2 class for each line: 'line' and the group name
-        //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
-        // .attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
-        //.attr("d", pathFun)
-        .attr('d', (d) => {
-          if (d.pathData) {
-            return d.pathData;
-          } else {
-            console.error(
-              `zzzop Missing or invalid pathData for item with Label: ${d.Label}`,
-            );
-            return null; // or you can handle it differently
-          }
-        })
-
-        .style('stroke-width', lineWidth)
-        .style('stroke-dasharray', function (d) {
-          return (
-            '' +
-            eval(4.0 * (lineWidth + 1000.0 * (d.Jvalue > 0.0))) +
-            ',' +
-            2.0 * lineWidth
-          );
-        })
-        .style('fill', 'none')
-        .style('stroke', function (d) {
-          return getJisOK(d.jOKcolor);
-        })
-        .style('opacity', 0.5)
-        .on('click', (d) => {
-          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
-        })
-        .on('mouseover', (d) => {
-          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
-        })
-    );
-    // .on("mouseleave", doNotHighlightLines)}
-  }
   // REDUNDANCE ABOVE AND BELOW
   addGraphicForLast(
     svg,
@@ -509,8 +366,7 @@ export class AssignedCouplings {
       svg
         .selectAll('myPath222')
         .attr('class', 'lineW')
-        //.data(jGraphData)
-        .data(tmpCOntent) ///////////////////////
+        .data(tmpCOntent)
         .enter()
         .append('path')
         .attr('class', function (d) {

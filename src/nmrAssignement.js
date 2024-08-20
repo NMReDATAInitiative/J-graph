@@ -18,18 +18,56 @@ export class NmrAssignment extends GraphBase {
     super(name, {
       dataTypesSend: [],
       dataTypesReceive: ['xAxisSpectrum'],
-      logAllDataExchange: true, // Enable logging for this instance if true
+      logAllDataExchange: false, // Enable logging for this instance if true
     });
+
     this.svg = svg;
-    //this.jgraphObj = jgraphObj;
     this.jgraphObj = {};
 
     const settings = this.initializeSettings(
       smallScreen,
       settings_with_spectrum_settings,
     );
+    if (Array.isArray(jGraphData) && jGraphData.length > 0) {
+      console.log('jGraphData,', jGraphData);
+      this.ingestCSData(jGraphData, settings);
+    }
 
-    //prepareVisualisationJgraph() {
+    this.jgraphObj.assignedCouplings.udateLineTrajectory(
+      settings.jGraph.spaceBlock,
+      2.0 * settings.spectrum.lineWidth * settings.jGraph.nbHzPerPoint,
+      settings.jGraph.spaceCircle,
+      this.jgraphObj.dataColumns,
+    );
+
+    // Make list of positions according to size of jGraphData
+    //const numberItem = arrayColumns.length;
+    const numberItem = this.jgraphObj.dataColumns.length;
+    this.jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / numberItem;
+    if (
+      this.jgraphObj.smallSpace >
+      settings.jGraph.preferedDistanceInPtBetweenColumns
+    ) {
+      this.jgraphObj.smallSpace =
+        settings.jGraph.preferedDistanceInPtBetweenColumns;
+    }
+
+    var leftPosColumns = [];
+    var rightPosColumns = [];
+    for (let i = 0; i < numberItem; i++) {
+      const curPosLeft = (i + 0.5) * this.jgraphObj.smallSpace;
+      const curPosRight =
+        settings.spectrum.widthOfThePlot -
+        (numberItem - i - 0.5) * this.jgraphObj.smallSpace;
+      leftPosColumns.push(curPosLeft);
+      rightPosColumns.push(curPosRight);
+    }
+    this.jgraphObj.leftPosColumns = leftPosColumns;
+    this.jgraphObj.rightPosColumns = rightPosColumns;
+    this.settings = settings;
+  }
+
+  ingestCSData(jGraphData, settings) {
     const processedData = this.processCSVData(jGraphData);
 
     let arrayColumns = [];
@@ -208,40 +246,6 @@ export class NmrAssignment extends GraphBase {
     this.jgraphObj.dataAssignedCoupBlocks = populateDataAssignedCoupBlocks(
       this.jgraphObj.dataColumns,
     );
-
-    this.jgraphObj.assignedCouplings.udateLineTrajectory(
-      settings.jGraph.spaceBlock,
-      2.0 * settings.spectrum.lineWidth * settings.jGraph.nbHzPerPoint,
-      settings.jGraph.spaceCircle,
-      this.jgraphObj.dataColumns,
-    );
-    //u console.log("TassignedCouplings 1 :" + JSON.stringify(assignedCouplings));
-
-    // Make list of positions according to size of jGraphData
-    const numberItem = arrayColumns.length;
-    this.jgraphObj.smallSpace =
-      settings.spectrum.widthOfThePlot / (numberItem + 1); // five items, six spaces
-    if (
-      this.jgraphObj.smallSpace >
-      settings.jGraph.preferedDistanceInPtBetweenColumns
-    ) {
-      this.jgraphObj.smallSpace =
-        settings.jGraph.preferedDistanceInPtBetweenColumns;
-    }
-
-    var leftPosColumns = [];
-    var rightPosColumns = [];
-    for (let i = 0; i < numberItem; i++) {
-      const curPosLeft = (i + 0.5) * this.jgraphObj.smallSpace;
-      const curPosRight =
-        settings.spectrum.widthOfThePlot -
-        (numberItem - i - 0.5) * this.jgraphObj.smallSpace;
-      leftPosColumns.push(curPosLeft);
-      rightPosColumns.push(curPosRight);
-    }
-    this.jgraphObj.leftPosColumns = leftPosColumns;
-    this.jgraphObj.rightPosColumns = rightPosColumns;
-    this.settings = settings;
   }
 
   initializeSettings(smallScreen, overrideSettings = {}) {
@@ -793,33 +797,36 @@ export class NmrAssignment extends GraphBase {
 
     if ('assignedCouplings' in this.jgraphObj) {
       // Example of generating pathData for each item in data
-  
- 
-  this.jgraphObj.assignedCouplings.udateLineTrajectory(
-    this.settings.jGraph.spaceBlock,
-    2.0 * this.settings.spectrum.lineWidth * this.settings.jGraph.nbHzPerPoint,
-    this.settings.jGraph.spaceCircle,
-    this.jgraphObj.dataColumns,
-  );
-// Now call the method, passing in the calculated pathData
- this.jgraphObj.assignedCouplings.theLinesW = this.jgraphObj.assignedCouplings.makeGraphic(
-  this.svg, 
-  this.settings.spectrum.lineWidth, 
-  this.settings.jGraph.darkMode, 
-  this.settings.jGraph.generalUseWidth, 
-  this.jgraphObj.yJs);
-if (false)
+
+      this.jgraphObj.assignedCouplings.udateLineTrajectory(
+        this.settings.jGraph.spaceBlock,
+        2.0 *
+          this.settings.spectrum.lineWidth *
+          this.settings.jGraph.nbHzPerPoint,
+        this.settings.jGraph.spaceCircle,
+        this.jgraphObj.dataColumns,
+      );
+      // Now call the method, passing in the calculated pathData
       this.jgraphObj.assignedCouplings.theLinesW =
-        this.jgraphObj.assignedCouplings.makeGraphicOLD(
-          this.jgraphObj.x,
+        this.jgraphObj.assignedCouplings.makeGraphic(
           this.svg,
           this.settings.spectrum.lineWidth,
           this.settings.jGraph.darkMode,
           this.settings.jGraph.generalUseWidth,
-          this.jgraphObj.smallSpace,
-          this.settings.jGraph.blockWidth,
           this.jgraphObj.yJs,
         );
+      if (false)
+        this.jgraphObj.assignedCouplings.theLinesW =
+          this.jgraphObj.assignedCouplings.makeGraphicOLD(
+            this.jgraphObj.x,
+            this.svg,
+            this.settings.spectrum.lineWidth,
+            this.settings.jGraph.darkMode,
+            this.settings.jGraph.generalUseWidth,
+            this.jgraphObj.smallSpace,
+            this.settings.jGraph.blockWidth,
+            this.jgraphObj.yJs,
+          );
     }
 
     var highlightDot = (d, wasDoubleClicked) => {
@@ -1327,9 +1334,7 @@ if (false)
         getJgraphColor(Math.abs(d.trueValue), this.settings.jGraph.darkMode),
       )
       .attr('stroke', 'black')
-      .style('stroke-width', this.settings.jGraph.lineWidthBlocks)
-      ;
-
+      .style('stroke-width', this.settings.jGraph.lineWidthBlocks);
     this.jgraphObj = {
       ...this.jgraphObj, // Copy all existing properties of jgraphObj
       yAxisn: yAxisn,
@@ -1347,7 +1352,6 @@ if (false)
 
   // Function to calculate the path data
   calculatePath(d) {
-    
     const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
     const y1b = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap2));
     const y2 = this.jgraphObj.yJs(Math.abs(d.JvalueShifted));
@@ -1382,7 +1386,7 @@ if (false)
 
   // Function to calculate the path data
   calculatePath2fdsfd(d) {
-    asdf
+    asdf;
     console.log('rrff');
     console.log('rrff', this.jgraphObj);
     const y1a = this.jgraphObj.yJs(Math.abs(d.JvalueAntiOverlap1));
@@ -1445,7 +1449,7 @@ if (false)
   }
   // Function to calculate the path data
   calculatePath3(d) {
-    asdf
+    asdf;
     console.log('rrff');
     console.log('rrff', this.jgraphObj);
     console.log('rrff', this.jgraphObj.yJs);
