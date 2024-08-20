@@ -1,8 +1,8 @@
 export function getRegionsWithSignal(
   chemShifts,
-  minSpacePPMin,
-  marginPPMin,
-  level = 0.01,
+  minSpacePPMin = 0.2,
+  marginPPMin = 0.02,
+  level = 0.01, // default 1%
 ) {
   const minSpacePPM = Math.abs(minSpacePPMin);
   const marginPPM = Math.abs(marginPPMin);
@@ -21,7 +21,6 @@ export function getRegionsWithSignal(
   // Step 1: Identify regions where y > 1% of maxY and merge close fragments
   var regions = [];
   var currentRegion = null;
-  var lastIn = null;
   chemShifts.forEach(function (d, i) {
     if (d.value > level * maxY) {
       if (!currentRegion) {
@@ -31,21 +30,15 @@ export function getRegionsWithSignal(
         // Continue the current region
         currentRegion.end = d.chemShift;
       }
-      lastIn = d.chemShift;
-    } else if (currentRegion) {
-      // Close the current region if a gap is detected
-      if (lastIn && Math.abs(d.chemShift - lastIn) < minSpacePPM) {
-        // Fuse with the next fragment if the gap is smaller than 0.1
-        currentRegion.end = d.chemShift;
-      } else {
-        // Finalize the current region and add margins
-        currentRegion.start += marginPPM;
-        if (currentRegion.start < minScale) currentRegion.start = minScale;
-        currentRegion.end -= marginPPM;
-        if (currentRegion.end > maxScale) currentRegion.end = maxScale;
-        regions.push(currentRegion);
-        currentRegion = null;
-        lastIn = null;
+    } else {
+      if (currentRegion) {
+          // Finalize the current region and add margins
+          currentRegion.start += marginPPM;
+          if (currentRegion.start > maxScale) currentRegion.start = maxScale;
+          currentRegion.end -= marginPPM;
+          if (currentRegion.end < minScale) currentRegion.end = minScale;
+          regions.push(currentRegion);
+          currentRegion = null;
       }
     }
   });
@@ -53,9 +46,9 @@ export function getRegionsWithSignal(
   // If there's an unfinished region, add it
   if (currentRegion) {
     currentRegion.start += marginPPM;
-    if (currentRegion.start < minScale) currentRegion.start = minScale;
+    if (currentRegion.start > maxScale) currentRegion.start = maxScale;
     currentRegion.end -= marginPPM;
-    if (currentRegion.end > maxScale) currentRegion.end = maxScale;
+    if (currentRegion.end < minScale) currentRegion.end = minScale;
     regions.push(currentRegion);
   }
 
@@ -63,7 +56,7 @@ export function getRegionsWithSignal(
   let curRegion;
   regions.forEach(function (d, i) {
     if (i != 0) {
-      if (curRegion.end < d.start) {
+      if (curRegion.end < (d.start + minSpacePPM)) {
         // fuse
         curRegion.end = d.end;
 

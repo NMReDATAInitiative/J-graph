@@ -9,9 +9,9 @@ export class NmrSpectrum extends GraphBase {
     regionsData = {},
   ) {
     if (Array.isArray(chemShifts)) {
-    chemShiftsList = chemShifts;
+    const chemShiftsList = chemShifts;
 } else {
-    chemShiftsList = [chemShifts];
+    const chemShiftsList = [chemShifts];
 }
 
     // data for base which takes care of communication between classes
