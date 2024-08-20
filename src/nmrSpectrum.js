@@ -8,6 +8,12 @@ export class NmrSpectrum extends GraphBase {
     smallScreen = false,
     regionsData = {},
   ) {
+    if (Array.isArray(chemShifts)) {
+    chemShiftsList = chemShifts;
+} else {
+    chemShiftsList = [chemShifts];
+}
+
     // data for base which takes care of communication between classes
     const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
