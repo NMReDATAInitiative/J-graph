@@ -8,12 +8,6 @@ export class NmrSpectrum extends GraphBase {
     smallScreen = false,
     regionsData = {},
   ) {
-    if (Array.isArray(chemShifts)) {
-    const chemShiftsList = chemShifts;
-} else {
-    const chemShiftsList = [chemShifts];
-}
-
     // data for base which takes care of communication between classes
     const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
@@ -21,10 +15,15 @@ export class NmrSpectrum extends GraphBase {
       dataTypesReceive: [],
     });
 
+    if (this.isArrayOfArrays(chemShifts)) {
+      this.chemShiftsList = chemShifts;
+    } else {
+      this.chemShiftsList = [chemShifts];
+    }
+
     this.fullSettings = this.initializeSettings(settingsInput);
 
     this.svg = svg;
-    this.chemShifts = chemShifts;
 
     if (
       typeof regionsData === 'object' &&
@@ -42,13 +41,13 @@ export class NmrSpectrum extends GraphBase {
     this.gapSizePt = 6;
     this.idleTimeout = null; // for brush
 
-    const maxY = d3.max(this.chemShifts, function (d) {
+    const maxY = d3.max(this.chemShiftsList[0], function (d) {
       return +d.value;
     });
-    const minScale = d3.min(this.chemShifts, function (d) {
+    const minScale = d3.min(this.chemShiftsList[0], function (d) {
       return +d.chemShift;
     });
-    const maxScale = d3.max(this.chemShifts, function (d) {
+    const maxScale = d3.max(this.chemShiftsList[0], function (d) {
       return +d.chemShift;
     });
 
@@ -89,25 +88,28 @@ export class NmrSpectrum extends GraphBase {
     var lineSpectrum = this.svg.append('g').attr('clip-path', 'url(#clip)');
 
     // Add the spectrum
-    lineSpectrum
-      .append('path')
-      .datum(this.chemShifts)
-      .attr('class', 'lineG') // add the class line to be able to modify this line later on.
-      .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
-      // .attr("stroke", "red")
-      .attr('stroke-width', this.settings.lineWidth)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x(function (d) {
-            return x(d.chemShift);
-          })
-          .y(function (d) {
-            return y(d.value);
-          }),
-      );
+    // Assuming this.chemShiftsList is an array of arrays
+    // Iterate over each spectrum in the list
+    this.chemShiftsList.forEach((chemShiftAr, index) => {
+      lineSpectrum
+        .append('path')
+        .datum(chemShiftAr) // Bind the data for the current spectrum
+        .attr('class', `lineGA lineG-${index}`) // Add a unique class for each spectrum based on the index
+        .attr('fill', 'none')
+        .attr('stroke', d3.schemeCategory10[index % 10]) // Use a color from the scheme based on the index    .attr('stroke-width', this.settings.lineWidth)
+        .attr(
+          'd',
+          d3
+            .line()
+            .x(function (d) {
+              return x(d.chemShift);
+            })
+            .y(function (d) {
+              return y(d.value); // Apply vertical shift based on index
+            }),
+        );
+    });
+
     // Add the brushing
     this.updateZigZag(this.regionsData, this.scaleData);
     lineSpectrum.append('g').attr('class', 'brush').call(brush);
@@ -137,16 +139,23 @@ export class NmrSpectrum extends GraphBase {
       lineSpectrum: lineSpectrum,
       brush: brush,
       xAxis: xAxis,
-      spectrumData: this.chemShifts,
+      spectrumData: this.chemShiftsList[0],
       regionsData: this.regionsData,
       gapSizePt: this.gapSizePt,
     };
     this.jgraphObj = jgraphObj;
   }
 
+  isArrayOfArrays(input) {
+    if (Array.isArray(input) && input.length > 0) {
+      return Array.isArray(input[0]);
+    }
+    return false;
+  }
+
   getRegionFullSpectrum() {
-    const minScale = d3.min(this.chemShifts, (d) => +d.chemShift);
-    const maxScale = d3.max(this.chemShifts, (d) => +d.chemShift);
+    const minScale = d3.min(this.chemShiftsList[0], (d) => +d.chemShift);
+    const maxScale = d3.max(this.chemShiftsList[0], (d) => +d.chemShift);
 
     const regions = [{ start: maxScale, end: minScale }];
 
@@ -339,10 +348,10 @@ export class NmrSpectrum extends GraphBase {
       if (!this.idleTimeout)
         return (this.idleTimeout = setTimeout(this.idled.bind(this), 350));
 
-      const minScale = d3.min(this.chemShifts, function (d) {
+      const minScale = d3.min(this.chemShiftsList[0], function (d) {
         return +d.chemShift;
       });
-      const maxScale = d3.max(this.chemShifts, function (d) {
+      const maxScale = d3.max(this.chemShiftsList[0], function (d) {
         return +d.chemShift;
       });
       // Reset the X domain to the original domain for the custom X-axis
@@ -408,21 +417,24 @@ export class NmrSpectrum extends GraphBase {
     }
 
     // Update the line path with a transition
-    this.jgraphObj.lineSpectrum
-      .select('.lineG')
-      .transition()
-      .duration(1000)
-      .attr(
-        'd',
-        d3
-          .line()
-          .x((d) => {
-            return this.jgraphObj.x(d.chemShift);
-          })
-          .y((d) => {
-            return this.jgraphObj.y(d.value);
-          }),
-      );
+    this.chemShiftsList.forEach((chemShifts, index) => {
+      this.jgraphObj.lineSpectrum
+        .selectAll(`.lineGA`)
+        .transition()
+        .duration(1000)
+        .attr(
+          'd',
+          d3
+            .line()
+            .x((d) => {
+              return this.jgraphObj.x(d.chemShift);
+            })
+            .y((d) => {
+              return this.jgraphObj.y(d.value);
+            }),
+        );
+    });
+
     console.log('send =======================');
     this.triggerSendAxis();
     return;

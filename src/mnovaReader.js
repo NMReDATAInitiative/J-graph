@@ -2,7 +2,7 @@
 
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
-import { getRegionsWithSignal } from './utils.js';  // Adjust the path as necessary
+import { getRegionsWithSignal } from './utils.js'; // Adjust the path as necessary
 export function jGraphNmredata(
   fileNameSpectrum,
   fileNameData,
@@ -78,7 +78,12 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     }
   }
 
-  async function processMnovaJsonFile(jsonFilePath, type, fieldsToKeep, callback) {
+  async function processMnovaJsonFile(
+    jsonFilePath,
+    type,
+    fieldsToKeep,
+    callback,
+  ) {
     try {
       // Load the JSON data using D3
       const jsonData = await d3.json(jsonFilePath);
@@ -183,7 +188,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
                   params.spectral_width -
                   i * increment) /
                 params.spectrometer_frequency,
-              value: yArray[i] , // Assign the corresponding y value, or null if it doesn't exist
+              value: yArray[i], // Assign the corresponding y value, or null if it doesn't exist
             }));
           } else {
             console.error(
@@ -260,7 +265,6 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     return result;
   }
 
-
   async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
     try {
       const smallScreen =
@@ -304,8 +308,9 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         ['data', 'raw_data', 'multiplets'],
       );
 
-      const spectrumData = extractSpectrumData(allObjectsExtracted[0].data	);
-      const spectrumData2 = extractSpectrumData(allObjectsExtracted[1].data	);
+      const spectrumData = extractSpectrumData(allObjectsExtracted[0].data);
+      const spectrumData2 = extractSpectrumData(allObjectsExtracted[1].data);
+      const spectrumDataAll = [spectrumData, spectrumData2, [{chemShift:2.01, value:1000},{chemShift:2.0, value:1000000},{chemShift:1.99, value:1000}]];
 
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
@@ -316,7 +321,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       );
 
       var spectrum = new NmrSpectrum(
-        spectrumData,
+        spectrumDataAll,
         svg,
         settings,
         smallScreen, // default true
