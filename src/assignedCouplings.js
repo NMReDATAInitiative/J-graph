@@ -378,11 +378,11 @@ export class AssignedCouplings {
         .attr('d', (d) => {
           if (d.pathData) {
             return d.pathData;
-          } else {// this error occurs... 
+          } else {
             //console.error( `Missing or invalid pathData for item with Label: ${d.Label}`, );
-            return null; // or you can handle it differently
+            return null; 
           }
-        }) // Use precomputed path data
+        }) 
 
         .style('stroke-width', lineWidth)
         .style('stroke-dasharray', function (d) {
@@ -407,47 +407,7 @@ export class AssignedCouplings {
     );
     // .on("mouseleave", doNotHighlightLines)}
   }
-  /*
-      pathFun(d, yJs, smallSpace, blockWidth) {
 
-        
-          const y1a = yJs(Math.abs(d.JvalueAntiOverlap1));
-          const y1b = yJs(Math.abs(d.JvalueAntiOverlap2));
-         // const y2 = yJs(Math.abs(d.JvalueShifted));
-         //const iiidex = d.iindex;
-           //   console.log("iiidex = " + JSON.stringify(d.iindex));
-         //     console.log("assignedCouplings.content[d.iindex].JvalueShifted = " + JSON.stringify(assignedCouplings.content[d.iindex].JvalueShifted));
-//console.log("test same... fff = " + JSON.stringify(dataColumns[0]));
-// HERE
-//const alterative = dataColumns[0].JvalueAntiOverlap1;//
-//console.log("test same... = " + JSON.stringify(alterative) + " "  +  JSON.stringify(Math.abs(assignedCouplings.content[d.iindex].JvalueShifted)) );
-          const y2 = yJs(Math.abs(this.content[d.iindex].JvalueShifted));
-          //const y2 = yJs(Math.abs(d.JvalueShifted));
-          const horizontalShiftX = smallSpace - blockWidth - 1.5; // make larger here !
-          const horizontalShiftSideBlock = blockWidth; // make larger here !
-          var usedHorizontalShiftX = eval(horizontalShiftX);
-          var usedHorizontalShiftSideBlock = eval(horizontalShiftSideBlock);
-          const cs1 = this.spreadPositionsZZ[d.indexColumn1];
-          const cs2 = this.spreadPositionsZZ[d.indexColumn2];
-          if (cs1 > cs2) {
-             usedHorizontalShiftX = eval(-usedHorizontalShiftX);
-             usedHorizontalShiftSideBlock = eval(-usedHorizontalShiftSideBlock);
-          }
-         
-          const fourPoints = [
-            [cs1 + usedHorizontalShiftSideBlock, y1a],
-            [cs1 + usedHorizontalShiftX, y2], 
-            [cs2 - usedHorizontalShiftX, y2],
-            [cs2 - usedHorizontalShiftSideBlock, y1b]
-          ];   
-          
-
-          d.xx = (cs1 + cs2) / 2.0;
-          var Gen = d3.line();
-
-          return d3.line()(fourPoints);
-        }
-*/
   udateLineTrajectory(
     fDeltaDotAbove,
     fDeltaLineAbove,

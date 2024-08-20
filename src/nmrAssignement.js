@@ -32,6 +32,12 @@ export class NmrAssignment extends GraphBase {
       console.log('jGraphData,', jGraphData);
       this.ingestCSData(jGraphData, settings);
     }
+    if (jGraphData !== null && typeof jGraphData === 'object') {
+      console.log('jGraphData,', jGraphData);
+      //this.ingestObject(jGraphData, settings);
+    }
+    console.log('this.jgraphObjU ' , this.jgraphObj);
+    console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
 
     this.jgraphObj.assignedCouplings.udateLineTrajectory(
       settings.jGraph.spaceBlock,
@@ -68,8 +74,31 @@ export class NmrAssignment extends GraphBase {
   }
 
   ingestCSData(jGraphData, settings) {
-    const processedData = this.processCSVData(jGraphData);
+    //const processedDatadel = this.processCSVDataDEL(jGraphData);
 
+    const processedData = jGraphData.reduce(
+      (acc, cur) => {
+        ['1', '2'].forEach((index) => {
+          const chemShiftKey = `chemShift${index}`;
+          const labelKey = `labelColumn${index}`;
+          const indexKey = `indexColumn${index}`;
+          const indexInMolFileKey = `indexInMolFile${index}`;
+
+          acc.arrayColumns[cur[indexKey] - 1] = cur[chemShiftKey];
+          acc.labelColumnArray[cur[indexKey] - 1] = cur[labelKey];
+          acc.indexAtomMol[cur[indexKey] - 1] = cur[indexInMolFileKey];
+          acc.chemColumnArray[cur[indexKey] - 1] = cur[chemShiftKey];
+        });
+        return acc;
+      },
+      {
+        arrayColumns: [],
+        labelColumnArray: [],
+        chemColumnArray: [],
+        indexAtomMol: [],
+      },
+    );
+console.log("processedData ", processedData);
     let arrayColumns = [];
     let labelColumnArray = [];
     let chemColumnArray = [];
@@ -182,7 +211,7 @@ export class NmrAssignment extends GraphBase {
     this.jgraphObj.assignedCouplings = new AssignedCouplings(
       this.jgraphObj.dataColumns,
     );
-    
+
     function populateDataUnassignedCoupCircles(dataColumns) {
       let dataUnassignedCoupCircles = [];
       for (let indexList1 = 0; indexList1 < dataColumns.length; indexList1++) {
@@ -472,8 +501,6 @@ export class NmrAssignment extends GraphBase {
     this.precomputePaths();
 
     this.updateTheLines();
-
-
   }
 
   xAxisSpectrum_UpdateFunction(data, sender) {
@@ -493,7 +520,7 @@ export class NmrAssignment extends GraphBase {
   updateAfterChangeScale() {
     if ('dataColumns' in this.jgraphObj && 'theColumns' in this.jgraphObj) {
       this.jgraphObj.dataColumns.length;
-      
+
       this.jgraphObj.assignedCouplings.spreadPositionsZZ =
         updateColumnsPositions(
           this.jgraphObj.dataColumns,
@@ -565,7 +592,7 @@ export class NmrAssignment extends GraphBase {
     );
   }
 
-  processCSVData(jGraphData) {
+  processCSVDataDEL(jGraphData) {
     return jGraphData.reduce(
       (acc, cur) => {
         ['1', '2'].forEach((index) => {
@@ -1275,5 +1302,4 @@ export class NmrAssignment extends GraphBase {
       });
     }
   }
-  
 }
