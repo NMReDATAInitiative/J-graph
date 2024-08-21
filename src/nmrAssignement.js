@@ -34,13 +34,14 @@ export class NmrAssignment extends GraphBase {
     }
     if (
       jGraphData !== null &&
-      typeof jGraphData === 'object' &&
-      'atoms' in jGraphData
+      typeof jGraphData === 'object' 
+      && 'chemShift' in jGraphData[0]
     ) {
       console.log('jGraphData,', jGraphData);
+      //const tmp = this.ingestMoleculeObject(jGraphData);
       this.ingestMoleculeObject(jGraphData, settings);
     }
-        console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
+    console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
 
 
     console.log('this.jgraphObjU ', this.jgraphObj);
@@ -84,55 +85,8 @@ export class NmrAssignment extends GraphBase {
    
 
 
-  ingestMoleculeObject(jGraphDataIn, settings) {
 
-   function getAtomIndexMol(atoms, element, label) {
-    return atoms.findIndex(atom => atom.elementSymbol === element && atom.number === label) + 1;
-}
-
-
-    const jGraphData = jGraphDataIn.assignments;
-    const atoms = jGraphDataIn.atoms;
-    var dataTMP = [];
-    jGraphData.forEach((atomIt, index) => {
-      if (!'atom' in atomIt) return;
-      const atomCode = atomIt.atom.atomCode;
-      const shifts = atomIt.shifts;
-      const [element, label] = atomIt.atom.atomCode.split(';');
-      const atomIndexMol = getAtomIndexMol(atoms, element, label);
-
-      if (element != 'H') {
-        return;
-      } // continue
-     
-      shifts.forEach((shiftIt, i) => {
-        
-        shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
-          
-          // Find the existing object in the list by assignedMultiplet
-
-          let existingItem = dataTMP.find(
-            (item) =>
-              item.assignedMultipletMnovaHash === assignedMultipletIt &&
-              item.chemShift === shiftIt.shift,
-          );
-          if (existingItem) {
-            existingItem.labelsColumn.push(label);
-            existingItem.atomIndexMolAll.push(atomIndexMol);
-          } else {
-            const obj = {
-              assignedMultipletMnovaHash: assignedMultipletIt,
-              chemShift: shiftIt.shift,
-              labelsColumn: [label],
-              atomIndexMolAll: [atomIndexMol],
-              listOfJs: [],
-            };
-            dataTMP.push(obj);
-          }
-        });
-      });
-    });
-    dataTMP.sort((a, b) => b.chemShift - a.chemShift);
+  ingestMoleculeObject(dataTMP, settings) {
 
     let dataColumns = [];
     dataTMP.forEach((item, index) => {

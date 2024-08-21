@@ -149,7 +149,7 @@ export async function processMnovaJsonFileMolecule(
   }
 }
 
-export function extractMoleculeData(spectrumObjectIn, type = 'data') {
+function extractMoleculeData(spectrumObjectIn, type = 'data') {
   const schema = spectrumObjectIn['$mnova_schema'];
   const expected =
     'https://mestrelab.com/json-schemas/mnova/2023-07/01/molecule/molecule';
@@ -234,3 +234,59 @@ export function extractSpectrumData(spectrumObjectIn, type = 'data') {
   return result;
 }
 
+function ingestMoleculeObject(jGraphDataIn) {
+  const jGraphData = jGraphDataIn.assignments;
+  const atoms = jGraphDataIn.atoms;
+  var dataTMP = [];
+  jGraphData.forEach((atomIt, index) => {
+    if (!'atom' in atomIt) return;
+    const atomCode = atomIt.atom.atomCode;
+    const shifts = atomIt.shifts;
+    const [element, label] = atomIt.atom.atomCode.split(';');
+    const atomIndexMol =
+      atoms.findIndex(
+        (atom) => atom.elementSymbol === element && atom.number === label,
+      ) + 1;
+
+    if (element != 'H') {
+      return;
+    }
+
+    shifts.forEach((shiftIt, i) => {
+      shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
+        // Find the existing object in the list by assignedMultiplet
+        let existingItem = dataTMP.find(
+          (item) =>
+            item.assignedMultipletMnovaHash === assignedMultipletIt &&
+            item.chemShift === shiftIt.shift,
+        );
+        if (existingItem) {
+          existingItem.labelsColumn.push(label);
+          existingItem.atomIndexMolAll.push(atomIndexMol);
+        } else {
+          const obj = {
+            assignedMultipletMnovaHash: assignedMultipletIt,
+            chemShift: shiftIt.shift,
+            labelsColumn: [label],
+            atomIndexMolAll: [atomIndexMol],
+            listOfJs: [],
+          };
+          dataTMP.push(obj);
+        }
+      });
+    });
+  });
+  dataTMP.sort((a, b) => b.chemShift - a.chemShift);
+  return dataTMP;
+}
+
+export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
+  const assignments = extractMoleculeData(
+    allObjectsExtractedMolecule,
+    'assignments',
+    '$mnova_schema',
+  );
+  const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
+  const JGraphMnova = { assignments, atoms };
+  return ingestMoleculeObject(JGraphMnova);
+}

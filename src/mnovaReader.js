@@ -2,8 +2,8 @@
 
 import { processMnovaJsonFileSpectrum } from './mnovaJsonReader.js';
 import { processMnovaJsonFileMolecule } from './mnovaJsonReader.js';
-import { extractMoleculeData } from './mnovaJsonReader.js';
 import { extractSpectrumData } from './mnovaJsonReader.js';
+import { ingestMoleculeObjecSuper } from './mnovaJsonReader.js';
 
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
@@ -160,14 +160,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         ],
       ];
 
-      // molecule (with assignement)
-      const assignments = extractMoleculeData(
-        allObjectsExtractedMolecule,
-        'assignments',
-        '$mnova_schema',
-      );
-      const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
-      const jGraphObj = { assignments, atoms };
+      const jGraphObj = ingestMoleculeObjecSuper(allObjectsExtractedMolecule);
 
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
