@@ -34,7 +34,7 @@ export class NmrAssignment extends GraphBase {
     }
     if (jGraphData !== null && typeof jGraphData === 'object') {
       console.log('jGraphData,', jGraphData);
-      //this.ingestObject(jGraphData, settings);
+      this.ingestObject(jGraphData, settings);
     }
     console.log('this.jgraphObjU ' , this.jgraphObj);
     console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
