@@ -124,7 +124,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       const allObjectsExtracted = await processMnovaJsonFileSpectrum(
         fileNameSpectrum,
         'spectra',
-        ['$mnova_schema', 'data', 'raw_data', 'multiplets'],
+        ['data', 'raw_data', 'multiplets'],
         //['$mnova_schema', 'data', 'raw_data', 'multiplets', 'peaks', 'processing', 'parameters'],
       );
       console.log('allObjectsExtracted', allObjectsExtracted);
@@ -132,7 +132,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       const allObjectsExtractedMolecule = await processMnovaJsonFileMolecule(
         fileNameData,
         'molecule',
-        ['assignments', '$mnova_schema'],
+        ['assignments', 'atoms', '$mnova_schema'],
         /*[
           '$mnova_schema',
           'assignments',
@@ -161,10 +161,13 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       ];
 
       // molecule (with assignement)
-      const jGraphObj = extractMoleculeData(
+      const assignments = extractMoleculeData(
         allObjectsExtractedMolecule,
         'assignments',
+        '$mnova_schema',
       );
+      const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
+      const jGraphObj = { assignments, atoms };
 
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
@@ -185,9 +188,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
 
       const settings_with_spectrum_settings = spectrum.getSettings();
 
-      const jGraphData = await readDataFile(fileNameData);
       var nmrAssignment = new NmrAssignment(
-        //jGraphData,
         jGraphObj,
         svg,
         smallScreen,
