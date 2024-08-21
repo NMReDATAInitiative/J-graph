@@ -153,7 +153,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       console.error('Error fetching or processing data:', error);
     }
   }
- async function processMnovaJsonFileMolecule(
+  async function processMnovaJsonFileMolecule(
     jsonFilePath,
     type,
     fieldsToKeep,
@@ -164,58 +164,51 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       const jsonData = await d3.json(jsonFilePath);
 
       // Array to store the filtered spectra
-	var filteredMolecule = {}
+      var filteredMolecule = {};
       // Check if the JSON has a 'spectra' field
       if (jsonData[type]) {
         const molecule = jsonData[type];
-          // Create an object to store the filtered data
+        // Create an object to store the filtered data
 
-          fieldsToKeep.forEach((field) => {
-            // Check for the field in the spectrum object
-            if (molecule[field]) {
-              filteredMolecule[field] = molecule[field];
-              console.log(
-                `moleculeT Found ${field} at spectrum level in molecule`,
-              );
-            }
-            // Check for the field in the spectrum.data object
-            else if (molecule.data && molecule.data[field]) {
-              filteredMolecule[field] = molecule.data[field];
-              console.log(`moleculeT Found ${field} in molecule`);
-            }
-            // Handle case where the field is an array of objects
-            else if (Array.isArray(molecule.data[field])) {
-              filteredMolecule[field] = molecule.data[field].map((item) => {
-                return item; // Customize this if you need to filter fields within the objects
-              });
-              console.log(
-                `moleculeT Found ${field} as an array in molecule`,
-              );
-            }
-            // Handle nested objects within spectrum.data
-            else if (
-              typeof molecule.data[field] === 'object' &&
-              molecule.data[field] !== null
-            ) {
-              filteredMolecule[field] = { ...molecule.data[field] };
-              console.log(
-                `moleculeT Found ${field} as an object in molecule`,
-              );
-            }
-            // Log if the field is not found at any expected location
-            else {
-              console.log(
-                `moleculeT Did not find ${field} in molecule`,
-              );
-			}
-          });
+        fieldsToKeep.forEach((field) => {
+          // Check for the field in the spectrum object
+          if (molecule[field]) {
+            filteredMolecule[field] = molecule[field];
+            console.log(
+              `moleculeT Found ${field} at spectrum level in molecule`,
+            );
+          }
+          // Check for the field in the spectrum.data object
+          else if (molecule.data && molecule.data[field]) {
+            filteredMolecule[field] = molecule.data[field];
+            console.log(`moleculeT Found ${field} in molecule`);
+          }
+          // Handle case where the field is an array of objects
+          else if (Array.isArray(molecule.data[field])) {
+            filteredMolecule[field] = molecule.data[field].map((item) => {
+              return item; // Customize this if you need to filter fields within the objects
+            });
+            console.log(`moleculeT Found ${field} as an array in molecule`);
+          }
+          // Handle nested objects within spectrum.data
+          else if (
+            typeof molecule.data[field] === 'object' &&
+            molecule.data[field] !== null
+          ) {
+            filteredMolecule[field] = { ...molecule.data[field] };
+            console.log(`moleculeT Found ${field} as an object in molecule`);
+          }
+          // Log if the field is not found at any expected location
+          else {
+            console.log(`moleculeT Did not find ${field} in molecule`);
+          }
+        });
 
-          // Store the filtered spectrum in the array
+        // Store the filtered spectrum in the array
 
-          // Log the filtered spectrum object
-          console.log(`moleculeT :`, filteredMolecule);
-        }
-      
+        // Log the filtered spectrum object
+        console.log(`moleculeT :`, filteredMolecule);
+      }
 
       // Return the filtered spectra array via the callback
       return filteredMolecule;
@@ -223,8 +216,8 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       console.error('Error fetching or processing data:', error);
     }
   }
-  
-  function extractSpectrumData(spectrumObject, type = "spectrum") {
+
+  function extractSpectrumData(spectrumObject, type = 'spectrum') {
     let result = [];
 
     if (spectrumObject.type === type) {
@@ -378,24 +371,41 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         ['$mnova_schema', 'data', 'raw_data', 'multiplets'],
         //['$mnova_schema', 'data', 'raw_data', 'multiplets', 'peaks', 'processing', 'parameters'],
       );
-	  
-	  const allObjectsExtractedMolecule = await processMnovaJsonFileMolecule(
+
+      const allObjectsExtractedMolecule = await processMnovaJsonFileMolecule(
         fileNameData,
         'molecule',
-       //['assignments'],
-       ['assignments', 'predictions', 'parameters', '$mnova_schema', 'bonds', 'atoms'],
+        //['assignments'],
+        [
+          'assignments',
+          'predictions',
+          'parameters',
+          '$mnova_schema',
+          'bonds',
+          'atoms',
+        ],
       );
 
-console.log("allObjectsExtracted", allObjectsExtracted)
-console.log("moleculeT allObjectsExtractedMolecule", allObjectsExtractedMolecule)
+      console.log('allObjectsExtracted', allObjectsExtracted);
+      console.log(
+        'moleculeT allObjectsExtractedMolecule',
+        allObjectsExtractedMolecule,
+      );
 
-	// spectra
+      // spectra
       const spectrumData = extractSpectrumData(allObjectsExtracted[0].data);
       const spectrumData2 = extractSpectrumData(allObjectsExtracted[1].data);
-      const spectrumDataAll = [spectrumData, spectrumData2, [{chemShift:2.01, value:1000},{chemShift:2.0, value:1000000},{chemShift:1.99, value:1000}]];
-	// molecule (with assignement)
+      const spectrumDataAll = [
+        spectrumData,
+        spectrumData2,
+        [
+          { chemShift: 2.01, value: 1000 },
+          { chemShift: 2.0, value: 1000000 },
+          { chemShift: 1.99, value: 1000 },
+        ],
+      ];
+      // molecule (with assignement)
       const jGraphObj = allObjectsExtractedMolecule.assignments;
-
 
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
@@ -418,8 +428,8 @@ console.log("moleculeT allObjectsExtractedMolecule", allObjectsExtractedMolecule
       const settings_with_spectrum_settings = spectrum.getSettings();
 
       const jGraphData = await readDataFile(fileNameData);
-	//const regions = {[{num: 0, chemShift:0.99, regionFrom: 1.1, regionTo:0.9, label:"H1", AssignedAtom: 4, couplings:[{J=7.0, assignedTo = 1,}]}]}
-	//const jGraphObj = {[{num: 0, chemShift:0.99, label:"H1", couplings:[{J=7.0, assignedTo = 1,}]}]};
+      //const regions = {[{num: 0, chemShift:0.99, regionFrom: 1.1, regionTo:0.9, label:"H1", AssignedAtom: 4, couplings:[{J=7.0, assignedTo = 1,}]}]}
+      //const jGraphObj = {[{num: 0, chemShift:0.99, label:"H1", couplings:[{J=7.0, assignedTo = 1,}]}]};
       var nmrAssignment = new NmrAssignment(
         //jGraphData,
         jGraphObj,

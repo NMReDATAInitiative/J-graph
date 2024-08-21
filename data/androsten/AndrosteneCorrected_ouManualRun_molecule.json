@@ -1,0 +1,5227 @@
+{
+    "$mnova_schema": "https://mestrelab.com/json-schemas/mnova/2023-07/01/molecule/dataset",
+    "molecule": {
+        "$mnova_schema": "https://mestrelab.com/json-schemas/mnova/2023-07/01/molecule/molecule",
+        "parameters": {
+            "label": "Compound{e38d314191144db8b9874a26b871e970}",
+            "name": "1"
+        },
+        "atoms": [
+            {
+                "coordinates": {
+                    "x": -31.8531444611417,
+                    "y": 23.86973491870507,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "2",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -31.8531444611417,
+                    "y": 21.156786616263496,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "3",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -29.503731231227302,
+                    "y": 19.800312465042715,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "4",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -27.154046706482657,
+                    "y": 21.156786616263496,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "5",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -27.154046706482657,
+                    "y": 23.86973491870507,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "10",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -29.503731231227302,
+                    "y": 25.226209069925854,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "1",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -24.804633476568256,
+                    "y": 19.800312465042715,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "6",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -22.45522024665385,
+                    "y": 21.156786616263496,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "7",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -22.45522024665385,
+                    "y": 23.86973491870507,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "8",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -24.804633476568256,
+                    "y": 25.226209069925854,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "9",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -20.10580701673946,
+                    "y": 25.226209069925854,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "14",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -20.10580701673946,
+                    "y": 27.939157372367426,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "13",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -22.45522024665385,
+                    "y": 29.295631523588213,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "12",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -24.804633476568256,
+                    "y": 27.939157372367426,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "11",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -17.52552188628728,
+                    "y": 28.77745839782187,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "17",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -15.93085087411212,
+                    "y": 26.58268322114664,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "16",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -17.52552188628728,
+                    "y": 24.38790804447141,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "15",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -16.687220860832834,
+                    "y": 31.35774352827405,
+                    "z": 0.0
+                },
+                "elementSymbol": "O",
+                "number": "",
+                "valence": 2
+            },
+            {
+                "coordinates": {
+                    "x": -34.2025576910561,
+                    "y": 19.800312465042715,
+                    "z": 0.0
+                },
+                "elementSymbol": "O",
+                "number": "",
+                "valence": 2
+            },
+            {
+                "coordinates": {
+                    "x": -28.721045645972907,
+                    "y": 32.849593799786675,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "19",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -19.088451403323866,
+                    "y": 33.7652138518607,
+                    "z": 0.0
+                },
+                "elementSymbol": "C",
+                "number": "18",
+                "valence": 4
+            },
+            {
+                "coordinates": {
+                    "x": -13.483228915649335,
+                    "y": 22.259328806375756,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "H8",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -27.352363227391137,
+                    "y": 26.158920696305266,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "H9",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -21.024140017115926,
+                    "y": 22.673596012158583,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "H14",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -29.48935260522436,
+                    "y": 27.939157372367426,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "1eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -31.24354497758308,
+                    "y": 27.307583007559032,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "1ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -33.20961861236248,
+                    "y": 26.219148148619468,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "2ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -34.56609276358327,
+                    "y": 23.86973491870507,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "2eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -23.44815932534747,
+                    "y": 17.450899235128315,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "6ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -26.161107627789043,
+                    "y": 17.450899235128315,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "6eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -19.782694873918665,
+                    "y": 20.690702097904037,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "7ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -21.09874609543307,
+                    "y": 18.807373386349095,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "7eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -21.09874609543307,
+                    "y": 31.645044753502614,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "12eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -13.736075697436892,
+                    "y": 24.988012208971483,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "16eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -18.36382291174172,
+                    "y": 21.807622914019234,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "15ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -27.517581779009827,
+                    "y": 27.939157372367426,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "11ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -25.73680251328718,
+                    "y": 30.486887123190307,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "11eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -23.811151808214156,
+                    "y": 31.6455873431631,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "12ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -13.736075697436892,
+                    "y": 28.177354233321797,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "16ax",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -15.637309867787948,
+                    "y": 22.44001116331836,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "15eq",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -29.503731231227302,
+                    "y": 17.087364162601144,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "20",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -26.00836863836158,
+                    "y": 32.849865094616916,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "21",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -31.433993948414475,
+                    "y": 32.849865094616916,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "22",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -28.721045645972907,
+                    "y": 35.56254210222824,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "23",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -21.76097677605906,
+                    "y": 34.23184095988065,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "24",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -16.41619732541892,
+                    "y": 33.29885803867099,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "25",
+                "valence": 1
+            },
+            {
+                "coordinates": {
+                    "x": -18.621824295303917,
+                    "y": 36.437739224595894,
+                    "z": 0.0
+                },
+                "elementSymbol": "H",
+                "number": "26",
+                "valence": 1
+            }
+        ],
+        "bonds": [
+            {
+                "atom1": 1,
+                "atom2": 2
+            },
+            {
+                "atom1": 2,
+                "atom2": 3
+            },
+            {
+                "atom1": 3,
+                "atom2": 4,
+                "bondType": "double"
+            },
+            {
+                "atom1": 4,
+                "atom2": 5
+            },
+            {
+                "atom1": 5,
+                "atom2": 6
+            },
+            {
+                "atom1": 6,
+                "atom2": 1
+            },
+            {
+                "atom1": 4,
+                "atom2": 7
+            },
+            {
+                "atom1": 7,
+                "atom2": 8
+            },
+            {
+                "atom1": 8,
+                "atom2": 9
+            },
+            {
+                "atom1": 9,
+                "atom2": 10
+            },
+            {
+                "atom1": 10,
+                "atom2": 5
+            },
+            {
+                "atom1": 9,
+                "atom2": 11
+            },
+            {
+                "atom1": 11,
+                "atom2": 12
+            },
+            {
+                "atom1": 12,
+                "atom2": 13
+            },
+            {
+                "atom1": 13,
+                "atom2": 14
+            },
+            {
+                "atom1": 14,
+                "atom2": 10
+            },
+            {
+                "atom1": 12,
+                "atom2": 15
+            },
+            {
+                "atom1": 15,
+                "atom2": 16
+            },
+            {
+                "atom1": 16,
+                "atom2": 17
+            },
+            {
+                "atom1": 17,
+                "atom2": 11
+            },
+            {
+                "atom1": 15,
+                "atom2": 18,
+                "bondType": "double"
+            },
+            {
+                "atom1": 2,
+                "atom2": 19,
+                "bondType": "double"
+            },
+            {
+                "atom1": 5,
+                "atom2": 20,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 12,
+                "atom2": 21,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 9,
+                "atom2": 22,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 10,
+                "atom2": 23,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 11,
+                "atom2": 24,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 6,
+                "atom2": 25,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 6,
+                "atom2": 26,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 1,
+                "atom2": 27,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 1,
+                "atom2": 28,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 7,
+                "atom2": 29,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 7,
+                "atom2": 30,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 8,
+                "atom2": 31,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 8,
+                "atom2": 32,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 13,
+                "atom2": 33,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 16,
+                "atom2": 34,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 17,
+                "atom2": 35,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 14,
+                "atom2": 36,
+                "bondStereo": "up"
+            },
+            {
+                "atom1": 14,
+                "atom2": 37,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 13,
+                "atom2": 38,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 16,
+                "atom2": 39,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 17,
+                "atom2": 40,
+                "bondStereo": "down"
+            },
+            {
+                "atom1": 3,
+                "atom2": 41
+            },
+            {
+                "atom1": 20,
+                "atom2": 42
+            },
+            {
+                "atom1": 20,
+                "atom2": 43
+            },
+            {
+                "atom1": 20,
+                "atom2": 44
+            },
+            {
+                "atom1": 21,
+                "atom2": 45
+            },
+            {
+                "atom1": 21,
+                "atom2": 46
+            },
+            {
+                "atom1": 21,
+                "atom2": 47
+            }
+        ],
+        "assignments": [
+            {
+                "atom": {
+                    "atomCode": "C;2"
+                },
+                "shifts": [
+                    {
+                        "shift": 33.90385171020208,
+                        "shiftMin": 33.90385171020208,
+                        "shiftMax": 33.90385171020208,
+                        "assignedPeaks": [
+                            "{9af75f08-01f2-4a9e-9d55-ecb48f4073c1}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;2ax"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";2"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.3524206791036013,
+                        "shiftMin": 2.317415875841166,
+                        "shiftMax": 2.3874254823660372,
+                        "assignedIntegrals": [
+                            "{c411b3d8-d4a5-490f-b6cb-7adff80e0271}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";1"
+                            },
+                            {
+                                "atomCode": ";1"
+                            },
+                            {
+                                "atomCode": ";2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";2"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.4244738805458663,
+                        "shiftMin": 2.388216551366319,
+                        "shiftMax": 2.4607312097254135,
+                        "assignedIntegrals": [
+                            "{59c9fd70-0fe1-42a6-9f17-21e096a6fb10}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";2"
+                            },
+                            {
+                                "atomCode": ";1"
+                            },
+                            {
+                                "atomCode": ";1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;3"
+                },
+                "shifts": [
+                    {
+                        "shift": 199.46913656868855,
+                        "shiftMin": 199.46913656868855,
+                        "shiftMax": 199.46913656868855,
+                        "assignedPeaks": [
+                            "{b7300efb-48f0-40f5-9ac7-415ab8cef9c0}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;2ax"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            },
+                            {
+                                "atomCode": "H;20"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;4"
+                },
+                "shifts": [
+                    {
+                        "shift": 124.11509452143177,
+                        "shiftMin": 124.11509452143177,
+                        "shiftMax": 124.11509452143177,
+                        "assignedPeaks": [
+                            "{63ce30a1-22a9-48f0-a732-1ccc1b93379a}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;2ax"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;6ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;20"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;5"
+                },
+                "shifts": [
+                    {
+                        "shift": 170.52477538007628,
+                        "shiftMin": 170.52477538007628,
+                        "shiftMax": 170.52477538007628,
+                        "assignedPeaks": [
+                            "{a9a95fdb-8b94-4030-a7a7-5c25a46122ee}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;6ax"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;20"
+                            },
+                            {
+                                "atomCode": "H;21"
+                            },
+                            {
+                                "atomCode": "H;22"
+                            },
+                            {
+                                "atomCode": "H;23"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;10"
+                },
+                "shifts": [
+                    {
+                        "shift": 38.65286078824756,
+                        "shiftMin": 38.65286078824756,
+                        "shiftMax": 38.65286078824756,
+                        "assignedPeaks": [
+                            "{2c7fcff0-6900-48c4-bf29-d5d273372b46}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;2ax"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;21"
+                            },
+                            {
+                                "atomCode": "H;22"
+                            },
+                            {
+                                "atomCode": "H;23"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;1"
+                },
+                "shifts": [
+                    {
+                        "shift": 35.67116901632807,
+                        "shiftMin": 35.67116901632807,
+                        "shiftMax": 35.67116901632807,
+                        "assignedPeaks": [
+                            "{ac25c6ab-7bd7-4b7d-a5ce-d81802fbdc32}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;2ax"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            },
+                            {
+                                "atomCode": "H;21"
+                            },
+                            {
+                                "atomCode": "H;22"
+                            },
+                            {
+                                "atomCode": "H;23"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;1ax"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;6"
+                },
+                "shifts": [
+                    {
+                        "shift": 32.58098845928005,
+                        "shiftMin": 32.58098845928005,
+                        "shiftMax": 32.58098845928005,
+                        "assignedPeaks": [
+                            "{cf1e6c8c-7566-4208-9ef5-4840ee84defc}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;6ax"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";6"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.323099508521376,
+                        "shiftMin": 2.299508580704769,
+                        "shiftMax": 2.3466904363379832,
+                        "assignedIntegrals": [
+                            "{349f876f-8e8d-4851-9541-1d31792c0592}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";7"
+                            },
+                            {
+                                "atomCode": ";7"
+                            },
+                            {
+                                "atomCode": ";6"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";6"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.422464061629109,
+                        "shiftMin": 2.3886540222237422,
+                        "shiftMax": 2.456274101034476,
+                        "assignedIntegrals": [
+                            "{058aa31b-d342-4f8e-a4a2-0ded594ebbe5}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";6"
+                            },
+                            {
+                                "atomCode": ";7"
+                            },
+                            {
+                                "atomCode": ";7"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;7"
+                },
+                "shifts": [
+                    {
+                        "shift": 30.733179473865164,
+                        "shiftMin": 30.733179473865164,
+                        "shiftMax": 30.733179473865164,
+                        "assignedPeaks": [
+                            "{06b15416-8e14-4e94-ba1c-bdefed48eb4f}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;6ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";7"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.1145137337918598,
+                        "shiftMin": 1.0621420706793938,
+                        "shiftMax": 1.166885396904326,
+                        "assignedIntegrals": [
+                            "{7369efff-715c-479f-afd6-6569e6bd8dad}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";6"
+                            },
+                            {
+                                "atomCode": ";7"
+                            },
+                            {
+                                "atomCode": ";6"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";7"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.9718363448798806,
+                        "shiftMin": 1.9376966053865772,
+                        "shiftMax": 2.005976084373184,
+                        "assignedIntegrals": [
+                            "{b0334c59-b218-433a-90a1-b4f7d30f1a3d}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";6"
+                            },
+                            {
+                                "atomCode": ";7"
+                            },
+                            {
+                                "atomCode": ";6"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;8"
+                },
+                "shifts": [
+                    {
+                        "shift": 35.121725814225535,
+                        "shiftMin": 35.121725814225535,
+                        "shiftMax": 35.121725814225535,
+                        "assignedPeaks": [
+                            "{fbec2a3d-fb25-40db-91df-82322676e5c7}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;6ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;9"
+                },
+                "shifts": [
+                    {
+                        "shift": 53.78703024415396,
+                        "shiftMin": 53.78703024415396,
+                        "shiftMax": 53.78703024415396,
+                        "assignedPeaks": [
+                            "{5b2f09ad-90f5-447a-b575-847d66493dd9}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;14"
+                },
+                "shifts": [
+                    {
+                        "shift": 50.80714165783488,
+                        "shiftMin": 50.80714165783488,
+                        "shiftMax": 50.80714165783488,
+                        "assignedPeaks": [
+                            "{a7531e1b-21c3-4b75-9729-2fab7a0dc912}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            },
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;24"
+                            },
+                            {
+                                "atomCode": "H;25"
+                            },
+                            {
+                                "atomCode": "H;26"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H14"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;13"
+                },
+                "shifts": [
+                    {
+                        "shift": 47.527252853592735,
+                        "shiftMin": 47.527252853592735,
+                        "shiftMax": 47.527252853592735,
+                        "assignedPeaks": [
+                            "{c97dfe31-60a7-4ce0-b812-6222fddeb732}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            },
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;24"
+                            },
+                            {
+                                "atomCode": "H;25"
+                            },
+                            {
+                                "atomCode": "H;26"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;12"
+                },
+                "shifts": [
+                    {
+                        "shift": 31.251125931898127,
+                        "shiftMin": 31.251125931898127,
+                        "shiftMax": 31.251125931898127,
+                        "assignedPeaks": [
+                            "{8ef749bd-90e7-4805-a7e2-0581d3c62016}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;24"
+                            },
+                            {
+                                "atomCode": "H;25"
+                            },
+                            {
+                                "atomCode": "H;26"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;12eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";12"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.2606825024434647,
+                        "shiftMin": 1.2362018233456098,
+                        "shiftMax": 1.2851631815413194,
+                        "assignedIntegrals": [
+                            "{1f33029d-9ecf-4166-a5f7-c45d7abada2b}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";11"
+                            },
+                            {
+                                "atomCode": ";12"
+                            },
+                            {
+                                "atomCode": ";11"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";12"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.8586828044448582,
+                        "shiftMin": 1.8254653798511173,
+                        "shiftMax": 1.8919002290385993,
+                        "assignedIntegrals": [
+                            "{44faa7e9-ca1e-4712-951a-ea9c9e6f3091}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";11"
+                            },
+                            {
+                                "atomCode": ";12"
+                            },
+                            {
+                                "atomCode": ";11"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;11"
+                },
+                "shifts": [
+                    {
+                        "shift": 20.304730924299008,
+                        "shiftMin": 20.304730924299008,
+                        "shiftMax": 20.304730924299008,
+                        "assignedPeaks": [
+                            "{bf49c8ba-f587-43b1-add8-f0ea812d706b}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";11"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.452031483963428,
+                        "shiftMin": 1.4007386325203044,
+                        "shiftMax": 1.5033243354065517,
+                        "assignedIntegrals": [
+                            "{cd30be97-100b-4bc7-bc54-7059189b83fa}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";12"
+                            },
+                            {
+                                "atomCode": ";12"
+                            },
+                            {
+                                "atomCode": ";11"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";11"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.6797499959565028,
+                        "shiftMin": 1.6540501035150195,
+                        "shiftMax": 1.7054498883979858,
+                        "assignedIntegrals": [
+                            "{252cc0f4-be4f-4cc5-985c-3bfbce338083}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";11"
+                            },
+                            {
+                                "atomCode": ";12"
+                            },
+                            {
+                                "atomCode": ";12"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;17"
+                },
+                "shifts": [
+                    {
+                        "shift": 220.54279300694662,
+                        "shiftMin": 220.54279300694662,
+                        "shiftMax": 220.54279300694662,
+                        "assignedPeaks": [
+                            "{f874fa2a-6b37-4bc3-8827-6392b0fc2039}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;16ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;24"
+                            },
+                            {
+                                "atomCode": "H;25"
+                            },
+                            {
+                                "atomCode": "H;26"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;16"
+                },
+                "shifts": [
+                    {
+                        "shift": 35.77265852499669,
+                        "shiftMin": 35.77265852499669,
+                        "shiftMax": 35.77265852499669,
+                        "assignedPeaks": [
+                            "{8c6b20c2-270a-4bd5-b666-97664d838861}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;16ax"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";16"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.110833855674045,
+                        "shiftMin": 2.0679153260253194,
+                        "shiftMax": 2.15375238532277,
+                        "assignedIntegrals": [
+                            "{08d55117-a4d8-4c70-bbb5-5c3d560de68a}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";15"
+                            },
+                            {
+                                "atomCode": ";15"
+                            },
+                            {
+                                "atomCode": ";16"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";16"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.4696744654032994,
+                        "shiftMin": 2.4340377546395326,
+                        "shiftMax": 2.5053111761670666,
+                        "assignedIntegrals": [
+                            "{7fc54dea-a722-4ebe-b2a0-f1b11806a33e}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";15"
+                            },
+                            {
+                                "atomCode": ";15"
+                            },
+                            {
+                                "atomCode": ";16"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;15"
+                },
+                "shifts": [
+                    {
+                        "shift": 21.75919370462609,
+                        "shiftMin": 21.75919370462609,
+                        "shiftMax": 21.75919370462609,
+                        "assignedPeaks": [
+                            "{75fc5678-ae07-4bfc-a021-1e3f2cdb08c8}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;16ax"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;15ax"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";15"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.5661913854707699,
+                        "shiftMin": 1.5139825902518753,
+                        "shiftMax": 1.6184001806896642,
+                        "assignedIntegrals": [
+                            "{2b77bfcf-bc1d-4256-98f9-d1f9a4733e27}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";16"
+                            },
+                            {
+                                "atomCode": ";15"
+                            },
+                            {
+                                "atomCode": ";16"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": ";15"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.9718363448798806,
+                        "shiftMin": 1.9376966053865772,
+                        "shiftMax": 2.005976084373184,
+                        "assignedIntegrals": [
+                            "{b0334c59-b218-433a-90a1-b4f7d30f1a3d}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": ";15"
+                            },
+                            {
+                                "atomCode": ";16"
+                            },
+                            {
+                                "atomCode": ";16"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;19"
+                },
+                "shifts": [
+                    {
+                        "shift": 17.379394968166906,
+                        "shiftMin": 17.379394968166906,
+                        "shiftMax": 17.379394968166906,
+                        "assignedPeaks": [
+                            "{6a7de69c-d71c-4cde-be6d-d99ac229d35e}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;21"
+                            },
+                            {
+                                "atomCode": "H;22"
+                            },
+                            {
+                                "atomCode": "H;23"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "C;18"
+                },
+                "shifts": [
+                    {
+                        "shift": 13.71785022206535,
+                        "shiftMin": 13.71785022206535,
+                        "shiftMax": 13.71785022206535,
+                        "assignedPeaks": [
+                            "{983525da-4c38-4bfe-a65c-e33b9cca2e48}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;12eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;24"
+                            },
+                            {
+                                "atomCode": "H;25"
+                            },
+                            {
+                                "atomCode": "H;26"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "atom": {
+                    "atomCode": "H;H8"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.729,
+                        "shiftMin": 1.6859762264587366,
+                        "shiftMax": 1.7792732147612769,
+                        "assignedMultiplets": [
+                            "{0bb6851f-1789-4573-b40e-6d47efbe35a8}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H9"
+                        },
+                        "coupling": 10.55
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H14"
+                        },
+                        "coupling": 10.87
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7ax"
+                        },
+                        "coupling": 11.81
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7eq"
+                        },
+                        "coupling": 3.54
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;6"
+                            },
+                            {
+                                "atomCode": "C;7"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;8"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;H9"
+                },
+                "shifts": [
+                    {
+                        "shift": 0.986,
+                        "shiftMin": 0.986,
+                        "shiftMax": 0.986,
+                        "assignedMultiplets": [
+                            "{76515a05-b371-48cd-af23-205e8d195c71}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11ax"
+                        },
+                        "coupling": 12.51
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11eq"
+                        },
+                        "coupling": 4.14
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H8"
+                        },
+                        "coupling": 10.55
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;19"
+                            },
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;7"
+                            },
+                            {
+                                "atomCode": "C;11"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            },
+                            {
+                                "atomCode": "C;1"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;9"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;H14"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.293,
+                        "shiftMin": 1.2489762264587354,
+                        "shiftMax": 1.3650237735412634,
+                        "assignedMultiplets": [
+                            "{69a24cc9-8159-4d60-ba96-17e2d2b78faa}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15ax"
+                        },
+                        "coupling": 12.76
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H8"
+                        },
+                        "coupling": 10.87
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15eq"
+                        },
+                        "coupling": 11.0
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;16"
+                            },
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;7"
+                            },
+                            {
+                                "atomCode": "C;18"
+                            },
+                            {
+                                "atomCode": "C;15"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            },
+                            {
+                                "atomCode": "C;12"
+                            },
+                            {
+                                "atomCode": "C;17"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;14"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;1eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.039,
+                        "shiftMin": 1.992976226458737,
+                        "shiftMax": 2.0830237735412633,
+                        "assignedMultiplets": [
+                            "{fa246846-fb95-48d1-ab9f-127697b61610}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2ax"
+                        },
+                        "coupling": 5.16
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;1ax"
+                        },
+                        "coupling": -13.39
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2eq"
+                        },
+                        "coupling": 3.09
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            },
+                            {
+                                "atomCode": "H;2ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;19"
+                            },
+                            {
+                                "atomCode": "C;2"
+                            },
+                            {
+                                "atomCode": "C;6"
+                            },
+                            {
+                                "atomCode": "C;3"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;1"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.713095559793881
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;1ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.707,
+                        "shiftMin": 1.707,
+                        "shiftMax": 1.707,
+                        "assignedMultiplets": [
+                            "{64733720-7e1d-4a1d-9178-fc4178215c01}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;1eq"
+                        },
+                        "coupling": -13.39
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2ax"
+                        },
+                        "coupling": 14.96
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2eq"
+                        },
+                        "coupling": 4.41
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;2eq"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;2ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;19"
+                            },
+                            {
+                                "atomCode": "C;2"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;3"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;1"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.1575030469343525
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;2ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.428,
+                        "shiftMin": 2.3740237735412633,
+                        "shiftMax": 2.4800237735412654,
+                        "assignedMultiplets": [
+                            "{b1f51bc0-1670-432f-9cc7-1d0389698088}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;1eq"
+                        },
+                        "coupling": 5.16
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;1ax"
+                        },
+                        "coupling": 14.96
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2eq"
+                        },
+                        "coupling": 16.75
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;2eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;4"
+                            },
+                            {
+                                "atomCode": "C;3"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            },
+                            {
+                                "atomCode": "C;1"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;2"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.29758429457309854
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;2eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.351,
+                        "shiftMin": 2.3141766371044334,
+                        "shiftMax": 2.399023773541261,
+                        "assignedMultiplets": [
+                            "{26a0c442-913e-46e9-a77c-c8b3fc1d6709}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;20"
+                        },
+                        "coupling": 0.8
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2ax"
+                        },
+                        "coupling": 16.75
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;1eq"
+                        },
+                        "coupling": 3.09
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;1ax"
+                        },
+                        "coupling": 4.41
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;1ax"
+                            },
+                            {
+                                "atomCode": "H;1eq"
+                            },
+                            {
+                                "atomCode": "H;2ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;4"
+                            },
+                            {
+                                "atomCode": "C;3"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            },
+                            {
+                                "atomCode": "C;1"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;2"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.48396879972734247
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;6ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.428,
+                        "shiftMin": 2.3789762264587364,
+                        "shiftMax": 2.4810237735412635,
+                        "assignedMultiplets": [
+                            "{b73407c1-b385-4d55-9044-82ebd45d7451}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;20"
+                        },
+                        "coupling": 1.76
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6eq"
+                        },
+                        "coupling": -14.56
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7ax"
+                        },
+                        "coupling": 13.95
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7eq"
+                        },
+                        "coupling": 5.42
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;4"
+                            },
+                            {
+                                "atomCode": "C;7"
+                            },
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;6"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.06480506418945615
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;6eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.329,
+                        "shiftMin": 2.2849762264587374,
+                        "shiftMax": 2.372023773541263,
+                        "assignedMultiplets": [
+                            "{d8c26426-7f75-4029-93a0-be1062ee9440}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7ax"
+                        },
+                        "coupling": 4.19
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7eq"
+                        },
+                        "coupling": 2.45
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6ax"
+                        },
+                        "coupling": -14.56
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;6ax"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;7"
+                            },
+                            {
+                                "atomCode": "C;4"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;6"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.3800703914465811
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;7ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.115,
+                        "shiftMin": 1.115,
+                        "shiftMax": 1.115,
+                        "assignedMultiplets": [
+                            "{4139d430-1938-4997-a970-453dc78caf7d}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6eq"
+                        },
+                        "coupling": 4.19
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7eq"
+                        },
+                        "coupling": -12.85
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H8"
+                        },
+                        "coupling": 11.81
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6ax"
+                        },
+                        "coupling": 13.95
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;6ax"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;7eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;6"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;7"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;7eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.972,
+                        "shiftMin": 1.972,
+                        "shiftMax": 1.972,
+                        "assignedMultiplets": [
+                            "{e1e33474-cd27-4017-b010-a5b151d24293}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6eq"
+                        },
+                        "coupling": 2.45
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;7ax"
+                        },
+                        "coupling": -12.85
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H8"
+                        },
+                        "coupling": 3.54
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6ax"
+                        },
+                        "coupling": 5.42
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H8"
+                            },
+                            {
+                                "atomCode": "H;6ax"
+                            },
+                            {
+                                "atomCode": "H;6eq"
+                            },
+                            {
+                                "atomCode": "H;7ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;6"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;7"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;12eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.86,
+                        "shiftMin": 1.86,
+                        "shiftMax": 1.86,
+                        "assignedMultiplets": [
+                            "{37d68474-6a02-4fef-b9d4-d62f3daf7c7b}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11eq"
+                        },
+                        "coupling": 2.74
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11ax"
+                        },
+                        "coupling": 4.04
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;12ax"
+                        },
+                        "coupling": 13.01
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;18"
+                            },
+                            {
+                                "atomCode": "C;11"
+                            },
+                            {
+                                "atomCode": "C;15"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;12"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.09202898087441717
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;16eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.473,
+                        "shiftMin": 2.4340377546395326,
+                        "shiftMax": 2.523023773541262,
+                        "assignedMultiplets": [
+                            "{7684857a-1a8e-477c-902b-ffb8b454f642}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15ax"
+                        },
+                        "coupling": 7.5
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;16ax"
+                        },
+                        "coupling": 19.41
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15eq"
+                        },
+                        "coupling": 0.89
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;16ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;15"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;16"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.6476554714134514
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;15ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.568,
+                        "shiftMin": 1.568,
+                        "shiftMax": 1.568,
+                        "assignedMultiplets": [
+                            "{d6867510-41b6-4e68-a1b0-0e99ee89280f}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;16ax"
+                        },
+                        "coupling": 9.29
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H14"
+                        },
+                        "coupling": 12.76
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;16eq"
+                        },
+                        "coupling": 7.5
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15eq"
+                        },
+                        "coupling": -12.42
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;16ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;16"
+                            },
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;15"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.6238409231451659
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;11ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.453,
+                        "shiftMin": 1.453,
+                        "shiftMax": 1.453,
+                        "assignedMultiplets": [
+                            "{326ea649-17b9-414b-bb86-d9c2c6d72f3a}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;12eq"
+                        },
+                        "coupling": 4.04
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11eq"
+                        },
+                        "coupling": 13.7
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;12ax"
+                        },
+                        "coupling": 13.44
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H9"
+                        },
+                        "coupling": 12.51
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            },
+                            {
+                                "atomCode": "C;12"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;11"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.010340776614369156
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;11eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.685,
+                        "shiftMin": 1.6550237735412636,
+                        "shiftMax": 1.7260237735412631,
+                        "assignedMultiplets": [
+                            "{9285a66c-d92a-4704-ae89-040ff54d2ace}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;12eq"
+                        },
+                        "coupling": 2.74
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11ax"
+                        },
+                        "coupling": 13.7
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;12ax"
+                        },
+                        "coupling": 4.22
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H9"
+                        },
+                        "coupling": 4.14
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            },
+                            {
+                                "atomCode": "C;12"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;11"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -1.0
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;12ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.275,
+                        "shiftMin": 1.2180237735412638,
+                        "shiftMax": 1.3210237735412627,
+                        "assignedMultiplets": [
+                            "{867a4372-de10-4d5f-83c0-1c47fe2e95a1}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;12eq"
+                        },
+                        "coupling": 13.01
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11ax"
+                        },
+                        "coupling": 13.44
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;11eq"
+                        },
+                        "coupling": 4.22
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H9"
+                            },
+                            {
+                                "atomCode": "H;11ax"
+                            },
+                            {
+                                "atomCode": "H;11eq"
+                            },
+                            {
+                                "atomCode": "H;12ax"
+                            },
+                            {
+                                "atomCode": "H;12eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;18"
+                            },
+                            {
+                                "atomCode": "C;11"
+                            },
+                            {
+                                "atomCode": "C;9"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            },
+                            {
+                                "atomCode": "C;17"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;12"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.11363795183262108
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;16ax"
+                },
+                "shifts": [
+                    {
+                        "shift": 2.1,
+                        "shiftMin": 2.1,
+                        "shiftMax": 2.1,
+                        "assignedMultiplets": [
+                            "{3238c8b4-eb7a-4a23-8342-823839e8149f}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15ax"
+                        },
+                        "coupling": 9.29
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;16eq"
+                        },
+                        "coupling": 19.41
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15eq"
+                        },
+                        "coupling": 9.07
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;15eq"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;15"
+                            },
+                            {
+                                "atomCode": "C;17"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;16"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.021992941147918218
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;15eq"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.965,
+                        "shiftMin": 1.9150237735412634,
+                        "shiftMax": 2.0360237735412627,
+                        "assignedMultiplets": [
+                            "{6e3d02e3-bac2-4e63-a5cf-1cdcf571092b}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;H14"
+                        },
+                        "coupling": 11.0
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;16eq"
+                        },
+                        "coupling": 0.89
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;15ax"
+                        },
+                        "coupling": -12.42
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;16ax"
+                        },
+                        "coupling": 9.07
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "COSY",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "H;H14"
+                            },
+                            {
+                                "atomCode": "H;15ax"
+                            },
+                            {
+                                "atomCode": "H;16eq"
+                            },
+                            {
+                                "atomCode": "H;16ax"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;16"
+                            },
+                            {
+                                "atomCode": "C;8"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            },
+                            {
+                                "atomCode": "C;17"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;15"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": -0.2090171517227403
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;20"
+                },
+                "shifts": [
+                    {
+                        "shift": 5.741473831428446,
+                        "shiftMin": 5.741473831428446,
+                        "shiftMax": 5.741473831428446,
+                        "assignedMultiplets": [
+                            "{a0484c9c-dadd-4546-9e1f-5ef0c06d4a76}"
+                        ]
+                    }
+                ],
+                "J-couplings": [
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;2eq"
+                        },
+                        "coupling": 0.8
+                    },
+                    {
+                        "coupledAtom": {
+                            "atomCode": "H;6ax"
+                        },
+                        "coupling": 1.76
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;3"
+                            },
+                            {
+                                "atomCode": "C;5"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;4"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;21"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.206950748742272,
+                        "shiftMin": 1.206950748742272,
+                        "shiftMax": 1.206950748742272,
+                        "assignedMultiplets": [
+                            "{86eace74-6f20-4dd4-b724-6d93bd789ff4}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;1"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;19"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;22"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.206950748742272,
+                        "shiftMin": 1.206950748742272,
+                        "shiftMax": 1.206950748742272,
+                        "assignedMultiplets": [
+                            "{86eace74-6f20-4dd4-b724-6d93bd789ff4}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;1"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;19"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;23"
+                },
+                "shifts": [
+                    {
+                        "shift": 1.206950748742272,
+                        "shiftMin": 1.206950748742272,
+                        "shiftMax": 1.206950748742272,
+                        "assignedMultiplets": [
+                            "{86eace74-6f20-4dd4-b724-6d93bd789ff4}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;5"
+                            },
+                            {
+                                "atomCode": "C;1"
+                            },
+                            {
+                                "atomCode": "C;10"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;19"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;24"
+                },
+                "shifts": [
+                    {
+                        "shift": 0.9126738327561286,
+                        "shiftMin": 0.9126738327561286,
+                        "shiftMax": 0.9126738327561286,
+                        "assignedMultiplets": [
+                            "{c713d8f4-c006-4339-b6e7-1f5538ebb3ac}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;17"
+                            },
+                            {
+                                "atomCode": "C;12"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;18"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;25"
+                },
+                "shifts": [
+                    {
+                        "shift": 0.9126738327561286,
+                        "shiftMin": 0.9126738327561286,
+                        "shiftMax": 0.9126738327561286,
+                        "assignedMultiplets": [
+                            "{c713d8f4-c006-4339-b6e7-1f5538ebb3ac}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;17"
+                            },
+                            {
+                                "atomCode": "C;12"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;18"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            },
+            {
+                "atom": {
+                    "atomCode": "H;26"
+                },
+                "shifts": [
+                    {
+                        "shift": 0.9126738327561286,
+                        "shiftMin": 0.9126738327561286,
+                        "shiftMax": 0.9126738327561286,
+                        "assignedMultiplets": [
+                            "{c713d8f4-c006-4339-b6e7-1f5538ebb3ac}"
+                        ]
+                    }
+                ],
+                "correlations": [
+                    {
+                        "experiment": "HMBC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;17"
+                            },
+                            {
+                                "atomCode": "C;12"
+                            },
+                            {
+                                "atomCode": "C;14"
+                            },
+                            {
+                                "atomCode": "C;13"
+                            }
+                        ]
+                    },
+                    {
+                        "experiment": "HSQC",
+                        "correlatedAtoms": [
+                            {
+                                "atomCode": "C;18"
+                            }
+                        ]
+                    }
+                ],
+                "quality": {
+                    "quality": 0.7142857142857143
+                }
+            }
+        ],
+        "predictions": [
+            {
+                "nucleus": "1H",
+                "solvent": "Chloroform-d",
+                "spectrumFrequency": 500.133088507,
+                "prediction_data": [
+                    {
+                        "atom": {
+                            "atomCode": "H;H8"
+                        },
+                        "shift": {
+                            "value": 1.6041165231283245,
+                            "error": 0.35
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 8.5,
+                                    "error": 1.22
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.97,
+                                    "error": 1.22
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.17,
+                                    "error": 4.01
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 3.41,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;H9"
+                        },
+                        "shift": {
+                            "value": 1.003190946017527,
+                            "error": 0.29000000000000004
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 8.5,
+                                    "error": 1.22
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H8"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 2.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.89,
+                                    "error": 4.01
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 4.13,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;21"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;22"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;23"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;H14"
+                        },
+                        "shift": {
+                            "value": 1.571174410587385,
+                            "error": 0.42
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 7.97,
+                                    "error": 1.22
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H8"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 2.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.8,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 5.27,
+                                    "error": 3.0
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 3.38,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;24"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;25"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;26"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;1eq"
+                        },
+                        "shift": {
+                            "value": 1.7036842663216616,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 12.62,
+                                    "error": 0.65
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;1ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.03,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.79,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;1ax"
+                        },
+                        "shift": {
+                            "value": 2.0147222774719484,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 12.62,
+                                    "error": 0.65
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;1eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.79,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.03,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;2ax"
+                        },
+                        "shift": {
+                            "value": 2.3579528437789845,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 6.03,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;1eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.79,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;1ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 14.51,
+                                    "error": 5.2
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;20"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;2eq"
+                        },
+                        "shift": {
+                            "value": 2.4441919379278065,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 8.79,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;1eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.03,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;1ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 14.51,
+                                    "error": 5.2
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;20"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;6ax"
+                        },
+                        "shift": {
+                            "value": 2.333591650656086,
+                            "error": 0.3
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 14.25,
+                                    "error": 5.2
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.84,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 5.08,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;20"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;6eq"
+                        },
+                        "shift": {
+                            "value": 2.4682299791022517,
+                            "error": 0.3
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 14.25,
+                                    "error": 5.2
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 5.08,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.84,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;20"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;7ax"
+                        },
+                        "shift": {
+                            "value": 1.3393369079940471,
+                            "error": 0.28
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 6.17,
+                                    "error": 4.01
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H8"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.84,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 5.08,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 12.14,
+                                    "error": 3.83
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;7eq"
+                        },
+                        "shift": {
+                            "value": 1.703417425188039,
+                            "error": 0.28
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 3.41,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H8"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 5.08,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.84,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 12.14,
+                                    "error": 3.83
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;7ax"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;12eq"
+                        },
+                        "shift": {
+                            "value": 1.4715923875772756,
+                            "error": 0.3
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 9.46,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 13.19,
+                                    "error": 0.65
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;12ax"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;16eq"
+                        },
+                        "shift": {
+                            "value": 2.1277748324168577,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.8,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.6,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 14.78,
+                                    "error": 5.2
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;15ax"
+                        },
+                        "shift": {
+                            "value": 1.571823793196174,
+                            "error": 0.2
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 5.27,
+                                    "error": 3.0
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.6,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 13.1,
+                                    "error": 3.83
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;11ax"
+                        },
+                        "shift": {
+                            "value": 1.4825449045264105,
+                            "error": 0.32
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 6.89,
+                                    "error": 4.01
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 9.46,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;12eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 13.77,
+                                    "error": 3.83
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;12ax"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;11eq"
+                        },
+                        "shift": {
+                            "value": 1.7092777506245156,
+                            "error": 0.32
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 4.13,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;12eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 13.77,
+                                    "error": 3.83
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 9.46,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;12ax"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;12ax"
+                        },
+                        "shift": {
+                            "value": 1.8672784667961813,
+                            "error": 0.3
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 13.19,
+                                    "error": 0.65
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;12eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 9.46,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;11eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;16ax"
+                        },
+                        "shift": {
+                            "value": 2.382902174026733,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 14.78,
+                                    "error": 5.2
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.6,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;15eq"
+                        },
+                        "shift": {
+                            "value": 1.8394091112702864,
+                            "error": 0.2
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 3.38,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 6.71,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 13.1,
+                                    "error": 3.83
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;15ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 8.6,
+                                    "error": 0.9
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;16ax"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;20"
+                        },
+                        "shift": {
+                            "value": 5.719914858577815,
+                            "error": 0.1
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;2eq"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6ax"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 0.9,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;6eq"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;21"
+                        },
+                        "shift": {
+                            "value": 1.1584566081773962,
+                            "error": 0.10000000000000002
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.14,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;22"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.14,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;23"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;22"
+                        },
+                        "shift": {
+                            "value": 1.1584566081773962,
+                            "error": 0.10000000000000002
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.14,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;21"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.14,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;23"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;23"
+                        },
+                        "shift": {
+                            "value": 1.1584566081773962,
+                            "error": 0.10000000000000002
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H9"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.14,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;21"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.14,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;22"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;24"
+                        },
+                        "shift": {
+                            "value": 0.9209844066588321,
+                            "error": 0.10000000000000002
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.95,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;25"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.95,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;26"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;25"
+                        },
+                        "shift": {
+                            "value": 0.9209844066588321,
+                            "error": 0.10000000000000002
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.95,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;24"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.95,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;26"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "atom": {
+                            "atomCode": "H;26"
+                        },
+                        "shift": {
+                            "value": 0.9209844066588321,
+                            "error": 0.10000000000000002
+                        },
+                        "J-couplings": [
+                            {
+                                "coupling": {
+                                    "value": 1.5,
+                                    "error": 0.68
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;H14"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.95,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;24"
+                                }
+                            },
+                            {
+                                "coupling": {
+                                    "value": 7.95,
+                                    "error": 1.72
+                                },
+                                "coupledAtom": {
+                                    "atomCode": "H;25"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
