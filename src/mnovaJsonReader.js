@@ -234,10 +234,16 @@ export function extractSpectrumData(spectrumObjectIn, type = 'data') {
   return result;
 }
 
-function ingestMoleculeObject(jGraphDataIn) {
-  const jGraphData = jGraphDataIn.assignments;
-  const atoms = jGraphDataIn.atoms;
-  var dataTMP = [];
+
+export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
+  const jGraphData = extractMoleculeData(
+    allObjectsExtractedMolecule,
+    'assignments',
+    '$mnova_schema',
+  );
+  const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
+
+  var dataOutput = [];
   jGraphData.forEach((atomIt, index) => {
     if (!'atom' in atomIt) return;
     const atomCode = atomIt.atom.atomCode;
@@ -255,7 +261,7 @@ function ingestMoleculeObject(jGraphDataIn) {
     shifts.forEach((shiftIt, i) => {
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
         // Find the existing object in the list by assignedMultiplet
-        let existingItem = dataTMP.find(
+        let existingItem = dataOutput.find(
           (item) =>
             item.assignedMultipletMnovaHash === assignedMultipletIt &&
             item.chemShift === shiftIt.shift,
@@ -271,22 +277,11 @@ function ingestMoleculeObject(jGraphDataIn) {
             atomIndicesMol: [atomIndexMol],
             listOfJs: [],
           };
-          dataTMP.push(obj);
+          dataOutput.push(obj);
         }
       });
     });
   });
-  dataTMP.sort((a, b) => b.chemShift - a.chemShift);
-  return dataTMP;
-}
-
-export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
-  const assignments = extractMoleculeData(
-    allObjectsExtractedMolecule,
-    'assignments',
-    '$mnova_schema',
-  );
-  const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
-  const JGraphMnova = { assignments, atoms };
-  return ingestMoleculeObject(JGraphMnova);
+  dataOutput.sort((a, b) => b.chemShift - a.chemShift);
+  return dataOutput;
 }
