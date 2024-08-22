@@ -81,17 +81,70 @@ export class NmrAssignment extends GraphBase {
     this.jgraphObj.rightPosColumns = rightPosColumns;
     this.settings = settings;
   }
-
   ingestMoleculeObject(data, settings) {
+    var listFound = [];
     let dataColumns = [];
+    var counterCouplings = 0;
+    var counterFound = 0;
     data.forEach((item, index) => {
+      let listOfJs = [];
+      if ('listOfJs' in item) {
+        item.listOfJs.forEach((aJ) => {
+          const coupling = aJ.coupling;
+          const atomIndexMol = aJ.atomIndexMol;
+          var isAssigned = atomIndexMol.length > 0;
+          if (isAssigned) {
+            //see if in listFound... if not add it and set
+            var isFistTime = true;
+            var indexInAssignmentList = counterCouplings;
+            listFound.forEach((pair, index) => {
+              const c1 =
+                pair[0] == atomIndexMol[0] && pair[1] == item.atomIndicesMol[0];
+              const c2 =
+                pair[1] == atomIndexMol[0] && pair[0] == item.atomIndicesMol[0];
+              if (c1 || c2) {
+                counterFound++;
+                indexInAssignmentList = index;
+                isFistTime = false;
+                return;
+              }
+            });
+            if (isFistTime) {
+              listFound.push([atomIndexMol[0], item.atomIndicesMol[0]]);
+            }
+          }
+          listOfJs.push({
+            isAssigned: isAssigned,
+            indexInAssignmentList: indexInAssignmentList,
+            isFirstInAssignmentIndex: isFistTime,
+            Jvalue: coupling,
+            JlevelAvoidContact: Math.abs(coupling),
+          });
+          if (isFistTime) counterCouplings++;
+          console.log(
+            'counterCouplings :',
+            counterCouplings,
+            ' counterFound :',
+            counterFound,
+            ' listOfJs.length ',
+            listOfJs.length,
+          );
+          listOfJs.sort((a, b) => a.JlevelAvoidContact - b.JlevelAvoidContact);
+
+          listOfJs = updateBlockPosition(
+            listOfJs,
+            settings.jGraph.minSpaceBetweekCircles,
+            settings.jGraph.minSpaceBetweekBlocks,
+          );
+        });
+      }
       const obj = {
         chemShift: item.chemShift.toString(),
         labelColumn: item.labelsColumn.join(','),
         MyIndex: index, //  needs to be sorted by chemical shifts before
         atomIndexMol: item.atomIndicesMol[0].toString(),
         atomIndicesMol: item.atomIndicesMol,
-        listOfJs: item.listOfJs,
+        listOfJs: listOfJs,
       };
       dataColumns.push(obj);
     });
@@ -105,152 +158,13 @@ export class NmrAssignment extends GraphBase {
 
     this.jgraphObj.dataUnassignedCoupCircles = [];
     this.jgraphObj.dataAssignedCoupBlocks = [];
-    return;
 
-    const processedData = jGraphData.reduce(
-      (acc, cur) => {
-        ['1', '2'].forEach((index) => {
-          const chemShiftKey = `chemShift${index}`;
-          const labelKey = `labelColumn${index}`;
-          const indexKey = `indexColumn${index}`;
-          const indexInMolFileKey = `indexInMolFile${index}`;
 
-          acc.arrayColumns[cur[indexKey] - 1] = cur[chemShiftKey];
-          acc.labelColumnArray[cur[indexKey] - 1] = cur[labelKey];
-          acc.indexAtomMol[cur[indexKey] - 1] = cur[indexInMolFileKey];
-          acc.indicesAtomMol[cur[indexKey] - 1] = cur[indicesInMolFileKey];
-          acc.chemColumnArray[cur[indexKey] - 1] = cur[chemShiftKey];
-        });
-        return acc;
-      },
-      {
-        arrayColumns: [],
-        labelColumnArray: [],
-        chemColumnArray: [],
-        indexAtomMol: [],
-        indicesAtomMol: [],
-      },
-    );
-    console.log('processedData ', processedData);
-    let arrayColumns = [];
-    let labelColumnArray = [];
-    let chemColumnArray = [];
-    let indexAtomMol = []; // atom index in the mol structure
-    let indicesAtomMol = []; // atom index in the mol structure
+//////////////////////////////////////////
+    
+     
+     
 
-    // Mapping fields from each row to new arrays
-    jGraphData.forEach((d) => {
-      const index1 = d.indexColumn1 - 1; // Adjusting index to 0-based
-      const index2 = d.indexColumn2 - 1;
-
-      arrayColumns[index1] = d.chemShift1;
-      arrayColumns[index2] = d.chemShift2;
-
-      labelColumnArray[index1] = d.labelColumn1;
-      labelColumnArray[index2] = d.labelColumn2;
-
-      indexAtomMol[index1] = d.indexInMolFile1;
-      indexAtomMol[index2] = d.indexInMolFile2;
-
-      indicesAtomMol[index1] = d.indicesInMolFile1;
-      indicesAtomMol[index2] = d.indicesInMolFile2;
-
-      chemColumnArray[index1] = d.chemShift1;
-      chemColumnArray[index2] = d.chemShift2;
-    });
-    // sort arrayColumns by decreasing values of chemical shift
-    var len = arrayColumns.length;
-    var indices = new Array(len);
-    for (var i = 0; i < len; ++i) indices[i] = i;
-    indices.sort(function (a, b) {
-      return arrayColumns[a] < arrayColumns[b]
-        ? 1
-        : arrayColumns[a] > arrayColumns[b]
-        ? -1
-        : 0;
-    });
-    var indicesSorted = new Array(len);
-    for (i = 0; i < len; ++i) indicesSorted[indices[i]] = i;
-
-    function populateDataColumns(
-      processedData,
-      jGraphData,
-      chemColumnArray,
-      labelColumnArray,
-      indicesSorted,
-      indexAtomMol,
-      indicesAtomMol,
-      updateBlockPosition,
-      minSpaceBetweekCircles,
-      minSpaceBetweekBlocks,
-    ) {
-      let dataColumns = [];
-      for (let i = 0; i < processedData.arrayColumns.length; i++) {
-        let listOfJs = [];
-
-        jGraphData.forEach((d, i1) => {
-          const condition = d.Label !== 'noAssignement';
-          if (i + 1 === +d.indexColumn1) {
-            listOfJs.push({
-              isAssigned: condition,
-              indexInAssignmentList: i1,
-              isFirstInAssignmentIndex: true,
-              Jvalue: +d.Jvalue,
-              JlevelAvoidContact: Math.abs(+d.Jvalue),
-            });
-          }
-          if (i + 1 === +d.indexColumn2) {
-            listOfJs.push({
-              isAssigned: condition,
-              indexInAssignmentList: i1,
-              isFirstInAssignmentIndex: false,
-              Jvalue: +d.Jvalue,
-              JlevelAvoidContact: Math.abs(+d.Jvalue),
-            });
-          }
-        });
-
-        listOfJs.sort((a, b) => a.JlevelAvoidContact - b.JlevelAvoidContact);
-
-        listOfJs = updateBlockPosition(
-          listOfJs,
-          minSpaceBetweekCircles,
-          minSpaceBetweekBlocks,
-        );
-
-        dataColumns.push({
-          chemShift: chemColumnArray[i],
-          labelColumn: labelColumnArray[i],
-          MyIndex: indicesSorted[i],
-          atomIndexMol: indexAtomMol[i],
-          atomIndicesMol: indicesAtomMol[i],
-          listOfJs: listOfJs,
-        });
-      }
-
-      dataColumns.sort((a, b) =>
-        a.chemShift < b.chemShift ? 1 : a.chemShift > b.chemShift ? -1 : 0,
-      );
-
-      return dataColumns;
-    }
-
-    this.jgraphObj.dataColumns = populateDataColumns(
-      processedData,
-      jGraphData,
-      chemColumnArray,
-      labelColumnArray,
-      indicesSorted,
-      indexAtomMol,
-      indicesAtomMol,
-      updateBlockPosition,
-      settings.jGraph.minSpaceBetweekCircles,
-      settings.jGraph.minSpaceBetweekBlocks,
-    );
-
-    this.jgraphObj.assignedCouplings = new AssignedCouplings(
-      this.jgraphObj.dataColumns,
-    );
 
     function populateDataUnassignedCoupCircles(dataColumns) {
       let dataUnassignedCoupCircles = [];

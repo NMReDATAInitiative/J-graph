@@ -66,15 +66,6 @@ export function updateColumnsAction(
         return x(d.chemShift);
       })
       .attr('stroke', function (d) {
-        console.log(
-          ' d.chemShift ',
-          d.chemShift,
-          ' x(d.chemShift) ',
-          x(d.chemShift),
-          ' width ',
-          width,
-        );
-
         if (x(d.chemShift) > 0.0 && x(d.chemShift) < width) {
           return colorShowLine;
         } else {

@@ -3,7 +3,7 @@
 import { processMnovaJsonFileSpectrum } from './mnovaJsonReader.js';
 import { processMnovaJsonFileMolecule } from './mnovaJsonReader.js';
 import { extractSpectrumData } from './mnovaJsonReader.js';
-import { ingestMoleculeObjecSuper } from './mnovaJsonReader.js';
+import { ingestMoleculeObject } from './mnovaJsonReader.js';
 
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
@@ -121,13 +121,13 @@ export function jGraph(fileNameSpectrum, fileNameData) {
             ')',
         );
 
-      const allObjectsExtracted = await processMnovaJsonFileSpectrum(
+      const allSpectraObjectsExtracted = await processMnovaJsonFileSpectrum(
         fileNameSpectrum,
         'spectra',
         ['data', 'raw_data', 'multiplets'],
         //['$mnova_schema', 'data', 'raw_data', 'multiplets', 'peaks', 'processing', 'parameters'],
       );
-      console.log('allObjectsExtracted', allObjectsExtracted);
+      console.log('allObjectsExtracted', allSpectraObjectsExtracted);
 
       const allObjectsExtractedMolecule = await processMnovaJsonFileMolecule(
         fileNameData,
@@ -142,14 +142,10 @@ export function jGraph(fileNameSpectrum, fileNameData) {
           'atoms',
         ],*/
       );
-      console.log(
-        'moleculeT allObjectsExtractedMolecule',
-        allObjectsExtractedMolecule,
-      );
 
       // spectra
-      const spectrumData = extractSpectrumData(allObjectsExtracted[0], 'data');
-      const spectrumData2 = extractSpectrumData(allObjectsExtracted[1], 'data');
+      const spectrumData = extractSpectrumData(allSpectraObjectsExtracted[0], 'data');
+      const spectrumData2 = extractSpectrumData(allSpectraObjectsExtracted[1], 'data');
       const spectrumDataAll = [
         spectrumData,
         spectrumData2,
@@ -160,7 +156,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         ],
       ];
 
-      const jGraphObj = ingestMoleculeObjecSuper(allObjectsExtractedMolecule);
+      const jGraphObj = ingestMoleculeObject(allObjectsExtractedMolecule, allSpectraObjectsExtracted[0].multiplets);
 
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;

@@ -234,13 +234,17 @@ export function extractSpectrumData(spectrumObjectIn, type = 'data') {
   return result;
 }
 
-export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
+export function ingestMoleculeObject(
+  allObjectsExtractedMolecule,
+  spectrumAssignment,
+) {
+  console.log('spectrumAssignment ', spectrumAssignment);
   const jGraphData = extractMoleculeData(
     allObjectsExtractedMolecule,
     'assignments',
-    '$mnova_schema',
   );
   const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
+  console.log('spectrumAssignment jGraphData ', jGraphData);
 
   var dataOutput = [];
   jGraphData.forEach((atomIt, index) => {
@@ -257,8 +261,82 @@ export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
       return;
     }
 
+// Assigned J's from the molecule
+    var listOfJs = [];
+    if ('J-couplings' in atomIt) {
+      const listCoup = atomIt['J-couplings'];
+      atomIt['J-couplings'].forEach((aJ, index) => {
+        const coupling = aJ.coupling;
+        var jObj = {
+          coupling: coupling,
+          atomIndexMol: [],
+        };
+        if ('atomCode' in aJ.coupledAtom) {
+          // !!!! Should be a list....
+          const atomCode = aJ.coupledAtom.atomCode;
+          const [elementPartner, labelPartner] =
+            aJ.coupledAtom.atomCode.split(';');
+          const atomIndexMolPartner =
+            atoms.findIndex(
+              (atom) =>
+                atom.elementSymbol === elementPartner &&
+                atom.number === labelPartner,
+            ) + 1;
+          if (false)
+            console.log(
+              'spectrumAssignment multiplet J-couplings atomIndexMolPartner',
+              atomIndexMolPartner,
+              ' coupling ',
+              coupling,
+              ' Hz',
+            );
+          jObj.atomIndexMol.push(atomIndexMolPartner);
+        }
+        listOfJs.push(jObj);
+      });
+    }
+// Unassigned J's from the multiplets of the spectrum
+
     shifts.forEach((shiftIt, i) => {
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
+        // find multiplet in spectra data from molecule data
+        const multipletIndex = spectrumAssignment.list.findIndex(
+          (multiplet) => '{' + multiplet.uuid + '}' === assignedMultipletIt,
+        );
+        if (multipletIndex > 0) {
+          const multiplet = spectrumAssignment.list[multipletIndex];
+          console.log(
+            'spectrumAssignment multipletIndex ========= ',
+            multipletIndex,
+          );
+          /*console.log('spectrumAssignment multiplet ========= ', multiplet);
+          console.log('spectrumAssignment multiplet area ', multiplet.area);
+          console.log( 'spectrumAssignment multiplet category ', multiplet.category,);
+          console.log('spectrumAssignment multiplet f1_shift ', multiplet.f1_shift, );
+          console.log(  'spectrumAssignment multiplet maximum ', multiplet.maximum,  );
+          console.log( 'spectrumAssignment multiplet nuclides ', multiplet.nuclides, );
+          console.log('spectrumAssignment multiplet name ', multiplet.name);
+          console.log('spectrumAssignment multiplet amoderea ', multiplet.mode);
+          console.log( 'spectrumAssignment multiplet is_reference ', multiplet.is_reference,);
+          */
+          console.log('spectrumAssignment multiplet range ', multiplet.range);
+
+          multiplet.j_list.forEach((aList) => {
+            console.log('spectrumAssignment multiplet aList ', aList);
+            console.log(
+              'spectrumAssignment multiplet aList.value ',
+              aList.value,
+            );
+            var jObj = {
+              coupling: aList.value,
+              atomIndexMol: [],
+            };
+            listOfJs.push(jObj);
+          });
+        }
+
+        //J-couplings
+
         // Find the existing object in the list by assignedMultiplet
         let existingItem = dataOutput.find(
           (item) =>
@@ -274,7 +352,7 @@ export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
             chemShift: shiftIt.shift,
             labelsColumn: [label],
             atomIndicesMol: [atomIndexMol],
-            listOfJs: [],
+            listOfJs: listOfJs,
           };
           dataOutput.push(obj);
         }
