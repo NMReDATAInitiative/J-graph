@@ -262,13 +262,13 @@ function ingestMoleculeObject(jGraphDataIn) {
         );
         if (existingItem) {
           existingItem.labelsColumn.push(label);
-          existingItem.atomIndexMolAll.push(atomIndexMol);
+          existingItem.atomIndicesMol.push(atomIndexMol);
         } else {
           const obj = {
             assignedMultipletMnovaHash: assignedMultipletIt,
             chemShift: shiftIt.shift,
             labelsColumn: [label],
-            atomIndexMolAll: [atomIndexMol],
+            atomIndicesMol: [atomIndexMol],
             listOfJs: [],
           };
           dataTMP.push(obj);

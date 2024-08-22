@@ -4,6 +4,8 @@ import { getJgraphColor } from './getJgraphColor.js';
 import { jmolGetInfo } from './jmolInterface.js';
 import { jmolUnselectAll } from './jmolInterface.js';
 import { jmolSelectPair } from './jmolInterface.js';
+import { jmolSelectAtom } from './jmolInterface.js';
+
 //import { updateBlockPosition } from './updateBlockPosition.js';
 
 export class AssignedCouplings {
@@ -89,7 +91,9 @@ export class AssignedCouplings {
                           ' Hz',
                         xx: 0.0,
                         indexInMolFile1: dataColumns[indexList1].atomIndexMol,
-                        indexInMolFile2: dataColumns[indexList2].atomIndexMol,
+                        indexInMolFile2: dataColumns[indexList2].atomIndexMol, 
+                        indicesInMolFile1: dataColumns[indexList1].atomIndicesMol,
+                        indicesInMolFile2: dataColumns[indexList2].atomIndicesMol,
                         iindex: counter,
                       });
                       counter++;
@@ -197,6 +201,8 @@ export class AssignedCouplings {
         xx: 0.0,
         indexInMolFile1: daC1.atomIndexMol,
         indexInMolFile2: daC2.atomIndexMol,
+        indicesInMolFile1: daC1.atomIndicesMol,
+        indicesInMolFile2: daC2.atomIndicesMol,
         iindex: this.content.length,
         indexJ1: at1.dataColIndex2,
         indexJ2: at2.dataColIndex2,
@@ -289,12 +295,27 @@ export class AssignedCouplings {
     };
     jmolUnselectAll();
     const atomColorHighlightPairs = [127, 255, 127];
-    jmolSelectPair(
-      d2.indexInMolFile1,
-      d2.indexInMolFile2,
-      atomColorHighlightPairs,
-    );
+   
+   if (
+     Array.isArray(d2.indicesInMolFile1) &&
+     Array.isArray(d2.indicesInMolFile2)
+   ) {
+     d2.indicesInMolFile1.forEach((element) => {
+       jmolSelectAtom(element.toString(), atomColorHighlightPairs);
+     });
+     d2.indicesInMolFile2.forEach((element) => {
+       jmolSelectAtom(element.toString(), atomColorHighlightPairs);
+     });
+   } else {
 
+    sdfsd
+     // Will become obsolete
+     jmolSelectPair(// Obsolete
+       d2.indexInMolFile1,// Obsolete
+       d2.indexInMolFile2,// Obsolete
+       atomColorHighlightPairs,// Obsolete
+     );// Obsolete
+   }
     //https://chemapps.stolaf.edu/jmol/docs/#getproperty
     // What are the directly bound atoms of the two selected hydrogen (we don't test 1J)
     const at1 = d2.indexInMolFile1;

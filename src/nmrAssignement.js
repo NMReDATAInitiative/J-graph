@@ -86,16 +86,16 @@ export class NmrAssignment extends GraphBase {
 
 
 
-  ingestMoleculeObject(dataTMP, settings) {
+  ingestMoleculeObject(data, settings) {
 
     let dataColumns = [];
-    dataTMP.forEach((item, index) => {
+    data.forEach((item, index) => {
       const obj = {
         chemShift: item.chemShift.toString(),
         labelColumn: item.labelsColumn.join(','),
-        MyIndex: index, //  needs to be sorted for this
-        atomIndexMol: item.atomIndexMolAll[0].toString(),
-        atomIndexMolAll: item.atomIndexMolAll,
+        MyIndex: index, //  needs to be sorted by chemical shifts before
+        atomIndexMol: item.atomIndicesMol[0].toString(),
+        atomIndicesMol: item.atomIndicesMol,
         listOfJs: item.listOfJs,
       };
       dataColumns.push(obj);
@@ -123,6 +123,7 @@ export class NmrAssignment extends GraphBase {
           acc.arrayColumns[cur[indexKey] - 1] = cur[chemShiftKey];
           acc.labelColumnArray[cur[indexKey] - 1] = cur[labelKey];
           acc.indexAtomMol[cur[indexKey] - 1] = cur[indexInMolFileKey];
+          acc.indicesAtomMol[cur[indexKey] - 1] = cur[indicesInMolFileKey];
           acc.chemColumnArray[cur[indexKey] - 1] = cur[chemShiftKey];
         });
         return acc;
@@ -132,6 +133,7 @@ export class NmrAssignment extends GraphBase {
         labelColumnArray: [],
         chemColumnArray: [],
         indexAtomMol: [],
+        indicesAtomMol: [],
       },
     );
     console.log('processedData ', processedData);
@@ -139,6 +141,7 @@ export class NmrAssignment extends GraphBase {
     let labelColumnArray = [];
     let chemColumnArray = [];
     let indexAtomMol = []; // atom index in the mol structure
+    let indicesAtomMol = []; // atom index in the mol structure
 
     // Mapping fields from each row to new arrays
     jGraphData.forEach((d) => {
@@ -153,6 +156,9 @@ export class NmrAssignment extends GraphBase {
 
       indexAtomMol[index1] = d.indexInMolFile1;
       indexAtomMol[index2] = d.indexInMolFile2;
+
+      indicesAtomMol[index1] = d.indicesInMolFile1;
+      indicesAtomMol[index2] = d.indicesInMolFile2;
 
       chemColumnArray[index1] = d.chemShift1;
       chemColumnArray[index2] = d.chemShift2;
@@ -178,6 +184,7 @@ export class NmrAssignment extends GraphBase {
       labelColumnArray,
       indicesSorted,
       indexAtomMol,
+      indicesAtomMol,
       updateBlockPosition,
       minSpaceBetweekCircles,
       minSpaceBetweekBlocks,
@@ -221,6 +228,7 @@ export class NmrAssignment extends GraphBase {
           labelColumn: labelColumnArray[i],
           MyIndex: indicesSorted[i],
           atomIndexMol: indexAtomMol[i],
+          atomIndicesMol: indicesAtomMol[i],
           listOfJs: listOfJs,
         });
       }
@@ -239,6 +247,7 @@ export class NmrAssignment extends GraphBase {
       labelColumnArray,
       indicesSorted,
       indexAtomMol,
+      indicesAtomMol,
       updateBlockPosition,
       settings.jGraph.minSpaceBetweekCircles,
       settings.jGraph.minSpaceBetweekBlocks,
@@ -263,6 +272,7 @@ export class NmrAssignment extends GraphBase {
               dataColIndex2: i1,
               uniqIndex: dataUnassignedCoupCircles.length,
               indexAtomMol: dataColumns[indexList1].atomIndexMol,
+              indicesAtomMol: dataColumns[indexList1].atomIndicesMol,
             });
           }
         }
@@ -325,6 +335,7 @@ export class NmrAssignment extends GraphBase {
     let labelColumnArray = [];
     let chemColumnArray = [];
     let indexAtomMol = []; // atom index in the mol structure
+    let indicesAtomMol = []; // atom index in the mol structure
 
     // Mapping fields from each row to new arrays
     jGraphData.forEach((d) => {
@@ -339,6 +350,9 @@ export class NmrAssignment extends GraphBase {
 
       indexAtomMol[index1] = d.indexInMolFile1;
       indexAtomMol[index2] = d.indexInMolFile2;
+
+      indicesAtomMol[index1] = [d.indexInMolFile1];
+      indicesAtomMol[index2] = [d.indexInMolFile2];
 
       chemColumnArray[index1] = d.chemShift1;
       chemColumnArray[index2] = d.chemShift2;
@@ -364,6 +378,7 @@ export class NmrAssignment extends GraphBase {
       labelColumnArray,
       indicesSorted,
       indexAtomMol,
+      indicesAtomMol,
       updateBlockPosition,
       minSpaceBetweekCircles,
       minSpaceBetweekBlocks,
@@ -407,6 +422,7 @@ export class NmrAssignment extends GraphBase {
           labelColumn: labelColumnArray[i],
           MyIndex: indicesSorted[i],
           atomIndexMol: indexAtomMol[i],
+          atomIndicesMol: indicesAtomMol[i],
           listOfJs: listOfJs,
         });
       }
@@ -425,6 +441,7 @@ export class NmrAssignment extends GraphBase {
       labelColumnArray,
       indicesSorted,
       indexAtomMol,
+      indicesAtomMol,
       updateBlockPosition,
       settings.jGraph.minSpaceBetweekCircles,
       settings.jGraph.minSpaceBetweekBlocks,
@@ -448,6 +465,7 @@ export class NmrAssignment extends GraphBase {
               dataColIndex2: i1,
               uniqIndex: dataUnassignedCoupCircles.length,
               indexAtomMol: dataColumns[indexList1].atomIndexMol,
+              indicesAtomMol: dataColumns[indexList1].atomIndicesMol,
             });
           }
         }
@@ -568,17 +586,26 @@ export class NmrAssignment extends GraphBase {
       this.jgraphObj.highlightColumn = (event, d) => {
         jmolUnselectAll(); // Clear previous selections
 
-        const number = d.atomIndexMol; // Ensure 'atomIndexMol' is a valid property of 'd'
+        const atomColorHighlightSingle = [127, 255, 127];
+        /*    
+        const number = d.atomIndexMol; // Ensure 'atomIndexMol' is a valid property of 'd'            jmolSelectAtom(number, atomColorHighlightSingle); // Highlight the selected atom
         if (number !== undefined) {
-          const atomColorHighlightSingle = [127, 255, 127];
           jmolSelectAtom(number, atomColorHighlightSingle); // Highlight the selected atom
-
+        }
+        */
+        const numbers = d.atomIndicesMol; // Ensure 'atomIndicesMol' is a valid property of 'd'            jmolSelectAtom(number, atomColorHighlightSingle); // Highlight the selected atom
+        if (numbers !== undefined) {
+          numbers.forEach((number) => {
+            jmolSelectAtom(number, atomColorHighlightSingle); // Highlight the selected atom
+          });
           setTimeout(() => {
             jmolUnselectAll(); // Unselect after the timeout
           }, 3200);
         } else {
           console.error(
-            'atomIndexMol is undefined or not a valid property of the provided data.',
+            'atomIndicesMol is undefined or not a valid property of the provided data. d.atomIndicesMol ',d.atomIndicesMol,
+            ' d.atomIndexMol ',d.atomIndexMol,
+            ' d ',d,
           );
         }
       };
@@ -813,30 +840,7 @@ export class NmrAssignment extends GraphBase {
     );
   }
 
-  processCSVDataDEL(jGraphData) {
-    return jGraphData.reduce(
-      (acc, cur) => {
-        ['1', '2'].forEach((index) => {
-          const chemShiftKey = `chemShift${index}`;
-          const labelKey = `labelColumn${index}`;
-          const indexKey = `indexColumn${index}`;
-          const indexInMolFileKey = `indexInMolFile${index}`;
-
-          acc.arrayColumns[cur[indexKey] - 1] = cur[chemShiftKey];
-          acc.labelColumnArray[cur[indexKey] - 1] = cur[labelKey];
-          acc.indexAtomMol[cur[indexKey] - 1] = cur[indexInMolFileKey];
-          acc.chemColumnArray[cur[indexKey] - 1] = cur[chemShiftKey];
-        });
-        return acc;
-      },
-      {
-        arrayColumns: [],
-        labelColumnArray: [],
-        chemColumnArray: [],
-        indexAtomMol: [],
-      },
-    );
-  }
+ 
 
   visualizeJgraph() {
     var yAxisn = this.svg
@@ -1021,6 +1025,7 @@ export class NmrAssignment extends GraphBase {
       var numberCandidate = 0;
       const deltaSearchJ = 0.5;
       const referenceSpinMol = d.indexAtomMol;
+      const referenceSpinsMol = d.indicesAtomMol;
       const referenceSpin = d;
       var partnerSpinNumberMol;
       var partnerSpinObj;
@@ -1246,6 +1251,11 @@ export class NmrAssignment extends GraphBase {
       // pointed atom
       const curColHighligh = [0, 0, 0]; // black
       jmolSelectAtom(referenceSpinMol, curColHighligh);
+      if (referenceSpinsMol !== undefined) {
+        referenceSpinsMol.forEach((spinMol) => {
+          jmolSelectAtom(referenceSpinMol, curColHighligh);
+        });
+      }
       if (numberCandidate == 1) {
         var textToDisplay = jmolGetInfo(
           referenceSpinMol,
@@ -1328,7 +1338,11 @@ export class NmrAssignment extends GraphBase {
             (jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 ||
               jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3) &&
             true;
-          if (test) jmolSelectAtom(p.indexAtomMol, [0, 255, 50]); // dunno
+          if (test) {
+          console.log("p.indicesAtomMol",p.indicesAtomMol)
+            p.indicesAtomMol.forEach((inAtomMol) => {
+              jmolSelectAtom(inAtomMol, [0, 255, 50]); // dunno
+            });}
           return test;
         })
         .style('stroke', highColor)
