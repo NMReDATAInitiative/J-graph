@@ -158,7 +158,7 @@ export function updateColumnsAction(
         .attr('x', function (d) {
           return eval(spreadPositions[d.MyIndex] - blockWidth);
         });
-      //    .attr("y", function (d) { return yJs(Math.abs(d.value )) - halfBlockHeight; })
+  //    .attr("y", function (d) { return yJs(Math.abs(d.value )) - halfBlockHeight; })
 
   //  .attr("x", function (d) { return spreadPositions[d.MyIndex]; })
   //.attr("transform", function (d) { return "rotate(-45," + spreadPositions[d.MyIndex] + "," + yJs(Math.abs(d.value)) + ")"; })

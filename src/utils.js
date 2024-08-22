@@ -32,13 +32,13 @@ export function getRegionsWithSignal(
       }
     } else {
       if (currentRegion) {
-          // Finalize the current region and add margins
-          currentRegion.start += marginPPM;
-          if (currentRegion.start > maxScale) currentRegion.start = maxScale;
-          currentRegion.end -= marginPPM;
-          if (currentRegion.end < minScale) currentRegion.end = minScale;
-          regions.push(currentRegion);
-          currentRegion = null;
+        // Finalize the current region and add margins
+        currentRegion.start += marginPPM;
+        if (currentRegion.start > maxScale) currentRegion.start = maxScale;
+        currentRegion.end -= marginPPM;
+        if (currentRegion.end < minScale) currentRegion.end = minScale;
+        regions.push(currentRegion);
+        currentRegion = null;
       }
     }
   });
@@ -56,7 +56,7 @@ export function getRegionsWithSignal(
   let curRegion;
   regions.forEach(function (d, i) {
     if (i != 0) {
-      if (curRegion.end < (d.start + minSpacePPM)) {
+      if (curRegion.end < d.start + minSpacePPM) {
         // fuse
         curRegion.end = d.end;
 

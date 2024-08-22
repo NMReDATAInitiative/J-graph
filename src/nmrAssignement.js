@@ -34,8 +34,8 @@ export class NmrAssignment extends GraphBase {
     }
     if (
       jGraphData !== null &&
-      typeof jGraphData === 'object' 
-      && 'chemShift' in jGraphData[0]
+      typeof jGraphData === 'object' &&
+      'chemShift' in jGraphData[0]
     ) {
       console.log('jGraphData,', jGraphData);
       //const tmp = this.ingestMoleculeObject(jGraphData);
@@ -43,11 +43,11 @@ export class NmrAssignment extends GraphBase {
     }
     console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
 
-
     console.log('this.jgraphObjU ', this.jgraphObj);
     console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
 
-    if ('assignedCouplings' in this.jgraphObj) //
+    if ('assignedCouplings' in this.jgraphObj)
+      //
       this.jgraphObj.assignedCouplings.udateLineTrajectory(
         settings.jGraph.spaceBlock,
         2.0 * settings.spectrum.lineWidth * settings.jGraph.nbHzPerPoint,
@@ -82,12 +82,7 @@ export class NmrAssignment extends GraphBase {
     this.settings = settings;
   }
 
-   
-
-
-
   ingestMoleculeObject(data, settings) {
-
     let dataColumns = [];
     data.forEach((item, index) => {
       const obj = {
@@ -603,9 +598,12 @@ export class NmrAssignment extends GraphBase {
           }, 3200);
         } else {
           console.error(
-            'atomIndicesMol is undefined or not a valid property of the provided data. d.atomIndicesMol ',d.atomIndicesMol,
-            ' d.atomIndexMol ',d.atomIndexMol,
-            ' d ',d,
+            'atomIndicesMol is undefined or not a valid property of the provided data. d.atomIndicesMol ',
+            d.atomIndicesMol,
+            ' d.atomIndexMol ',
+            d.atomIndexMol,
+            ' d ',
+            d,
           );
         }
       };
@@ -839,8 +837,6 @@ export class NmrAssignment extends GraphBase {
       this.jgraphObj.yJs,
     );
   }
-
- 
 
   visualizeJgraph() {
     var yAxisn = this.svg
@@ -1339,10 +1335,11 @@ export class NmrAssignment extends GraphBase {
               jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3) &&
             true;
           if (test) {
-          console.log("p.indicesAtomMol",p.indicesAtomMol)
+            console.log('p.indicesAtomMol', p.indicesAtomMol);
             p.indicesAtomMol.forEach((inAtomMol) => {
               jmolSelectAtom(inAtomMol, [0, 255, 50]); // dunno
-            });}
+            });
+          }
           return test;
         })
         .style('stroke', highColor)
