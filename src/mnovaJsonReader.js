@@ -234,7 +234,6 @@ export function extractSpectrumData(spectrumObjectIn, type = 'data') {
   return result;
 }
 
-
 export function ingestMoleculeObjecSuper(allObjectsExtractedMolecule) {
   const jGraphData = extractMoleculeData(
     allObjectsExtractedMolecule,
