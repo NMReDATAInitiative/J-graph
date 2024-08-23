@@ -20,7 +20,8 @@
       disableJ2SLoadMonitor: false,
       isableInitialConsole: true
     }
-    Jmol.getApplet("JmolAppletA", Cholest);
+
+    Jmol.getApplet("JmolAppletAz", Cholest);
   </script>
   <p id="textMainPage" style="height:20px">J-graph output</p>
   <div id="my_dataviz"></div>
@@ -29,7 +30,8 @@
  import { jGraph } from "../src/index.js"; 
       var fName1 = "./Androsten_spectrum.csv";
       var fName2 = "./androstenNoAssignment.csv"
-      var ajgraph = jGraph(fName1, fName2)
+      console.log("JmolAppletAz", JmolAppletAz)
+      var ajgraph = jGraph(fName1, fName2, JmolAppletAz)
   
   </script>
 

@@ -43,11 +43,12 @@ export function jGraphNmredata(
   parseSDF,
   readNmrRecord,
   NmrRecord,
+  JmolAppletAz
 ) {
-  jGraph(fileNameSpectrum, fileNameData);
+  jGraph(fileNameSpectrum, fileNameData, JmolAppletAz);
 }
 
-export function jGraph(fileNameSpectrum, fileNameData) {
+export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAz) {
   //
   // set the dimensions and margins of the graph
   //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -117,7 +118,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   }
 
 
-  async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
+  async function processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAz) {
     try {
       const smallScreen =
         /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -171,6 +172,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         settings,
         smallScreen, // default true
         regionsData, // default {}
+        JmolAppletAz,
       );
 
       const settings_with_spectrum_settings = spectrum.getSettings();
@@ -182,6 +184,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         svg,
         smallScreen,
         settings_with_spectrum_settings,
+        JmolAppletAz
       );
 
       // Register each class as a receiver for every other class based on data type compatibility
@@ -207,5 +210,5 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   }
 
   // Main call
-  processDataAndVisualize(fileNameSpectrum, fileNameData);
+  processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAz);
 }

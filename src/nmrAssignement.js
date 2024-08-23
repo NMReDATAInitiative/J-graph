@@ -11,7 +11,7 @@ import { jmolSelectAtom } from './jmolInterface.js';
 import { jmolGetNBbonds } from './jmolInterface.js';
 import { jmolGetInfo } from './jmolInterface.js';
 export class NmrAssignment extends GraphBase {
-  constructor(jGraphData, svg, smallScreen, settings_with_spectrum_settings) {
+  constructor(jGraphData, svg, smallScreen, settings_with_spectrum_settings, JmolAppletAr) {
     // data for base which takes care of communication between classes
 
     const name = 'nameIsWiredInConstructor_NmrAssignment1';
@@ -20,7 +20,7 @@ export class NmrAssignment extends GraphBase {
       dataTypesReceive: ['xAxisSpectrum'],
       logAllDataExchange: false, // Enable logging for this instance if true
     });
-
+    this.JmolAppletAr = JmolAppletAr;
     this.svg = svg;
     this.jgraphObj = {};
 
@@ -493,7 +493,7 @@ export class NmrAssignment extends GraphBase {
     if (this.jgraphObj) {
       // Define highlightColumn function within jgraphObj
       this.jgraphObj.highlightColumn = (event, d) => {
-        jmolUnselectAll(); // Clear previous selections
+        jmolUnselectAll(this.JmolAppletAr); // Clear previous selections
 
         const atomColorHighlightSingle = [127, 255, 127];
         /*    
@@ -505,10 +505,10 @@ export class NmrAssignment extends GraphBase {
         const numbers = d.atomIndicesMol; // Ensure 'atomIndicesMol' is a valid property of 'd'            jmolSelectAtom(number, atomColorHighlightSingle); // Highlight the selected atom
         if (numbers !== undefined) {
           numbers.forEach((number) => {
-            jmolSelectAtom(number, atomColorHighlightSingle); // Highlight the selected atom
+            jmolSelectAtom(this.JmolAppletAr, number, atomColorHighlightSingle); // Highlight the selected atom
           });
           setTimeout(() => {
-            jmolUnselectAll(); // Unselect after the timeout
+            jmolUnselectAll(this.JmolAppletAr); // Unselect after the timeout
           }, 3200);
         } else {
           console.error(
@@ -944,8 +944,8 @@ export class NmrAssignment extends GraphBase {
           Math.abs(d.value - p.value) <= deltaSearchJ &&
           d.uniqIndex != p.uniqIndex &&
           d.MyIndex != p.MyIndex &&
-          (jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 2 ||
-            jmolGetNBbonds(referenceSpinMol, p.indexAtomMol) == 3);
+          (jmolGetNBbonds(this.JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 2 ||
+            jmolGetNBbonds(this.JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 3);
         if (test) {
           numberCandidate++;
           partnerSpinNumberMol = p.indexAtomMol;
@@ -1157,17 +1157,17 @@ export class NmrAssignment extends GraphBase {
           );
         }
       }
-      jmolUnselectAll();
+      jmolUnselectAll(this.JmolAppletAr);
       // pointed atom
       const curColHighligh = [0, 0, 0]; // black
-      jmolSelectAtom(referenceSpinMol, curColHighligh);
+      jmolSelectAtom(this.JmolAppletAr, referenceSpinMol, curColHighligh);
       if (referenceSpinsMol !== undefined) {
         referenceSpinsMol.forEach((spinMol) => {
-          jmolSelectAtom(referenceSpinMol, curColHighligh);
+          jmolSelectAtom(this.JmolAppletAr, referenceSpinMol, curColHighligh);
         });
       }
       if (numberCandidate == 1) {
-        var textToDisplay = jmolGetInfo(
+        var textToDisplay = jmolGetInfo(this.JmolAppletAr, 
           referenceSpinMol,
           partnerSpinNumberMol,
           'J',
@@ -1224,11 +1224,11 @@ export class NmrAssignment extends GraphBase {
             d.uniqIndex != p.uniqIndex &&
             d.MyIndex != p.MyIndex &&
             !(
-              jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 ||
-              jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3
+              jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+              jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3
             ) &&
             true;
-          if (test) jmolSelectAtom(p.indexAtomMol, [255, 0, 50]); // pink
+          if (test) jmolSelectAtom(this.JmolAppletAr, p.indexAtomMol, [255, 0, 50]); // pink
           return test;
         })
         .style('stroke', 'red')
@@ -1245,13 +1245,13 @@ export class NmrAssignment extends GraphBase {
             Math.abs(d.value - p.value) <= deltaSearchJ &&
             d.uniqIndex != p.uniqIndex &&
             d.MyIndex != p.MyIndex &&
-            (jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 2 ||
-              jmolGetNBbonds(d.indexAtomMol, p.indexAtomMol) == 3) &&
+            (jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+              jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3) &&
             true;
           if (test) {
             console.log('p.indicesAtomMol', p.indicesAtomMol);
             p.indicesAtomMol.forEach((inAtomMol) => {
-              jmolSelectAtom(inAtomMol, [0, 255, 50]); // dunno
+              jmolSelectAtom(this.JmolAppletAr, inAtomMol, [0, 255, 50]); // dunno
             });
           }
           return test;

@@ -16,11 +16,13 @@ export function jGraphNmredata(
   parseSDF,
   readNmrRecord,
   NmrRecord,
+  JmolAppletAr,
 ) {
-  jGraph(fileNameSpectrum, fileNameData);
+  jGraph(fileNameSpectrum, fileNameData, JmolAppletAr);
 }
 
-export function jGraph(fileNameSpectrum, fileNameData) {
+export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
+
   function initializeSettings(smallScreen, overrideSettings = {}) {
     // Default settings
     let defaultSettings = {
@@ -85,7 +87,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
     }
   }
 
-  async function processDataAndVisualize(fileNameSpectrum, fileNameData) {
+  async function processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAr) {
     try {
       const smallScreen =
         /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -184,6 +186,7 @@ export function jGraph(fileNameSpectrum, fileNameData) {
         svg,
         smallScreen,
         settings_with_spectrum_settings,
+        JmolAppletAr,
       );
 
       // Register each class as a receiver for every other class based on data type compatibility
@@ -209,5 +212,5 @@ export function jGraph(fileNameSpectrum, fileNameData) {
   }
 
   // Main call
-  processDataAndVisualize(fileNameSpectrum, fileNameData);
+  processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAr);
 }

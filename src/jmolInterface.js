@@ -1,33 +1,33 @@
-export function jmolUnselectAll() {
-  Jmol.script(JmolAppletA, 'select hydrogen; color white');
+export function jmolUnselectAll(JmolAppletAr) {
+  Jmol.script(JmolAppletAr, 'select hydrogen; color white');
 }
 
-export function jmolSelectAtom(number, col) {
+export function jmolSelectAtom(JmolAppletAr,number, col) {
   Jmol.script(
-    JmolAppletA,
+    JmolAppletAr,
     'select atomno = ' + number + ';color [' + col + '];spacefill 80',
   );
 }
 
-export function jmolSelectPair(a1, a2, col) {
+export function jmolSelectPair(JmolAppletAr,a1, a2, col) {
   Jmol.script(
-    JmolAppletA,
+    JmolAppletAr,
     'select atomno = ' + a1 + ';color [' + col + '];spacefill 80',
   );
   Jmol.script(
-    JmolAppletA,
+    JmolAppletAr,
     'select atomno = ' + a2 + ';color [' + col + '];spacefill 80',
   );
 }
 
-export function jmolGetNBbonds(at1, at2) {
+export function jmolGetNBbonds(JmolAppletAr,at1, at2) {
   // the two functions are ugly copy/paste plus editing....
 
   var at1to = -1;
   var at2to = -1;
 
-  var bondInfo = Jmol.getPropertyAsArray(JmolAppletA, 'bondInfo');
-  var atomInfo = Jmol.getPropertyAsArray(JmolAppletA, 'atomInfo');
+  var bondInfo = Jmol.getPropertyAsArray(JmolAppletAr, 'bondInfo');
+  var atomInfo = Jmol.getPropertyAsArray(JmolAppletAr, 'atomInfo');
 
   /*
 https://chemapps.stolaf.edu/jmol/docs/#getproperty
@@ -125,12 +125,12 @@ atomInfo[0].formalCharge=0
   }
   return returnedNumberBonds;
 }
-export function jmolGetInfo(at1, at2, lineText) {
+export function jmolGetInfo(JmolAppletAr, at1, at2, lineText) {
   var at1to = -1;
   var at2to = -1;
 
-  var bondInfo = Jmol.getPropertyAsArray(JmolAppletA, 'bondInfo');
-  var atomInfo = Jmol.getPropertyAsArray(JmolAppletA, 'atomInfo');
+  var bondInfo = Jmol.getPropertyAsArray(JmolAppletAr, 'bondInfo');
+  var atomInfo = Jmol.getPropertyAsArray(JmolAppletAr, 'atomInfo');
 
   /*
 https://chemapps.stolaf.edu/jmol/docs/#getproperty
@@ -177,7 +177,7 @@ atomInfo[0].formalCharge=0
         const numberOfBonds = atomInfo[at1to - 1].bondCount;
         // const partialCharge = atomInfo[at1to - 1].partialCharge;
         var theta = Jmol.evaluateVar(
-          JmolAppletA,
+          JmolAppletAr,
           'angle(@' + at1 + ', @' + at1to + ', @' + at2 + ')',
         );
         textToDisplay =
@@ -218,7 +218,7 @@ atomInfo[0].formalCharge=0
             const elementNumber2 = atomInfo[at2to - 1].elemno;
             const numberOfBonds2 = atomInfo[at2to - 1].bondCount;
             var theta = Jmol.evaluateVar(
-              JmolAppletA,
+              JmolAppletAr,
               'angle(@' +
                 at1 +
                 ', @' +
