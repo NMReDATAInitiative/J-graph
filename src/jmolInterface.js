@@ -1,4 +1,5 @@
 export function jmolUnselectAll(JmolAppletAr) {
+  console.log("JmolAppletAr",JmolAppletAr)
   Jmol.script(JmolAppletAr, 'select hydrogen; color white');
 }
 

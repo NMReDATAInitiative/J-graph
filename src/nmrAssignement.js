@@ -894,6 +894,7 @@ export class NmrAssignment extends GraphBase {
           this.settings.jGraph.darkMode,
           this.settings.jGraph.generalUseWidth,
           this.jgraphObj.yJs,
+          this.JmolAppletAr,
         );
       if (false)
         this.jgraphObj.assignedCouplings.theLinesW =
@@ -906,6 +907,7 @@ export class NmrAssignment extends GraphBase {
             this.jgraphObj.smallSpace,
             this.settings.jGraph.blockWidth,
             this.jgraphObj.yJs,
+            this,JmolAppletAr,
           );
     }
 
@@ -939,19 +941,23 @@ export class NmrAssignment extends GraphBase {
       const referenceSpin = d;
       var partnerSpinNumberMol;
       var partnerSpinObj;
-      d3.selectAll('.circleL').filter(function (p) {
-        const test =
-          Math.abs(d.value - p.value) <= deltaSearchJ &&
-          d.uniqIndex != p.uniqIndex &&
-          d.MyIndex != p.MyIndex &&
-          (jmolGetNBbonds(this.JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 2 ||
-            jmolGetNBbonds(this.JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 3);
-        if (test) {
-          numberCandidate++;
-          partnerSpinNumberMol = p.indexAtomMol;
-          partnerSpinObj = p;
-        }
-      });
+    // Capture the reference to this.JmolAppletAr outside the filter function
+const JmolAppletAr = this.JmolAppletAr;
+
+d3.selectAll('.circleL').filter(function (p) {
+    const test =
+      Math.abs(d.value - p.value) <= deltaSearchJ &&
+      d.uniqIndex != p.uniqIndex &&
+      d.MyIndex != p.MyIndex &&
+      (jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 2 ||
+       jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 3);
+    if (test) {
+      numberCandidate++;
+      partnerSpinNumberMol = p.indexAtomMol;
+      partnerSpinObj = p;
+    }
+});
+
 
       // Add assignment
       if (numberCandidate == 1) {
@@ -971,6 +977,7 @@ export class NmrAssignment extends GraphBase {
               this.jgraphObj.smallSpace,
               this.settings.jGraph.blockWidth,
               this.pathFun,
+              this.JmolAppletAr,
             );
           this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs[
             referenceSpin.dataColIndex2
@@ -1224,11 +1231,11 @@ export class NmrAssignment extends GraphBase {
             d.uniqIndex != p.uniqIndex &&
             d.MyIndex != p.MyIndex &&
             !(
-              jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
-              jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3
+              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3
             ) &&
             true;
-          if (test) jmolSelectAtom(this.JmolAppletAr, p.indexAtomMol, [255, 0, 50]); // pink
+          if (test) jmolSelectAtom(JmolAppletAr, p.indexAtomMol, [255, 0, 50]); // pink
           return test;
         })
         .style('stroke', 'red')
@@ -1245,13 +1252,13 @@ export class NmrAssignment extends GraphBase {
             Math.abs(d.value - p.value) <= deltaSearchJ &&
             d.uniqIndex != p.uniqIndex &&
             d.MyIndex != p.MyIndex &&
-            (jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
-              jmolGetNBbonds(this.JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3) &&
+            (jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3) &&
             true;
           if (test) {
             console.log('p.indicesAtomMol', p.indicesAtomMol);
             p.indicesAtomMol.forEach((inAtomMol) => {
-              jmolSelectAtom(this.JmolAppletAr, inAtomMol, [0, 255, 50]); // dunno
+              jmolSelectAtom(JmolAppletAr, inAtomMol, [0, 255, 50]); // dunno
             });
           }
           return test;

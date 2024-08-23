@@ -154,6 +154,7 @@ export class AssignedCouplings {
     smallSpace,
     blockWidth,
     pathFun,
+    JmolAppletAr,
   ) {
     console.log('at1 = ' + JSON.stringify(at1));
     console.log('at2 = ' + JSON.stringify(at2));
@@ -217,6 +218,7 @@ export class AssignedCouplings {
         smallSpace,
         blockWidth,
         pathFun,
+        JmolAppletAr,
       );
     }
     this.content.sort((a, b) => (a.tmpJvalue > b.tmpJvalue ? 1 : -1));
@@ -227,7 +229,7 @@ export class AssignedCouplings {
     return this.content;
   }
 
-  highlightLines(d, darkMode, generalUseWidth, svg, yJs) {
+  highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr) {
     const element = d3.select(d.target);
     const data = element.datum();
     const d2 = element.datum();
@@ -293,7 +295,7 @@ export class AssignedCouplings {
     var toto = function (d5) {
       return d5.lineText;
     };
-    jmolUnselectAll();
+    jmolUnselectAll(JmolAppletAr);
     const atomColorHighlightPairs = [127, 255, 127];
 
     if (
@@ -301,10 +303,10 @@ export class AssignedCouplings {
       Array.isArray(d2.indicesInMolFile2)
     ) {
       d2.indicesInMolFile1.forEach((element) => {
-        jmolSelectAtom(element.toString(), atomColorHighlightPairs);
+        jmolSelectAtom(JmolAppletAr, element.toString(), atomColorHighlightPairs);
       });
       d2.indicesInMolFile2.forEach((element) => {
-        jmolSelectAtom(element.toString(), atomColorHighlightPairs);
+        jmolSelectAtom(JmolAppletAr, element.toString(), atomColorHighlightPairs);
       });
     }
     //https://chemapps.stolaf.edu/jmol/docs/#getproperty
@@ -312,17 +314,17 @@ export class AssignedCouplings {
     const at1 = d2.indexInMolFile1;
     const at2 = d2.indexInMolFile2;
 
-    var textToDisplay = jmolGetInfo(at1, at2, d2.lineText);
+    var textToDisplay = jmolGetInfo(JmolAppletAr, at1, at2, d2.lineText);
     // const nbBond = jmolGetNBbonds(at1, at2);
     document.getElementById('textMainPage').innerHTML = textToDisplay;
 
     setTimeout(function () {
-      jmolUnselectAll();
+      jmolUnselectAll(JmolAppletAr);
     }, 3200);
   }
 
   // Method that creates the SVG paths
-  makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs) {
+  makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs, JmolAppletAr) {
     console.log('zzzop2', this.content);
     return svg
       .selectAll('myPath222')
@@ -352,10 +354,10 @@ export class AssignedCouplings {
       .style('stroke', (d) => getJisOK(d.jOKcolor))
       .style('opacity', 0.5)
       .on('click', (d) => {
-        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
+        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
       })
       .on('mouseover', (d) => {
-        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
+        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
       });
   }
 
@@ -369,6 +371,7 @@ export class AssignedCouplings {
     smallSpace,
     blockWidth,
     pathFun,
+    JmolAppletAr,
   ) {
     var tmpCOntent = [];
 
@@ -395,7 +398,6 @@ export class AssignedCouplings {
             return null;
           }
         })
-
         .style('stroke-width', lineWidth)
         .style('stroke-dasharray', function (d) {
           return (
@@ -411,10 +413,10 @@ export class AssignedCouplings {
         })
         .style('opacity', 0.5)
         .on('click', (d) => {
-          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
+          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
         })
         .on('mouseover', (d) => {
-          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs);
+          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
         })
     );
     // .on("mouseleave", doNotHighlightLines)}
