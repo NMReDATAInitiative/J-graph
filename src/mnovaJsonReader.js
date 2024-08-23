@@ -16,7 +16,6 @@ export async function processMnovaJsonFileSpectrum(
     if (jsonData[type] && Array.isArray(jsonData[type])) {
       jsonData[type].forEach((spectrum, index) => {
         // Create an object to store the filtered data
-        let filteredSpectrum = {};
         if (spectrum['$mnova_schema']) {
           const schema = spectrum['$mnova_schema'];
           const expected =
@@ -32,49 +31,13 @@ export async function processMnovaJsonFileSpectrum(
             console.log('processMnovaJsonFileSpectrum: schema OK :', schema);
           }
         }
-        fieldsToKeep.forEach((field) => {
-          // Check for the field in the spectrum object
-          if (spectrum[field]) {
-            filteredSpectrum[field] = spectrum[field];
-            console.log(
-              `SpectrumT Found ${field} at spectrum level in spectra[${index}]`,
-            );
-          }
-          // Check for the field in the spectrum.data object
-          else if (spectrum.data && spectrum.data[field]) {
-            filteredSpectrum[field] = spectrum.data[field];
-            console.log(`SpectrumT Found ${field} in spectra[${index}].data`);
-          }
-          // Handle case where the field is an array of objects
-          else if (Array.isArray(spectrum.data[field])) {
-            filteredSpectrum[field] = spectrum.data[field].map((item) => {
-              return item; // Customize this if you need to filter fields within the objects
-            });
-            console.log(
-              `SpectrumT Found ${field} as an array in spectra[${index}].data`,
-            );
-          }
-          // Handle nested objects within spectrum.data
-          else if (
-            typeof spectrum.data[field] === 'object' &&
-            spectrum.data[field] !== null
-          ) {
-            filteredSpectrum[field] = { ...spectrum.data[field] };
-            console.log(
-              `SpectrumT Found ${field} as an object in spectra[${index}].data`,
-            );
-          }
-          // Log if the field is not found at any expected location
-          else {
-            console.log(`SpectrumT Did not find ${field} in spectra[${index}]`);
-          }
-        });
-
-        // Store the filtered spectrum in the array
+        // Apply logic for varisous versions
+        const filteredSpectrum = processMnovaJsonFileSpectrumV1(
+          spectrum,
+          fieldsToKeep,
+          index,
+        );
         filteredSpectraArray.push(filteredSpectrum);
-
-        // Log the filtered spectrum object
-        console.log(`SpectrumT ${index + 1}:`, filteredSpectrum);
       });
     } else {
       console.log('No spectra found in the JSON data.');
@@ -86,7 +49,50 @@ export async function processMnovaJsonFileSpectrum(
     console.error('Error fetching or processing data:', error);
   }
 }
+function processMnovaJsonFileSpectrumV1(spectrum, fieldsToKeep, index) {
+  let filteredSpectrum = {};
+  fieldsToKeep.forEach((field) => {
+    // Check for the field in the spectrum object
+    if (spectrum[field]) {
+      filteredSpectrum[field] = spectrum[field];
+      console.log(
+        `SpectrumT Found ${field} at spectrum level in spectra[${index}]`,
+      );
+    }
+    // Check for the field in the spectrum.data object
+    else if (spectrum.data && spectrum.data[field]) {
+      filteredSpectrum[field] = spectrum.data[field];
+      console.log(`SpectrumT Found ${field} in spectra[${index}].data`);
+    }
+    // Handle case where the field is an array of objects
+    else if (Array.isArray(spectrum.data[field])) {
+      filteredSpectrum[field] = spectrum.data[field].map((item) => {
+        return item; // Customize this if you need to filter fields within the objects
+      });
+      console.log(
+        `SpectrumT Found ${field} as an array in spectra[${index}].data`,
+      );
+    }
+    // Handle nested objects within spectrum.data
+    else if (
+      typeof spectrum.data[field] === 'object' &&
+      spectrum.data[field] !== null
+    ) {
+      filteredSpectrum[field] = { ...spectrum.data[field] };
+      console.log(
+        `SpectrumT Found ${field} as an object in spectra[${index}].data`,
+      );
+    }
+    // Log if the field is not found at any expected location
+    else {
+      console.log(`SpectrumT Did not find ${field} in spectra[${index}]`);
+    }
+  });
 
+  // Log the filtered spectrum object
+  console.log(`SpectrumT ${index + 1}:`, filteredSpectrum);
+  return filteredSpectrum;
+}
 export async function processMnovaJsonFileMolecule(
   jsonFilePath,
   type,
@@ -181,6 +187,11 @@ export function extractSpectrumData(spectrumObjectIn, type = 'data') {
   } else {
     console.log('extractSpectrumData: schema OK :', schema);
   }
+  // Apply logic for varisous versions
+  return extractSpectrumDataV1(spectrumObjectIn, type);
+}
+
+function extractSpectrumDataV1(spectrumObjectIn, type) {
   const spectrumObject = spectrumObjectIn[type];
   let result = [];
 
@@ -261,7 +272,7 @@ export function ingestMoleculeObject(
       return;
     }
 
-// Assigned J's from the molecule
+    // Assigned J's from the molecule
     var listOfJs = [];
     if ('J-couplings' in atomIt) {
       const listCoup = atomIt['J-couplings'];
@@ -295,7 +306,7 @@ export function ingestMoleculeObject(
         listOfJs.push(jObj);
       });
     }
-// Unassigned J's from the multiplets of the spectrum
+    // Unassigned J's from the multiplets of the spectrum
 
     shifts.forEach((shiftIt, i) => {
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
