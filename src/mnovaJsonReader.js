@@ -300,6 +300,13 @@ export function ingestSpectrumRegions(
                             }
                         },
                         */
+                       /*
+                       "peaks": [
+                            "49ad22f6-faf3-4c10-ba8d-015f374f83b5",
+                            "24b26e8e-c6f0-4353-9842-bd6ba5f3a4ba",
+                            "2acb9a7d-dbb0-4ebd-81d9-d627243b573d"
+                        ],
+                        */
     var jObj = {
       couplings: multiplet.j_list.map((obj) => obj.value),
       area: multiplet.area,
