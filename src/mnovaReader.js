@@ -4,6 +4,7 @@ import { processMnovaJsonFileSpectrum } from './mnovaJsonReader.js';
 import { processMnovaJsonFileMolecule } from './mnovaJsonReader.js';
 import { extractSpectrumData } from './mnovaJsonReader.js';
 import { ingestMoleculeObject } from './mnovaJsonReader.js';
+import { ingestSpectrumRegions } from './mnovaJsonReader.js';
 
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
@@ -157,7 +158,8 @@ export function jGraph(fileNameSpectrum, fileNameData) {
       ];
 
       const jGraphObj = ingestMoleculeObject(allObjectsExtractedMolecule, allSpectraObjectsExtracted[0].multiplets);
-
+      const spectralRegions = ingestSpectrumRegions(allObjectsExtractedMolecule, allSpectraObjectsExtracted[0].multiplets);
+	  // TO DO create object for regions or add it to spectrum or assignment
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
       const regionsData = getRegionsWithSignal(

@@ -49,6 +49,7 @@ export async function processMnovaJsonFileSpectrum(
     console.error('Error fetching or processing data:', error);
   }
 }
+
 function processMnovaJsonFileSpectrumV1(spectrum, fieldsToKeep, index) {
   let filteredSpectrum = {};
   fieldsToKeep.forEach((field) => {
@@ -93,6 +94,7 @@ function processMnovaJsonFileSpectrumV1(spectrum, fieldsToKeep, index) {
   console.log(`SpectrumT ${index + 1}:`, filteredSpectrum);
   return filteredSpectrum;
 }
+
 export async function processMnovaJsonFileMolecule(
   jsonFilePath,
   type,
@@ -243,6 +245,82 @@ function extractSpectrumDataV1(spectrumObjectIn, type) {
   }
 
   return result;
+}
+
+export function ingestSpectrumRegions(
+  allObjectsExtractedMolecule,
+  spectrumAssignment,
+) {
+  console.log('spectrumAssignment ', spectrumAssignment);
+  const jGraphData = extractMoleculeData(
+    allObjectsExtractedMolecule,
+    'assignments',
+  );
+  const atoms = extractMoleculeData(allObjectsExtractedMolecule, 'atoms');
+  console.log('spectrumAssignment jGraphData ', jGraphData);
+
+  var dataOutput = [];
+
+  spectrumAssignment.list.forEach((multiplet, i) => {
+    // find multiplet in spectra data from molecule data
+
+    /*console.log('spectrumAssignment multiplet ========= ', multiplet);
+          console.log('spectrumAssignment multiplet area ', multiplet.area);
+          console.log( 'spectrumAssignment multiplet category ', multiplet.category,);
+          console.log('spectrumAssignment multiplet f1_shift ', multiplet.f1_shift, );
+          console.log(  'spectrumAssignment multiplet maximum ', multiplet.maximum,  );
+          console.log( 'spectrumAssignment multiplet nuclides ', multiplet.nuclides, );
+          console.log('spectrumAssignment multiplet name ', multiplet.name);
+          console.log('spectrumAssignment multiplet amoderea ', multiplet.mode);
+          console.log( 'spectrumAssignment multiplet is_reference ', multiplet.is_reference,);
+          */
+    console.log('spectrumAssignment multiplet range ', multiplet.range);
+    let f2range = [
+      multiplet.range?.f2?.from ?? null,
+      multiplet.range?.f2?.to ?? null,
+    ];
+    let f1range = [
+      multiplet.range?.f1?.from ?? null,
+      multiplet.range?.f1?.to ?? null,
+    ];
+
+    /*
+"calc_parms": {
+                            "method": "Peaks",
+                            "parameters": {
+                                "exc_peaks": [
+                                    "Hidden",
+                                    "C13Satellite",
+                                    "Rotational"
+                                ],
+                                "inc_peaks": [
+                                    "Compound"
+                                ],
+                                "peak_method": "AutoAssignment"
+                            }
+                        },
+                        */
+    var jObj = {
+      couplings: multiplet.j_list.map((obj) => obj.value),
+      area: multiplet.area,
+      category: multiplet.category,
+      f1_shift: multiplet.f1_shift,
+      maximum: multiplet.maximum,
+      nuclides: multiplet.nuclides,
+      name: multiplet.name,
+      mode: multiplet.mode,
+      is_reference: multiplet.is_reference,
+      area: multiplet.area,
+      f1rangePPM: f1range,
+      f2rangePPM: f2range,
+      type: multiplet.type,
+      uuid: multiplet.uuid,
+    };
+
+    dataOutput.push(jObj);
+  });
+  dataOutput.sort((a, b) => b.chemShift - a.chemShift);
+  return dataOutput;
 }
 
 export function ingestMoleculeObject(
