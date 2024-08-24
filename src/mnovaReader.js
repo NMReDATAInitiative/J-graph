@@ -17,12 +17,11 @@ export function jGraphNmredata(
   readNmrRecord,
   NmrRecord,
   JmolAppletAr,
+  dataviz,
 ) {
-  jGraph(fileNameSpectrum, fileNameData, JmolAppletAr);
+  jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz);
 }
-
-export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
-
+export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "my_dataviz") {
   function initializeSettings(smallScreen, overrideSettings = {}) {
     // Default settings
     let defaultSettings = {
@@ -87,7 +86,12 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
     }
   }
 
-  async function processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAr) {
+  async function processDataAndVisualize(
+    fileNameSpectrum,
+    fileNameData,
+    JmolAppletAr,
+    dataviz,
+  ) {
     try {
       const smallScreen =
         /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -98,7 +102,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
 
       // append the svg object to the body of the page
       var svg = d3
-        .select('#my_dataviz')
+        .select('#' + dataviz)
         .append('svg')
         .attr(
           'width',
@@ -147,8 +151,14 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
       );
 
       // spectra
-      const spectrumData = extractSpectrumData(allSpectraObjectsExtracted[0], 'data');
-      const spectrumData2 = extractSpectrumData(allSpectraObjectsExtracted[1], 'data');
+      const spectrumData = extractSpectrumData(
+        allSpectraObjectsExtracted[0],
+        'data',
+      );
+      const spectrumData2 = extractSpectrumData(
+        allSpectraObjectsExtracted[1],
+        'data',
+      );
       const spectrumDataAll = [
         spectrumData,
         spectrumData2,
@@ -159,9 +169,15 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
         ],
       ];
 
-      const jGraphObj = ingestMoleculeObject(allObjectsExtractedMolecule, allSpectraObjectsExtracted[0].multiplets);
-      const spectralRegions = ingestSpectrumRegions(allObjectsExtractedMolecule, allSpectraObjectsExtracted[0].multiplets);
-	  // TO DO create object for regions or add it to spectrum or assignment
+      const jGraphObj = ingestMoleculeObject(
+        allObjectsExtractedMolecule,
+        allSpectraObjectsExtracted[0].multiplets,
+      );
+      const spectralRegions = ingestSpectrumRegions(
+        allObjectsExtractedMolecule,
+        allSpectraObjectsExtracted[0].multiplets,
+      );
+      // TO DO create object for regions or add it to spectrum or assignment
       const marginPPM = 0.02;
       const minSpaceBetweenRegions = 0.05;
       const regionsData = getRegionsWithSignal(
@@ -212,5 +228,10 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
   }
 
   // Main call
-  processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAr);
+  processDataAndVisualize(
+    fileNameSpectrum,
+    fileNameData,
+    JmolAppletAr,
+    dataviz,
+  );
 }

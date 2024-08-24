@@ -57,7 +57,7 @@
 	Highlight atoms 1 and 2 on molecule A0
 	<a href='javascript:jmolScript("select atomno = 1 or atomno = 2;color [0,255,0]", "JmolAppletA0")'>On</a> /
 	<a href='javascript:jmolScript("select atomno = 1 or atomno = 2;color cpk", "JmolAppletA0")'>Off</a>
- 
+
 	<table id="sortableTable">
 		<tr>
 			<th onclick="sortTable(0)">structure</th>
@@ -71,27 +71,34 @@
 					const JmolAppletA0 = jmolApplet(200, "load ./santonin_twoMAnalzedDeco_correctAssignment_DWchange.mol ;cartoon on;color cartoon structure;", "JmolAppletA0");
 				</script>
 			</td>
-			<td id="my_dataviz">
-
+			<td id="my_dataviz0">
 				<script type="module">
-
 					import { jGraph } from "../../src/mnovaReader.js";
 					var fName1 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange.json";
 					var fName2 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_molecule.json"
 					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
 					console.log("JmolAppletA p", JmolAppletA0)
-					var ajgraph = jGraph(fName1, fName2, JmolAppletA0)
-
+					var ajgraph0 = jGraph(fName1, fName2, JmolAppletA0, "my_dataviz0")
 				</script>
-
-
 			</td>
-
-
-
 		</tr>
-
-
+		<tr>
+			<td>
+				<script>
+					const JmolAppletA1 = jmolApplet(200, "load ./santonin_twoMAnalzedDeco_correctAssignment_DWchange.mol ;cartoon on;color cartoon structure;", "JmolAppletA1");
+				</script>
+			</td>
+			<td id="my_dataviz1">
+				<script type="module">
+					import { jGraph } from "../../src/mnovaReader.js";
+					var fName1 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange.json";
+					var fName2 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_molecule.json"
+					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
+					console.log("JmolAppletA p", JmolAppletA1)
+					var ajgraph1 = jGraph(fName1, fName2, JmolAppletA1, "my_dataviz1")
+				</script>
+			</td>
+		</tr>
 	</table>
 
 	<script>

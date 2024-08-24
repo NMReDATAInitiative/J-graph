@@ -3,7 +3,7 @@
 //import * as d3 from "d3"; //
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
-import { getRegionsWithSignal } from './utils.js';  // Adjust the path as necessary
+import { getRegionsWithSignal } from './utils.js'; // Adjust the path as necessary
 
 //import { jmolSelectPair } from './src/jmolInterface.js';
 //import { readNmrRecord, NmrRecord, parseSDF} from 'nmredata3';
@@ -43,12 +43,13 @@ export function jGraphNmredata(
   parseSDF,
   readNmrRecord,
   NmrRecord,
-  JmolAppletAr
+  JmolAppletAr,
+  dataviz,
 ) {
-  jGraph(fileNameSpectrum, fileNameData, JmolAppletAr);
+  jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz);
 }
 
-export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
+export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "my_dataviz") {
   //
   // set the dimensions and margins of the graph
   //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -117,8 +118,12 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
     }
   }
 
-
-  async function processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAr) {
+  async function processDataAndVisualize(
+    fileNameSpectrum,
+    fileNameData,
+    JmolAppletAr,
+    dataviz,
+  ) {
     try {
       const smallScreen =
         /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -129,7 +134,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
 
       // append the svg object to the body of the page
       var svg = d3
-        .select('#my_dataviz')
+        .select('#' + dataviz)
         .append('svg')
         .attr(
           'width',
@@ -143,8 +148,8 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
             settings.spectrum.margin.top +
             settings.spectrum.margin.bottom,
         )
-       //           .style('border', '1px solid black') // Add a black border around the SVG
- // .style('background-color', 'lightblue') // Set the background color
+        //           .style('border', '1px solid black') // Add a black border around the SVG
+        // .style('background-color', 'lightblue') // Set the background color
         .append('g')
         .attr(
           'transform',
@@ -154,7 +159,6 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
             settings.spectrum.margin.top +
             ')',
         );
-
 
       const spectrumData = await loadSpectrum(fileNameSpectrum);
 
@@ -183,7 +187,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
         svg,
         smallScreen,
         settings_with_spectrum_settings,
-        JmolAppletAr
+        JmolAppletAr,
       );
 
       // Register each class as a receiver for every other class based on data type compatibility
@@ -209,5 +213,10 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr) {
   }
 
   // Main call
-  processDataAndVisualize(fileNameSpectrum, fileNameData, JmolAppletAr);
+  processDataAndVisualize(
+    fileNameSpectrum,
+    fileNameData,
+    JmolAppletAr,
+    dataviz,
+  );
 }
