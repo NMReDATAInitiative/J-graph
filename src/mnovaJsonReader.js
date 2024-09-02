@@ -378,6 +378,7 @@ export function ingestMoleculeObject(
                 atom.elementSymbol === elementPartner &&
                 atom.number === labelPartner,
             ) + 1;
+            
           if (false)
             console.log(
               'spectrumAssignment multiplet J-couplings atomIndexMolPartner',
@@ -387,6 +388,7 @@ export function ingestMoleculeObject(
               ' Hz',
             );
           jObj.atomIndexMol.push(atomIndexMolPartner);
+         
         }
         listOfJs.push(jObj);
       });
@@ -394,6 +396,7 @@ export function ingestMoleculeObject(
     // Unassigned J's from the multiplets of the spectrum
 
     shifts.forEach((shiftIt, i) => {
+      const listOfJsToRemove = Array.from(listOfJs);      
       var alreadySomething = false; // assumes first multiplet has more information (1H)
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
         if (alreadySomething) return;
@@ -416,20 +419,37 @@ export function ingestMoleculeObject(
           console.log('spectrumAssignment multiplet amoderea ', multiplet.mode);
           console.log( 'spectrumAssignment multiplet is_reference ', multiplet.is_reference,);
           */
-          console.log('spectrumAssignment multiplet range ', multiplet.range);
+         
 
           multiplet.j_list.forEach((aList) => {
+            
 
-            console.log('spectrumAssignment multiplet aList ', aList);
-            console.log(
-              'spectrumAssignment multiplet aList.value ',
+            const delta = 0.1;
+            let foundIndex = listOfJsToRemove.findIndex(
+              (item) => Math.abs(item.coupling - aList.value) <= delta,
+            );
+
+            if (foundIndex !== -1) {
+               console.log(
+              'spectrumAssignmentA Remove',
+              label,
+              'multiplet aList.value ',
               aList.value,
             );
-            var jObj = {
-              coupling: aList.value,
-              atomIndexMol: [],
-            };
-            listOfJs.push(jObj);
+              listOfJsToRemove.splice(foundIndex, 1);
+            } else {
+               console.log(
+              'spectrumAssignmentA Keep ',
+              label,
+              'multiplet aList.value ',
+              aList.value,
+            );
+              var jObj = {
+                coupling: aList.value,
+                atomIndexMol: [],
+              };
+              listOfJs.push(jObj);
+            }
           });
         }
 
@@ -438,12 +458,15 @@ export function ingestMoleculeObject(
         // Find the existing object in the list by assignedMultiplet
         let existingItem = dataOutput.find(
           (item) =>
-            item.assignedMultipletMnovaHash === assignedMultipletIt &&
-            item.chemShift === shiftIt.shift,
+            item.assignedMultipletMnovaHash === assignedMultipletIt 
+           &&  item.chemShift === shiftIt.shift,
         );
-        if (existingItem) {
+        const avoidsDegeneracy = false;
+        if (existingItem && avoidsDegeneracy) {
           existingItem.labelsColumn.push(label);
           existingItem.atomIndicesMol.push(atomIndexMol);
+          existingItem.listOfJs.concat(listOfJs);
+
         } else {
           const obj = {
             assignedMultipletMnovaHash: assignedMultipletIt,

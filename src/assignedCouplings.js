@@ -303,10 +303,18 @@ export class AssignedCouplings {
       Array.isArray(d2.indicesInMolFile2)
     ) {
       d2.indicesInMolFile1.forEach((element) => {
-        jmolSelectAtom(JmolAppletAr, element.toString(), atomColorHighlightPairs);
+        jmolSelectAtom(
+          JmolAppletAr,
+          element.toString(),
+          atomColorHighlightPairs,
+        );
       });
       d2.indicesInMolFile2.forEach((element) => {
-        jmolSelectAtom(JmolAppletAr, element.toString(), atomColorHighlightPairs);
+        jmolSelectAtom(
+          JmolAppletAr,
+          element.toString(),
+          atomColorHighlightPairs,
+        );
       });
     }
     //https://chemapps.stolaf.edu/jmol/docs/#getproperty
@@ -316,7 +324,10 @@ export class AssignedCouplings {
 
     var textToDisplay = jmolGetInfo(JmolAppletAr, at1, at2, d2.lineText);
     // const nbBond = jmolGetNBbonds(at1, at2);
-    document.getElementById('textMainPage').innerHTML = textToDisplay;
+    const textElement = document.getElementById('textMainPage');
+    if (textElement) {
+      textElement.innerHTML = textToDisplay;
+    }
 
     setTimeout(function () {
       jmolUnselectAll(JmolAppletAr);
@@ -354,10 +365,24 @@ export class AssignedCouplings {
       .style('stroke', (d) => getJisOK(d.jOKcolor))
       .style('opacity', 0.5)
       .on('click', (d) => {
-        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
+        this.highlightLines(
+          d,
+          darkMode,
+          generalUseWidth,
+          svg,
+          yJs,
+          JmolAppletAr,
+        );
       })
       .on('mouseover', (d) => {
-        this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
+        this.highlightLines(
+          d,
+          darkMode,
+          generalUseWidth,
+          svg,
+          yJs,
+          JmolAppletAr,
+        );
       });
   }
 
@@ -413,10 +438,24 @@ export class AssignedCouplings {
         })
         .style('opacity', 0.5)
         .on('click', (d) => {
-          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
+          this.highlightLines(
+            d,
+            darkMode,
+            generalUseWidth,
+            svg,
+            yJs,
+            JmolAppletAr,
+          );
         })
         .on('mouseover', (d) => {
-          this.highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr);
+          this.highlightLines(
+            d,
+            darkMode,
+            generalUseWidth,
+            svg,
+            yJs,
+            JmolAppletAr,
+          );
         })
     );
     // .on("mouseleave", doNotHighlightLines)}

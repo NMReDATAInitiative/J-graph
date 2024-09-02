@@ -11,7 +11,13 @@ import { jmolSelectAtom } from './jmolInterface.js';
 import { jmolGetNBbonds } from './jmolInterface.js';
 import { jmolGetInfo } from './jmolInterface.js';
 export class NmrAssignment extends GraphBase {
-  constructor(jGraphData, svg, smallScreen, settings_with_spectrum_settings, JmolAppletAr) {
+  constructor(
+    jGraphData,
+    svg,
+    smallScreen,
+    settings_with_spectrum_settings,
+    JmolAppletAr,
+  ) {
     // data for base which takes care of communication between classes
 
     const name = 'nameIsWiredInConstructor_NmrAssignment1';
@@ -159,12 +165,7 @@ export class NmrAssignment extends GraphBase {
     this.jgraphObj.dataUnassignedCoupCircles = [];
     this.jgraphObj.dataAssignedCoupBlocks = [];
 
-
-//////////////////////////////////////////
-    
-     
-     
-
+    //////////////////////////////////////////
 
     function populateDataUnassignedCoupCircles(dataColumns) {
       let dataUnassignedCoupCircles = [];
@@ -907,7 +908,8 @@ export class NmrAssignment extends GraphBase {
             this.jgraphObj.smallSpace,
             this.settings.jGraph.blockWidth,
             this.jgraphObj.yJs,
-            this,JmolAppletAr,
+            this,
+            JmolAppletAr,
           );
     }
 
@@ -941,29 +943,33 @@ export class NmrAssignment extends GraphBase {
       const referenceSpin = d;
       var partnerSpinNumberMol;
       var partnerSpinObj;
-    // Capture the reference to this.JmolAppletAr outside the filter function
-const JmolAppletAr = this.JmolAppletAr;
+      // Capture the reference to this.JmolAppletAr outside the filter function
+      const JmolAppletAr = this.JmolAppletAr;
 
-d3.selectAll('.circleL').filter(function (p) {
-    const test =
-      Math.abs(d.value - p.value) <= deltaSearchJ &&
-      d.uniqIndex != p.uniqIndex &&
-      d.MyIndex != p.MyIndex &&
-      (jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 2 ||
-       jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 3);
-    if (test) {
-      numberCandidate++;
-      partnerSpinNumberMol = p.indexAtomMol;
-      partnerSpinObj = p;
-    }
-});
-
+      d3.selectAll('.circleL').filter(function (p) {
+        const test =
+          Math.abs(d.value - p.value) <= deltaSearchJ &&
+          d.uniqIndex != p.uniqIndex &&
+          d.MyIndex != p.MyIndex &&
+          (jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) ==
+            2 ||
+            jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) ==
+              3);
+        if (test) {
+          numberCandidate++;
+          partnerSpinNumberMol = p.indexAtomMol;
+          partnerSpinObj = p;
+        }
+      });
 
       // Add assignment
       if (numberCandidate == 1) {
         if (wasDoubleClicked) {
-          document.getElementById('textMainPage').innerHTML =
-            'TMP Info :  ' + referenceSpinMol + ' ' + partnerSpinNumberMol;
+          const textElement = document.getElementById('textMainPage');
+          if (textElement) {
+            textElement.innerHTML =
+              'TMP Info :  ' + referenceSpinMol + ' ' + partnerSpinNumberMol;
+          }
           this.jgraphObj.assignedCouplings.theLinesW =
             this.jgraphObj.assignedCouplings.addAssignment(
               this.jgraphObj.dataColumns,
@@ -1174,7 +1180,8 @@ d3.selectAll('.circleL').filter(function (p) {
         });
       }
       if (numberCandidate == 1) {
-        var textToDisplay = jmolGetInfo(this.JmolAppletAr, 
+        var textToDisplay = jmolGetInfo(
+          this.JmolAppletAr,
           referenceSpinMol,
           partnerSpinNumberMol,
           'J',
@@ -1182,7 +1189,10 @@ d3.selectAll('.circleL').filter(function (p) {
         document.getElementById('textMainPage').innerHTML =
           '? ' + textToDisplay;
       } else {
-        document.getElementById('textMainPage').innerHTML = 'No guess!';
+        const textElement = document.getElementById('textMainPage');
+        if (textElement) {
+          textElement.innerHTML = 'No guess!';
+        }
       }
 
       // select color when only one candidate, or more ...
@@ -1231,7 +1241,8 @@ d3.selectAll('.circleL').filter(function (p) {
             d.uniqIndex != p.uniqIndex &&
             d.MyIndex != p.MyIndex &&
             !(
-              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
+                2 ||
               jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3
             ) &&
             true;
@@ -1252,8 +1263,10 @@ d3.selectAll('.circleL').filter(function (p) {
             Math.abs(d.value - p.value) <= deltaSearchJ &&
             d.uniqIndex != p.uniqIndex &&
             d.MyIndex != p.MyIndex &&
-            (jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
-              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3) &&
+            (jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
+              2 ||
+              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
+                3) &&
             true;
           if (test) {
             console.log('p.indicesAtomMol', p.indicesAtomMol);

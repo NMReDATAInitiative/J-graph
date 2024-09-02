@@ -23,13 +23,13 @@
 	<script src="https://d3js.org/d3.v7.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/CHEMeDATA/dispProxToVal@latest/src/dispProxToVal.js"></script>
 
-	<script type="text/javascript" src="src/JSmol.min.js"></script>
-	<script type="text/javascript" src="src/Jmol2.js"></script>
+	<script type="text/javascript" src="../../html/src/JSmol.min.js"></script>
+	<script type="text/javascript" src="../../html/src/Jmol2.js"></script>
 	<script type="text/javascript">
 		Jmol.Info = {
-			jarPath: "src",
+			jarPath: "../../html/src/",
 			jarFile: "JmolApplet0.jar",
-			j2sPath: "src/j2s",
+			j2sPath: "../../html/src/j2s/",
 			use: "HTML5", // could be JAVA or HTML5
 			disableJ2SLoadMonitor: false,
 			disableInitialConsole: true
@@ -75,7 +75,10 @@
 				<script type="module">
 					import { jGraph } from "../../src/mnovaReader.js";
 					var fName1 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange.json";
-					var fName2 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_molecule.json"
+					var fName22 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_molecule.json"
+					var fName24 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_someJassigned.json"
+					var fName2 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_someJassigned.molecule.json"
+				
 					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
 					console.log("JmolAppletA p", JmolAppletA0)
 					var ajgraph0 = jGraph(fName1, fName2, JmolAppletA0, "my_dataviz0")
@@ -85,14 +88,14 @@
 		<tr>
 			<td>
 				<script>
-					const JmolAppletA1 = jmolApplet(200, "load ./santonin_twoMAnalzedDeco_correctAssignment_DWchange.mol ;cartoon on;color cartoon structure;", "JmolAppletA1");
+					const JmolAppletA1 = jmolApplet(200, "load ./santonin_twoMAnalzedDeco_correctAssignment_DWchange_someJassigned_explicitH.mol ;cartoon on;color cartoon structure;", "JmolAppletA1");
 				</script>
 			</td>
 			<td id="my_dataviz1">
 				<script type="module">
 					import { jGraph } from "../../src/mnovaReader.js";
 					var fName1 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange.json";
-					var fName2 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_molecule.json"
+					var fName2 = "./santonin_twoMAnalzedDeco_correctAssignment_DWchange_someJassigned_explicitH_molecule.json"
 					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
 					console.log("JmolAppletA p", JmolAppletA1)
 					var ajgraph1 = jGraph(fName1, fName2, JmolAppletA1, "my_dataviz1")
