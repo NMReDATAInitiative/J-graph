@@ -156,7 +156,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "
         'data',
       );
       const spectrumData2 = extractSpectrumData(
-        allSpectraObjectsExtracted[1],
+        allSpectraObjectsExtracted[allSpectraObjectsExtracted.length - 1],
         'data',
       );
       const spectrumDataAll = [
@@ -166,6 +166,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "
           { chemShift: 2.005, value: 10000 },
           { chemShift: 2.0, value: 3000000 },
           { chemShift: 1.995, value: 10000 },
+          { chemShift: 1.990, value: 80000 },
         ],
       ];
 

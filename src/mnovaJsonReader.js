@@ -356,7 +356,7 @@ export function ingestMoleculeObject(
     if (element != 'H') {
       return;
     }
-
+    console.log("llog", " element ",element, " label ", label);
     // Assigned J's from the molecule
     var listOfJs = [];
     if ('J-couplings' in atomIt) {
@@ -394,18 +394,19 @@ export function ingestMoleculeObject(
     // Unassigned J's from the multiplets of the spectrum
 
     shifts.forEach((shiftIt, i) => {
+      var alreadySomething = false; // assumes first multiplet has more information (1H)
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
+        if (alreadySomething) return;
         // find multiplet in spectra data from molecule data
         const multipletIndex = spectrumAssignment.list.findIndex(
           (multiplet) => '{' + multiplet.uuid + '}' === assignedMultipletIt,
         );
+        //console.log(" -------- llog", " element ", element, " label ", label,  " ",   shiftIt);
+
         if (multipletIndex > 0) {
           const multiplet = spectrumAssignment.list[multipletIndex];
-          console.log(
-            'spectrumAssignment multipletIndex ========= ',
-            multipletIndex,
-          );
-          /*console.log('spectrumAssignment multiplet ========= ', multiplet);
+          /*
+          console.log('spectrumAssignment multiplet ========= ', multiplet);
           console.log('spectrumAssignment multiplet area ', multiplet.area);
           console.log( 'spectrumAssignment multiplet category ', multiplet.category,);
           console.log('spectrumAssignment multiplet f1_shift ', multiplet.f1_shift, );
@@ -418,6 +419,7 @@ export function ingestMoleculeObject(
           console.log('spectrumAssignment multiplet range ', multiplet.range);
 
           multiplet.j_list.forEach((aList) => {
+
             console.log('spectrumAssignment multiplet aList ', aList);
             console.log(
               'spectrumAssignment multiplet aList.value ',
@@ -451,6 +453,8 @@ export function ingestMoleculeObject(
             listOfJs: listOfJs,
           };
           dataOutput.push(obj);
+          console.log("      push        llog", " element ", element, " label ", label);
+          alreadySomething = true;
         }
       });
     });
