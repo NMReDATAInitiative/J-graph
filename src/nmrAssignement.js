@@ -87,6 +87,430 @@ export class NmrAssignment extends GraphBase {
     this.jgraphObj.rightPosColumns = rightPosColumns;
     this.settings = settings;
   }
+
+  highlightDot(d, wasDoubleClicked) {
+    if ('assignedCouplings' in this.jgraphObj) {
+      if ('spreadPositionsZZ' in this.jgraphObj.assignedCouplings) {
+        this.jgraphObj.assignedCouplings.spreadPositionsZZ =
+          updateColumnsPositions(
+            this.jgraphObj.dataColumns,
+            this.jgraphObj.leftPosColumns,
+            this.jgraphObj.x,
+            this.jgraphObj.rightPosColumns,
+            this.jgraphObj.smallSpace,
+          );
+      }
+    }
+
+    var spreadPositionsNew = updateColumnsPositions(
+      this.jgraphObj.dataColumns,
+      this.jgraphObj.leftPosColumns,
+      this.jgraphObj.x,
+      this.jgraphObj.rightPosColumns,
+      this.jgraphObj.smallSpace,
+    );
+
+    // specific to those matching the condition of similarity of J's
+    var numberCandidate = 0;
+    const deltaSearchJ = 0.5;
+    const referenceSpinMol = d.indexAtomMol;
+    const referenceSpinsMol = d.indicesAtomMol;
+    const referenceSpin = d;
+    var partnerSpinNumberMol;
+    var partnerSpinObj;
+    // Capture the reference to this.JmolAppletAr outside the filter function
+    const JmolAppletAr = this.JmolAppletAr;
+
+    d3.selectAll('.circleL').filter(function (p) {
+      const test =
+        Math.abs(d.value - p.value) <= deltaSearchJ &&
+        d.uniqIndex != p.uniqIndex &&
+        d.MyIndex != p.MyIndex &&
+        (jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 2 ||
+          jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) == 3);
+      if (test) {
+        numberCandidate++;
+        partnerSpinNumberMol = p.indexAtomMol;
+        partnerSpinObj = p;
+      }
+    });
+
+    // Add assignment
+    if (numberCandidate == 1) {
+      if (wasDoubleClicked) {
+        const textElement = document.getElementById('textMainPage');
+        if (textElement) {
+          textElement.innerHTML =
+            'TMP Info :  ' + referenceSpinMol + ' ' + partnerSpinNumberMol;
+        }
+        this.jgraphObj.assignedCouplings.theLinesW =
+          this.jgraphObj.assignedCouplings.addAssignment(
+            this.jgraphObj.dataColumns,
+            referenceSpin,
+            partnerSpinObj,
+            this.svg,
+            this.settings.spectrum.lineWidth,
+            this.settings.jGraph.darkMode,
+            this.settings.jGraph.generalUseWidth,
+            this.jgraphObj.yJs,
+            this.jgraphObj.smallSpace,
+            this.settings.jGraph.blockWidth,
+            this.pathFun,
+            this.JmolAppletAr,
+          );
+        this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs[
+          referenceSpin.dataColIndex2
+        ].isAssigned = true;
+        this.jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs[
+          partnerSpinObj.dataColIndex2
+        ].isAssigned = true;
+
+        this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs =
+          updateBlockPosition(
+            this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs,
+            this.settings.jGraph.minSpaceBetweekCircles,
+            this.settings.jGraph.minSpaceBetweekBlocks,
+          );
+        this.jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs =
+          updateBlockPosition(
+            this.jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs,
+            this.settings.jGraph.minSpaceBetweekCircles,
+            this.settings.jGraph.minSpaceBetweekBlocks,
+          );
+
+        // UGLY FIX TO BE MOVED OUT
+        for (
+          var indexList1 = 0;
+          indexList1 < this.jgraphObj.dataColumns.length;
+          indexList1++
+        ) {
+          for (
+            var i1 = 0;
+            i1 < this.jgraphObj.dataColumns[indexList1].listOfJs.length;
+            i1++
+          ) {
+            if (
+              !this.jgraphObj.dataColumns[indexList1].listOfJs[i1].isAssigned
+            ) {
+              for (
+                var iloo = 0;
+                iloo < this.jgraphObj.dataUnassignedCoupCircles.length;
+                iloo++
+              ) {
+                if (
+                  this.jgraphObj.dataUnassignedCoupCircles[iloo]
+                    .dataColIndex1 == indexList1
+                ) {
+                  if (
+                    this.jgraphObj.dataUnassignedCoupCircles[iloo]
+                      .dataColIndex2 == i1
+                  ) {
+                    this.jgraphObj.dataUnassignedCoupCircles[iloo].valueOnBar =
+                      this.jgraphObj.dataColumns[indexList1].listOfJs[
+                        i1
+                      ].JlevelAvoidContact;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        this.jgraphObj.assignedCouplings.spreadPositionsZZ =
+          updateColumnsPositions(
+            this.jgraphObj.dataColumns,
+            this.jgraphObj.leftPosColumns,
+            this.jgraphObj.x,
+            this.jgraphObj.rightPosColumns,
+            this.jgraphObj.smallSpace,
+          );
+
+        updateColumnsAction(
+          this.jgraphObj.assignedCouplings.spreadPositionsZZ,
+          1000,
+          this.settings.jGraph.positionJscale,
+          this.settings.jGraph.topJGraphYposition,
+          this.settings.jGraph.jGraphParameters.colorShowLine,
+          this.settings.jGraph.jGraphParameters.colorHideLine,
+          this.settings.jGraph.generalUseWidth,
+          this.jgraphObj.x,
+          this.settings.spectrum.widthOfThePlot,
+          this.jgraphObj,
+          this.settings.jGraph.blockWidth,
+          this.jgraphObj.yJs,
+        );
+        this.jgraphObj.assignedCouplings.udateLineTrajectory(
+          this.settings.jGraph.spaceBlock,
+          2.0 *
+            this.settings.spectrum.lineWidth *
+            this.settings.jGraph.nbHzPerPoint,
+          this.settings.jGraph.spaceCircle,
+          this.jgraphObj.dataColumns,
+        );
+        this.precomputePaths();
+
+        this.updateTheLines(
+          this.jgraphObj.yJs,
+          this.jgraphObj.smallSpace,
+          this.settings.jGraph.blockWidth,
+          this.pathFun,
+        );
+
+        // remove the two dots
+        this.svg.selectAll('.circleL')
+          .filter(function (p) {
+            const test =
+              d.uniqIndex == p.uniqIndex ||
+              partnerSpinObj.uniqIndex == p.uniqIndex;
+            return test;
+          })
+          .remove();
+
+        // redraw blocks
+        this.svg.selectAll('.circleS').remove();
+        // This is redundant with other part
+        this.jgraphObj.dataAssignedCoupBlocks = [];
+        for (
+          var indexList1 = 0;
+          indexList1 < this.jgraphObj.dataColumns.length;
+          indexList1++
+        ) {
+          for (
+            var i1 = 0;
+            i1 < this.jgraphObj.dataColumns[indexList1].listOfJs.length;
+            i1++
+          ) {
+            if (
+              this.jgraphObj.dataColumns[indexList1].listOfJs[i1].isAssigned
+            ) {
+              this.jgraphObj.dataAssignedCoupBlocks.push({
+                chemShift: this.jgraphObj.dataColumns[indexList1].chemShift,
+                value:
+                  this.jgraphObj.dataColumns[indexList1].listOfJs[i1]
+                    .JlevelAvoidContact,
+                trueValue:
+                  this.jgraphObj.dataColumns[indexList1].listOfJs[i1].Jvalue,
+                MyIndex: indexList1,
+                uniqIndex: this.jgraphObj.dataAssignedCoupBlocks.length,
+              });
+            }
+          }
+        }
+
+        this.jgraphObj.theBlocks = this.svg
+          .selectAll() // specify a selector instead of an empty string
+          .data(this.jgraphObj.dataAssignedCoupBlocks)
+          .enter()
+          .append('rect')
+          .attr('class', 'circleS')
+          .attr('x', (d) => {
+            return this.jgraphObj.x(
+              d.chemShift + this.settings.jGraph.blockWidth,
+            );
+          })
+          .attr('y', (d) => {
+            return (
+              this.jgraphObj.yJs(Math.abs(d.value)) -
+              this.settings.jGraph.halfBlockHeight
+            );
+          })
+          .attr('width', 2 * this.settings.jGraph.blockWidth)
+          .attr('height', 2 * this.settings.jGraph.halfBlockHeight)
+          .style('fill', (d) => {
+            return getJgraphColor(
+              Math.abs(d.trueValue),
+              this.settings.jGraph.darkMode,
+            );
+          })
+          .attr('stroke', 'black')
+          .style('stroke-width', this.settings.jGraph.lineWidthBlocks);
+
+        updateColumnsAction(
+          this.jgraphObj.assignedCouplings.spreadPositionsZZ,
+          0,
+          this.settings.jGraph.positionJscale,
+          this.settings.jGraph.topJGraphYposition,
+          this.settings.jGraph.jGraphParameters.colorShowLine,
+          this.settings.jGraph.jGraphParameters.colorHideLine,
+          this.settings.jGraph.generalUseWidth,
+          this.jgraphObj.x,
+          this.settings.spectrum.widthOfThePlot,
+          this.jgraphObj,
+          this.settings.jGraph.blockWidth,
+          this.jgraphObj.yJs,
+        );
+      }
+    }
+    jmolUnselectAll(this.JmolAppletAr);
+    // pointed atom
+    const curColHighligh = [0, 0, 0]; // black
+    jmolSelectAtom(this.JmolAppletAr, referenceSpinMol, curColHighligh);
+    if (referenceSpinsMol !== undefined) {
+      referenceSpinsMol.forEach((spinMol) => {
+        jmolSelectAtom(this.JmolAppletAr, referenceSpinMol, curColHighligh);
+      });
+    }
+    if (numberCandidate == 1) {
+      var textToDisplay = jmolGetInfo(
+        this.JmolAppletAr,
+        referenceSpinMol,
+        partnerSpinNumberMol,
+        'J',
+      );
+      document.getElementById('textMainPage').innerHTML = '? ' + textToDisplay;
+    } else {
+      const textElement = document.getElementById('textMainPage');
+      if (textElement) {
+        textElement.innerHTML = 'No guess!';
+      }
+    }
+
+    // select color when only one candidate, or more ...
+    var highColor = 'green';
+    if (numberCandidate != 1) {
+      highColor = 'red';
+    }
+
+    // Work on view
+    // Unselect hydrogens
+    this.svg.selectAll('.line')
+      .transition()
+      .duration(200)
+      .style('stroke', 'black')
+      .style('opacity', '0.1')
+      .transition()
+      .duration(20)
+      .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
+      .style('stroke', function (d) {
+        return getJisOK(d.jOKcolor);
+      })
+      .style('opacity', '1');
+
+    // first every group dimmed
+    this.svg.selectAll('.circleL')
+      .transition()
+      .duration(10)
+      .delay(10)
+      .style('stroke', 'black')
+      .style('opacity', '0.1')
+      .style('stroke-width', this.settings.spectrum.lineWidth)
+      .transition()
+      .duration(200)
+      .delay(1.2 * this.settings.jGraph.jGraphParameters.delayBeforeErase)
+      .style('stroke', 'black')
+      .style('opacity', '1.0')
+      .style('stroke-width', this.settings.spectrum.lineWidth);
+
+    this.svg.selectAll('.circleL')
+      .transition()
+      .duration(20)
+      .delay(300)
+      .filter(function (p) {
+        const test =
+          Math.abs(d.value - p.value) <= deltaSearchJ &&
+          d.uniqIndex != p.uniqIndex &&
+          d.MyIndex != p.MyIndex &&
+          !(
+            jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+            jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3
+          ) &&
+          true;
+        if (test) jmolSelectAtom(JmolAppletAr, p.indexAtomMol, [255, 0, 50]); // pink
+        return test;
+      })
+      .style('stroke', 'red')
+      .style('opacity', '1.0')
+      .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
+
+    // right distance dots
+    this.svg.selectAll('.circleL')
+      .transition()
+      .duration(20)
+      .delay(300)
+      .filter(function (p) {
+        const test =
+          Math.abs(d.value - p.value) <= deltaSearchJ &&
+          d.uniqIndex != p.uniqIndex &&
+          d.MyIndex != p.MyIndex &&
+          (jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 2 ||
+            jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
+              3) &&
+          true;
+        if (test) {
+          console.log('p.indicesAtomMol', p.indicesAtomMol);
+          p.indicesAtomMol.forEach((inAtomMol) => {
+            jmolSelectAtom(JmolAppletAr, inAtomMol, [0, 255, 50]); // dunno
+          });
+        }
+        return test;
+      })
+      .style('stroke', highColor)
+      .style('opacity', '1.0')
+      .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
+
+    this.svg.selectAll('.circleL')
+      .transition()
+      .duration(20)
+      .delay(310)
+      .filter(function (p) {
+        return d.uniqIndex == p.uniqIndex;
+      })
+      .style('opacity', '1.0')
+      .style('stroke-width', this.settings.spectrum.lineWidth * 2.0)
+      .style('stroke', curColHighligh);
+
+    // all will get back to normal
+    this.svg.selectAll('.circleL')
+      .transition()
+      .duration(200)
+      .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
+      .style('stroke', 'black')
+      .style('opacity', '1.0')
+      .style('stroke-width', this.settings.spectrum.lineWidth);
+
+    this.svg.selectAll('.rulerClass')
+      .transition()
+      .duration(200)
+      .delay(0)
+      .attr('y1', this.jgraphObj.yJs(Math.abs(d.value)))
+      .attr('y2', this.jgraphObj.yJs(Math.abs(d.value)))
+      .style('opacity', '1.0')
+      .style('stroke', highColor)
+      .transition()
+      .duration(200)
+      .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
+      .attr('y1', this.jgraphObj.yJs(Math.abs(d.value)))
+      .attr('y2', this.jgraphObj.yJs(Math.abs(d.value)))
+      .style('opacity', '0.0')
+      .style('stroke', 'black');
+
+    var selectedCicle = 'textCircle' + d.uniqIndex;
+    this.svg.selectAll('.' + selectedCicle)
+      .transition()
+      .duration(100)
+      .delay(10)
+      .style('stroke', curColHighligh)
+      .style('opacity', '1.0')
+      .transition()
+      .duration(200)
+      .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
+      .style('stroke', 'black')
+      .style('opacity', '0.0');
+
+    var theTextDotNew = this.svg
+      .append('text')
+      .attr('x', spreadPositionsNew[d.MyIndex])
+      .attr('y', this.jgraphObj.yJs(Math.abs(d.valueOnBar) + 3.0))
+      .text('J = ' + d.value)
+      .style('font-size', this.settings.jGraph.generalUseWidth * 2.5)
+      .style('font-family', 'Helvetica')
+      .style('text-anchor', 'middle')
+      .transition()
+      .duration(100)
+      .delay(3000)
+      .remove();
+  }
+
   ingestMoleculeObject(data, settings) {
     var listFound = [];
     let dataColumns = [];
@@ -913,436 +1337,6 @@ export class NmrAssignment extends GraphBase {
           );
     }
 
-    var highlightDot = (d, wasDoubleClicked) => {
-      if ('assignedCouplings' in this.jgraphObj) {
-        if ('spreadPositionsZZ' in this.jgraphObj.assignedCouplings) {
-          this.jgraphObj.assignedCouplings.spreadPositionsZZ =
-            updateColumnsPositions(
-              this.jgraphObj.dataColumns,
-              this.jgraphObj.leftPosColumns,
-              this.jgraphObj.x,
-              this.jgraphObj.rightPosColumns,
-              this.jgraphObj.smallSpace,
-            );
-        }
-      }
-
-      var spreadPositionsNew = updateColumnsPositions(
-        this.jgraphObj.dataColumns,
-        this.jgraphObj.leftPosColumns,
-        this.jgraphObj.x,
-        this.jgraphObj.rightPosColumns,
-        this.jgraphObj.smallSpace,
-      );
-
-      // specific to those matching the condition of similarity of J's
-      var numberCandidate = 0;
-      const deltaSearchJ = 0.5;
-      const referenceSpinMol = d.indexAtomMol;
-      const referenceSpinsMol = d.indicesAtomMol;
-      const referenceSpin = d;
-      var partnerSpinNumberMol;
-      var partnerSpinObj;
-      // Capture the reference to this.JmolAppletAr outside the filter function
-      const JmolAppletAr = this.JmolAppletAr;
-
-      d3.selectAll('.circleL').filter(function (p) {
-        const test =
-          Math.abs(d.value - p.value) <= deltaSearchJ &&
-          d.uniqIndex != p.uniqIndex &&
-          d.MyIndex != p.MyIndex &&
-          (jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) ==
-            2 ||
-            jmolGetNBbonds(JmolAppletAr, referenceSpinMol, p.indexAtomMol) ==
-              3);
-        if (test) {
-          numberCandidate++;
-          partnerSpinNumberMol = p.indexAtomMol;
-          partnerSpinObj = p;
-        }
-      });
-
-      // Add assignment
-      if (numberCandidate == 1) {
-        if (wasDoubleClicked) {
-          const textElement = document.getElementById('textMainPage');
-          if (textElement) {
-            textElement.innerHTML =
-              'TMP Info :  ' + referenceSpinMol + ' ' + partnerSpinNumberMol;
-          }
-          this.jgraphObj.assignedCouplings.theLinesW =
-            this.jgraphObj.assignedCouplings.addAssignment(
-              this.jgraphObj.dataColumns,
-              referenceSpin,
-              partnerSpinObj,
-              this.svg,
-              this.settings.spectrum.lineWidth,
-              this.settings.jGraph.darkMode,
-              this.settings.jGraph.generalUseWidth,
-              this.jgraphObj.yJs,
-              this.jgraphObj.smallSpace,
-              this.settings.jGraph.blockWidth,
-              this.pathFun,
-              this.JmolAppletAr,
-            );
-          this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs[
-            referenceSpin.dataColIndex2
-          ].isAssigned = true;
-          this.jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs[
-            partnerSpinObj.dataColIndex2
-          ].isAssigned = true;
-
-          this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs =
-            updateBlockPosition(
-              this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs,
-              this.settings.jGraph.minSpaceBetweekCircles,
-              this.settings.jGraph.minSpaceBetweekBlocks,
-            );
-          this.jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs =
-            updateBlockPosition(
-              this.jgraphObj.dataColumns[partnerSpinObj.dataColIndex1].listOfJs,
-              this.settings.jGraph.minSpaceBetweekCircles,
-              this.settings.jGraph.minSpaceBetweekBlocks,
-            );
-
-          // UGLY FIX TO BE MOVED OUT
-          for (
-            var indexList1 = 0;
-            indexList1 < this.jgraphObj.dataColumns.length;
-            indexList1++
-          ) {
-            for (
-              var i1 = 0;
-              i1 < this.jgraphObj.dataColumns[indexList1].listOfJs.length;
-              i1++
-            ) {
-              if (
-                !this.jgraphObj.dataColumns[indexList1].listOfJs[i1].isAssigned
-              ) {
-                for (
-                  var iloo = 0;
-                  iloo < this.jgraphObj.dataUnassignedCoupCircles.length;
-                  iloo++
-                ) {
-                  if (
-                    this.jgraphObj.dataUnassignedCoupCircles[iloo]
-                      .dataColIndex1 == indexList1
-                  ) {
-                    if (
-                      this.jgraphObj.dataUnassignedCoupCircles[iloo]
-                        .dataColIndex2 == i1
-                    ) {
-                      this.jgraphObj.dataUnassignedCoupCircles[
-                        iloo
-                      ].valueOnBar =
-                        this.jgraphObj.dataColumns[indexList1].listOfJs[
-                          i1
-                        ].JlevelAvoidContact;
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          this.jgraphObj.assignedCouplings.spreadPositionsZZ =
-            updateColumnsPositions(
-              this.jgraphObj.dataColumns,
-              this.jgraphObj.leftPosColumns,
-              this.jgraphObj.x,
-              this.jgraphObj.rightPosColumns,
-              this.jgraphObj.smallSpace,
-            );
-
-          updateColumnsAction(
-            this.jgraphObj.assignedCouplings.spreadPositionsZZ,
-            1000,
-            this.settings.jGraph.positionJscale,
-            this.settings.jGraph.topJGraphYposition,
-            this.settings.jGraph.jGraphParameters.colorShowLine,
-            this.settings.jGraph.jGraphParameters.colorHideLine,
-            this.settings.jGraph.generalUseWidth,
-            this.jgraphObj.x,
-            this.settings.spectrum.widthOfThePlot,
-            this.jgraphObj,
-            this.settings.jGraph.blockWidth,
-            this.jgraphObj.yJs,
-          );
-          this.jgraphObj.assignedCouplings.udateLineTrajectory(
-            this.settings.jGraph.spaceBlock,
-            2.0 *
-              this.settings.spectrum.lineWidth *
-              this.settings.jGraph.nbHzPerPoint,
-            this.settings.jGraph.spaceCircle,
-            this.jgraphObj.dataColumns,
-          );
-          this.precomputePaths();
-
-          this.updateTheLines(
-            this.jgraphObj.yJs,
-            this.jgraphObj.smallSpace,
-            this.settings.jGraph.blockWidth,
-            this.pathFun,
-          );
-
-          // remove the two dots
-          d3.selectAll('.circleL')
-            .filter(function (p) {
-              const test =
-                d.uniqIndex == p.uniqIndex ||
-                partnerSpinObj.uniqIndex == p.uniqIndex;
-              return test;
-            })
-            .remove();
-
-          // redraw blocks
-          this.svg.selectAll('.circleS').remove();
-          // This is redundant with other part
-          this.jgraphObj.dataAssignedCoupBlocks = [];
-          for (
-            var indexList1 = 0;
-            indexList1 < this.jgraphObj.dataColumns.length;
-            indexList1++
-          ) {
-            for (
-              var i1 = 0;
-              i1 < this.jgraphObj.dataColumns[indexList1].listOfJs.length;
-              i1++
-            ) {
-              if (
-                this.jgraphObj.dataColumns[indexList1].listOfJs[i1].isAssigned
-              ) {
-                this.jgraphObj.dataAssignedCoupBlocks.push({
-                  chemShift: this.jgraphObj.dataColumns[indexList1].chemShift,
-                  value:
-                    this.jgraphObj.dataColumns[indexList1].listOfJs[i1]
-                      .JlevelAvoidContact,
-                  trueValue:
-                    this.jgraphObj.dataColumns[indexList1].listOfJs[i1].Jvalue,
-                  MyIndex: indexList1,
-                  uniqIndex: this.jgraphObj.dataAssignedCoupBlocks.length,
-                });
-              }
-            }
-          }
-
-          this.jgraphObj.theBlocks = this.svg
-            .selectAll() // specify a selector instead of an empty string
-            .data(this.jgraphObj.dataAssignedCoupBlocks)
-            .enter()
-            .append('rect')
-            .attr('class', 'circleS')
-            .attr('x', (d) => {
-              return this.jgraphObj.x(
-                d.chemShift + this.settings.jGraph.blockWidth,
-              );
-            })
-            .attr('y', (d) => {
-              return (
-                this.jgraphObj.yJs(Math.abs(d.value)) -
-                this.settings.jGraph.halfBlockHeight
-              );
-            })
-            .attr('width', 2 * this.settings.jGraph.blockWidth)
-            .attr('height', 2 * this.settings.jGraph.halfBlockHeight)
-            .style('fill', (d) => {
-              return getJgraphColor(
-                Math.abs(d.trueValue),
-                this.settings.jGraph.darkMode,
-              );
-            })
-            .attr('stroke', 'black')
-            .style('stroke-width', this.settings.jGraph.lineWidthBlocks);
-
-          updateColumnsAction(
-            this.jgraphObj.assignedCouplings.spreadPositionsZZ,
-            0,
-            this.settings.jGraph.positionJscale,
-            this.settings.jGraph.topJGraphYposition,
-            this.settings.jGraph.jGraphParameters.colorShowLine,
-            this.settings.jGraph.jGraphParameters.colorHideLine,
-            this.settings.jGraph.generalUseWidth,
-            this.jgraphObj.x,
-            this.settings.spectrum.widthOfThePlot,
-            this.jgraphObj,
-            this.settings.jGraph.blockWidth,
-            this.jgraphObj.yJs,
-          );
-        }
-      }
-      jmolUnselectAll(this.JmolAppletAr);
-      // pointed atom
-      const curColHighligh = [0, 0, 0]; // black
-      jmolSelectAtom(this.JmolAppletAr, referenceSpinMol, curColHighligh);
-      if (referenceSpinsMol !== undefined) {
-        referenceSpinsMol.forEach((spinMol) => {
-          jmolSelectAtom(this.JmolAppletAr, referenceSpinMol, curColHighligh);
-        });
-      }
-      if (numberCandidate == 1) {
-        var textToDisplay = jmolGetInfo(
-          this.JmolAppletAr,
-          referenceSpinMol,
-          partnerSpinNumberMol,
-          'J',
-        );
-        document.getElementById('textMainPage').innerHTML =
-          '? ' + textToDisplay;
-      } else {
-        const textElement = document.getElementById('textMainPage');
-        if (textElement) {
-          textElement.innerHTML = 'No guess!';
-        }
-      }
-
-      // select color when only one candidate, or more ...
-      var highColor = 'green';
-      if (numberCandidate != 1) {
-        highColor = 'red';
-      }
-
-      // Work on view
-      // Unselect hydrogens
-      d3.selectAll('.line')
-        .transition()
-        .duration(200)
-        .style('stroke', 'black')
-        .style('opacity', '0.1')
-        .transition()
-        .duration(20)
-        .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
-        .style('stroke', function (d) {
-          return getJisOK(d.jOKcolor);
-        })
-        .style('opacity', '1');
-
-      // first every group dimmed
-      d3.selectAll('.circleL')
-        .transition()
-        .duration(10)
-        .delay(10)
-        .style('stroke', 'black')
-        .style('opacity', '0.1')
-        .style('stroke-width', this.settings.spectrum.lineWidth)
-        .transition()
-        .duration(200)
-        .delay(1.2 * this.settings.jGraph.jGraphParameters.delayBeforeErase)
-        .style('stroke', 'black')
-        .style('opacity', '1.0')
-        .style('stroke-width', this.settings.spectrum.lineWidth);
-
-      d3.selectAll('.circleL')
-        .transition()
-        .duration(20)
-        .delay(300)
-        .filter(function (p) {
-          const test =
-            Math.abs(d.value - p.value) <= deltaSearchJ &&
-            d.uniqIndex != p.uniqIndex &&
-            d.MyIndex != p.MyIndex &&
-            !(
-              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
-                2 ||
-              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) == 3
-            ) &&
-            true;
-          if (test) jmolSelectAtom(JmolAppletAr, p.indexAtomMol, [255, 0, 50]); // pink
-          return test;
-        })
-        .style('stroke', 'red')
-        .style('opacity', '1.0')
-        .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
-
-      // right distance dots
-      d3.selectAll('.circleL')
-        .transition()
-        .duration(20)
-        .delay(300)
-        .filter(function (p) {
-          const test =
-            Math.abs(d.value - p.value) <= deltaSearchJ &&
-            d.uniqIndex != p.uniqIndex &&
-            d.MyIndex != p.MyIndex &&
-            (jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
-              2 ||
-              jmolGetNBbonds(JmolAppletAr, d.indexAtomMol, p.indexAtomMol) ==
-                3) &&
-            true;
-          if (test) {
-            console.log('p.indicesAtomMol', p.indicesAtomMol);
-            p.indicesAtomMol.forEach((inAtomMol) => {
-              jmolSelectAtom(JmolAppletAr, inAtomMol, [0, 255, 50]); // dunno
-            });
-          }
-          return test;
-        })
-        .style('stroke', highColor)
-        .style('opacity', '1.0')
-        .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
-
-      d3.selectAll('.circleL')
-        .transition()
-        .duration(20)
-        .delay(310)
-        .filter(function (p) {
-          return d.uniqIndex == p.uniqIndex;
-        })
-        .style('opacity', '1.0')
-        .style('stroke-width', this.settings.spectrum.lineWidth * 2.0)
-        .style('stroke', curColHighligh);
-
-      // all will get back to normal
-      d3.selectAll('.circleL')
-        .transition()
-        .duration(200)
-        .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
-        .style('stroke', 'black')
-        .style('opacity', '1.0')
-        .style('stroke-width', this.settings.spectrum.lineWidth);
-
-      d3.selectAll('.rulerClass')
-        .transition()
-        .duration(200)
-        .delay(0)
-        .attr('y1', this.jgraphObj.yJs(Math.abs(d.value)))
-        .attr('y2', this.jgraphObj.yJs(Math.abs(d.value)))
-        .style('opacity', '1.0')
-        .style('stroke', highColor)
-        .transition()
-        .duration(200)
-        .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
-        .attr('y1', this.jgraphObj.yJs(Math.abs(d.value)))
-        .attr('y2', this.jgraphObj.yJs(Math.abs(d.value)))
-        .style('opacity', '0.0')
-        .style('stroke', 'black');
-
-      var selectedCicle = 'textCircle' + d.uniqIndex;
-      d3.selectAll('.' + selectedCicle)
-        .transition()
-        .duration(100)
-        .delay(10)
-        .style('stroke', curColHighligh)
-        .style('opacity', '1.0')
-        .transition()
-        .duration(200)
-        .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
-        .style('stroke', 'black')
-        .style('opacity', '0.0');
-
-      var theTextDotNew = this.svg
-        .append('text')
-        .attr('x', spreadPositionsNew[d.MyIndex])
-        .attr('y', this.jgraphObj.yJs(Math.abs(d.valueOnBar) + 3.0))
-        .text('J = ' + d.value)
-        .style('font-size', this.settings.jGraph.generalUseWidth * 2.5)
-        .style('font-family', 'Helvetica')
-        .style('text-anchor', 'middle')
-        .transition()
-        .duration(100)
-        .delay(3000)
-        .remove();
-    };
-
     // Circles
     var theDots = this.svg
       .selectAll('dots')
@@ -1360,15 +1354,15 @@ export class NmrAssignment extends GraphBase {
       .style('stroke-width', this.settings.jGraph.lineWidthCircle)
       .on('mouseover', (event, d) => {
         event.preventDefault();
-        highlightDot(d, false);
+        this.highlightDot(d, false);
       })
       .on('click', (event, d) => {
         event.preventDefault();
-        highlightDot(d, false);
+        this.highlightDot(d, false);
       })
       .on('dblclick', (event, d) => {
         event.preventDefault();
-        highlightDot(d, true);
+        this.highlightDot(d, true);
       });
 
     var theBlocks = this.svg
