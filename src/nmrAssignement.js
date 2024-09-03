@@ -17,6 +17,7 @@ export class NmrAssignment extends GraphBase {
     smallScreen,
     settings_with_spectrum_settings,
     JmolAppletAr,
+    instanceNumb = 0,
   ) {
     // data for base which takes care of communication between classes
 
@@ -29,6 +30,7 @@ export class NmrAssignment extends GraphBase {
     this.JmolAppletAr = JmolAppletAr;
     this.svg = svg;
     this.jgraphObj = {};
+    this.instanceId = instanceNumb;
 
     const settings = this.initializeSettings(
       smallScreen,
@@ -120,8 +122,10 @@ export class NmrAssignment extends GraphBase {
     var partnerSpinObj;
     // Capture the reference to this.JmolAppletAr outside the filter function
     const JmolAppletAr = this.JmolAppletAr;
+    console.log('this.instanceId', this.instanceId);
 
-    d3.selectAll('.circleL').filter(function (p) {
+    d3.selectAll(`.circleL-${this.instanceId}`).filter(function (p) {
+      //this.jgraphObj.theDots.selectAll(`.circleL-${this.instanceId}`).filter((p) => {
       const test =
         Math.abs(d.value - p.value) <= deltaSearchJ &&
         d.uniqIndex != p.uniqIndex &&
@@ -157,6 +161,7 @@ export class NmrAssignment extends GraphBase {
             this.settings.jGraph.blockWidth,
             this.pathFun,
             this.JmolAppletAr,
+            this.instanceId,
           );
         this.jgraphObj.dataColumns[referenceSpin.dataColIndex1].listOfJs[
           referenceSpin.dataColIndex2
@@ -254,10 +259,12 @@ export class NmrAssignment extends GraphBase {
           this.jgraphObj.smallSpace,
           this.settings.jGraph.blockWidth,
           this.pathFun,
+          this.instanceId,
         );
 
         // remove the two dots
-        this.svg.selectAll('.circleL')
+        this.svg
+          .selectAll(`.circleL-${this.instanceId}`)
           .filter(function (p) {
             const test =
               d.uniqIndex == p.uniqIndex ||
@@ -267,7 +274,7 @@ export class NmrAssignment extends GraphBase {
           .remove();
 
         // redraw blocks
-        this.svg.selectAll('.circleS').remove();
+        this.svg.selectAll(`.circleS-${this.instanceId}`).remove();
         // This is redundant with other part
         this.jgraphObj.dataAssignedCoupBlocks = [];
         for (
@@ -302,7 +309,7 @@ export class NmrAssignment extends GraphBase {
           .data(this.jgraphObj.dataAssignedCoupBlocks)
           .enter()
           .append('rect')
-          .attr('class', 'circleS')
+          .attr('class', `circleS-${this.instanceId}`)
           .attr('x', (d) => {
             return this.jgraphObj.x(
               d.chemShift + this.settings.jGraph.blockWidth,
@@ -373,7 +380,8 @@ export class NmrAssignment extends GraphBase {
 
     // Work on view
     // Unselect hydrogens
-    this.svg.selectAll('.line')
+    this.svg
+      .selectAll('.line')
       .transition()
       .duration(200)
       .style('stroke', 'black')
@@ -387,7 +395,8 @@ export class NmrAssignment extends GraphBase {
       .style('opacity', '1');
 
     // first every group dimmed
-    this.svg.selectAll('.circleL')
+    this.svg
+      .selectAll(`.circleL-${this.instanceId}`)
       .transition()
       .duration(10)
       .delay(10)
@@ -401,7 +410,8 @@ export class NmrAssignment extends GraphBase {
       .style('opacity', '1.0')
       .style('stroke-width', this.settings.spectrum.lineWidth);
 
-    this.svg.selectAll('.circleL')
+    this.svg
+      .selectAll(`.circleL-${this.instanceId}`)
       .transition()
       .duration(20)
       .delay(300)
@@ -423,7 +433,8 @@ export class NmrAssignment extends GraphBase {
       .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
 
     // right distance dots
-    this.svg.selectAll('.circleL')
+    this.svg
+      .selectAll(`.circleL-${this.instanceId}`)
       .transition()
       .duration(20)
       .delay(300)
@@ -448,7 +459,8 @@ export class NmrAssignment extends GraphBase {
       .style('opacity', '1.0')
       .style('stroke-width', this.settings.spectrum.lineWidth * 2.0);
 
-    this.svg.selectAll('.circleL')
+    this.svg
+      .selectAll(`.circleL-${this.instanceId}`)
       .transition()
       .duration(20)
       .delay(310)
@@ -460,7 +472,8 @@ export class NmrAssignment extends GraphBase {
       .style('stroke', curColHighligh);
 
     // all will get back to normal
-    this.svg.selectAll('.circleL')
+    this.svg
+      .selectAll(`.circleL-${this.instanceId}`)
       .transition()
       .duration(200)
       .delay(this.settings.jGraph.jGraphParameters.delayBeforeErase)
@@ -468,7 +481,8 @@ export class NmrAssignment extends GraphBase {
       .style('opacity', '1.0')
       .style('stroke-width', this.settings.spectrum.lineWidth);
 
-    this.svg.selectAll('.rulerClass')
+    this.svg
+      .selectAll('.rulerClass')
       .transition()
       .duration(200)
       .delay(0)
@@ -485,7 +499,8 @@ export class NmrAssignment extends GraphBase {
       .style('stroke', 'black');
 
     var selectedCicle = 'textCircle' + d.uniqIndex;
-    this.svg.selectAll('.' + selectedCicle)
+    this.svg
+      .selectAll('.' + selectedCicle)
       .transition()
       .duration(100)
       .delay(10)
@@ -872,7 +887,8 @@ export class NmrAssignment extends GraphBase {
     );
     settings.jGraph.heightJscale =
       settings.spectrum.height * settings.jGraph.ratioOccupyJgraph;
-    settings.jGraph.positionJscale = 20;
+    settings.jGraph.positionJscale =
+      20 + this.instanceId * (30 + settings.jGraph.heightJscale);
     settings.jGraph.topJGraphYposition = 0;
     settings.jGraph.bottomJGraphYposition = settings.jGraph.heightJscale;
     settings.jGraph.pointingLineColum =
@@ -1320,21 +1336,8 @@ export class NmrAssignment extends GraphBase {
           this.settings.jGraph.generalUseWidth,
           this.jgraphObj.yJs,
           this.JmolAppletAr,
+          this.instanceId,
         );
-      if (false)
-        this.jgraphObj.assignedCouplings.theLinesW =
-          this.jgraphObj.assignedCouplings.makeGraphicOLD(
-            this.jgraphObj.x,
-            this.svg,
-            this.settings.spectrum.lineWidth,
-            this.settings.jGraph.darkMode,
-            this.settings.jGraph.generalUseWidth,
-            this.jgraphObj.smallSpace,
-            this.settings.jGraph.blockWidth,
-            this.jgraphObj.yJs,
-            this,
-            JmolAppletAr,
-          );
     }
 
     // Circles
@@ -1343,7 +1346,7 @@ export class NmrAssignment extends GraphBase {
       .data(this.jgraphObj.dataUnassignedCoupCircles)
       .enter()
       .append('circle')
-      .attr('class', 'circleL')
+      .attr('class', `circleL circleL-${this.instanceId}`) // Add instance-specific class
       .attr('cx', (d) => this.jgraphObj.x(d.chemShift))
       .attr('cy', (d) => this.jgraphObj.yJs(Math.abs(d.valueOnBar)))
       .attr('r', this.settings.jGraph.circleRadius)
@@ -1370,7 +1373,7 @@ export class NmrAssignment extends GraphBase {
       .data(this.jgraphObj.dataAssignedCoupBlocks)
       .enter()
       .append('rect')
-      .attr('class', 'circleS')
+      .attr('class', `circleS-${this.instanceId}`)
       .attr('x', (d) =>
         this.jgraphObj.x(d.chemShift + this.settings.jGraph.blockWidth),
       )

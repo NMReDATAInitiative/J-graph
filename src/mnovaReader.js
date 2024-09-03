@@ -21,7 +21,12 @@ export function jGraphNmredata(
 ) {
   jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz);
 }
-export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "my_dataviz") {
+export function jGraph(
+  fileNameSpectrum,
+  fileNameData,
+  JmolAppletAr,
+  dataviz = 'my_dataviz',
+) {
   function initializeSettings(smallScreen, overrideSettings = {}) {
     // Default settings
     let defaultSettings = {
@@ -166,7 +171,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "
           { chemShift: 2.005, value: 10000 },
           { chemShift: 2.0, value: 3000000 },
           { chemShift: 1.995, value: 10000 },
-          { chemShift: 1.990, value: 80000 },
+          { chemShift: 1.99, value: 80000 },
         ],
       ];
 
@@ -205,9 +210,18 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "
         settings_with_spectrum_settings,
         JmolAppletAr,
       );
+      const addOne = false;
+      if (addOne) var nmrAssignment2 = new NmrAssignment(
+        jGraphObj,
+        svg,
+        smallScreen,
+        settings_with_spectrum_settings,
+        JmolAppletAr,
+        1,
+      );
 
       // Register each class as a receiver for every other class based on data type compatibility
-      const classes = [spectrum, nmrAssignment];
+      const classes = addOne   ? [spectrum, nmrAssignment, nmrAssignment2] : [spectrum, nmrAssignment];
       classes.forEach((sender) => {
         classes.forEach((receiver) => {
           if (sender !== receiver) {
@@ -223,6 +237,7 @@ export function jGraph(fileNameSpectrum, fileNameData, JmolAppletAr, dataviz = "
       spectrum.triggerSendAxis();
 
       nmrAssignment.build();
+      if (addOne) nmrAssignment2.build();
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);
     }

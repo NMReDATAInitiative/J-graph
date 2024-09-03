@@ -155,6 +155,7 @@ export class AssignedCouplings {
     blockWidth,
     pathFun,
     JmolAppletAr,
+    instanceId,
   ) {
     console.log('at1 = ' + JSON.stringify(at1));
     console.log('at2 = ' + JSON.stringify(at2));
@@ -219,17 +220,26 @@ export class AssignedCouplings {
         blockWidth,
         pathFun,
         JmolAppletAr,
+        instanceId,
       );
     }
     this.content.sort((a, b) => (a.tmpJvalue > b.tmpJvalue ? 1 : -1));
 
-    return svg.selectAll('.lineZ');
+    return svg.selectAll(`.lineZ-${instanceId}`);
   }
   getAssignedCouplings() {
     return this.content;
   }
 
-  highlightLines(d, darkMode, generalUseWidth, svg, yJs, JmolAppletAr) {
+  highlightLines(
+    d,
+    darkMode,
+    generalUseWidth,
+    svg,
+    yJs,
+    JmolAppletAr,
+    instanceId,
+  ) {
     const element = d3.select(d.target);
     const data = element.datum();
     const d2 = element.datum();
@@ -241,7 +251,7 @@ export class AssignedCouplings {
 
     // first every group turns grey
 
-    d3.selectAll('.lineZ')
+    d3.selectAll(`.lineZ-${instanceId}`)
       .transition()
       .duration(200)
       .style('stroke', 'black')
@@ -257,7 +267,7 @@ export class AssignedCouplings {
       .style('opacity', 0.5);
     // Second the hovered specie takes its color
 
-    d3.selectAll('.' + selected_specie)
+    d3.selectAll(`.lineZ-${instanceId}_${selected_specie}`)
       .transition()
       .duration(200)
       //  .style("stroke", color(selected_specie))
@@ -335,14 +345,24 @@ export class AssignedCouplings {
   }
 
   // Method that creates the SVG paths
-  makeGraphic(svg, lineWidth, darkMode, generalUseWidth, yJs, JmolAppletAr) {
-    console.log('zzzop2', this.content);
+  makeGraphic(
+    svg,
+    lineWidth,
+    darkMode,
+    generalUseWidth,
+    yJs,
+    JmolAppletAr,
+    instanceId,
+  ) {
     return svg
       .selectAll('myPath222')
       .data(this.content) // Pass data as a separate parameter
       .enter()
       .append('path')
-      .attr('class', (d) => 'lineZ ' + d.Label)
+      .attr(
+        'class',
+        (d) => `lineZ-${instanceId} lineZ-${instanceId}_${d.Label}`,
+      )
       .attr('d', (d) => {
         if (d.pathData) {
           return d.pathData;
@@ -372,6 +392,7 @@ export class AssignedCouplings {
           svg,
           yJs,
           JmolAppletAr,
+          instanceId,
         );
       })
       .on('mouseover', (d) => {
@@ -382,6 +403,7 @@ export class AssignedCouplings {
           svg,
           yJs,
           JmolAppletAr,
+          instanceId,
         );
       });
   }
@@ -397,6 +419,7 @@ export class AssignedCouplings {
     blockWidth,
     pathFun,
     JmolAppletAr,
+    instanceId,
   ) {
     var tmpCOntent = [];
 
@@ -409,9 +432,11 @@ export class AssignedCouplings {
         .data(tmpCOntent)
         .enter()
         .append('path')
-        .attr('class', function (d) {
-          return 'lineZ ' + d.Label;
-        }) // 2 class for each line: 'line' and the group name
+        .attr(
+          'class',
+          (d) => `lineZ-${instanceId} lineZ-${instanceId}_${d.Label}`,
+        )
+        // 2 class for each line: 'line' and the group name
         //.attr("d", function (d) { return d3.line()(listOfChemicalShifts.map(function(p) { return [x(p), yJs(d[p])]; })); })
         //.attr("d", d => {this.pathFun(d, yJs, smallSpace, blockWidth);})
         //    .attr("d", pathFun)
@@ -445,6 +470,7 @@ export class AssignedCouplings {
             svg,
             yJs,
             JmolAppletAr,
+            instanceId,
           );
         })
         .on('mouseover', (d) => {
@@ -455,6 +481,7 @@ export class AssignedCouplings {
             svg,
             yJs,
             JmolAppletAr,
+            instanceId,
           );
         })
     );
