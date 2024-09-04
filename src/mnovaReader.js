@@ -27,7 +27,7 @@ export function jGraph(
   fileNameData,
   JmolAppletAr,
   dataviz = 'my_dataviz',
-  fileResulstSF  = ""
+  fileResulstSF = '',
 ) {
   function initializeSettings(smallScreen, overrideSettings = {}) {
     // Default settings
@@ -136,7 +136,6 @@ export function jGraph(
             ')',
         );
 
-
       const allSpectraObjectsExtracted = await processMnovaJsonFileSpectrum(
         fileNameSpectrum,
         'spectra',
@@ -159,8 +158,6 @@ export function jGraph(
         ],*/
       );
 
-      
-
       // spectra
       const spectrumData = extractSpectrumData(
         allSpectraObjectsExtracted[0],
@@ -180,8 +177,6 @@ export function jGraph(
           { chemShift: 1.99, value: 80000 },
         ],
       ];
-
-     
 
       const spectralRegions = ingestSpectrumRegions(
         allObjectsExtractedMolecule,
@@ -209,28 +204,39 @@ export function jGraph(
 
       var nmrAssignmentList = [];
 
-      if (fileResulstSF !== '') {
-        const jGraphObj2 = await processSfFile(fileResulstSF, 'couplingNetwork');
-        nmrAssignmentList.push(new NmrAssignment(
-          jGraphObj2,
-          svg,
-          smallScreen,
-          settings_with_spectrum_settings,
-          JmolAppletAr,
-          nmrAssignmentList.length,
-        ));
-        console.log('jGraphObjZ 2 ', jGraphObj2);
+      if (fileResulstSF !== '') {const jGraphObj3 = await processSfFile(fileResulstSF, 'variableSet');
+        if (jGraphObj3.length > 0) {
+          nmrAssignmentList.push(
+            new NmrAssignment(
+              jGraphObj3,
+              svg,
+              smallScreen,
+              settings_with_spectrum_settings,
+              JmolAppletAr,
+              nmrAssignmentList.length,
+            ),
+          );
+        } else {
+          console.log('NO variableSet in ', fileResulstSF);
+        }
 
-        const jGraphObj3 = await processSfFile(fileResulstSF, 'variableSet');
-        nmrAssignmentList.push(new NmrAssignment(
-          jGraphObj3,
-          svg,
-          smallScreen,
-          settings_with_spectrum_settings,
-          JmolAppletAr,
-          nmrAssignmentList.length,
-        ));
-        console.log('jGraphObjZ 3 ', jGraphObj3);
+        const jGraphObj2 = await processSfFile(fileResulstSF,'couplingNetwork',);
+        console.log('jGraphObjZ 2 ', jGraphObj2);
+        if (jGraphObj2.length > 0) {
+          nmrAssignmentList.push(
+            new NmrAssignment(
+              jGraphObj2,
+              svg,
+              smallScreen,
+              settings_with_spectrum_settings,
+              JmolAppletAr,
+              nmrAssignmentList.length,
+            ),
+          );
+        } else {
+          console.log('NO couplingNetwork in ', fileResulstSF);
+        }
+
       }
 
       {
@@ -238,15 +244,17 @@ export function jGraph(
           allObjectsExtractedMolecule,
           allSpectraObjectsExtracted[0].multiplets,
         );
-        console.log( "jGraphObjZ 1 ", jGraphObj)
-        nmrAssignmentList.push(new NmrAssignment(
-          jGraphObj,
-          svg,
-          smallScreen,
-          settings_with_spectrum_settings,
-          JmolAppletAr,
-          nmrAssignmentList.length,
-        ));
+        console.log('jGraphObjZ 1 ', jGraphObj);
+        nmrAssignmentList.push(
+          new NmrAssignment(
+            jGraphObj,
+            svg,
+            smallScreen,
+            settings_with_spectrum_settings,
+            JmolAppletAr,
+            nmrAssignmentList.length,
+          ),
+        );
       }
 
       // Register each class as a receiver for every other class based on data type compatibility
@@ -267,8 +275,6 @@ export function jGraph(
       nmrAssignmentList.forEach((nmrAssignment) => {
         nmrAssignment.build();
       });
-
-     
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);
     }

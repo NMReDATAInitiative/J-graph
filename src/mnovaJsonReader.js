@@ -258,6 +258,8 @@ export async function processSfFile(jsonFilePath, type) {
               }
               listOfJs.push(jObj);
             });
+            listOfJs.sort((a, b) => a.coupling - b.coupling);
+
             const obj = {
               assignedMultipletMnovaHash: afJGraphColumn.fQUuid,
               chemShift: afJGraphColumn.chemicalShift,
@@ -270,15 +272,142 @@ export async function processSfFile(jsonFilePath, type) {
         }
       }
     }
+
+    if (type == 'variableSet') {
+      const runEachDegenerated = true; // HERE
+      console.log(`moleculeK look for spinFitVariableArray`);
+      if ('spinFitVariableArray' in jsonData) {
+        console.log(
+          `moleculeK got spinFitVariableArray`,
+          jsonData.spinFitVariableArray,
+        );
+
+        jsonData.spinFitVariableArray.forEach((aVar, indexVar) => {
+          if (aVar.typeVariableString !== 'ChemicalShift') return;
+          /*
+                    "molAtomIndicesFull": [2],
+            "molAtomIndices": [2],
+            "molCompoundIndices": [0],
+            "typeVariableEnum": 1,
+            "typeVariableString": "ChemicalShift",
+            "value": 7.315821,
+            "lowerBound": 7.308822,
+            "upperBound": 7.322819,
+            "curQuality": {
+                "m5NScalPro": 0.991754,
+                "proj2": 1.000316,
+                "integral1Ref": 91249653.875,
+                "integral2Sim": 91588782.515625,
+                "lineShapeFactor": 50085576.0,
+                "lineShapeLineWidth": 1.203124,
+                "diffLineWidthRelToCompoundD": 0.190624,
+                "diffLineWidthRelToCompoundS": "0.190625 Hz δ(5) sp:0.991754",
+                "lineKurtosis": -0.574999,
+                "lineOptimized": true,
+                "m1X2": 6644623768563.628,
+                "m2DistEXtreSlopes": 96203.78125,
+                "m3MaxMinRatio": 0.178678,
+                "m4PercentInte": 86.964848,
+                "sum1Ref": 404565940537269.9,
+                "sum2Sim": 397669647039552.2,
+                "sp": 397795481904129.2,
+                "multiCompPropSelf": 1.0,
+                "multiCompPropSelfFactoredQuantity": 0.0,
+                "lineShapeFactorCorrectedShape": 53940580.0,
+                "satisfactory": true
+            },
+            "satisfactory": true,
+            "labelVarSet": "δ(5)",
+            "stepNumber": 3
+            */
+          const label = aVar.labelVarSet.replace(/[δ()]/g, '');
+          if (runEachDegenerated) {
+            aVar.molAtomIndices.forEach((aIndex) => {
+              const obj = {
+                assignedMultipletMnovaHash: '',
+                chemShift: aVar.value,
+                labelsColumn: [label],
+                atomIndicesMol: [aIndex],
+                listOfJs: [],
+                satisfactory: aVar.satisfactory,
+              };
+              dataOutput.push(obj);
+            });
+          } else {
+            const obj = {
+              assignedMultipletMnovaHash: '',
+              chemShift: aVar.value,
+              labelsColumn: [label],
+              atomIndicesMol: aVar.molAtomIndices,
+              listOfJs: [],
+              satisfactory: aVar.satisfactory,
+            };
+            dataOutput.push(obj);
+          }
+        });
+        jsonData.spinFitVariableArray.forEach((aVar, indexVar) => {
+          if (aVar.typeVariableString !== 'Jcoupling') return;
+          /*
+            "molAtomIndices": [[2, 12]],
+            "typeVariableEnum": 2,
+            "typeVariableString": "Jcoupling",
+            "value": 0.5,
+            "lowerBound": -0.18,
+            "upperBound": 1.18,
+            "numberBonds": 4,
+            "numberBondslabelVarSet": "4J(5-8)",
+            "satisfactory": true,
+            "labelVarSet": "J(5-8)",
+            "stepNumber": 3
+            */
+          aVar.molAtomIndices.forEach((aPair, indexPair) => {
+            if (!runEachDegenerated && indexPair > 0) return;
+
+            if (aPair.length < 2) return;
+            const c1 = aPair[0];
+            const c2 = aPair[1];
+            const graphIndex1 = dataOutput.findIndex((item) =>
+              Array.isArray(item?.atomIndicesMol) && item.atomIndicesMol.includes(c1)
+            );
+            const graphIndex2 = dataOutput.findIndex((item) =>
+              Array.isArray(item?.atomIndicesMol) && item.atomIndicesMol.includes(c2)
+            );
+            if (graphIndex1 < 0) return;
+            if (graphIndex2 < 0) return;
+            console.log(
+              `moleculeK got J `,
+              aVar.value,
+              ' ',
+              aVar.numberBondslabelVarSet,
+              '',
+            );
+
+            const jObj1 = {
+              coupling: aVar.value,
+              atomIndexMol: [c2],
+            };
+            const jObj2 = {
+              coupling: aVar.value,
+              atomIndexMol: [c1],
+            };
+            dataOutput[graphIndex1].listOfJs.push(jObj1);
+            dataOutput[graphIndex1].listOfJs.sort((a, b) => a.coupling - b.coupling);
+            dataOutput[graphIndex2].listOfJs.push(jObj2);
+            dataOutput[graphIndex2].listOfJs.sort((a, b) => a.coupling - b.coupling);
+
+          });
+        });
+      }
+    }
+
     dataOutput.sort((a, b) => b.chemShift - a.chemShift);
-    console.log(`moleculeS returning dataOutput`, dataOutput);
+    console.log(`moleculeK returning dataOutput`, dataOutput);
 
     return dataOutput;
   } catch (error) {
     console.error('Error fetching or processing data:', error);
   }
 }
-
 
 function extractMoleculeData(spectrumObjectIn, type = 'data') {
   const schema = spectrumObjectIn['$mnova_schema'];
@@ -429,7 +558,7 @@ export function ingestSpectrumRegions(
         "2acb9a7d-dbb0-4ebd-81d9-d627243b573d"
     ],
     */
-   
+
     var jObj = {
       couplings: multiplet.j_list.map((obj) => obj.value),
       area: multiplet.area,
@@ -476,20 +605,16 @@ export function ingestMoleculeObject(
         (atom) => atom.elementSymbol === element && atom.number === label,
       ) + 1;
     if (atomIndexMol == 0) {
-        console.log('PROB element', element);
-        console.log('PROB label', label);
-        console.log('PROB ', atoms);
-        atomIndexMol =
-      atoms.findIndex(
-        (atom) =>  atom.number === label,
-      ) + 1;
-              console.log('PROB atomIndexMol ', atomIndexMol);
-
+      console.log('PROB element', element);
+      console.log('PROB label', label);
+      console.log('PROB ', atoms);
+      atomIndexMol = atoms.findIndex((atom) => atom.number === label) + 1;
+      console.log('PROB atomIndexMol ', atomIndexMol);
     }
     if (element != 'H') {
       return;
     }
-    console.log("llog", " element ",element, " label ", label);
+    console.log('llog', ' element ', element, ' label ', label);
     // Assigned J's from the molecule
     var listOfJs = [];
     if ('J-couplings' in atomIt) {
@@ -511,7 +636,7 @@ export function ingestMoleculeObject(
                 atom.elementSymbol === elementPartner &&
                 atom.number === labelPartner,
             ) + 1;
-            
+
           if (false)
             console.log(
               'spectrumAssignment multiplet J-couplings atomIndexMolPartner',
@@ -521,7 +646,6 @@ export function ingestMoleculeObject(
               ' Hz',
             );
           jObj.atomIndexMol.push(atomIndexMolPartner);
-         
         }
         listOfJs.push(jObj);
       });
@@ -529,7 +653,7 @@ export function ingestMoleculeObject(
     // Unassigned J's from the multiplets of the spectrum
 
     shifts.forEach((shiftIt, i) => {
-      const listOfJsToRemove = Array.from(listOfJs);      
+      const listOfJsToRemove = Array.from(listOfJs);
       var alreadySomething = false; // assumes first multiplet has more information (1H)
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
         if (alreadySomething) return;
@@ -552,31 +676,28 @@ export function ingestMoleculeObject(
           console.log('spectrumAssignment multiplet amoderea ', multiplet.mode);
           console.log( 'spectrumAssignment multiplet is_reference ', multiplet.is_reference,);
           */
-         
 
           multiplet.j_list.forEach((aList) => {
-            
-
             const delta = 0.1;
             let foundIndex = listOfJsToRemove.findIndex(
               (item) => Math.abs(item.coupling - aList.value) <= delta,
             );
 
             if (foundIndex !== -1) {
-               console.log(
-              'spectrumAssignmentA Remove',
-              label,
-              'multiplet aList.value ',
-              aList.value,
-            );
+              console.log(
+                'spectrumAssignmentA Remove',
+                label,
+                'multiplet aList.value ',
+                aList.value,
+              );
               listOfJsToRemove.splice(foundIndex, 1);
             } else {
-               console.log(
-              'spectrumAssignmentA Keep ',
-              label,
-              'multiplet aList.value ',
-              aList.value,
-            );
+              console.log(
+                'spectrumAssignmentA Keep ',
+                label,
+                'multiplet aList.value ',
+                aList.value,
+              );
               var jObj = {
                 coupling: aList.value,
                 atomIndexMol: [],
@@ -591,15 +712,14 @@ export function ingestMoleculeObject(
         // Find the existing object in the list by assignedMultiplet
         let existingItem = dataOutput.find(
           (item) =>
-            item.assignedMultipletMnovaHash === assignedMultipletIt 
-           &&  item.chemShift === shiftIt.shift,
+            item.assignedMultipletMnovaHash === assignedMultipletIt &&
+            item.chemShift === shiftIt.shift,
         );
         const avoidsDegeneracy = false;
         if (existingItem && avoidsDegeneracy) {
           existingItem.labelsColumn.push(label);
           existingItem.atomIndicesMol.push(atomIndexMol);
           existingItem.listOfJs.concat(listOfJs);
-
         } else {
           const obj = {
             assignedMultipletMnovaHash: assignedMultipletIt,
@@ -609,7 +729,13 @@ export function ingestMoleculeObject(
             listOfJs: listOfJs,
           };
           dataOutput.push(obj);
-          console.log("      push        llog", " element ", element, " label ", label);
+          console.log(
+            '      push        llog',
+            ' element ',
+            element,
+            ' label ',
+            label,
+          );
           alreadySomething = true;
         }
       });
