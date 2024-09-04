@@ -279,6 +279,7 @@ export async function processSfFile(jsonFilePath, type) {
   }
 }
 
+
 function extractMoleculeData(spectrumObjectIn, type = 'data') {
   const schema = spectrumObjectIn['$mnova_schema'];
   const expected =

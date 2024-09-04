@@ -220,6 +220,17 @@ export function jGraph(
           nmrAssignmentList.length,
         ));
         console.log('jGraphObjZ 2 ', jGraphObj2);
+
+        const jGraphObj3 = await processSfFile(fileResulstSF, 'variableSet');
+        nmrAssignmentList.push(new NmrAssignment(
+          jGraphObj3,
+          svg,
+          smallScreen,
+          settings_with_spectrum_settings,
+          JmolAppletAr,
+          nmrAssignmentList.length,
+        ));
+        console.log('jGraphObjZ 3 ', jGraphObj3);
       }
 
       {
