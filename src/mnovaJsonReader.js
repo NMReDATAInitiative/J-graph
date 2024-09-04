@@ -274,7 +274,7 @@ export async function processSfFile(jsonFilePath, type) {
     }
 
     if (type == 'variableSet') {
-      const runEachDegenerated = true; // HERE
+      const runEachDegenerated = false; // HERE
       console.log(`moleculeK look for spinFitVariableArray`);
       if ('spinFitVariableArray' in jsonData) {
         console.log(
