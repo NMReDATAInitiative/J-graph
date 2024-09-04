@@ -1,5 +1,6 @@
 export function jmolUnselectAll(JmolAppletAr) {
   Jmol.script(JmolAppletAr, 'select hydrogen; color white');
+  Jmol.script(JmolAppletAr, 'select carbon; color gray');
 }
 
 export function jmolSelectAtom(JmolAppletAr,number, col) {

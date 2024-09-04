@@ -5,6 +5,7 @@ import { processMnovaJsonFileMolecule } from './mnovaJsonReader.js';
 import { extractSpectrumData } from './mnovaJsonReader.js';
 import { ingestMoleculeObject } from './mnovaJsonReader.js';
 import { ingestSpectrumRegions } from './mnovaJsonReader.js';
+import { processSfFile } from './mnovaJsonReader.js';
 
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
@@ -26,6 +27,7 @@ export function jGraph(
   fileNameData,
   JmolAppletAr,
   dataviz = 'my_dataviz',
+  fileResulstSF  = ""
 ) {
   function initializeSettings(smallScreen, overrideSettings = {}) {
     // Default settings
@@ -96,6 +98,7 @@ export function jGraph(
     fileNameData,
     JmolAppletAr,
     dataviz,
+    fileResulstSF,
   ) {
     try {
       const smallScreen =
@@ -133,6 +136,7 @@ export function jGraph(
             ')',
         );
 
+
       const allSpectraObjectsExtracted = await processMnovaJsonFileSpectrum(
         fileNameSpectrum,
         'spectra',
@@ -155,6 +159,8 @@ export function jGraph(
         ],*/
       );
 
+      
+
       // spectra
       const spectrumData = extractSpectrumData(
         allSpectraObjectsExtracted[0],
@@ -175,10 +181,8 @@ export function jGraph(
         ],
       ];
 
-      const jGraphObj = ingestMoleculeObject(
-        allObjectsExtractedMolecule,
-        allSpectraObjectsExtracted[0].multiplets,
-      );
+     
+
       const spectralRegions = ingestSpectrumRegions(
         allObjectsExtractedMolecule,
         allSpectraObjectsExtracted[0].multiplets,
@@ -203,25 +207,39 @@ export function jGraph(
 
       const settings_with_spectrum_settings = spectrum.getSettings();
 
-      var nmrAssignment = new NmrAssignment(
-        jGraphObj,
-        svg,
-        smallScreen,
-        settings_with_spectrum_settings,
-        JmolAppletAr,
-      );
-      const addOne = false;
-      if (addOne) var nmrAssignment2 = new NmrAssignment(
-        jGraphObj,
-        svg,
-        smallScreen,
-        settings_with_spectrum_settings,
-        JmolAppletAr,
-        1,
-      );
+      var nmrAssignmentList = [];
+
+      if (fileResulstSF !== '') {
+        const jGraphObj2 = await processSfFile(fileResulstSF, 'couplingNetwork');
+        nmrAssignmentList.push(new NmrAssignment(
+          jGraphObj2,
+          svg,
+          smallScreen,
+          settings_with_spectrum_settings,
+          JmolAppletAr,
+          nmrAssignmentList.length,
+        ));
+        console.log('jGraphObjZ 2 ', jGraphObj2);
+      }
+
+      {
+        const jGraphObj = ingestMoleculeObject(
+          allObjectsExtractedMolecule,
+          allSpectraObjectsExtracted[0].multiplets,
+        );
+        console.log( "jGraphObjZ 1 ", jGraphObj)
+        nmrAssignmentList.push(new NmrAssignment(
+          jGraphObj,
+          svg,
+          smallScreen,
+          settings_with_spectrum_settings,
+          JmolAppletAr,
+          nmrAssignmentList.length,
+        ));
+      }
 
       // Register each class as a receiver for every other class based on data type compatibility
-      const classes = addOne   ? [spectrum, nmrAssignment, nmrAssignment2] : [spectrum, nmrAssignment];
+      const classes = [...nmrAssignmentList, spectrum];
       classes.forEach((sender) => {
         classes.forEach((receiver) => {
           if (sender !== receiver) {
@@ -235,9 +253,11 @@ export function jGraph(
       });
 
       spectrum.triggerSendAxis();
+      nmrAssignmentList.forEach((nmrAssignment) => {
+        nmrAssignment.build();
+      });
 
-      nmrAssignment.build();
-      if (addOne) nmrAssignment2.build();
+     
     } catch (error) {
       console.error('Error processing or visualizing the data ', error);
     }
@@ -249,5 +269,6 @@ export function jGraph(
     fileNameData,
     JmolAppletAr,
     dataviz,
+    fileResulstSF,
   );
 }

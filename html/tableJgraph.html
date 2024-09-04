@@ -59,11 +59,47 @@
 	<a href='javascript:jmolScript("select atomno = 1 or atomno = 2;color cpk", "JmolAppletA0")'>Off</a>
 
 	<table id="sortableTable">
+		
 		<tr>
 			<th onclick="sortTable(0)">structure</th>
-
 			<th onclick="sortTable(1)">Spectrum</th>
+		</tr>
+		<tr>
+			<td>
+				<script>
+					const JmolAppletA0AG = jmolApplet(200, "load ./Vaniline_assigned.mol ;cartoon on;color cartoon structure;", "JmolAppletA0AG");
+				</script>
+			</td>
+			<td id="my_dataviz0AG">
+				<script type="module">
+					import { jGraph } from "./srcJgraph/mnovaReader.js";
+					var fName1 = "./Vaniline_assignedSimAnnR_An_Ny_1st_spectra.json"; 
+					var fName2 = "./Vaniline_assigned_molecule.json"
+					var fName3 = "./spinfit-Vaniline_assigned-2024_09_03-14_53_58.spinFitResult.json"
 
+					console.log("JmolAppletAG p", JmolAppletA0AG)
+					var ajgraph0AG = jGraph(fName1, fName2, JmolAppletA0AG, "my_dataviz0AG", fName3)
+				</script>
+			</td>	
+		</tr>
+		<tr>
+			<td>
+				<script>
+					const JmolAppletA0A = jmolApplet(200, "load ./Ethylindanone_AutoAssign_explicitH_out.mnova.mol ;cartoon on;color cartoon structure;", "JmolAppletA0A");
+				</script>
+			</td>
+			<td id="my_dataviz0A">
+				<script type="module">
+					import { jGraph } from "./srcJgraph/mnovaReader.js";
+					var fName1 = "./Ethylindanone_AutoAssign_explicitH_out.mnova.json"; 
+					var fName2 = "./Ethylindanone_AutoAssign_explicitH_molecule.json"
+					//var fName3o = "./Ethylindanone_AutoAssign_explicitH-2024_08_30-01_09_45.spinFitResult.json"
+				//	var fName3 = "./spinfit-Ethylindanone_AutoAssign_explicitH-2024_08_29-21_47_25.spinFitResult.json"
+
+					console.log("JmolAppletA p", JmolAppletA0A)
+					var ajgraph0A = jGraph(fName1, fName2, JmolAppletA0A, "my_dataviz0A")
+				</script>
+			</td>	
 		</tr>
 		<tr>
 			<td>
@@ -76,7 +112,6 @@
 					import { jGraph } from "./srcJgraph/mnovaReader.js";
 					var fName1 = "./HAP_pyrene_out.mnova.json"; 
 					var fName2 = "./HAP_pyrene_molecule.json"
-					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
 					console.log("JmolAppletA p", JmolAppletA0)
 					var ajgraph0 = jGraph(fName1, fName2, JmolAppletA0, "my_dataviz0")
 				</script>
@@ -94,6 +129,8 @@
 					var fName1 = "./02-AZ138SimAnnR_An_Nn_1st_spectra.json";
 					var fName2 = "./02-AZ138_molecule.json"
 					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
+					//var fName3 = "./02-AZ138SimAnnR_An_Nn_1st_spectra.json"
+
 					console.log("JmolAppletA p", JmolAppletA1)
 					var ajgraph1 = jGraph(fName1, fName2, JmolAppletA1, "my_dataviz1")
 				</script>

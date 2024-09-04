@@ -2,5 +2,14 @@
     "liveServer.settings.port": 5501,
     "cSpell.words": [
         "multiplet"
-    ]
+    ],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": false,
+    "prettier.printWidth": 1200  // disable
 }

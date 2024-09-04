@@ -157,6 +157,128 @@ export async function processMnovaJsonFileMolecule(
   }
 }
 
+export async function processSfFile(jsonFilePath, type) {
+  try {
+    // Load the JSON data using D3
+    const jsonData = await d3.json(jsonFilePath);
+    console.log(`moleculeS got json`);
+    var dataOutput = [];
+
+    if (type == 'couplingNetwork') {
+      console.log(`moleculeS look for couplingNetwork`);
+      if ('z_fromVarSet' in jsonData) {
+        if ('network' in jsonData.z_fromVarSet) {
+          const network = jsonData.z_fromVarSet.network;
+          console.log(`moleculeS got network`, network);
+          if ('fJGraphColumn' in network) {
+          }
+          network.fJGraphColumn.forEach((afJGraphColumn, indexCol) => {
+            /*
+                    "atomIndex": 
+                    "chemicalShift": 7.359199,
+                    "assigned": true,
+                    "nameChemicalShift": "1",
+                    "nameChemicalShiftWithMoleculeNumber": "1 (1)",
+                    "compoundIndex": [0],
+                    "nbProton": 1,
+                    "fQUuid": "{7b8cf080-2f69-4438-adf0-7b404cd8b67d}",
+                    "indexNetworkArray": [2],
+            */
+            console.log(`moleculeS Element ${indexCol}:`, afJGraphColumn);
+            console.log('moleculeS Atom Index:', afJGraphColumn.atomIndex);
+            console.log(
+              'moleculeS compoundIndex:',
+              afJGraphColumn.compoundIndex,
+            );
+            console.log(
+              'moleculeS Chemical Shift:',
+              afJGraphColumn.chemicalShift,
+            );
+            console.log('moleculeS Assigned:', afJGraphColumn.assigned);
+            console.log('moleculeS nbProton:', afJGraphColumn.nbProton);
+            console.log(
+              'moleculeS nameChemicalShift:',
+              afJGraphColumn.nameChemicalShift,
+            );
+            console.log(
+              'moleculeS nameChemicalShiftWithMoleculeNumber:',
+              afJGraphColumn.nameChemicalShiftWithMoleculeNumber,
+            );
+            // You can add more processing logic here
+            var listOfJs = [];
+            afJGraphColumn.jInColumnArray.forEach((ajInColumnArray, IndexJ) => {
+              /*
+              jInColumnArray {
+                    assigned: true
+                    fValue: 8.086425
+                    ​indexPartnerJInColumn: 1
+                    ​​​indexPartnerjGraphColumn: 1
+                    ​​nameCoupling: "J(1-2)"
+                    ​​​nodeNumber: 0
+              }
+              */
+              var jObj = {
+                coupling: ajInColumnArray.fValue,
+                atomIndexMol: [],
+              };
+              // update jObj if find assigned J
+              if ('fJGraphEdges' in network) {
+                network.fJGraphEdges.forEach((afJGraphEdges, index) => {
+                  /* afJGraphEdges:
+                  edgeAssignmentType: 2
+                  ​​jValue1: 8.121948
+                 ​ jValue2: 8.086425
+                  ​jValueAv: 8.104187
+                  ​​​name: "J(1-2)"
+                  ​​​numberOfBonds: 3
+                  ​​​partner1JInColumn: 1
+                  ​​​partner1jGraphColumn: 1
+                  ​​​partner2JInColumn: 0
+                  ​​​partner2jGraphColumn: 3
+                  */
+                  var tarCol = -1;
+                  if (
+                    afJGraphEdges.partner1jGraphColumn == indexCol &&
+                    afJGraphEdges.partner1JInColumn == IndexJ
+                  ) {
+                    tarCol = afJGraphEdges.partner2jGraphColumn;
+                  }
+                  if (
+                    afJGraphEdges.partner2jGraphColumn == indexCol &&
+                    afJGraphEdges.partner2JInColumn == IndexJ
+                  ) {
+                    tarCol = afJGraphEdges.partner1jGraphColumn;
+                  }
+
+                  if (network?.fJGraphColumn?.[tarCol]?.atomIndex) {
+                    // Set coupling partners
+                    jObj.atomIndexMol = network.fJGraphColumn[tarCol].atomIndex;
+                  }
+                });
+              }
+              listOfJs.push(jObj);
+            });
+            const obj = {
+              assignedMultipletMnovaHash: afJGraphColumn.fQUuid,
+              chemShift: afJGraphColumn.chemicalShift,
+              labelsColumn: [afJGraphColumn.nameChemicalShift],
+              atomIndicesMol: afJGraphColumn.atomIndex,
+              listOfJs: listOfJs,
+            };
+            dataOutput.push(obj);
+          });
+        }
+      }
+    }
+    dataOutput.sort((a, b) => b.chemShift - a.chemShift);
+    console.log(`moleculeS returning dataOutput`, dataOutput);
+
+    return dataOutput;
+  } catch (error) {
+    console.error('Error fetching or processing data:', error);
+  }
+}
+
 function extractMoleculeData(spectrumObjectIn, type = 'data') {
   const schema = spectrumObjectIn['$mnova_schema'];
   const expected =
@@ -348,11 +470,21 @@ export function ingestMoleculeObject(
     const atomCode = atomIt.atom.atomCode;
     const shifts = atomIt.shifts;
     const [element, label] = atomIt.atom.atomCode.split(';');
-    const atomIndexMol =
+    var atomIndexMol =
       atoms.findIndex(
         (atom) => atom.elementSymbol === element && atom.number === label,
       ) + 1;
+    if (atomIndexMol == 0) {
+        console.log('PROB element', element);
+        console.log('PROB label', label);
+        console.log('PROB ', atoms);
+        atomIndexMol =
+      atoms.findIndex(
+        (atom) =>  atom.number === label,
+      ) + 1;
+              console.log('PROB atomIndexMol ', atomIndexMol);
 
+    }
     if (element != 'H') {
       return;
     }
