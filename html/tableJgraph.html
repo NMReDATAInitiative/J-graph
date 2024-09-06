@@ -22,6 +22,7 @@
 	</style>
 	<script src="https://d3js.org/d3.v7.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/CHEMeDATA/dispProxToVal@latest/src/dispProxToVal.js"></script>
+	<script src="./srcJgraph/mnovaReader.js"></script>
 
 	<script type="text/javascript" src="src/JSmol.min.js"></script>
 	<script type="text/javascript" src="src/Jmol2.js"></script>
@@ -57,6 +58,7 @@
 	Highlight atoms 1 and 2 on molecule A0
 	<a href='javascript:jmolScript("select atomno = 1 or atomno = 2;color [0,255,0]", "JmolAppletA0")'>On</a> /
 	<a href='javascript:jmolScript("select atomno = 1 or atomno = 2;color cpk", "JmolAppletA0")'>Off</a>
+<script src="./srcJgraph/mnovaReader.js"></script>
 
 	<table id="sortableTable">
 		
@@ -67,18 +69,22 @@
 		<tr>
 			<td>
 				<script>
-					const JmolAppletA0AG = jmolApplet(200, "load ./Vaniline_assigned.mol ;cartoon on;color cartoon structure;", "JmolAppletA0AG");
+					var mainName = "Vaniline_assigned"; // " + mainName + "
+					const JmolAppletA000 = jmolApplet(200, "load ./" + mainName + ".mol ;cartoon on;color cartoon structure;", "JmolAppletA000");
 				</script>
 			</td>
-			<td id="my_dataviz0AG">
+			<td id="my_dataviz0G0">
 				<script type="module">
 					import { jGraph } from "./srcJgraph/mnovaReader.js";
-					var fName1 = "./Vaniline_assignedSimAnnR_An_Ny_1st_spectra.json"; 
-					var fName2 = "./Vaniline_assigned_molecule.json"
-					var fName3 = "./spinfit-Vaniline_assigned-2024_09_03-14_53_58.spinFitResult.json"
+					var mainName = "Vaniline_assigned"; // " + mainName + "
+					var variantName = "Exp.SimAnnR.Ny.Obj0.Ay.2nd30"; //  " + variantName + "
+					var fName1 = "./" + mainName + "-" + variantName + "_spectra.json"; 
+					var fName2 = "./" + mainName + "_molecule.json";
+					var fName3 = "./spinfit-" + mainName + "-2024_09_05-08_47_04.spinFitResult.json";
+					//var fName3 = "./spinfit-Opt-" + mainName + "-" + variantName + "_.spinFitResult.json";
 
-					console.log("JmolAppletAG p", JmolAppletA0AG)
-					var ajgraph0AG = jGraph(fName1, fName2, JmolAppletA0AG, "my_dataviz0AG", fName3)
+					console.log("JmolAppletAG p", JmolAppletA000)
+					var ajgraph0G0 = jGraph(fName1, fName2, JmolAppletA000, "my_dataviz0G0", fName3)
 				</script>
 			</td>	
 		</tr>
