@@ -93,8 +93,7 @@ export class ParallelCoordChem extends GraphBase {
 
     // Log the content
     console.log('Highlighted cont:', returnedObject);
-	this.sendData("dataHighlighted", returnedObject);
-
+    this.sendData('dataHighlighted', returnedObject);
   }
 
   transmitSelection() {
@@ -151,8 +150,7 @@ export class ParallelCoordChem extends GraphBase {
     } else {
       console.log('No data selected.');
     }
-	this.sendData("dataSelected", returnedObject);
-
+    this.sendData('dataSelected', returnedObject);
   }
 
   shouldUseLogScale(values) {
