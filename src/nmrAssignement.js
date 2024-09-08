@@ -19,8 +19,7 @@ export class NmrAssignment extends GraphBase {
     JmolAppletAr,
     instanceNumb = 0,
   ) {
-    // data for base which takes care of communication between classes
-
+    // data for GraphBase which takes care of communication between classes
     const name = 'nameIsWiredInConstructor_NmrAssignment1';
     super(name, {
       dataTypesSend: [],
@@ -31,13 +30,13 @@ export class NmrAssignment extends GraphBase {
     this.svg = svg;
     this.jgraphObj = {};
     this.instanceId = instanceNumb;
-
+    this.logActivity = true;
     const settings = this.initializeSettings(
       smallScreen,
       settings_with_spectrum_settings,
     );
     if (Array.isArray(jGraphData) && jGraphData.length > 0) {
-      console.log('jGraphData,', jGraphData);
+      if (this.logActivity) console.log('jGraphData,', jGraphData);
       this.ingestCSData(jGraphData, settings);
     }
     if (
@@ -45,14 +44,14 @@ export class NmrAssignment extends GraphBase {
       typeof jGraphData === 'object' &&
       'chemShift' in jGraphData[0]
     ) {
-      console.log('jGraphData,', jGraphData);
+      if (this.logActivity) console.log('jGraphData,', jGraphData);
       //const tmp = this.ingestMoleculeObject(jGraphData);
       this.ingestMoleculeObject(jGraphData, settings);
     }
-    console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
+    if (this.logActivity) console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
 
-    console.log('this.jgraphObjU ', this.jgraphObj);
-    console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
+    if (this.logActivity) console.log('this.jgraphObjU ', this.jgraphObj);
+    if (this.logActivity) console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
 
     if ('assignedCouplings' in this.jgraphObj)
       //
@@ -122,7 +121,7 @@ export class NmrAssignment extends GraphBase {
     var partnerSpinObj;
     // Capture the reference to this.JmolAppletAr outside the filter function
     const JmolAppletAr = this.JmolAppletAr;
-    console.log('this.instanceId', this.instanceId);
+    if (this.logActivity) console.log('this.instanceId', this.instanceId);
 
     d3.selectAll(`.circleL-${this.instanceId}`).filter(function (p) {
       //this.jgraphObj.theDots.selectAll(`.circleL-${this.instanceId}`).filter((p) => {
@@ -448,7 +447,7 @@ export class NmrAssignment extends GraphBase {
               3) &&
           true;
         if (test) {
-          console.log('p.indicesAtomMol', p.indicesAtomMol);
+          if (this.logActivity) e.log('p.indicesAtomMol', p.indicesAtomMol);
           p.indicesAtomMol.forEach((inAtomMol) => {
             jmolSelectAtom(JmolAppletAr, inAtomMol, [0, 255, 50]); // dunno
           });
@@ -566,7 +565,7 @@ export class NmrAssignment extends GraphBase {
             JlevelAvoidContact: Math.abs(coupling),
           });
           if (isFistTime) counterCouplings++;
-          console.log(
+          if (this.logActivity) console.log(
             'counterCouplings :',
             counterCouplings,
             ' counterFound :',
@@ -679,7 +678,7 @@ export class NmrAssignment extends GraphBase {
         indexAtomMol: [],
       },
     );
-    console.log('processedData ', processedData);
+    if (this.logActivity) console.log('processedData ', processedData);
     let arrayColumns = [];
     let labelColumnArray = [];
     let chemColumnArray = [];
@@ -952,7 +951,7 @@ export class NmrAssignment extends GraphBase {
             jmolUnselectAll(this.JmolAppletAr); // Unselect after the timeout
           }, 3200);
         } else {
-          console.error(
+          if (this.logActivity) console.error(
             'atomIndicesMol is undefined or not a valid property of the provided data. d.atomIndicesMol ',
             d.atomIndicesMol,
             ' d.atomIndexMol ',
@@ -963,7 +962,7 @@ export class NmrAssignment extends GraphBase {
         }
       };
     } else {
-      console.error('jgraphObj is undefined.');
+      if (this.logActivity) console.error('jgraphObj is undefined.');
     }
 
     this.jgraphObj.spreadPositionsUU = updateColumnsPositions(
@@ -1457,8 +1456,8 @@ export class NmrAssignment extends GraphBase {
   // Precompute paths for all data points
   precomputePaths() {
     if ('yJs' in this.jgraphObj) {
-      console.log('this.jgraphObj', this.jgraphObj);
-      console.log('this.jgraphObj.yJs', this.jgraphObj.yJs);
+      if (this.logActivity) e.log('this.jgraphObj', this.jgraphObj);
+      if (this.logActivity) console.log('this.jgraphObj.yJs', this.jgraphObj.yJs);
       const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
       tmp.forEach((d) => {
         d.pathData = this.calculatePath(d); // Store precomputed path data
