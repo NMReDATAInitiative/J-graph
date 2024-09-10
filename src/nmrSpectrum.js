@@ -12,7 +12,11 @@ export class NmrSpectrum extends GraphBase {
     // data for GraphBase which takes care of communication between classes
     super(name, {
       dataTypesSend: ['xAxisSpectrum'],
-      dataTypesReceive: ['dataHighlighted', 'dataSelected'],
+      dataTypesReceive: [
+        'dataHighlighted',
+        'dataUNHighlighted',
+        'dataSelected',
+      ],
       logAllDataExchange: false, // Enable logging for this instance if true
     });
 
@@ -98,6 +102,7 @@ export class NmrSpectrum extends GraphBase {
         .attr('class', `lineGA lineG-${index}`) // Add a unique class for each spectrum based on the index
         .attr('fill', 'none')
         .attr('stroke', d3.schemeCategory10[index % 10]) // Use a color from the scheme based on the index    .attr('stroke-width', this.settings.lineWidth)
+        .attr('stroke-width', 1)
         .attr(
           'd',
           d3
@@ -145,6 +150,102 @@ export class NmrSpectrum extends GraphBase {
       gapSizePt: this.gapSizePt,
     };
     this.jgraphObj = jgraphObj;
+  }
+
+  highlightSpectrum(index, higlightOrUnHighlight, col = 'green') {
+    const spectrumLine = this.jgraphObj.lineSpectrum.select(`.lineG-${index + 1}`);
+    if (spectrumLine) {
+      // reset stroke-width
+      this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('stroke-width', 1);
+
+      //
+      const originalStrokeCol = spectrumLine.attr('stroke');
+      const originalStrokewidth = spectrumLine.attr('stroke-width');
+
+      if (higlightOrUnHighlight) {
+        spectrumLine.attr('stroke', 'red');
+        spectrumLine.attr('stroke-width', '4px');
+        
+        // in case problem goes back to original after a while
+        setTimeout(() => {
+          spectrumLine.attr('stroke', col);
+          spectrumLine.attr('stroke-width', '1px');
+        }, 10000); // in ms
+      } else {
+        spectrumLine.attr('stroke', col);
+        spectrumLine.attr('stroke-width', '1px');
+      }
+
+      // Make sure reference spectrum is quite visible.
+      this.jgraphObj.lineSpectrum
+        .select(`.lineG-${0}`)
+        .attr('opacity', 1)
+        .attr('stroke-width', 2)
+        .attr('stroke', 'blue');
+    }
+  }
+
+  selectSpectrum(listSelected) {
+    const defOpacity = 0;
+    const selectedOpacity = 1;
+    const noselectionOpacity = 1;
+    if (listSelected.length == 0) {
+      this.jgraphObj.lineSpectrum
+        .selectAll(`.lineGA`)
+        .attr('opacity', noselectionOpacity);
+    } else {
+      // non-selected, opacity defOpacity
+      this.jgraphObj.lineSpectrum
+        .selectAll(`.lineGA`)
+        .attr('opacity', defOpacity);
+
+      // Set the selected lines to opacity 0 (invisible)
+      listSelected.forEach((indexObj) => {
+        const index = indexObj.index;
+        this.jgraphObj.lineSpectrum
+          .select(`.lineG-${index + 1}`)
+          .attr('opacity', selectedOpacity)
+          .attr('stroke', indexObj.color);
+        //spectrumLine.style('opacity', selectedOpacity);
+      });
+    }
+    this.jgraphObj.lineSpectrum
+      .select(`.lineG-${0}`)
+      .attr('opacity', 1)
+      .attr('stroke-width', 2)
+      .attr('stroke', 'blue');
+  }
+
+  dataHighlighted_UpdateFunction(data, sender) {
+    // this is the method called when receiving data catenate the datatype (see dataTypesReceive)
+    const index = data.content.index;
+    const color = data.content.color;
+    this.highlightSpectrum(index, true, color);
+
+    var inContent = null;
+    inContent = { reception: 'highlightOK' };
+    return inContent;
+  }
+
+  dataUNHighlighted_UpdateFunction(data, sender) {
+    // this is the method called when receiving data catenate the datatype (see dataTypesReceive)
+    const index = data.content.index;
+    const color = data.content.color;
+    this.highlightSpectrum(index, false, color);
+
+    var inContent = null;
+    inContent = { reception: 'highlightOK' };
+    return inContent;
+  }
+
+  dataSelected_UpdateFunction(data, sender) {
+    // this is the method called when receiving data catenate the datatype (see dataTypesReceive)
+
+    this.selectSpectrum(data.content);
+
+    var inContent = null;
+    inContent = { reception: 'dataSelectedOK' };
+    return inContent;
   }
 
   isArrayOfArrays(input) {
@@ -344,7 +445,9 @@ export class NmrSpectrum extends GraphBase {
   }
 
   updateChart(event) {
-    var extent = event.selection;
+    // console.time('UpdataChart Event Selection Time6');
+    // console.time('UpdataChart Event Selection Time7');
+    const extent = event.selection;
     if (!extent) {
       if (!this.idleTimeout)
         return (this.idleTimeout = setTimeout(this.idled.bind(this), 350));
@@ -416,27 +519,29 @@ export class NmrSpectrum extends GraphBase {
           d3.axisBottom(this.jgraphObj.x).tickValues(this.scaleData.tickValues),
         );
     }
+    //console.timeEnd('UpdataChart Event Selection Time6');
 
     // Update the line path with a transition
-    this.chemShiftsList.forEach((chemShifts, index) => {
-      this.jgraphObj.lineSpectrum
-        .selectAll(`.lineGA`)
-        .transition()
-        .duration(1000)
-        .attr(
-          'd',
-          d3
-            .line()
-            .x((d) => {
-              return this.jgraphObj.x(d.chemShift);
-            })
-            .y((d) => {
-              return this.jgraphObj.y(d.value);
-            }),
-        );
-    });
+    this.jgraphObj.lineSpectrum
+      .selectAll(`.lineGA`)
+      .transition()
+      .duration(1000)
+      .attr(
+        'd',
+        d3
+          .line()
+          .x((d) => {
+            return this.jgraphObj.x(d.chemShift);
+          })
+          .y((d) => {
+            return this.jgraphObj.y(d.value);
+          }),
+      );
+
+    //console.timeEnd('UpdataChart Event Selection Time7');
 
     this.triggerSendAxis();
+
     return;
   }
 

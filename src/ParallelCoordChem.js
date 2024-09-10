@@ -1,12 +1,17 @@
 import { GraphBase } from './graphBase.js';
 
 export class ParallelCoordChem extends GraphBase {
-  constructor(containerSelector, options = {}, dataFromHtml = {}, name = 'nameIsWiredInConstructor_ParallelCoordChem1') {
+  constructor(
+    containerSelector,
+    options = {},
+    dataFromHtml = {},
+    name = 'nameIsWiredInConstructor_ParallelCoordChem1',
+  ) {
     // data for GraphBase which takes care of communication between classes
     super(name, {
-      dataTypesSend: ['dataHighlighted', 'dataSelected'],
+      dataTypesSend: ['dataHighlighted', 'dataUNHighlighted', 'dataSelected'],
       dataTypesReceive: [],
-	  logAllDataExchange: false, // Enable logging for this instance if true
+      logAllDataExchange: false, // Enable logging for this instance if true
     });
     const defaults = {
       width: 2400,
@@ -43,7 +48,10 @@ export class ParallelCoordChem extends GraphBase {
       } else {
         dataInput = this.dataFromHtml;
       }
-      if ('filterKeepKey' in this.settings && 'filterKeepValue' in this.settings) {
+      if (
+        'filterKeepKey' in this.settings &&
+        'filterKeepValue' in this.settings
+      ) {
         const { filterKeepKey, filterKeepValue } = this.settings;
         for (let i = dataInput.length - 1; i >= 0; i--) {
           if (dataInput[i][filterKeepKey] !== filterKeepValue) {
@@ -76,7 +84,7 @@ export class ParallelCoordChem extends GraphBase {
   }
 
   // Transmit highlighted lines
-  transmitHighlight(data, element) {
+  transmitHighlight(data, element, highlightOrUnHighlight) {
     let content = {};
 
     // Find the index of the highlighted element within dataNoIdenticalValue
@@ -95,14 +103,19 @@ export class ParallelCoordChem extends GraphBase {
     }
     const color = d3.select(element).style('stroke');
 
-    var returnedObject = {};
-    returnedObject['data'] = content;
-    returnedObject['color'] = color;
-    returnedObject['index'] = index;
+    var sentData = {};
+    sentData['data'] = content;
+    sentData['color'] = color;
+    sentData['index'] = index;
 
     // Log the content
-    console.log('Highlighted cont:', returnedObject);
-    this.sendData('dataHighlighted', returnedObject);
+    if (highlightOrUnHighlight) {
+      console.log('Highlighted cont:', sentData);
+      this.sendData('dataHighlighted', sentData);
+    } else {
+      console.log('UNHighlighted cont:', sentData);
+      this.sendData('dataUNHighlighted', sentData);
+    }
   }
 
   transmitSelection() {
@@ -515,7 +528,7 @@ export class ParallelCoordChem extends GraphBase {
             .transition()
             .duration(200)
             .style('stroke-width', '4px')
-            .style('stroke', 'black');
+            .style('stroke', 'red');
 
           plot.tooltip.style('visibility', 'visible').html(() => {
             let content = '';
@@ -533,7 +546,7 @@ export class ParallelCoordChem extends GraphBase {
           });
 
           // Transmit the highlighted data
-          plot.transmitHighlight(d, this);
+          plot.transmitHighlight(d, this, true);
         }
       })
       .on('mousemove', function (event) {
@@ -541,14 +554,17 @@ export class ParallelCoordChem extends GraphBase {
           .style('top', event.pageY - 10 + 'px')
           .style('left', event.pageX + 10 + 'px');
       })
-      .on('mouseout', function () {
-        d3.select(this)
-          .transition()
-          .duration(200)
-          .style('stroke-width', '1.5px')
-          .style('stroke', (d) => plot.color(d[plot.colorAxis]));
-
-        plot.tooltip.style('visibility', 'hidden');
+      .on('mouseout', function (event, d) {
+        const opacity = d3.select(this).style('opacity');
+        if (opacity > plot.settings.darkFactor) {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style('stroke-width', '1.5px')
+            .style('stroke', (d) => plot.color(d[plot.colorAxis]));
+          plot.tooltip.style('visibility', 'hidden');
+          plot.transmitHighlight(d, this, false);
+        }
       });
 
     svg.selectAll('.data-line').lower();
