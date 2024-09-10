@@ -1,3 +1,19 @@
+export function filterOutPointsOutsideRegions(spectrumDataAll, regionsData) {
+  // Helper function to check if chemShift is within any region
+  function isWithinRegions(chemShift, regions) {
+    return regions.some(region => chemShift <= region.start && chemShift >= region.end);
+  }
+
+  // Iterate through each spectrum in spectrumDataAll
+  let filteredSpectrumData = spectrumDataAll.map(spectrumArray => {
+    // For each inner array, filter the points based on chemShift
+    return spectrumArray.filter(point => isWithinRegions(point.chemShift, regionsData.regions));
+  });
+
+  // Return the filtered spectrum data
+  return filteredSpectrumData;
+}
+
 export function getRegionsWithSignal(
   chemShifts,
   minSpacePPMin = 0.2,

@@ -9,6 +9,7 @@ import { processSfFile } from './mnovaJsonReader.js';
 import { NmrSpectrum } from './nmrSpectrum.js';
 import { NmrAssignment } from './nmrAssignement.js';
 import { getRegionsWithSignal } from './utils.js'; // Adjust the path as necessary
+import { filterOutPointsOutsideRegions } from './utils.js'; // Adjust the path as necessary
 
 export function jGraphNmredata(
   fileNameSpectrum,
@@ -195,8 +196,13 @@ async function processDataAndVisualize(
       marginPPM,
     );
 
+    console.log("TTPo spectrumDataAll",spectrumDataAll);
+    console.log("TTPo regionsData",regionsData);
+    const spectrumDataAllChopped = filterOutPointsOutsideRegions(spectrumDataAll, regionsData);
+    console.log("TTPo spectrumDataAllChopped",spectrumDataAllChopped);
+
     var spectrum = new NmrSpectrum(
-      spectrumDataAll,
+      spectrumDataAllChopped,
       svg,
       settings,
       settings.smallScreen, // default true
