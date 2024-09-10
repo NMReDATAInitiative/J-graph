@@ -7,12 +7,13 @@ export class NmrSpectrum extends GraphBase {
     settingsInput,
     smallScreen = false,
     regionsData = {},
+    name = 'nameIsWiredInConstructor_NmrSpectrum1',
   ) {
     // data for GraphBase which takes care of communication between classes
-    const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
       dataTypesSend: ['xAxisSpectrum'],
       dataTypesReceive: ['dataHighlighted', 'dataSelected'],
+      logAllDataExchange: false, // Enable logging for this instance if true
     });
 
     if (this.isArrayOfArrays(chemShifts)) {

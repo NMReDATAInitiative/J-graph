@@ -7,8 +7,17 @@ export async function processMnovaJsonFileSpectrum(
   try {
     fieldsToKeep.push('$mnova_schema');
     // Load the JSON data using D3
-    const jsonData = await d3.json(jsonFilePath);
+    const jsonDataInitial = await d3.json(jsonFilePath);
 
+    // may be either an array or not. If not put at in an array...
+    let filteredSpectraArray_FullArray = [];
+
+     const jsonDataList = Array.isArray(jsonDataInitial)
+       ? jsonDataInitial
+       : [jsonDataInitial];
+
+    jsonDataList.forEach((jsonData, index) => {
+            console.log('read add : index', index);
     // Array to store the filtered spectra
     let filteredSpectraArray = [];
 
@@ -42,9 +51,10 @@ export async function processMnovaJsonFileSpectrum(
     } else {
       console.log('No spectra found in the JSON data.');
     }
+    filteredSpectraArray_FullArray.push(filteredSpectraArray);
+  });
 
-    // Return the filtered spectra array via the callback
-    return filteredSpectraArray;
+    return filteredSpectraArray_FullArray;
   } catch (error) {
     console.error('Error fetching or processing data:', error);
   }
@@ -160,7 +170,12 @@ export async function processMnovaJsonFileMolecule(
 export async function processSfFile(jsonFilePath, type) {
   try {
     // Load the JSON data using D3
-    const jsonData = await d3.json(jsonFilePath);
+    const jsonDataInitial = await d3.json(jsonFilePath);
+
+    const jsonData = Array.isArray(jsonDataInitial)
+       ? jsonDataInitial[0]
+       : jsonDataInitial;
+
     console.log(`moleculeS got json`);
     var dataOutput = [];
 

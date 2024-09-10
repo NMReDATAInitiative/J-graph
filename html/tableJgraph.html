@@ -97,11 +97,17 @@
 			<td id="my_dataviz0A">
 				<script type="module">
 					import { jGraph } from "./srcJgraph/mnovaReader.js";
-					var fName1 = "./Ethylindanone_AutoAssign_explicitH_out.mnova.json"; 
-					var fName2 = "./Ethylindanone_AutoAssign_explicitH_molecule.json"
+					var fName1q = "./Ethylindanone_AutoAssign_explicitH_out.mnova.json"; 
+					var fName2q = "./Ethylindanone_AutoAssign_explicitH_molecule.json"
 					//var fName3o = "./Ethylindanone_AutoAssign_explicitH-2024_08_30-01_09_45.spinFitResult.json"
-					var fName3 = "./spinfit-Ethylindanone_AutoAssign_explicitH-2024_08_29-21_47_25.spinFitResult.json"
-
+					var fName3q = "./spinfit-Ethylindanone_AutoAssign_explicitH-2024_08_29-21_47_25.spinFitResult.json"
+var mainName = "Ethylindanone_AutoAssign_explicitH"; // " + mainName + "
+					var variantName = "Exp.DifEvoR.Ny.Obj0.An.2nd30"; //  " + variantName + "
+				
+					var fName1 = "./" + mainName + "-" + variantName + "_spectra.json"; 
+					var fName2 = "./" + mainName + "_molecule.json";
+					var fName3 = "./spinfit-" + mainName + "-2024_09_05-08_47_04.spinFitResult.json";
+					
 					console.log("JmolAppletA p", JmolAppletA0A)
 					var ajgraph0A = jGraph(fName1, fName2, JmolAppletA0A, "my_dataviz0A", fName3)
 				</script>
@@ -116,9 +122,11 @@
 			<td id="my_dataviz0">
 				<script type="module">
 					import { jGraph } from "./srcJgraph/mnovaReader.js";
-					var fName1 = "./HAP_pyrene_out.mnova.json"; 
-					var fName2 = "./HAP_pyrene_molecule.json"
-					var fName3 = "./spinfit-HAP_pyrene-2024_08_29-21_04_47.spinFitResult.json"
+					var mainName = "HAP_pyrene"; // " + mainName + "
+					var variantName = "Exp.SimAnnR.Ny.Obj0.Ay.2nd30"; //  " + variantName + "
+					var fName1 = "./" + mainName + "-" + variantName + "_spectra.json"; 
+					var fName2 = "./" + mainName + "_molecule.json";
+					var fName3 = "./spinfit-" + mainName + "-2024_09_05-08_47_04.spinFitResult.json";
 					
 					console.log("JmolAppletA p", JmolAppletA0)
 					var ajgraph0 = jGraph(fName1, fName2, JmolAppletA0, "my_dataviz0", fName3)
@@ -134,11 +142,17 @@
 			<td id="my_dataviz1">
 				<script type="module">
 					import { jGraph } from "./srcJgraph/mnovaReader.js";
-					var fName1 = "./02-AZ138SimAnnR_An_Nn_1st_spectra.json";
-					var fName2 = "./02-AZ138_molecule.json"
+					var fName1f = "./02-AZ138SimAnnR_An_Nn_1st_spectra.json";
+					var fName2f = "./02-AZ138_molecule.json"
 					// fName2 = "../androsten/AndrosteneCorrected_ouManualRun_molecule.json"
 					//var fName3 = "./02-AZ138SimAnnR_An_Nn_1st_spectra.json"
-
+					var mainName = "02-AZ138"; // " + mainName + "
+					var variantName = "Exp.SimAnnR.Ny.Obj0.Ay.2nd30"; //  " + variantName + "
+				
+					var fName1 = "./" + mainName + "-" + variantName + "_spectra.json"; 
+					var fName2 = "./" + mainName + "_molecule.json";
+					var fName3 = "./spinfit-" + mainName + "-2024_09_05-08_47_04.spinFitResult.json";
+					
 					console.log("JmolAppletA p", JmolAppletA1)
 					var ajgraph1 = jGraph(fName1, fName2, JmolAppletA1, "my_dataviz1")
 				</script>

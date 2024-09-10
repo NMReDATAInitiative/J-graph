@@ -18,10 +18,10 @@ export class NmrAssignment extends GraphBase {
     settings_with_spectrum_settings,
     JmolAppletAr,
     instanceNumb = 0,
+    name = 'nameIsWiredInConstructor_NmrAssignment1',
   ) {
     // data for GraphBase which takes care of communication between classes
-    const name = 'nameIsWiredInConstructor_NmrAssignment1';
-    super(name, {
+     super(name, {
       dataTypesSend: [],
       dataTypesReceive: ['xAxisSpectrum'],
       logAllDataExchange: false, // Enable logging for this instance if true
@@ -1456,7 +1456,7 @@ export class NmrAssignment extends GraphBase {
   // Precompute paths for all data points
   precomputePaths() {
     if ('yJs' in this.jgraphObj) {
-      if (this.logActivity) e.log('this.jgraphObj', this.jgraphObj);
+      if (this.logActivity) console.log('this.jgraphObj', this.jgraphObj);
       if (this.logActivity) console.log('this.jgraphObj.yJs', this.jgraphObj.yJs);
       const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
       tmp.forEach((d) => {

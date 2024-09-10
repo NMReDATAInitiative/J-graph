@@ -1,12 +1,12 @@
 import { GraphBase } from './graphBase.js';
 
 export class ParallelCoordChem extends GraphBase {
-  constructor(containerSelector, options = {}, dataFromHtml = {}) {
+  constructor(containerSelector, options = {}, dataFromHtml = {}, name = 'nameIsWiredInConstructor_ParallelCoordChem1') {
     // data for GraphBase which takes care of communication between classes
-    const name = 'nameIsWiredInConstructor_NmrSpectrum1';
     super(name, {
       dataTypesSend: ['dataHighlighted', 'dataSelected'],
       dataTypesReceive: [],
+	  logAllDataExchange: false, // Enable logging for this instance if true
     });
     const defaults = {
       width: 2400,
@@ -42,6 +42,15 @@ export class ParallelCoordChem extends GraphBase {
         dataInput = await d3.json(this.settings.jsonPath);
       } else {
         dataInput = this.dataFromHtml;
+      }
+      if ('filterKeepKey' in this.settings && 'filterKeepValue' in this.settings) {
+        const { filterKeepKey, filterKeepValue } = this.settings;
+        for (let i = dataInput.length - 1; i >= 0; i--) {
+          if (dataInput[i][filterKeepKey] !== filterKeepValue) {
+            // Remove the item if it doesn't match the condition
+            dataInput.splice(i, 1);
+          }
+        }
       }
 
       const {
@@ -150,7 +159,7 @@ export class ParallelCoordChem extends GraphBase {
     } else {
       console.log('No data selected.');
     }
-    this.sendData('dataSelected', returnedObject);
+    this.sendData('dataSelected', selectedObjects);
   }
 
   shouldUseLogScale(values) {
