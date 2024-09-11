@@ -166,7 +166,7 @@ export class NmrSpectrum extends GraphBase {
         spectrumLine.attr('stroke', 'red');
         spectrumLine.attr('stroke-width', '2px');
         spectrumLine.attr('opacity', 1.0);
-        spectrumLine.attr("stroke-dasharray", "6,6")
+        spectrumLine.attr("stroke-dasharray", "4,4")
         // in case problem goes back to original after a while
         if (false) setTimeout(() => {
           spectrumLine.attr('stroke', col);
