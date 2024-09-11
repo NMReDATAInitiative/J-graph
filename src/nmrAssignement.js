@@ -12,7 +12,7 @@ import { jmolGetNBbonds } from './jmolInterface.js';
 import { jmolGetInfo } from './jmolInterface.js';
 export class NmrAssignment extends GraphBase {
   constructor(
-    jGraphData,
+    jGraphDataIn,
     svg,
     smallScreen,
     settings_with_spectrum_settings,
@@ -21,37 +21,205 @@ export class NmrAssignment extends GraphBase {
     name = 'nameIsWiredInConstructor_NmrAssignment1',
   ) {
     // data for GraphBase which takes care of communication between classes
-     super(name, {
+    super(name, {
       dataTypesSend: [],
-      dataTypesReceive: ['xAxisSpectrum'],
+      dataTypesReceive: [
+        'dataHighlighted',
+        'dataUNHighlighted',
+        'xAxisSpectrum',
+      ],
       logAllDataExchange: false, // Enable logging for this instance if true
     });
     this.JmolAppletAr = JmolAppletAr;
     this.svg = svg;
-    this.jgraphObj = {};
     this.instanceId = instanceNumb;
     this.logActivity = true;
+    this.smallScreen = smallScreen;
+
+    // test and manage new type of array
+    const hasMultAssign = 'data' in jGraphDataIn && 'typeArray' in jGraphDataIn;
+    this.hasMultAssign = hasMultAssign;
+    this.curGraphData = hasMultAssign ? jGraphDataIn.data[0] : jGraphDataIn;
+    this.currentItem = -2;
+    this.storedSetOfAssignements = hasMultAssign
+      ? jGraphDataIn.data
+      : [jGraphDataIn];
+
+    this.settings_with_spectrum_settings = settings_with_spectrum_settings;
+
+    this.jgraphObj = {};
+
+    const willDisplay = hasMultAssign ? 0 : -1;
+    this.digest(willDisplay); // -2 to make sure update
+  }
+
+  graphRemoveAll() {
+    if (this.jgraphObj) {
+      if (false)
+        if (this.jgraphObj.x) {
+          // not removing the x axis
+          this.jgraphObj.x.remove();
+        }
+      if (this.jgraphObj.theBlocks) {
+        this.jgraphObj.theBlocks.remove();
+      }
+
+      if (this.jgraphObj.theTicksCouplings) {
+        this.jgraphObj.theTicksCouplings.remove();
+      }
+      if (this.jgraphObj.theGridLinesCouplings) {
+        this.jgraphObj.theGridLinesCouplings.remove();
+      }
+      if (this.jgraphObj.theColumnsMainVerticalLine) {
+        this.jgraphObj.theColumnsMainVerticalLine.remove();
+      }
+      if (this.jgraphObj.theDots) {
+        this.jgraphObj.theDots.remove();
+      }
+      if (this.jgraphObj.theBlocks) {
+        this.jgraphObj.theBlocks.remove();
+      }
+
+      if (this.jgraphObj.yAxisn) {
+        this.jgraphObj.yAxisn.remove();
+      }
+      if (this.jgraphObj.yAxisn2) {
+        this.jgraphObj.yAxisn2.remove();
+      }
+      if (this.jgraphObj.theColumnsBase) {
+        this.jgraphObj.theColumnsBase.remove();
+      }
+      if (this.jgraphObj.assignedCouplings) {
+        if (this.jgraphObj.assignedCouplings.theLinesW) {
+          this.jgraphObj.assignedCouplings.theLinesW.remove();
+        }
+      }
+      if (this.jgraphObj.theColumns) {
+        if (
+          this.jgraphObj.theColumns.theColumnsConnectColumnToSpectrumPosition
+        ) {
+          this.jgraphObj.theColumns.theColumnsConnectColumnToSpectrumPosition.remove();
+        }
+
+        if (this.jgraphObj.theColumns.theColumnsVerticalInSpectrum) {
+          this.jgraphObj.theColumns.theColumnsVerticalInSpectrum.remove();
+        }
+
+        if (this.jgraphObj.theColumns.theColumnLabel) {
+          this.jgraphObj.theColumns.theColumnLabel.remove();
+        }
+
+        if (this.jgraphObj.theColumns.theColumnsMainVerticalBackLine) {
+          this.jgraphObj.theColumns.theColumnsMainVerticalBackLine.remove();
+        }
+
+        if (
+          this.jgraphObj.theColumns.theColumnsConnectColumnToSpectrumPosition
+        ) {
+          this.jgraphObj.theColumns.theColumnsConnectColumnToSpectrumPosition.remove();
+        }
+      }
+    }
+  }
+
+  dataHighlighted_UpdateFunction(data, sender) {
+    // method called when receiving data catenate the datatype (see dataTypesReceive)
+    const index = data.content.index;
+
+    console.log(
+      'dataHighlighted_UpdateFunction this.storedSetOfAssignements.length',
+      this.storedSetOfAssignements.length,
+    );
+    console.log(
+      'dataHighlighted_UpdateFunction this.currentItem',
+      this.currentItem,
+    );
+    console.log('dataHighlighted_UpdateFunction index', index);
+
+    if (
+      this.currentItem > -1 &&
+      index != this.currentItem &&
+      index < this.storedSetOfAssignements.length &&
+      this.storedSetOfAssignements.length > 1
+    ) {
+      this.graphRemoveAll();
+      this.digest(index);
+      this.build();
+    }
+
+    var inContent = null;
+    inContent = { reception: 'dataHighlighted_UpdateFunction_OK' };
+    return inContent;
+  }
+
+  dataUNHighlighted_UpdateFunction(data, sender) {
+    // method called when receiving data catenate the datatype (see dataTypesReceive)
+
+    // No action Could remove this .... except it expect returns
+
+    var inContent = null;
+    inContent = { reception: 'dataUNHighlighted_UpdateFunctionOK' };
+    return inContent;
+  }
+
+  digest(item) {
+    const smallScreen = this.smallScreen;
     const settings = this.initializeSettings(
       smallScreen,
-      settings_with_spectrum_settings,
+      this.settings_with_spectrum_settings,
     );
+
+    if (item > -1) {
+      if (this.storedSetOfAssignements.length < item) {
+        console.log(
+          'try to open storedSetOfAssignements has only ',
+          this.storedSetOfAssignements.length,
+          ' elements',
+        );
+        return;
+      }
+      if (item == this.currentItem) {
+        console.log('Already look at item ', item, ' ');
+        return;
+      }
+    }
+    const jGraphData =
+      item == -1 ? this.curGraphData : this.storedSetOfAssignements[item];
+    this.currentItem = item;
+
+    console.log('jGraphData ', jGraphData, ' ');
+    console.log('this.hasMultAssign ', this.hasMultAssign, ' ');
+    console.log(
+      'this.storedSetOfAssignements ',
+      this.storedSetOfAssignements,
+      ' ',
+    );
+
+    // Ingest
+    var needToIngest = true;
     if (Array.isArray(jGraphData) && jGraphData.length > 0) {
-      if (this.logActivity) console.log('jGraphData,', jGraphData);
-      this.ingestCSData(jGraphData, settings);
+      if ('chemShift1' in jGraphData[0]) {
+        if (this.logActivity) console.log('jGraphData CSD,', jGraphData);
+        this.ingestCSData(jGraphData, settings);
+        needToIngest = false;
+      }
     }
     if (
       jGraphData !== null &&
       typeof jGraphData === 'object' &&
-      'chemShift' in jGraphData[0]
+      //'chemShift' in jGraphData[0] &&
+      needToIngest
     ) {
-      if (this.logActivity) console.log('jGraphData,', jGraphData);
+      if (this.logActivity) console.log('jGraphData Mol obj,', jGraphData);
       //const tmp = this.ingestMoleculeObject(jGraphData);
       this.ingestMoleculeObject(jGraphData, settings);
     }
-    if (this.logActivity) console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
 
+    if (this.logActivity)
+      console.log('this.jgraphObj.dataColumns OPZ', this.jgraphObj.dataColumns);
     if (this.logActivity) console.log('this.jgraphObjU ', this.jgraphObj);
-    if (this.logActivity) console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
+    if (this.logActivity)
+      console.log('this.jgraphObjU ' + JSON.stringify(this.jgraphObj));
 
     if ('assignedCouplings' in this.jgraphObj)
       //
@@ -64,6 +232,7 @@ export class NmrAssignment extends GraphBase {
 
     // Make list of positions according to size of jGraphData
     //const numberItem = arrayColumns.length;
+    if (!('dataColumns' in this.jgraphObj)) return;
     const numberItem = this.jgraphObj.dataColumns.length;
     this.jgraphObj.smallSpace = settings.spectrum.widthOfThePlot / numberItem;
     if (
@@ -511,7 +680,7 @@ export class NmrAssignment extends GraphBase {
       .style('stroke', 'black')
       .style('opacity', '0.0');
 
-    var theTextDotNew = this.svg
+    this.jgraphObj.theTextDotNew = this.svg
       .append('text')
       .attr('x', spreadPositionsNew[d.MyIndex])
       .attr('y', this.jgraphObj.yJs(Math.abs(d.valueOnBar) + 3.0))
@@ -565,14 +734,15 @@ export class NmrAssignment extends GraphBase {
             JlevelAvoidContact: Math.abs(coupling),
           });
           if (isFistTime) counterCouplings++;
-          if (this.logActivity) console.log(
-            'counterCouplings :',
-            counterCouplings,
-            ' counterFound :',
-            counterFound,
-            ' listOfJs.length ',
-            listOfJs.length,
-          );
+          if (this.logActivity)
+            console.log(
+              'counterCouplings :',
+              counterCouplings,
+              ' counterFound :',
+              counterFound,
+              ' listOfJs.length ',
+              listOfJs.length,
+            );
           listOfJs.sort((a, b) => a.JlevelAvoidContact - b.JlevelAvoidContact);
 
           listOfJs = updateBlockPosition(
@@ -951,20 +1121,21 @@ export class NmrAssignment extends GraphBase {
             jmolUnselectAll(this.JmolAppletAr); // Unselect after the timeout
           }, 3200);
         } else {
-          if (this.logActivity) console.error(
-            'atomIndicesMol is undefined or not a valid property of the provided data. d.atomIndicesMol ',
-            d.atomIndicesMol,
-            ' d.atomIndexMol ',
-            d.atomIndexMol,
-            ' d ',
-            d,
-          );
+          if (this.logActivity)
+            console.error(
+              'atomIndicesMol is undefined or not a valid property of the provided data. d.atomIndicesMol ',
+              d.atomIndicesMol,
+              ' d.atomIndexMol ',
+              d.atomIndexMol,
+              ' d ',
+              d,
+            );
         }
       };
     } else {
       if (this.logActivity) console.error('jgraphObj is undefined.');
     }
-
+    if (!this.jgraphObj.dataColumns) return;
     this.jgraphObj.spreadPositionsUU = updateColumnsPositions(
       this.jgraphObj.dataColumns,
       this.jgraphObj.leftPosColumns,
@@ -1001,7 +1172,6 @@ export class NmrAssignment extends GraphBase {
       .style('stroke-width', this.settings.jGraph.lineWidthColumn)
       .on('click', (event, d) => this.jgraphObj.highlightColumn(event, d)) // Pass both event and data
       .on('mouseover', (event, d) => this.jgraphObj.highlightColumn(event, d));
-
     // streight down
     var theColumnsVerticalInSpectrum = this.svg
       .selectAll('ColunnSegment2')
@@ -1457,7 +1627,8 @@ export class NmrAssignment extends GraphBase {
   precomputePaths() {
     if ('yJs' in this.jgraphObj) {
       if (this.logActivity) console.log('this.jgraphObj', this.jgraphObj);
-      if (this.logActivity) console.log('this.jgraphObj.yJs', this.jgraphObj.yJs);
+      if (this.logActivity)
+        console.log('this.jgraphObj.yJs', this.jgraphObj.yJs);
       const tmp = this.jgraphObj.assignedCouplings.getAssignedCouplings();
       tmp.forEach((d) => {
         d.pathData = this.calculatePath(d); // Store precomputed path data

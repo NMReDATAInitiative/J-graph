@@ -217,7 +217,8 @@ async function processDataAndVisualize(
     if (fileResulstSF !== '') {
       const jGraphObj3 = await processSfFile(fileResulstSF, 'variableSet');
       if (jGraphObj3) {
-        if (jGraphObj3.length > 0) {
+      if (jGraphObj3.data) {
+        if (jGraphObj3.data.length > 0) {
           console.log('OKOKOOOKOKO3 ', fileResulstSF);
           console.log('OKOKOOOKOKO3 jGraphObj3', jGraphObj3);
 
@@ -233,10 +234,12 @@ async function processDataAndVisualize(
           );
         }
       }
+      }
       const jGraphObj2 = await processSfFile(fileResulstSF, 'couplingNetwork');
       console.log('jGraphObjZ 2 ', jGraphObj2);
       if (jGraphObj2) {
-        if (jGraphObj2.length > 0) {
+      if (jGraphObj2.data) {
+        if (jGraphObj2.data.length > 0) {
           console.log('OKOKOOOKOKO2 ', fileResulstSF);
           console.log('OKOKOOOKOKO2 jGraphObj2', jGraphObj2);
 
@@ -251,6 +254,7 @@ async function processDataAndVisualize(
             ),
           );
         } 
+      }
       }
     }
 

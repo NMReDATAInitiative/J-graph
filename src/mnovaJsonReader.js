@@ -12,47 +12,47 @@ export async function processMnovaJsonFileSpectrum(
     // may be either an array or not. If not put at in an array...
     let filteredSpectraArray_FullArray = [];
 
-     const jsonDataList = Array.isArray(jsonDataInitial)
-       ? jsonDataInitial
-       : [jsonDataInitial];
+    const jsonDataList = Array.isArray(jsonDataInitial)
+      ? jsonDataInitial
+      : [jsonDataInitial];
 
     jsonDataList.forEach((jsonData, index) => {
-            console.log('read add : index', index);
-    // Array to store the filtered spectra
-    let filteredSpectraArray = [];
+      console.log('read add : index', index);
+      // Array to store the filtered spectra
+      let filteredSpectraArray = [];
 
-    // Check if the JSON has a 'spectra' field
-    if (jsonData[type] && Array.isArray(jsonData[type])) {
-      jsonData[type].forEach((spectrum, index) => {
-        // Create an object to store the filtered data
-        if (spectrum['$mnova_schema']) {
-          const schema = spectrum['$mnova_schema'];
-          const expected =
-            'https://mestrelab.com/json-schemas/mnova/2023-07/01/nmr/spec';
-          if (schema != expected) {
-            console.error(
-              'processMnovaJsonFileSpectrum: wrong schema : got ',
-              schema,
-              ' expected ',
-              expected,
-            );
-          } else {
-            console.log('processMnovaJsonFileSpectrum: schema OK :', schema);
+      // Check if the JSON has a 'spectra' field
+      if (jsonData[type] && Array.isArray(jsonData[type])) {
+        jsonData[type].forEach((spectrum, index) => {
+          // Create an object to store the filtered data
+          if (spectrum['$mnova_schema']) {
+            const schema = spectrum['$mnova_schema'];
+            const expected =
+              'https://mestrelab.com/json-schemas/mnova/2023-07/01/nmr/spec';
+            if (schema != expected) {
+              console.error(
+                'processMnovaJsonFileSpectrum: wrong schema : got ',
+                schema,
+                ' expected ',
+                expected,
+              );
+            } else {
+              console.log('processMnovaJsonFileSpectrum: schema OK :', schema);
+            }
           }
-        }
-        // Apply logic for varisous versions
-        const filteredSpectrum = processMnovaJsonFileSpectrumV1(
-          spectrum,
-          fieldsToKeep,
-          index,
-        );
-        filteredSpectraArray.push(filteredSpectrum);
-      });
-    } else {
-      console.log('No spectra found in the JSON data.');
-    }
-    filteredSpectraArray_FullArray.push(filteredSpectraArray);
-  });
+          // Apply logic for varisous versions
+          const filteredSpectrum = processMnovaJsonFileSpectrumV1(
+            spectrum,
+            fieldsToKeep,
+            index,
+          );
+          filteredSpectraArray.push(filteredSpectrum);
+        });
+      } else {
+        console.log('No spectra found in the JSON data.');
+      }
+      filteredSpectraArray_FullArray.push(filteredSpectraArray);
+    });
 
     return filteredSpectraArray_FullArray;
   } catch (error) {
@@ -172,23 +172,26 @@ export async function processSfFile(jsonFilePath, type) {
     // Load the JSON data using D3
     const jsonDataInitial = await d3.json(jsonFilePath);
 
-    const jsonData = Array.isArray(jsonDataInitial)
-       ? jsonDataInitial[0]
-       : jsonDataInitial;
+    let filteredSpectraArray_FullArray = [];
 
-    console.log(`moleculeS got json`);
-    var dataOutput = [];
+    const jsonDataList = Array.isArray(jsonDataInitial)
+      ? jsonDataInitial
+      : [jsonDataInitial];
 
-    if (type == 'couplingNetwork') {
-      console.log(`moleculeS look for couplingNetwork`);
-      if ('z_fromVarSet' in jsonData) {
-        if ('network' in jsonData.z_fromVarSet) {
-          const network = jsonData.z_fromVarSet.network;
-          console.log(`moleculeS got network`, network);
-          if ('fJGraphColumn' in network) {
-          }
-          network.fJGraphColumn.forEach((afJGraphColumn, indexCol) => {
-            /*
+    jsonDataList.forEach((jsonData, index) => {
+      console.log(`moleculeS got json`);
+      var dataOutput = [];
+
+      if (type == 'couplingNetwork') {
+        console.log(`moleculeS look for couplingNetwork`);
+        if ('z_fromVarSet' in jsonData) {
+          if ('network' in jsonData.z_fromVarSet) {
+            const network = jsonData.z_fromVarSet.network;
+            console.log(`moleculeS got network`, network);
+            if ('fJGraphColumn' in network) {
+            }
+            network.fJGraphColumn.forEach((afJGraphColumn, indexCol) => {
+              /*
                     "atomIndex": 
                     "chemicalShift": 7.359199,
                     "assigned": true,
@@ -199,30 +202,31 @@ export async function processSfFile(jsonFilePath, type) {
                     "fQUuid": "{7b8cf080-2f69-4438-adf0-7b404cd8b67d}",
                     "indexNetworkArray": [2],
             */
-            console.log(`moleculeS Element ${indexCol}:`, afJGraphColumn);
-            console.log('moleculeS Atom Index:', afJGraphColumn.atomIndex);
-            console.log(
-              'moleculeS compoundIndex:',
-              afJGraphColumn.compoundIndex,
-            );
-            console.log(
-              'moleculeS Chemical Shift:',
-              afJGraphColumn.chemicalShift,
-            );
-            console.log('moleculeS Assigned:', afJGraphColumn.assigned);
-            console.log('moleculeS nbProton:', afJGraphColumn.nbProton);
-            console.log(
-              'moleculeS nameChemicalShift:',
-              afJGraphColumn.nameChemicalShift,
-            );
-            console.log(
-              'moleculeS nameChemicalShiftWithMoleculeNumber:',
-              afJGraphColumn.nameChemicalShiftWithMoleculeNumber,
-            );
-            // You can add more processing logic here
-            var listOfJs = [];
-            afJGraphColumn.jInColumnArray.forEach((ajInColumnArray, IndexJ) => {
-              /*
+              console.log(`moleculeS Element ${indexCol}:`, afJGraphColumn);
+              console.log('moleculeS Atom Index:', afJGraphColumn.atomIndex);
+              console.log(
+                'moleculeS compoundIndex:',
+                afJGraphColumn.compoundIndex,
+              );
+              console.log(
+                'moleculeS Chemical Shift:',
+                afJGraphColumn.chemicalShift,
+              );
+              console.log('moleculeS Assigned:', afJGraphColumn.assigned);
+              console.log('moleculeS nbProton:', afJGraphColumn.nbProton);
+              console.log(
+                'moleculeS nameChemicalShift:',
+                afJGraphColumn.nameChemicalShift,
+              );
+              console.log(
+                'moleculeS nameChemicalShiftWithMoleculeNumber:',
+                afJGraphColumn.nameChemicalShiftWithMoleculeNumber,
+              );
+              // You can add more processing logic here
+              var listOfJs = [];
+              afJGraphColumn.jInColumnArray.forEach(
+                (ajInColumnArray, IndexJ) => {
+                  /*
               jInColumnArray {
                     assigned: true
                     fValue: 8.086425
@@ -232,14 +236,14 @@ export async function processSfFile(jsonFilePath, type) {
                     ​​​nodeNumber: 0
               }
               */
-              var jObj = {
-                coupling: ajInColumnArray.fValue,
-                atomIndexMol: [],
-              };
-              // update jObj if find assigned J
-              if ('fJGraphEdges' in network) {
-                network.fJGraphEdges.forEach((afJGraphEdges, index) => {
-                  /* afJGraphEdges:
+                  var jObj = {
+                    coupling: ajInColumnArray.fValue,
+                    atomIndexMol: [],
+                  };
+                  // update jObj if find assigned J
+                  if ('fJGraphEdges' in network) {
+                    network.fJGraphEdges.forEach((afJGraphEdges, index) => {
+                      /* afJGraphEdges:
                   edgeAssignmentType: 2
                   ​​jValue1: 8.121948
                  ​ jValue2: 8.086425
@@ -251,55 +255,57 @@ export async function processSfFile(jsonFilePath, type) {
                   ​​​partner2JInColumn: 0
                   ​​​partner2jGraphColumn: 3
                   */
-                  var tarCol = -1;
-                  if (
-                    afJGraphEdges.partner1jGraphColumn == indexCol &&
-                    afJGraphEdges.partner1JInColumn == IndexJ
-                  ) {
-                    tarCol = afJGraphEdges.partner2jGraphColumn;
-                  }
-                  if (
-                    afJGraphEdges.partner2jGraphColumn == indexCol &&
-                    afJGraphEdges.partner2JInColumn == IndexJ
-                  ) {
-                    tarCol = afJGraphEdges.partner1jGraphColumn;
-                  }
+                      var tarCol = -1;
+                      if (
+                        afJGraphEdges.partner1jGraphColumn == indexCol &&
+                        afJGraphEdges.partner1JInColumn == IndexJ
+                      ) {
+                        tarCol = afJGraphEdges.partner2jGraphColumn;
+                      }
+                      if (
+                        afJGraphEdges.partner2jGraphColumn == indexCol &&
+                        afJGraphEdges.partner2JInColumn == IndexJ
+                      ) {
+                        tarCol = afJGraphEdges.partner1jGraphColumn;
+                      }
 
-                  if (network?.fJGraphColumn?.[tarCol]?.atomIndex) {
-                    // Set coupling partners
-                    jObj.atomIndexMol = network.fJGraphColumn[tarCol].atomIndex;
+                      if (network?.fJGraphColumn?.[tarCol]?.atomIndex) {
+                        // Set coupling partners
+                        jObj.atomIndexMol =
+                          network.fJGraphColumn[tarCol].atomIndex;
+                      }
+                    });
                   }
-                });
-              }
-              listOfJs.push(jObj);
+                  listOfJs.push(jObj);
+                },
+              );
+              listOfJs.sort((a, b) => a.coupling - b.coupling);
+
+              const obj = {
+                assignedMultipletMnovaHash: afJGraphColumn.fQUuid,
+                chemShift: afJGraphColumn.chemicalShift,
+                labelsColumn: [afJGraphColumn.nameChemicalShift],
+                atomIndicesMol: afJGraphColumn.atomIndex,
+                listOfJs: listOfJs,
+              };
+              dataOutput.push(obj);
             });
-            listOfJs.sort((a, b) => a.coupling - b.coupling);
-
-            const obj = {
-              assignedMultipletMnovaHash: afJGraphColumn.fQUuid,
-              chemShift: afJGraphColumn.chemicalShift,
-              labelsColumn: [afJGraphColumn.nameChemicalShift],
-              atomIndicesMol: afJGraphColumn.atomIndex,
-              listOfJs: listOfJs,
-            };
-            dataOutput.push(obj);
-          });
+          }
         }
       }
-    }
 
-    if (type == 'variableSet') {
-      const runEachDegenerated = false; // HERE
-      console.log(`moleculeK look for spinFitVariableArray`);
-      if ('spinFitVariableArray' in jsonData) {
-        console.log(
-          `moleculeK got spinFitVariableArray`,
-          jsonData.spinFitVariableArray,
-        );
+      if (type == 'variableSet') {
+        const runEachDegenerated = false; // HERE
+        console.log(`moleculeK look for spinFitVariableArray`);
+        if ('spinFitVariableArray' in jsonData) {
+          console.log(
+            `moleculeK got spinFitVariableArray`,
+            jsonData.spinFitVariableArray,
+          );
 
-        jsonData.spinFitVariableArray.forEach((aVar, indexVar) => {
-          if (aVar.typeVariableString !== 'ChemicalShift') return;
-          /*
+          jsonData.spinFitVariableArray.forEach((aVar, indexVar) => {
+            if (aVar.typeVariableString !== 'ChemicalShift') return;
+            /*
                     "molAtomIndicesFull": [2],
             "molAtomIndices": [2],
             "molCompoundIndices": [0],
@@ -335,34 +341,34 @@ export async function processSfFile(jsonFilePath, type) {
             "labelVarSet": "δ(5)",
             "stepNumber": 3
             */
-          const label = aVar.labelVarSet.replace(/[δ()]/g, '');
-          if (runEachDegenerated) {
-            aVar.molAtomIndices.forEach((aIndex) => {
+            const label = aVar.labelVarSet.replace(/[δ()]/g, '');
+            if (runEachDegenerated) {
+              aVar.molAtomIndices.forEach((aIndex) => {
+                const obj = {
+                  assignedMultipletMnovaHash: '',
+                  chemShift: aVar.value,
+                  labelsColumn: [label],
+                  atomIndicesMol: [aIndex],
+                  listOfJs: [],
+                  satisfactory: aVar.satisfactory,
+                };
+                dataOutput.push(obj);
+              });
+            } else {
               const obj = {
                 assignedMultipletMnovaHash: '',
                 chemShift: aVar.value,
                 labelsColumn: [label],
-                atomIndicesMol: [aIndex],
+                atomIndicesMol: aVar.molAtomIndices,
                 listOfJs: [],
                 satisfactory: aVar.satisfactory,
               };
               dataOutput.push(obj);
-            });
-          } else {
-            const obj = {
-              assignedMultipletMnovaHash: '',
-              chemShift: aVar.value,
-              labelsColumn: [label],
-              atomIndicesMol: aVar.molAtomIndices,
-              listOfJs: [],
-              satisfactory: aVar.satisfactory,
-            };
-            dataOutput.push(obj);
-          }
-        });
-        jsonData.spinFitVariableArray.forEach((aVar, indexVar) => {
-          if (aVar.typeVariableString !== 'Jcoupling') return;
-          /*
+            }
+          });
+          jsonData.spinFitVariableArray.forEach((aVar, indexVar) => {
+            if (aVar.typeVariableString !== 'Jcoupling') return;
+            /*
             "molAtomIndices": [[2, 12]],
             "typeVariableEnum": 2,
             "typeVariableString": "Jcoupling",
@@ -375,50 +381,58 @@ export async function processSfFile(jsonFilePath, type) {
             "labelVarSet": "J(5-8)",
             "stepNumber": 3
             */
-          aVar.molAtomIndices.forEach((aPair, indexPair) => {
-            if (!runEachDegenerated && indexPair > 0) return;
+            aVar.molAtomIndices.forEach((aPair, indexPair) => {
+              if (!runEachDegenerated && indexPair > 0) return;
 
-            if (aPair.length < 2) return;
-            const c1 = aPair[0];
-            const c2 = aPair[1];
-            const graphIndex1 = dataOutput.findIndex((item) =>
-              Array.isArray(item?.atomIndicesMol) && item.atomIndicesMol.includes(c1)
-            );
-            const graphIndex2 = dataOutput.findIndex((item) =>
-              Array.isArray(item?.atomIndicesMol) && item.atomIndicesMol.includes(c2)
-            );
-            if (graphIndex1 < 0) return;
-            if (graphIndex2 < 0) return;
-            console.log(
-              `moleculeK got J `,
-              aVar.value,
-              ' ',
-              aVar.numberBondslabelVarSet,
-              '',
-            );
+              if (aPair.length < 2) return;
+              const c1 = aPair[0];
+              const c2 = aPair[1];
+              const graphIndex1 = dataOutput.findIndex(
+                (item) =>
+                  Array.isArray(item?.atomIndicesMol) &&
+                  item.atomIndicesMol.includes(c1),
+              );
+              const graphIndex2 = dataOutput.findIndex(
+                (item) =>
+                  Array.isArray(item?.atomIndicesMol) &&
+                  item.atomIndicesMol.includes(c2),
+              );
+              if (graphIndex1 < 0) return;
+              if (graphIndex2 < 0) return;
+              console.log(
+                `moleculeK got J `,
+                aVar.value,
+                ' ',
+                aVar.numberBondslabelVarSet,
+                '',
+              );
 
-            const jObj1 = {
-              coupling: aVar.value,
-              atomIndexMol: [c2],
-            };
-            const jObj2 = {
-              coupling: aVar.value,
-              atomIndexMol: [c1],
-            };
-            dataOutput[graphIndex1].listOfJs.push(jObj1);
-            dataOutput[graphIndex1].listOfJs.sort((a, b) => a.coupling - b.coupling);
-            dataOutput[graphIndex2].listOfJs.push(jObj2);
-            dataOutput[graphIndex2].listOfJs.sort((a, b) => a.coupling - b.coupling);
-
+              const jObj1 = {
+                coupling: aVar.value,
+                atomIndexMol: [c2],
+              };
+              const jObj2 = {
+                coupling: aVar.value,
+                atomIndexMol: [c1],
+              };
+              dataOutput[graphIndex1].listOfJs.push(jObj1);
+              dataOutput[graphIndex1].listOfJs.sort(
+                (a, b) => a.coupling - b.coupling,
+              );
+              dataOutput[graphIndex2].listOfJs.push(jObj2);
+              dataOutput[graphIndex2].listOfJs.sort(
+                (a, b) => a.coupling - b.coupling,
+              );
+            });
           });
-        });
+        }
       }
-    }
 
-    dataOutput.sort((a, b) => b.chemShift - a.chemShift);
-    console.log(`moleculeK returning dataOutput`, dataOutput);
-
-    return dataOutput;
+      dataOutput.sort((a, b) => b.chemShift - a.chemShift);
+      console.log(`moleculeK returning dataOutput`, dataOutput);
+      filteredSpectraArray_FullArray.push(dataOutput);
+    });
+    return {"typeArray": true, "data":filteredSpectraArray_FullArray};
   } catch (error) {
     console.error('Error fetching or processing data:', error);
   }

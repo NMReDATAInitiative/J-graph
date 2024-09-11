@@ -210,7 +210,7 @@ export class AssignedCouplings {
         indexJ2: at2.dataColIndex2,
       };
       this.content.push(theAssignedCouplings);
-      this.addGraphicForLast(
+      const lastObj = this.addGraphicForLast(
         svg,
         lineWidth,
         darkMode,
@@ -367,8 +367,6 @@ export class AssignedCouplings {
         if (d.pathData) {
           return d.pathData;
         } else {
-          console.warn();
-          `zzzop3 Missing or invalid pathData for item with Label: ${d.Label}`;
           return null; // or you can handle it differently
         }
       })

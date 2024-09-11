@@ -155,23 +155,25 @@ export class NmrSpectrum extends GraphBase {
   highlightSpectrum(index, higlightOrUnHighlight, col = 'green') {
     const spectrumLine = this.jgraphObj.lineSpectrum.select(`.lineG-${index + 1}`);
     if (spectrumLine) {
-      // reset stroke-width
-      this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('stroke-width', 1);
+      // reset 
+      //this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('stroke-width', 1);
 
-      //
-      const originalStrokeCol = spectrumLine.attr('stroke');
-      const originalStrokewidth = spectrumLine.attr('stroke-width');
+      //const originalStrokewidth = spectrumLine.attr('stroke-width');
 
       if (higlightOrUnHighlight) {
+        this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('opacity', 0.0);
+
         spectrumLine.attr('stroke', 'red');
-        spectrumLine.attr('stroke-width', '4px');
-        
+        spectrumLine.attr('stroke-width', '2px');
+        spectrumLine.attr('opacity', 1.0);
+        spectrumLine.attr("stroke-dasharray", "6,6")
         // in case problem goes back to original after a while
         if (false) setTimeout(() => {
           spectrumLine.attr('stroke', col);
           spectrumLine.attr('stroke-width', '1px');
         }, 10000); // in ms
       } else {
+        this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('opacity', 1.0);
         spectrumLine.attr('stroke', col);
         spectrumLine.attr('stroke-width', '1px');
       }
