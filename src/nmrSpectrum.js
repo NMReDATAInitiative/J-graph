@@ -162,6 +162,7 @@ export class NmrSpectrum extends GraphBase {
 
       if (higlightOrUnHighlight) {
         this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('opacity', 0.0);
+        this.jgraphObj.lineSpectrum.selectAll(`.lineGA`).attr('stroke-dasharray', null);
 
         spectrumLine.attr('stroke', 'red');
         spectrumLine.attr('stroke-width', '2px');
