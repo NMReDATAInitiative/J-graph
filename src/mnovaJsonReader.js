@@ -123,35 +123,43 @@ export async function processMnovaJsonFileMolecule(
       // Create an object to store the filtered data
 
       fieldsToKeep.forEach((field) => {
-        // Check for the field in the spectrum object
+        // Check for the field in the molecule object
         if (molecule[field]) {
           filteredMolecule[field] = molecule[field];
           console.log(`moleculeT Found ${field} at spectrum level in molecule`);
+          return; // Exit the current iteration
         }
-        // Check for the field in the spectrum.data object
-        else if (molecule.data && molecule.data[field]) {
+
+        // Check for the field in the molecule.data object
+        if (molecule.data && molecule.data[field]) {
           filteredMolecule[field] = molecule.data[field];
           console.log(`moleculeT Found ${field} in molecule`);
+          return; // Exit the current iteration
         }
+
         // Handle case where the field is an array of objects
-        else if (Array.isArray(molecule.data[field])) {
-          filteredMolecule[field] = molecule.data[field].map((item) => {
-            return item; // Customize this if you need to filter fields within the objects
-          });
-          console.log(`moleculeT Found ${field} as an array in molecule`);
-        }
-        // Handle nested objects within spectrum.data
-        else if (
-          typeof molecule.data[field] === 'object' &&
-          molecule.data[field] !== null
-        ) {
-          filteredMolecule[field] = { ...molecule.data[field] };
-          console.log(`moleculeT Found ${field} as an object in molecule`);
-        }
+        if (molecule.data)
+          if (Array.isArray(molecule.data[field])) {
+            filteredMolecule[field] = molecule.data[field].map((item) => {
+              return item; // Customize this if needed
+            });
+            console.log(`moleculeT Found ${field} as an array in molecule`);
+            return; // Exit the current iteration
+          }
+
+        // Handle nested objects within molecule.data
+        if (molecule.data)
+          if (
+            typeof molecule.data[field] === 'object' &&
+            molecule.data[field] !== null
+          ) {
+            filteredMolecule[field] = { ...molecule.data[field] };
+            console.log(`moleculeT Found ${field} as an object in molecule`);
+            return; // Exit the current iteration
+          }
+
         // Log if the field is not found at any expected location
-        else {
-          console.log(`moleculeT Did not find ${field} in molecule`);
-        }
+        console.log(`moleculeT Did not find ${field} in molecule`);
       });
 
       // Store the filtered spectrum in the array
@@ -432,7 +440,7 @@ export async function processSfFile(jsonFilePath, type) {
       console.log(`moleculeK returning dataOutput`, dataOutput);
       filteredSpectraArray_FullArray.push(dataOutput);
     });
-    return {"typeArray": true, "data":filteredSpectraArray_FullArray};
+    return { typeArray: true, data: filteredSpectraArray_FullArray };
   } catch (error) {
     console.error('Error fetching or processing data:', error);
   }

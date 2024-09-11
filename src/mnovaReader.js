@@ -183,11 +183,6 @@ async function processDataAndVisualize(
       );
     }
 
-    const spectralRegions = ingestSpectrumRegions(
-      allObjectsExtractedMolecule,
-      allSpectraObjectsExtracted[0][0].multiplets,
-    );
-    // TO DO create object for regions or add it to spectrum or assignment
     const marginPPM = 0.02;
     const minSpaceBetweenRegions = 0.05;
     const regionsData = getRegionsWithSignal(
@@ -258,7 +253,7 @@ async function processDataAndVisualize(
       }
     }
 
-    {
+    if('assignments' in allObjectsExtractedMolecule) {
       const jGraphObj = ingestMoleculeObject(
         allObjectsExtractedMolecule,
         allSpectraObjectsExtracted[0][0].multiplets,
