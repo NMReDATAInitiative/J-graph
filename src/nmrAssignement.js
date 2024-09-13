@@ -763,6 +763,7 @@ export class NmrAssignment extends GraphBase {
       dataColumns.push(obj);
     });
 
+    dataColumns.sort((a, b) => parseFloat(b.chemShift) - parseFloat(a.chemShift));
     //const processedDatadel = this.processCSVDataDEL(jGraphData);
 
     this.jgraphObj.dataColumns = dataColumns;
@@ -936,10 +937,10 @@ export class NmrAssignment extends GraphBase {
         );
 
         dataColumns.push({
-          chemShift: chemColumnArray[i],
+          chemShift: chemColumnArray[i].toString(),
           labelColumn: labelColumnArray[i],
           MyIndex: indicesSorted[i],
-          atomIndexMol: indexAtomMol[i],
+          atomIndexMol: indexAtomMol[i].toString(),
           atomIndicesMol: indicesAtomMol[i],
           listOfJs: listOfJs,
         });
