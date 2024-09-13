@@ -1,10 +1,12 @@
 function getSpread(spreadDelta, smallSpace) {
+console.log("In spreadDelta", spreadDelta)
   // determine how to spead objects to avoid contacts
   // there muss be enough space for this function to work
   // this is obtained by setting smallSpace to a value below the width/number of items
   for (var i = 0; i < spreadDelta.length; i++) {
     const curDelta = spreadDelta[i];
     if (curDelta < smallSpace) {
+      spreadDelta[i] = smallSpace;
       const spreadFull = smallSpace - curDelta;
       var spreadleft = spreadFull / 2.0;
       // try shift left (1 of 3)
@@ -13,46 +15,41 @@ function getSpread(spreadDelta, smallSpace) {
         if (curExtraSpace > 0.0) {
           if (curExtraSpace > spreadleft) {
             spreadDelta[j] -= spreadleft;
-            spreadDelta[i] += spreadleft;
             spreadleft = 0;
+            break;
           } else {
             spreadDelta[j] -= curExtraSpace;
-            spreadDelta[i] += curExtraSpace;
             spreadleft -= curExtraSpace;
           }
-        }
+        } 
       }
       // work left over
-      var spreadRight = spreadFull - spreadleft;
+      var spreadRight = spreadFull / 2.0 + spreadleft;
       // try shift right (2 of 3)
       for (j = i + 1; j < spreadDelta.length; j += 1) {
         const curExtraSpace = spreadDelta[j] - smallSpace;
         if (curExtraSpace > 0.0) {
           if (curExtraSpace > spreadRight) {
             spreadDelta[j] -= spreadRight;
-            spreadDelta[i] += spreadRight;
-            spreadRight = 0;
+            spreadRight = 0;break;
           } else {
             spreadDelta[j] -= curExtraSpace;
-            spreadDelta[i] += curExtraSpace;
             spreadRight -= curExtraSpace;
           }
-        }
+        } 
       }
       // work left over (rare but there may be a left over....)
       if (spreadRight > 0.0) {
         spreadleft = spreadRight;
-        // try shift left (3 of 3)
-        for (j = i - 1; j >= 0; j -= 1) {
+        for (var j = i - 1; j >= 0; j -= 1) {
           const curExtraSpace = spreadDelta[j] - smallSpace;
           if (curExtraSpace > 0.0) {
             if (curExtraSpace > spreadleft) {
               spreadDelta[j] -= spreadleft;
-              spreadDelta[i] += spreadleft;
               spreadleft = 0;
+              break;
             } else {
               spreadDelta[j] -= curExtraSpace;
-              spreadDelta[i] += curExtraSpace;
               spreadleft -= curExtraSpace;
             }
           }
@@ -61,6 +58,8 @@ function getSpread(spreadDelta, smallSpace) {
       // Done 3/3
     }
   }
+  console.log("out spreadDelta", spreadDelta)
+
   return spreadDelta;
 }
 
@@ -94,11 +93,18 @@ export function updateColumnsPositions(
     spreadPositions.push(returnValue);
     if (i > 0) {
       spreadDelta.push(returnValue - spreadPositions[i - 1]);
+    } else {
+      spreadDelta.push(returnValue);
     }
   }
   spreadDelta = getSpread(spreadDelta, smallSpace);
   for (i = 0; i < spreadDelta.length; i++) {
-    spreadPositions[i + 1] = spreadPositions[i] + spreadDelta[i];
+    //spreadPositions[i + 1] = spreadPositions[i] + spreadDelta[i + 1];
+    if ( i == 0) {
+      spreadPositions[i] = spreadDelta[i];
+    } else {
+      spreadPositions[i] = spreadPositions[i - 1] + spreadDelta[i];
+    }
   }
   return spreadPositions;
 }

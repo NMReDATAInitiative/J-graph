@@ -695,14 +695,15 @@ export function ingestMoleculeObject(
       shiftIt.assignedMultiplets.forEach((assignedMultipletIt, i) => {
         if (alreadySomething) return;
         // find multiplet in spectra data from molecule data
-        const multipletIndex = spectrumAssignment.list.findIndex(
-          (multiplet) => '{' + multiplet.uuid + '}' === assignedMultipletIt,
-        );
-        //console.log(" -------- llog", " element ", element, " label ", label,  " ",   shiftIt);
+        if (typeof spectrumAssignment !== 'undefined') {
+          const multipletIndex = spectrumAssignment.list.findIndex(
+            (multiplet) => '{' + multiplet.uuid + '}' === assignedMultipletIt,
+          );
+          //console.log(" -------- llog", " element ", element, " label ", label,  " ",   shiftIt);
 
-        if (multipletIndex > 0) {
-          const multiplet = spectrumAssignment.list[multipletIndex];
-          /*
+          if (multipletIndex > 0) {
+            const multiplet = spectrumAssignment.list[multipletIndex];
+            /*
           console.log('spectrumAssignment multiplet ========= ', multiplet);
           console.log('spectrumAssignment multiplet area ', multiplet.area);
           console.log( 'spectrumAssignment multiplet category ', multiplet.category,);
@@ -714,36 +715,36 @@ export function ingestMoleculeObject(
           console.log( 'spectrumAssignment multiplet is_reference ', multiplet.is_reference,);
           */
 
-          multiplet.j_list.forEach((aList) => {
-            const delta = 0.1;
-            let foundIndex = listOfJsToRemove.findIndex(
-              (item) => Math.abs(item.coupling - aList.value) <= delta,
-            );
+            multiplet.j_list.forEach((aList) => {
+              const delta = 0.1;
+              let foundIndex = listOfJsToRemove.findIndex(
+                (item) => Math.abs(item.coupling - aList.value) <= delta,
+              );
 
-            if (foundIndex !== -1) {
-              console.log(
-                'spectrumAssignmentA Remove',
-                label,
-                'multiplet aList.value ',
-                aList.value,
-              );
-              listOfJsToRemove.splice(foundIndex, 1);
-            } else {
-              console.log(
-                'spectrumAssignmentA Keep ',
-                label,
-                'multiplet aList.value ',
-                aList.value,
-              );
-              var jObj = {
-                coupling: aList.value,
-                atomIndexMol: [],
-              };
-              listOfJs.push(jObj);
-            }
-          });
+              if (foundIndex !== -1) {
+                console.log(
+                  'spectrumAssignmentA Remove',
+                  label,
+                  'multiplet aList.value ',
+                  aList.value,
+                );
+                listOfJsToRemove.splice(foundIndex, 1);
+              } else {
+                console.log(
+                  'spectrumAssignmentA Keep ',
+                  label,
+                  'multiplet aList.value ',
+                  aList.value,
+                );
+                var jObj = {
+                  coupling: aList.value,
+                  atomIndexMol: [],
+                };
+                listOfJs.push(jObj);
+              }
+            });
+          }
         }
-
         //J-couplings
 
         // Find the existing object in the list by assignedMultiplet
