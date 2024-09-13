@@ -937,10 +937,10 @@ export class NmrAssignment extends GraphBase {
         );
 
         dataColumns.push({
-          chemShift: chemColumnArray[i].toString(),
+          chemShift: chemColumnArray[i],
           labelColumn: labelColumnArray[i],
           MyIndex: indicesSorted[i],
-          atomIndexMol: indexAtomMol[i].toString(),
+          atomIndexMol: indexAtomMol[i],
           atomIndicesMol: indicesAtomMol[i],
           listOfJs: listOfJs,
         });
