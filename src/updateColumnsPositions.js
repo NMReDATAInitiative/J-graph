@@ -1,5 +1,4 @@
 function getSpread(spreadDelta, smallSpace) {
-console.log("In spreadDelta", spreadDelta)
   // determine how to spead objects to avoid contacts
   // there muss be enough space for this function to work
   // this is obtained by setting smallSpace to a value below the width/number of items
@@ -58,8 +57,6 @@ console.log("In spreadDelta", spreadDelta)
       // Done 3/3
     }
   }
-  console.log("out spreadDelta", spreadDelta)
-
   return spreadDelta;
 }
 
