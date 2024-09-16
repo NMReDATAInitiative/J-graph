@@ -111,9 +111,10 @@ export class ParallelCoordChem extends GraphBase {
     // Log the content
     if (highlightOrUnHighlight) {
       console.log('Highlighted cont:', sentData);
+	  console.log('Highlighted cont2 :', " /", " /", this.dataNoIdenticalValue.length);
       this.sendData('dataHighlighted', sentData);
     } else {
-      console.log('UNHighlighted cont:', sentData);
+      console.log('UNHighlighted cont  :', " /", " /", this.dataNoIdenticalValue.length);
       this.sendData('dataUNHighlighted', sentData);
     }
   }

@@ -153,6 +153,8 @@ export class NmrSpectrum extends GraphBase {
   }
 
   highlightSpectrum(index, higlightOrUnHighlight, col = 'green') {
+	  console.log('Highlighted cont2   :', index, " /", this.chemShiftsList.length);
+	  console.log('Highlighted cont2+1 :', index+1, " /", this.chemShiftsList.length);
     const spectrumLine = this.jgraphObj.lineSpectrum.select(`.lineG-${index + 1}`);
     if (spectrumLine) {
       // reset 
