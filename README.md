@@ -11,6 +11,7 @@ J-graphs can be used to [facilitate the assignment of homonuclear coupling const
 
 [J-graph visualizer of androsten with no assigned couplings](./html/androstenNoAssignement.html) This is a demo of the guided assignement feature: Double-click on dots if the horizontal line is green when rolling over a dot. The green line is indicating that only one coupling partner is compatible with the structure and the value of the coupling constant.
 
+[Mnova json reader](./html/mnovaFileDemo.html) 
 
 ### More info
 
