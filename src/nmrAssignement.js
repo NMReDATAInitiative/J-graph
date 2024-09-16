@@ -532,7 +532,9 @@ export class NmrAssignment extends GraphBase {
         partnerSpinNumberMol,
         'J',
       );
-      document.getElementById('textMainPage').innerHTML = '? ' + textToDisplay;
+      const textElement = document.getElementById('textMainPage');
+      if (textElement)
+            document.getElementById('textMainPage').innerHTML = '? ' + textToDisplay;
     } else {
       const textElement = document.getElementById('textMainPage');
       if (textElement) {
