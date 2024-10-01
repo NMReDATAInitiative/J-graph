@@ -38,7 +38,7 @@ export class ControlSliders extends GraphBase {
     };
 
     this.recalculatedValues = [];
-    this.init();
+    this.init();    
   }
 
   init() {

@@ -17,6 +17,8 @@ J-graphs can be used to [facilitate the assignment of homonuclear coupling const
 
 [demoDispProcToVal](./html/demoDispProcToVal.html) 
 
+[demoSimSSnmr](./html/demoSimSSnmr.html) 
+
 ### More info
 
 More [details](./details.md). 
