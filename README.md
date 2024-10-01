@@ -13,6 +13,12 @@ J-graphs can be used to [facilitate the assignment of homonuclear coupling const
 
 [Mnova json reader](./html/mnovaFileDemo.html) 
 
+### Other demonstration
+
+[demoDispProcToVal](./html/demoDispProcToVal.html) 
+
+[tableJgraph](./html/tableJgraph.html) 
+
 ### More info
 
 More [details](./details.md). 
