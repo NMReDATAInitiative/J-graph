@@ -21,19 +21,24 @@ export class ControlSliders extends GraphBase {
     }
 
     // Set default options and override with provided options
+    console.error(`options.initialValue: ${options.initialValue}`);
+
     this.options = {
-      min: options.min || 0,
-      max: options.max || 0,
-      step: options.step || 1,
-      initialValue: options.initialValue || 0,
-      width: options.width || '100 pt',
-      margin: options.margin || '20px 0',
-      precision: options.precision || 0,
-      constantShift: options.constantShift || 0,
-      shiftLog: options.shiftLog || 0,
-      logScale: options.logScale || false,
-      number: options.number || 1,
+      min: options.min !== undefined ? options.min : 0,
+      max: options.max !== undefined ? options.max : 0,
+      step: options.step !== undefined ? options.step : 1,
+      initialValue:
+        options.initialValue !== undefined ? options.initialValue : null,
+      width: options.width !== undefined ? options.width : '100 pt',
+      margin: options.margin !== undefined ? options.margin : '20px 0',
+      precision: options.precision !== undefined ? options.precision : 0,
+      constantShift:
+        options.constantShift !== undefined ? options.constantShift : 0,
+      shiftLog: options.shiftLog !== undefined ? options.shiftLog : 0,
+      logScale: options.logScale !== undefined ? options.logScale : false,
+      number: options.number !== undefined ? options.number : 1,
     };
+
     this.recalculatedValues = [];
     this.init();
   }
@@ -69,7 +74,13 @@ export class ControlSliders extends GraphBase {
       slider.min = this.options.min;
       slider.max = this.options.max;
       slider.step = this.options.step;
-      slider.value = this.options.initialValue;
+      if (this.options.initialValue === null) {
+        slider.value =
+          this.options.min +
+          Math.random() * (this.options.max - this.options.min);
+      } else {
+        slider.value = this.options.initialValue;
+      }
       slider.style.width = this.options.width;
       slider.style.margin = this.options.margin;
       this.sliders[i] = slider;
