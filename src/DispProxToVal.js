@@ -11,7 +11,7 @@ export class DispProxToVal extends GraphBase {
     // data for GraphBase which takes care of communication between classes
     super(name, {
       dataTypesSend: [],
-      dataTypesReceive: ['dataValues'],
+      dataTypesReceive: ['controlSliders'],
       logAllDataExchange: false, // Enable logging for this instance if true
     });
 
@@ -26,10 +26,9 @@ export class DispProxToVal extends GraphBase {
     d3.select(selector).style('shape-rendering', 'crispEdges');
   }
 
-  dataValues_UpdateFunction(data, sender) {
+  controlSliders_UpdateFunction(data, sender) {
     // this is the method called when receiving data catenate the datatype (see dataTypesReceive)
     const value = data.content;
-
     if (typeof value === 'undefined') {
       console.error('no data.content in recieved data');
       return;

@@ -3,38 +3,41 @@
 
 <head>
 	<script src="https://d3js.org/d3.v7.min.js"></script>
-
 </head>
 
 <body>
 
-	<h2>DispProxToVal </h2>
-	<h3>This has to be started from a server </h3>
-	
+	<h3>DispProxToVal </h3>
+
+	<!-- the tooltip is used to display information when rolling over the DispProxToVal-->
 	<div id="tooltip"
-		style="position: absolute; visibility: hidden; padding: 8px; background-color: white; border: 1px solid #ccc; border-radius: 5px; pointer-events: none; z-index: 10;">
+		style="position: absolute; visibility: hidden; padding: 1px; background-color: white; border: 1px solid #ccc; border-radius: 5px; pointer-events: none; z-index: 10;">
 	</div>
 
-	<div id="slider-container">
-		<svg id="drawing"></svg>
+	<div>
+		<svg id="drawingSVG"></svg>
+	</div>
+
+	<div id="slider-container2">
 	</div>
 	<script type="module">
-		import { DispProxToVal } from "../src/DispProxToVal.js";
+		import { DispProxToVal } from "../src/dispProxToVal.js";
+		import { ControlSliders } from "../src/controlSliders.js";
 
 		const relevantNumberDigits = 3;
-		const dispQuality = new DispProxToVal("#drawing");
+		const dispQuality = new DispProxToVal("#drawingSVG");
 		const dataDispVal = [
 			{
 				"lab": "(0)",
-				"val": 1.00000001,
+				"val": 1.0000000,
 			},
 			{
 				"lab": "(1)",
-				"val": 0.9937677347501954,
+				"val": 1.0,
 			},
 			{
 				"lab": "(2)",
-				"val": 1.37677347501954,
+				"val": 1.0,
 			}
 		];
 		dispQuality.initJson(dataDispVal, {
@@ -42,7 +45,38 @@
 			keys: ["lab", "val"],
 			extract: "",
 		});
+
+		const sliders = new ControlSliders('#slider-container2', {
+			min: -(relevantNumberDigits + 1),
+			max: (relevantNumberDigits + 1),
+			step: 0.01,
+			initialValue: 0,
+			width: '200 pt',
+			margin: '20px 0',
+			logScale: true,
+			precision: relevantNumberDigits + 1,
+			constantShift: 1, // ref. value 
+			shiftLog: relevantNumberDigits, // for logScale
+			number: dataDispVal.length,
+		});
+
+
+		// Register each class as a receiver for every other class based on data type compatibility
+		const classes = [dispQuality, sliders];
+		classes.forEach((sender) => {
+			classes.forEach((receiver) => {
+				if (sender !== receiver) {
+					sender.getExportTypes().forEach((sendType) => {
+						if (receiver.getImportTypes().includes(sendType)) {
+							sender.registerReceiver(receiver, sendType);
+						}
+					});
+				}
+			});
+		});
+
 	</script>
 
 </body>
+
 </html>
