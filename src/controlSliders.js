@@ -21,8 +21,6 @@ export class ControlSliders extends GraphBase {
     }
 
     // Set default options and override with provided options
-    console.error(`options.initialValue: ${options.initialValue}`);
-
     this.options = {
       min: options.min !== undefined ? options.min : 0,
       max: options.max !== undefined ? options.max : 0,
