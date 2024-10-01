@@ -1,6 +1,6 @@
 import { GraphBase } from './graphBase.js';
 
-export class DispProxToVal extends GraphBase {
+export class DisplayProxToVal extends GraphBase {
   constructor(
     selector,
     JmolAppletA,
