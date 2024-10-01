@@ -46,11 +46,16 @@ export class SsSpectrum extends GraphBase {
     const xx = sorted[1]; // second largest
     const yy = sorted[0]; // smallest
     const sAni = zz - iso; // > 0
-    const eta = (yy - xx) / sAni;
+   const eta = (Math.abs(sAni) < 1e-10) ? 0.0 :(yy - xx) / sAni;
+    //const eta = (yy - xx) / sAni;
     let etaRoundedDown = (Math.floor(eta * 100) / 100).toFixed(2); // Rounds down to 2 decimal places and converts to a string
     let etaRoundedUp = (Math.ceil(eta * 100) / 100).toFixed(2); // Rounds down to 2 decimal places and converts to a string
     const factorCorr = (eta - etaRoundedDown) * 100;
     const crudeArrayDown = this.rank2stat[etaRoundedDown];
+          console.log('etaString :', etaRoundedDown);
+    console.log('etaString :', etaRoundedUp);
+ console.log('etaRoundedDown :', this.rank2stat[etaRoundedDown]);
+    console.log('etaRoundedUp :', this.rank2stat[etaRoundedUp]);
     const i0Down = this.rank2stat[etaRoundedDown].i0;
     const crudeArrayUp = this.rank2stat[etaRoundedUp];
     const i0Up = this.rank2stat[etaRoundedUp].i0;
@@ -89,14 +94,12 @@ export class SsSpectrum extends GraphBase {
     );
     console.log('eta :', eta);
 
-    console.log('etaString :', etaRoundedDown);
-    console.log('etaString :', etaRoundedUp);
+
     console.log('factorCorr :', factorCorr);
     console.log('sAni :', sAni);
     // const pickDown = this.rank2stat[etaRoundedDown];
     //   console.log('pickDown :', pickDown);
-    console.log('etaRoundedDown :', this.rank2stat[etaRoundedDown]);
-    console.log('etaRoundedUp :', this.rank2stat[etaRoundedUp]);
+   
     console.log('fullDown :', fullDown);
     console.log('x :', x);
     console.log('y :', y);
@@ -488,12 +491,13 @@ export class SsSpectrum extends GraphBase {
     // Define the scales for x and y
     const xScale = d3
       .scaleLinear()
-      .domain([d3.min(this.plotx), d3.max(this.plotx)])  // Data range for x
+      .domain([d3.min(this.plotx) - 1, d3.max(this.plotx) + 1])  // Data range for x
       .range([0, width]);  // Scale to fit in the available width
 
     const yScale = d3
       .scaleLinear()
-      .domain([d3.min(this.ploty), d3.max(this.ploty)])  // Data range for y
+      //.domain([d3.min(this.ploty), d3.max(this.ploty)])  // Data range for y
+      .domain([0, 1.0])  // Data range for y
       .range([height, 0]);  // Scale to fit in the available height (inverted for y)
 
     // Create and append x-axis
