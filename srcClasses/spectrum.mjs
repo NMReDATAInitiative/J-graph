@@ -1,13 +1,17 @@
-import { ObjectCeDBase } from './objectsBase.js';
+import { ObjectCeDBase } from './objectsBase.mjs';
 
 export class SpectrumCeD extends ObjectCeDBase {
-typeHierarchy = "Spectrum";
-constructor(version = "last", content = {},  ObjectBase = {}) {
-
-super(version, content,  ObjectBase)
-
+  constructor(version = 'last', content = {}) {
+    super(version, content);
+    this.classHierarchy.push('SpectrumCeD'); // cannot use this.constructor.name
+  }
 }
 
+export class SpectrumCeDNextLevel extends SpectrumCeD {
+  constructor(version = 'last', content = {}) {
+    super(version, content);
+    this.classHierarchy.push('SpectrumCeDNextLevel'); // cannot use this.constructor.name
+  }
 }
 
 /*
