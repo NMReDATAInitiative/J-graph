@@ -48,6 +48,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
     "d3": "^7.5.0",
     "esm": "^3.2.25",
     "nmredata-data-test": "^0.4.0"
