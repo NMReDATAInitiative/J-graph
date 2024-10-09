@@ -1,44 +1,43 @@
-import { ObjectCeDBase } from './objectsBase.mjs';
+import { BaseObjectCeD } from './objectsBase.mjs';
 
-export class SpectrumCeD extends ObjectCeDBase {
-  constructor(content = {}, version = 'v1', options = {}) {
-    super(content, version, options);
-    this.classHierarchy.push('SpectrumCeD'); // cannot use this.constructor.name
+export class SpectrumCeD extends BaseObjectCeD {
+  constructor(content = {}, options = {}) {
+
+    const NameOfThisClass = "SpectrumCeD";// cannot use this.constructor.name Copy from class name above
+
+    // if Add new version : update version number this should be set to the last version managed by the present code
+    const lastVersionManagedByThisCode = 'v3';
+
+    super(content, options);
+    this.classHierarchy.push(NameOfThisClass); 
+    this.classHierVersion.push(lastVersionManagedByThisCode);
+
   }
 
   // Upgrade methods for each version
-  upgradeV1toNext() {
+  SpectrumCeD_V1toNext() {
     if (this.dumpChangeVersion) {
-      console.log("upgradeV1toNext ...")
+      console.log("SpectrumCeD_V1toNext ...")
     }
     this.data.description = "Default description";
     
-    // update version number
-    this.data.version = 'v2';
-    
-    // Validate schema only if the flag is true
-    if (this.validateSchemaFlag) {
-      this.validateSchema();
-    }
+   // if Add new version : update version number this should be set to the last version managed by the present code
+    this.data.SpectrumCeD_version = 'v2';
   }
 
- downgradeV2toPrevious() {
+ SpectrumCeD_V2toPrevious() {
    if (this.dumpChangeVersion) {
-      console.log("downgradeV2toPrevious ...")
+      console.log("SpectrumCeD_V2toPrevious ...")
     }
     delete this.data.description;
 
     // update version number
-    this.data.version = 'v1';
-
-    if (this.validateSchemaFlag) {
-      this.validateSchema();
-    }
+    this.data.SpectrumCeD_version = 'v1';
   }
 
-  upgradeV2toNext() {
+  SpectrumCeD_V2toNext() {
      if (this.dumpChangeVersion) {
-      console.log("upgradeV2toNext ...")
+      console.log("SpectrumCeD_V2toNext ...")
     }
     // Add z coordinate in each data point in v3
     this.data.dataPoints = this.data.dataPoints.map((point) => ({
@@ -47,35 +46,61 @@ export class SpectrumCeD extends ObjectCeDBase {
     }));
 
     // update version number
-    this.data.version = 'v3';
-
-    if (this.validateSchemaFlag) {
-      this.validateSchema();
-    }
+    this.data.SpectrumCeD_version = 'v3';
   }
 
   // Downgrade methods for each version
-  downgradeV3toPrevious() {
+  SpectrumCeD_V3toPrevious() {
      if (this.dumpChangeVersion) {
-      console.log("downgradeV3toPrevious ...")
+      console.log("SpectrumCeD_V3toPrevious ...")
     }
     // Remove z coordinate from each data point in v2
     this.data.dataPoints = this.data.dataPoints.map(({ z, ...rest }) => rest);
 
     // update version number
-    this.data.version = 'v2';
-
-    if (this.validateSchemaFlag) {
-      this.validateSchema();
-    }
+    this.data.SpectrumCeD_version = 'v2';
   }
-
 
 }
 
 export class SpectrumCeDNextLevel extends SpectrumCeD {
-  constructor(content = {}, version = 'v1', options = {}) {
-    super(content, version, options);
-    this.classHierarchy.push('SpectrumCeDNextLevel'); // cannot use this.constructor.name
+  constructor(content = {}, options = {}) {
+
+    const NameOfThisClass = "SpectrumCeDNextLevel";// cannot use this.constructor.name Copy from class name above
+
+    // if Add new version : update version number this should be set to the last version managed by the present code
+    const lastVersionManagedByThisCode = 'v2';
+
+    super(content, options);
+    this.classHierarchy.push(NameOfThisClass); 
+    this.classHierVersion.push(lastVersionManagedByThisCode);
+    //this.data[NameOfThisClass + "_version"] = lastVersionManagedByThisCode;
+
   }
+
+// Upgrade methods for each version
+  SpectrumCeDNextLevel_V1toNext() {
+    if (this.dumpChangeVersion) {
+      console.log("SpectrumCeD_NextLevel_V1toNext ...")
+    }
+this.data.descriptionNL2 = this.data.descriptionNL1;
+
+    delete this.data.descriptionNL1;    
+    // update version number 
+    this.data.SpectrumCeDNextLevel_version = 'v2';
+  }
+
+ SpectrumCeDNextLevel_V2toPrevious() {
+   if (this.dumpChangeVersion) {
+      console.log("SpectrumCeD_NextLevel_V2toPrevious ...")
+    }
+   this.data.descriptionNL1 = this.data.descriptionNL2;
+
+    delete this.data.descriptionNL2;
+
+    // update version number
+    this.data.SpectrumCeDNextLevel_version = 'v1';
+  }
+
+
 }

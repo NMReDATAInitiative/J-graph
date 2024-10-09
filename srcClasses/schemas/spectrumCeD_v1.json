@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SpectrumCeD v3",
+  "type": "object",
+  "properties": {
+    "SpectrumCeD_version": { "type": "string" },
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "larmor": { "type": "number" },
+    "dataPoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": { "type": "number" },
+          "y": { "type": "number" }
+        },
+        "required": ["x", "y"]
+      }
+    }
+  },
+  "required": ["SpectrumCeD_version", "larmor", "name", "dataPoints"]
+}
