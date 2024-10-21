@@ -30,3 +30,4 @@ For two-dimensional COSY cross-peaks, a two-dimensional representation of coupli
 Installation 
 npm install -g browserify
 browserify src/nodeModules.js -r nmredata  > src/browserifiedModules.js
+
