@@ -67,107 +67,124 @@
 
 				// Event listener for file selection
 				fileInput.addEventListener("change", async (event) => {
-					const file = event.target.files[0];
-					if (file && file.type === "application/json") {
-						const jsonData = await file.text();
-						try {
-							console.log("JSON file content:", jsonData);
-							const parsedData = JSON.parse(jsonData);
-							validateJSON(parsedData, schemas);
-						} catch (error) {
-							console.error("Parsing error:", error);
-							resultList.innerHTML = `<li class="invalid-schema">❌ Invalid JSON file (Parsing error)</li>`;
-						}
-					} else {
-						resultList.innerHTML = `<li class="invalid-schema">❌ Please select a valid JSON file</li>`;
-					}
-				});
+    const file = event.target.files[0];
+    if (file && file.type === "application/json") {
+        const jsonData = await file.text();
+        try {
+            console.log("JSON file content:", jsonData);
+            const parsedData = JSON.parse(jsonData);
+
+            // Fetch schemas based on JSON content
+            let schemas = await fetchSchemas(parsedData);
+
+            // Validate with the updated schemas
+            validateJSON(parsedData, schemas);
+        } catch (error) {
+            console.error("Parsing error:", error);
+            resultList.innerHTML = `<li class="invalid-schema">❌ Invalid JSON file (Parsing error)</li>`;
+        }
+    } else {
+        resultList.innerHTML = `<li class="invalid-schema">❌ Please select a valid JSON file</li>`;
+    }
+});
+
 
 				// Fetch all schemas from index.json
-				async function fetchSchemas() {
-					try {
-						
+			async function fetchSchemas(jsonData) {
+    let schemaObjects = {};
 
-						let schemaObjects = {};
+    async function fetchSchema(url) {
+        if (schemaObjects[url]) return; // Avoid duplicate fetches
 
-						
-						// Manually resolve referenced schemas
-						for (let schemaName in schemaObjects) {
-							let schema = schemaObjects[schemaName];
+        console.log(`⏳ Fetching schema: ${url}`);
+        let response = await fetch(url);
+        if (response.ok) {
+            schemaObjects[url] = await response.json();
+            console.log(`✅ Loaded schema: ${url}`);
 
-							for (let key in schema.properties) {
-								let ref = schema.properties[key]["$ref"];
-								if (ref && schemaObjects[ref] === undefined) {
-									console.log(`⏳ Fetching referenced schema: ${ref}`);
-									let refResponse = await fetch(ref);
-									if (refResponse.ok) {
-										schemaObjects[ref] = await refResponse.json();
-										console.log(`✅ Loaded referenced schema: ${ref}`);
-									} else {
-										console.error(`❌ Failed to fetch referenced schema: ${ref}`);
-									}
-								}
-							}
-						}
+            // Recursively check for nested $refs in this schema
+            await resolveRefs(schemaObjects[url]);
+        } else {
+            console.error(`❌ Failed to fetch schema: ${url}`);
+        }
+    }
 
-						return schemaObjects;
-					} catch (error) {
-						console.error("Error loading schemas:", error);
-						return {};
-					}
-				}
+    async function resolveRefs(schema) {
+        if (!schema || typeof schema !== "object") return;
 
-				function validateJSON(data, schemas) {
-					const ajv = new Ajv({ schemas });
-					resultList.innerHTML = "";
+        for (let key in schema) {
+            if (key === "$ref" && typeof schema[key] === "string") {
+                await fetchSchema(schema[key]); // Fetch referenced schemas
+            } else if (typeof schema[key] === "object") {
+                await resolveRefs(schema[key]); // Check deeper levels
+            }
+        }
+    }
 
-					console.log("Validating JSON:", data);
-					console.log("Available schemas:", Object.keys(schemas));
+    async function extractAndFetchSchemas(data) {
+        if (!data || typeof data !== "object") return;
 
-					// If JSON instance specifies a `$schema`, validate only against that
-					if (data["$schema"]) {
-						let schemaName = data["$schema"];
+        if (data["$schema"] && typeof data["$schema"] === "string") {
+            await fetchSchema(data["$schema"]); // Fetch schema if defined
+        }
 
-						if (!(schemaName in schemas)) {
-							console.error(`❌ Schema "${schemaName}" is missing.`);
-							resultList.innerHTML = `<li class="invalid-schema">❌ Schema "${schemaName}" not found. Validation failed.</li>`;
-							return;
-						}
+        for (let key in data) {
+            if (typeof data[key] === "object") {
+                await extractAndFetchSchemas(data[key]); // Recursively check nested objects
+            }
+        }
+    }
 
-						// Validate using the specified schema
-						const validate = ajv.compile(schemas[schemaName]);
-						if (validate(data)) {
-							resultList.innerHTML = `<li class="valid-schema">✅ ${schemaName} - Valid</li>`;
-						} else {
-							resultList.innerHTML = `<li class="invalid-schema">❌ ${schemaName} - Invalid: ${ajv.errorsText(validate.errors)}</li>`;
-						}
-						return;
-					}
+    // Start recursive fetching
+    await extractAndFetchSchemas(jsonData);
 
-					// Default behavior: Validate against all schemas
-					let validSchemas = [];
-					let invalidSchemas = [];
+    return schemaObjects;
+}
 
-					Object.entries(schemas).forEach(([name, schema]) => {
-						const validate = ajv.compile(schema);
-						if (validate(data)) {
-							validSchemas.push(name);
-							resultList.innerHTML += `<li class="valid-schema">✅ ${name} - Valid</li>`;
-						} else {
-							invalidSchemas.push({
-								name,
-								errors: ajv.errorsText(validate.errors),
-							});
-						}
-					});
 
-					if (validSchemas.length === 0) {
-						resultList.innerHTML += `<li class="invalid-schema">❌ No schema validated this JSON.</li>`;
-						invalidSchemas.forEach(({ name, errors }) => {
-							resultList.innerHTML += `<li class="invalid-schema">❌ ${name} - Invalid: ${errors}</li>`;
-						});
-					}
-				}
+			function validateJSON(data, schemas) {
+    const ajv = new Ajv({ schemas });
+    resultList.innerHTML = "";
+
+    console.log("Validating JSON:", data);
+    console.log("Available schemas:", Object.keys(schemas));
+
+    async function validateObject(obj, path = "Root") {
+        if (!obj || typeof obj !== "object") return;
+
+        if (obj["$schema"]) {
+            let schemaName = obj["$schema"];
+
+            if (!(schemaName in schemas)) {
+                console.error(`❌ Schema "${schemaName}" is missing.`);
+                resultList.innerHTML += `<li class="invalid-schema">❌ ${path} - Schema "${schemaName}" not found. Validation failed.</li>`;
+                return;
+            }
+
+            const validate = ajv.compile(schemas[schemaName]);
+            if (validate(obj)) {
+                resultList.innerHTML += `<li class="valid-schema">✅ ${path} - ${schemaName} Valid</li>`;
+            } else {
+                resultList.innerHTML += `<li class="invalid-schema">❌ ${path} - ${schemaName} Invalid: ${ajv.errorsText(validate.errors)}</li>`;
+            }
+        }
+
+        // Recursively validate nested objects
+        for (let key in obj) {
+            if (typeof obj[key] === "object") {
+                await validateObject(obj[key], `${path}.${key}`);
+            }
+        }
+    }
+
+    // Start validation from the root
+    validateObject(data);
+}
+
+
+
+
+
 			});
 		</script>
 	</body>

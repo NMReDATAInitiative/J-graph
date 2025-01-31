@@ -1,93 +1,85 @@
 const fs = require("fs");
 const path = require("path");
+const fetch = require("node-fetch");
 const Ajv = require("ajv");
 
-const SCHEMA_DIR = ""; // Directory where schemas are stored
-const INSTANCE_DIR = "instances"; // Directory where JSON instances are stored
-const INDEX_FILE = "index.json"; // File that lists all available schemas
+const instancesDir = path.join(__dirname, "instances"); // Folder containing JSON files
+let schemas = {}; // Cache for fetched schemas
+const ajv = new Ajv(); // Schema validator
+let failedFiles = []; // Store names of failed JSON files
 
-async function loadSchemas() {
-    const ajv = new Ajv({ allErrors: true });
+async function fetchSchema(url) {
+    if (schemas[url]) return schemas[url]; // Avoid re-fetching
 
     try {
-        console.log("📥 Loading schemas...");
+        console.log(`⏳ Fetching schema: ${url}`);
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch schema: ${url}`);
+        
+        const schema = await response.json();
+        schemas[url] = schema;
+        console.log(`✅ Loaded schema: ${url}`);
 
-        // Read index.json to get a list of schemas
-        const schemaList = JSON.parse(fs.readFileSync(INDEX_FILE, "utf8"));
-
-        // Load each schema from schemaLinkData/
-        let schemas = {};
-        for (let schemaName of schemaList) {
-            let schemaPath = path.join(SCHEMA_DIR, schemaName);
-            if (!fs.existsSync(schemaPath)) {
-                console.error(`❌ Schema not found: ${schemaPath}`);
-                continue;
-            }
-            const schema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
-            schemas[schemaName] = schema;
-
-            // Add schema to Ajv
-            ajv.addSchema(schema, schemaName);
-            console.log(`✅ Loaded schema: ${schemaName}`);
-        }
-
-        return { ajv, schemas };
+        return schema;
     } catch (error) {
-        console.error("❌ Error loading schemas:", error);
-        process.exit(1);
+        console.error(`❌ Error loading schema from ${url}:`, error.message);
+        return null;
     }
 }
 
-async function validateInstances(ajv, schemas) {
-    console.log("\n📂 Scanning JSON instances in:", INSTANCE_DIR);
+async function validateObject(obj, fileName, path = "Root") {
+    if (!obj || typeof obj !== "object") return;
 
-    let instanceFiles = fs.readdirSync(INSTANCE_DIR).filter(file => file.endsWith(".json"));
-    if (instanceFiles.length === 0) {
-        console.error("❌ No JSON instances found.");
-        process.exit(1);
+    if (obj["$schema"]) {
+        let schemaUrl = obj["$schema"];
+
+        if (!schemas[schemaUrl]) {
+            schemas[schemaUrl] = await fetchSchema(schemaUrl);
+        }
+
+        if (!schemas[schemaUrl]) {
+            console.error(`❌ ${path} - Schema "${schemaUrl}" not found.`);
+            failedFiles.push(fileName);
+            return;
+        }
+
+        const validate = ajv.compile(schemas[schemaUrl]);
+        if (validate(obj)) {
+            console.log(`✅ ${path} - ${schemaUrl} Valid`);
+        } else {
+            console.error(`❌ ${path} - ${schemaUrl} Invalid:`, ajv.errorsText(validate.errors));
+            failedFiles.push(fileName);
+        }
     }
 
-    for (let file of instanceFiles) {
-        let filePath = path.join(INSTANCE_DIR, file);
-        console.log(`\n📑 Validating: ${file}`);
-
-        try {
-            let data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-            // Determine which schema to use
-            let schemaName = data["$schema"];
-            if (!schemaName) {
-                console.error(`❌ ${file}: Missing "$schema" field.`);
-                continue;
-            }
-
-            if (!(schemaName in schemas)) {
-                console.error(`❌ ${file}: Schema "${schemaName}" not found in loaded schemas.`);
-                continue;
-            }
-
-            // Validate using the correct schema
-            const validate = ajv.getSchema(schemaName);
-            if (!validate) {
-                console.error(`❌ ${file}: Schema "${schemaName}" is not compiled.`);
-                continue;
-            }
-
-            const valid = validate(data);
-            if (valid) {
-                console.log(`✅ ${file}: Valid according to ${schemaName}`);
-            } else {
-                console.error(`❌ ${file}: Invalid - ${ajv.errorsText(validate.errors)}`);
-            }
-        } catch (error) {
-            console.error(`❌ ${file}: JSON parsing error -`, error.message);
+    for (let key in obj) {
+        if (typeof obj[key] === "object") {
+            await validateObject(obj[key], fileName, `${path}.${key}`);
         }
     }
 }
 
-async function main() {
-    const { ajv, schemas } = await loadSchemas();
-    await validateInstances(ajv, schemas);
+async function validateJSONFiles() {
+    const files = fs.readdirSync(instancesDir).filter(file => file.endsWith(".json"));
+
+    for (let file of files) {
+        const filePath = path.join(instancesDir, file);
+        try {
+            const jsonData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+            console.log(`\n🔍 Validating ${file}...`);
+            await validateObject(jsonData, file);
+        } catch (error) {
+            console.error(`❌ Error reading ${file}:`, error.message);
+            failedFiles.push(file);
+        }
+    }
+
+    console.log("\n🔴 Summary: Failed Files");
+    if (failedFiles.length > 0) {
+        console.log(failedFiles.join("\n"));
+    } else {
+        console.log("✅ All files passed validation.");
+    }
 }
 
-main();
+validateJSONFiles();
