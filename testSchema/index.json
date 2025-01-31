@@ -1,0 +1,5 @@
+[
+    "./schemaLinkData/obj1.schema.json",
+    "./schemaLinkData/obj2.schema.json",
+	"./schemaLinkData/pairObj1.schema.json"
+]

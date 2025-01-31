@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+
+	<h3>Non-linear scales</h3>
+
+	<!-- the tooltip is used to display information when rolling over the DispProxToVal-->
+	<div id="tooltip"
+		style="position: absolute; visibility: hidden; padding: 1px; background-color: white; border: 1px solid #ccc; border-radius: 5px; pointer-events: none; z-index: 10;">
+	</div>
+
+	<div>
+		<svg id="drawingSVG"></svg>
+	</div>
+
+	<div id="slider-container2">
+	</div>
+	<script type="module">
+		import { NonLinScale } from "../src/nonLinScale.js";
+		import { ControlSliders } from "../src/controlSliders.js";
+
+		const nonLinScale = new NonLinScale("#drawingSVG");
+		
+		nonLinScale.init();
+
+		const sliders = new ControlSliders('#slider-container2', {
+			min: -1000,
+			max: 1000,
+			step: 0.01,
+			width: '200 pt',
+			margin: '20px 0',
+			logScale: false,
+			precision: 0,
+			constantShift: 0, // ref. value 
+			number: 3,
+		});
+
+
+		// Register each class as a receiver for every other class based on data type compatibility
+		const classes = [nonLinScale, sliders];
+		classes.forEach((sender) => {
+			classes.forEach((receiver) => {
+				if (sender !== receiver) {
+					sender.getExportTypes().forEach((sendType) => {
+						if (receiver.getImportTypes().includes(sendType)) {
+							sender.registerReceiver(receiver, sendType);
+						}
+					});
+				}
+			});
+		});
+		
+     	sliders.updateDispQuality();
+
+	</script>
+
+</body>
+
+</html>
