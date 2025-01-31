@@ -1,5 +1,5 @@
 {
-    "$schema": "./schemaLinkData/pairObj1.schema.json",
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json",
     "object1": {
         "name": "Alice"
     },

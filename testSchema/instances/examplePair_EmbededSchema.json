@@ -1,11 +1,11 @@
 {
-    "$schema": "./schemaLinkData/pairObj1.schema.json",
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json",
     "object1": {
-        "$schema": "./schemaLinkData/obj1.schema.json",
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json",
         "name": "Alice"
     },
     "object2": {
-        "$schema": "./schemaLinkData/obj2.schema.json",
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json",
         "name": "Bob",
         "age": 53
     }
