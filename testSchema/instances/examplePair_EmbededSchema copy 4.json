@@ -1,0 +1,10 @@
+{
+    "object1": {
+        "name": "Alice"
+    },
+    "object2": {
+        "$schema": "./schemaLinkData/obj2.schema.json",
+        "name": "Bob",
+        "age": 53
+    }
+}
