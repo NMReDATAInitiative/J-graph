@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>JSON Schema Validator</title>
 		<p>Using ajax/libs/ajv/6.12.6</p>
+		<p>Tests all schema of the input json</p>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
 		<style>
 			body {
@@ -85,26 +86,11 @@
 				// Fetch all schemas from index.json
 				async function fetchSchemas() {
 					try {
-						console.log("Fetching schema index...");
-						let response = await fetch("./index.json");
-						if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-						let schemaList = await response.json();
-						console.log("Schema index loaded successfully:", schemaList);
+						
 
 						let schemaObjects = {};
 
-						for (let schemaName of schemaList) {
-							let schemaPath = `./${schemaName}`;
-							let schemaResponse = await fetch(schemaPath);
-							if (!schemaResponse.ok) {
-								console.error(`Error fetching schema ${schemaName}: ${schemaResponse.statusText}`);
-								continue;
-							}
-							schemaObjects[schemaName] = await schemaResponse.json();
-							console.log(`✅ Loaded schema: ${schemaPath}`);
-						}
-
+						
 						// Manually resolve referenced schemas
 						for (let schemaName in schemaObjects) {
 							let schema = schemaObjects[schemaName];
