@@ -3,8 +3,8 @@
     "type": "object",
     "$id": "pairObj",
     "properties": {
-        "object1": { "$ref": "obj1" },
-        "object2": { "$ref": "obj2" }
+        "object1": { "$ref": "./schemaLinkData/obj1" },
+        "object2": { "$ref": "./schemaLinkData/obj2" }
     },
     "required": ["object1", "object2"]
 }
