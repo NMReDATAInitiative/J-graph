@@ -79,17 +79,25 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         const newBaseUrl = schema["$id"] || url;
 
         // 🛠️ Store $defs separately to ensure correct resolution
-        if (schema["$defs"]) {
-            for (const key in schema["$defs"]) {
-                let subSchema = schema["$defs"][key];
-                let subSchemaId = `${newBaseUrl}#/$defs/${key}`;
+       if (schema["$defs"]) {
+    for (const key in schema["$defs"]) {
+        let subSchema = schema["$defs"][key];
+        let subSchemaId = `${newBaseUrl}#/$defs/${key}`;
 
-                if (!schemaCache[subSchemaId]) {
-                    console.log(`📌 Storing $defs schema: ${subSchemaId}`);
-                    schemaCache[subSchemaId] = subSchema;
-                }
-            }
+        // ✅ If the sub-schema is missing $id, assign it
+        if (!subSchema["$id"]) {
+            console.log(`⚠️ Assigning missing $id to $defs schema: ${subSchemaId}`);
+            subSchema["$id"] = subSchemaId;
         }
+
+        // ✅ Store the sub-schema in schemaCache
+        schemaCache[subSchemaId] = subSchema;
+        console.log(`📌 Stored $defs schema separately: ${subSchema["$id"]}`);
+    }
+}
+
+
+		
 
         await resolveRefs(schema, schemaCache, newBaseUrl);
 
@@ -158,16 +166,47 @@ for (const key in schemaCache) {
 }
 
 // Remove duplicate schemas before validation
-const uniqueSchemas = {};
+const uniqueSchemas2 = {};
 for (const key in schemaCache) {
     const schema = schemaCache[key];
     if (schema?.$id) {
-        if (!uniqueSchemas[schema.$id]) {
-            uniqueSchemas[schema.$id] = schema;
+        if (!uniqueSchemas2[schema.$id]) {
+            uniqueSchemas2[schema.$id] = schema;
         } else {
             console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
             delete schemaCache[key];
         }
+    }
+}
+// Deduplicate schemas before validation
+const uniqueSchemas4 = {};
+for (const key in schemaCache) {
+    const schema = schemaCache[key];
+    if (schema?.$id) {
+        if (!uniqueSchemas4[schema.$id]) {
+            uniqueSchemas4[schema.$id] = schema;
+        } else {
+            console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
+        }
+    } else {
+        console.log(`❌ Schema missing $id: ${key}`);
+    }
+}
+
+
+const uniqueSchemas = {};
+for (const key in schemaCache) {
+    const schema = schemaCache[key];
+
+    // Ignore schemas with `#` in $id to prevent conflicts
+    if (schema?.$id && !schema.$id.includes("#")) {
+        if (!uniqueSchemas[schema.$id]) {
+            uniqueSchemas[schema.$id] = schema;
+        } else {
+            console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
+        }
+    } else {
+        console.log(`❌ Ignoring schema with # in $id: ${key}`);
     }
 }
 
@@ -176,9 +215,16 @@ for (const key in uniqueSchemas) {
     if (!uniqueSchemas[key]?.$id) {
         console.log(`❌ Schema in cache missing $id: ${key}`);
     } else {
-		        console.log(`✅ Schema in cache NOT missing $id: ${key}`);
+		        console.log(`✅ Schema in cache NOT missing $id: ${key} the id is :${uniqueSchemas[key].$id}  `);
 	}
 }
+
+
+console.log("\n🔍 Final list of schemas before validation:");
+for (const key in uniqueSchemas) {
+    console.log(`   🔹 Schema: ${key}, ID: ${uniqueSchemas[key]?.$id || "(missing $id)"}`);
+}
+
 
 		//const validate = validator(schema, { mode: "default" }); // Uses Draft 2020-12 support
 		//const validate = validator(schema, {
@@ -187,7 +233,7 @@ for (const key in uniqueSchemas) {
 		//});
 const validate = validator(schema, {
     mode: "default",
-    schemas: Object.values(schemaCache), // Pass all schemas for reference resolution
+    schemas: Object.values(uniqueSchemas), // Pass all schemas for reference resolution
     contentValidation: true // ✅ Enables "content*" keywords
 });
 
