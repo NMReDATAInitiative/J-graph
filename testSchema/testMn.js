@@ -67,8 +67,9 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         const schema = await response.json();
 
         // ✅ Remove "$schema" before validation
-        removeUnprocessedKeywords(schema);
-        fixInvalidRegex(schema);
+        removeUnprocessedKeywords(schema);        
+		fixInvalidRegex(schema);
+
 
         schemaCache[url] = schema;
         if (schema["$id"] && !schemaCache[schema["$id"]]) {
@@ -76,6 +77,19 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         }
 
         const newBaseUrl = schema["$id"] || url;
+
+        // 🛠️ Store $defs separately to ensure correct resolution
+        if (schema["$defs"]) {
+            for (const key in schema["$defs"]) {
+                let subSchema = schema["$defs"][key];
+                let subSchemaId = `${newBaseUrl}#/$defs/${key}`;
+
+                if (!schemaCache[subSchemaId]) {
+                    console.log(`📌 Storing $defs schema: ${subSchemaId}`);
+                    schemaCache[subSchemaId] = subSchema;
+                }
+            }
+        }
 
         await resolveRefs(schema, schemaCache, newBaseUrl);
 
@@ -87,6 +101,7 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         return null;
     }
 }
+
 
 
 
@@ -166,10 +181,15 @@ for (const key in uniqueSchemas) {
 }
 
 		//const validate = validator(schema, { mode: "default" }); // Uses Draft 2020-12 support
-		const validate = validator(schema, {
-			mode: "default",
-			schemas: Object.values(uniqueSchemas), // Pass all schemas for reference resolution
-		});
+		//const validate = validator(schema, {
+		//	mode: "default",
+		//	schemas: Object.values(uniqueSchemas), // Pass all schemas for reference resolution
+		//});
+const validate = validator(schema, {
+    mode: "default",
+    schemas: Object.values(schemaCache), // Pass all schemas for reference resolution
+    contentValidation: true // ✅ Enables "content*" keywords
+});
 
 		if (validate(obj)) {
 			console.log(`✅ ${path} - ${schemaUrl} Valid`);
