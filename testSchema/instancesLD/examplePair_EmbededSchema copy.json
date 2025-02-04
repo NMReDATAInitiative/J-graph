@@ -1,13 +1,13 @@
 {
     "object1": {
         "name": "Alice",
-        "@id": "urn:uuid:8edcafc1-80d4-449e-87b7-6a7d9a201a5c",
+        "@id": "urn:uuid:49dfd9e6-c7a8-4750-884a-95c1b3420d76",
         "@type": "Obj1"
     },
     "object2": {
         "name": "Bob",
         "age": 53,
-        "@id": "urn:uuid:5346a0c7-5968-4f0f-829b-a3ceef378c20",
+        "@id": "urn:uuid:7b7a0dc7-561e-4f99-bd66-ef05269750a7",
         "@type": "Obj2"
     }
 }
