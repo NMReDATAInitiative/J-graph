@@ -108,9 +108,23 @@ for (const key in schemaCache) {
     }
 }
 
-// test missing $id...
+// Remove duplicate schemas before validation
+const uniqueSchemas = {};
 for (const key in schemaCache) {
-    if (!schemaCache[key]?.$id) {
+    const schema = schemaCache[key];
+    if (schema?.$id) {
+        if (!uniqueSchemas[schema.$id]) {
+            uniqueSchemas[schema.$id] = schema;
+        } else {
+            console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
+            delete schemaCache[key];
+        }
+    }
+}
+
+// test missing $id...
+for (const key in uniqueSchemas) {
+    if (!uniqueSchemas[key]?.$id) {
         console.log(`❌ Schema in cache missing $id: ${key}`);
     } else {
 		        console.log(`✅ Schema in cache NOT missing $id: ${key}`);
@@ -120,7 +134,7 @@ for (const key in schemaCache) {
 		//const validate = validator(schema, { mode: "default" }); // Uses Draft 2020-12 support
 		const validate = validator(schema, {
 			mode: "default",
-			schemas: Object.values(schemaCache), // Pass all schemas for reference resolution
+			schemas: Object.values(uniqueSchemas), // Pass all schemas for reference resolution
 		});
 
 		if (validate(obj)) {
