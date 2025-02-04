@@ -4,12 +4,19 @@
 🔍 Validating examplePair_EmbededSchema copy 2.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json Valid
 
 🔍 Validating examplePair_EmbededSchema copy 3.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
 
 🔍 Validating examplePair_EmbededSchema copy 4.json...
 
@@ -18,21 +25,26 @@
 🔍 Validating examplePair_EmbededSchema.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json Valid
 
 🔍 Validating test1.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json Valid
 
 🔍 Validating testEmbeddedSchema.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json Valid
 
 🔍 Validating testEmbeddedSchemaFailed.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
 
 🔴 Summary: Failed Files
-examplePair_EmbededSchema copy 2.json
 examplePair_EmbededSchema copy 3.json
-examplePair_EmbededSchema.json
-test1.json
-testEmbeddedSchema.json
 testEmbeddedSchemaFailed.json
