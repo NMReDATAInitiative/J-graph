@@ -8,6 +8,26 @@ const instancesDir = process.argv[2] ? path.resolve(process.argv[2]) : path.join
 let failedFiles = []; // Store names of failed JSON files
 let schemas = {}; // Cache for fetched schemas
 
+function fixInvalidRegex(schema) {
+    if (!schema || typeof schema !== "object") return;
+
+    for (const key in schema) {
+        if (typeof schema[key] === "object") {
+            fixInvalidRegex(schema[key]); // Recursively fix nested properties
+        }
+
+        if (key === "pattern" && typeof schema[key] === "string") {
+            if (schema[key].includes("(?i)") || schema[key].includes("(?-i)")) {
+                console.log(`⚠️ Fixing invalid regex: ${schema[key]}`);
+                schema[key] = schema[key]
+                    .replace(/\(\?i\)/g, "")  // Remove (?i)
+                    .replace(/\(\?-i\)/g, ""); // Remove (?-i)
+            }
+        }
+    }
+}
+
+
 /** Fetches and caches schemas, ensuring it is fully resolved before use */
 async function fetchSchema(url, schemaCache, baseUrl = null) {
     if (!url.startsWith("http")) {
@@ -18,11 +38,7 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         url = new URL(url, baseUrl).href;
     }
 
-    // Prevent duplicate loads
-    if (schemaCache[url] || Object.values(schemaCache).some(s => s?.$id === url)) {
-        while (schemaCache[url] === "loading") {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-        }
+    if (schemaCache[url]) {
         return schemaCache[url];
     }
 
@@ -34,16 +50,17 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         if (!response.ok) throw new Error(`Failed to fetch schema: ${url}`);
 
         const schema = await response.json();
-        schemaCache[url] = schema;
 
-        // Store by $id if available, ensuring no duplicates
+        // ✅ Fix invalid regex patterns before validation
+        fixInvalidRegex(schema);
+
+        schemaCache[url] = schema;
         if (schema["$id"] && !schemaCache[schema["$id"]]) {
             schemaCache[schema["$id"]] = schema;
         }
 
         const newBaseUrl = schema["$id"] || url;
 
-        // Recursively resolve references
         await resolveRefs(schema, schemaCache, newBaseUrl);
 
         console.log(`✅ Loaded schema: ${url}`);
@@ -54,6 +71,7 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
         return null;
     }
 }
+
 
 
 /** Resolves references ($ref) recursively */
