@@ -2,18 +2,18 @@
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json",
     "object1": {
         "name": "Alice",
-        "@id": "urn:uuid:d55365c2-d9f6-4f2f-a6c4-44cba33fd973",
+        "@id": "urn:uuid:28532618-844a-4422-a4e9-ca6fd4c558bf",
         "@type": "Obj1"
     },
     "object2": {
         "name": "Bob",
         "age": 53,
-        "@id": "urn:uuid:e214fd94-93f7-4818-ad4e-393dba551b60",
+        "@id": "urn:uuid:e41bc9e7-02c0-41f8-84ca-4ad63b2c656e",
         "@type": "Obj2"
     },
     "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:aac43a95-f177-4784-b376-04cc6e894ce5",
+    "@id": "urn:uuid:8f15fdd8-364b-4dfa-be1e-2a4db6d76e21",
     "@type": "PairObj1",
-    "timestamp": "2025-02-04T14:28:05.114Z",
+    "timestamp": "2025-02-04T14:57:58.003Z",
     "source": "Generated from schema conversion"
 }

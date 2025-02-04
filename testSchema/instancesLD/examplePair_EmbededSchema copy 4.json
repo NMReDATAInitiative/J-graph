@@ -5,7 +5,7 @@
     "object2": {
         "name": "Bob",
         "age": 53,
-        "@id": "urn:uuid:da62caaa-f26d-4cab-85bf-0c74f365127b",
+        "@id": "urn:uuid:cb51f063-88e4-431d-b941-0f934f23e08d",
         "@type": "Obj2"
     }
 }

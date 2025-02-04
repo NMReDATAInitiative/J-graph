@@ -36,7 +36,8 @@ fs.readdir(inputDir, (err, files) => {
 
                     // Determine schema title and ID
                     let typeName = capitalizeFirstLetter(path.basename(file, '.json'));
-                    schema["$schema"] = "https://json-schema.org/draft/2020-12/schema";
+                    //schema["$schema"] = "https://json-schema.org/draft/2020-12/schema";
+                    schema["$schema"] = "http://json-schema.org/draft-07/schema#";
                     schema["title"] = typeName;
 
                     // Set proper $id and replace occurrences of source with target

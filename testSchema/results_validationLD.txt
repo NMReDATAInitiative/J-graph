@@ -1,38 +1,38 @@
-📂 Validating JSON files in: /Users/djeanner/git/J-graph/testSchema/instancesLD
 
 🔍 Validating examplePair.json...
 
 🔍 Validating examplePair_EmbededSchema copy 2.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
-❌ Error loading schema from https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json: no schema with key or ref "https://json-schema.org/draft/2020-12/schema"
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
-❌ Error loading schema from https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json: no schema with key or ref "https://json-schema.org/draft/2020-12/schema"
-❌ Error loading schema from https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json: no schema with key or ref "https://json-schema.org/draft/2020-12/schema"
-❌ Root - Schema "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json" not found.
 
 🔍 Validating examplePair_EmbededSchema copy 3.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
-⚠️ Schema already exists in AJV: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
-❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json Invalid: data/object1 must have required property '@id'
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
 
 🔍 Validating examplePair_EmbededSchema copy 4.json...
 
 🔍 Validating examplePair_EmbededSchema copy.json...
 
 🔍 Validating examplePair_EmbededSchema.json...
-✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json Valid
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
 
 🔍 Validating test1.json...
-✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json Valid
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
 
 🔍 Validating testEmbeddedSchema.json...
-✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json Valid
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json
 
 🔍 Validating testEmbeddedSchemaFailed.json...
-❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json Invalid: data must have required property 'age'
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json
 
 🔴 Summary: Failed Files
 examplePair_EmbededSchema copy 2.json
 examplePair_EmbededSchema copy 3.json
+examplePair_EmbededSchema.json
+test1.json
+testEmbeddedSchema.json
 testEmbeddedSchemaFailed.json
