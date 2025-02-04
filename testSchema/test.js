@@ -2,10 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const fetch = require("node-fetch");
 const Ajv = require("ajv");
+const addFormats = require("ajv-formats"); // Import ajv-formats
 
 const instancesDir = path.join(__dirname, "instancesLD"); // Folder containing JSON files
 let schemas = {}; // Cache for fetched schemas
 const ajv = new Ajv({ schemas: true }); // Enable support for multiple schemas
+
+addFormats(ajv); // Enable standard formats like "uri"
+
 let failedFiles = []; // Store names of failed JSON files
 
 async function fetchSchema(url) {
@@ -22,16 +26,21 @@ async function fetchSchema(url) {
         // Recursively resolve any `$ref` references inside this schema
         await resolveRefs(schema);
 
-        // Register the schema with AJV
-        ajv.addSchema(schema, url);
+        // Check if AJV already has this schema before adding
+        if (!ajv.getSchema(url)) {
+            ajv.addSchema(schema, url);
+            console.log(`✅ Loaded schema: ${url}`);
+        } else {
+            console.log(`⚠️ Schema already exists in AJV: ${url}`);
+        }
 
-        console.log(`✅ Loaded schema: ${url}`);
         return schema;
     } catch (error) {
         console.error(`❌ Error loading schema from ${url}:`, error.message);
         return null;
     }
 }
+
 
 async function resolveRefs(schema) {
     if (!schema || typeof schema !== "object") return;
