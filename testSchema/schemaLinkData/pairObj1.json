@@ -1,0 +1,38 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json",
+    "properties": {
+        "@context": {
+            "type": "string",
+            "format": "uri",
+            "description": "Linked Data context URL"
+        },
+        "@id": {
+            "type": "string",
+            "format": "uri",
+            "description": "Unique identifier for this resource"
+        },
+        "@type": {
+            "type": "string",
+            "enum": [
+                "PairObj1"
+            ]
+        },
+        "object1": {
+            "$ref": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
+            "@type": "Obj1"
+        },
+        "object2": {
+            "$ref": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
+            "@type": "Obj2"
+        }
+    },
+    "required": [
+        "@id",
+        "@type",
+        "object1",
+        "object2"
+    ],
+    "title": "PairObj1"
+}

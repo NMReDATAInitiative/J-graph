@@ -1,0 +1,27 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json",
+    "object1": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
+        "name": "Alice",
+        "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
+        "@id": "urn:uuid:60bb362c-79c4-4768-b20a-07996b40c51d",
+        "@type": "Obj1",
+        "timestamp": "2025-02-04T12:34:02.706Z",
+        "source": "Generated from schema conversion"
+    },
+    "object2": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
+        "name": "Bob",
+        "age": 53,
+        "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
+        "@id": "urn:uuid:668a869d-1d9b-46ab-98a3-f3d689b0ba6a",
+        "@type": "Obj2",
+        "timestamp": "2025-02-04T12:34:02.706Z",
+        "source": "Generated from schema conversion"
+    },
+    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
+    "@id": "urn:uuid:cbb1759e-cfc2-47ab-b61e-eb8a3eda14b5",
+    "@type": "PairObj1",
+    "timestamp": "2025-02-04T12:34:02.706Z",
+    "source": "Generated from schema conversion"
+}

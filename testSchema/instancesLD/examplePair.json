@@ -1,0 +1,9 @@
+{
+    "object1": {
+        "name": "Alice"
+    },
+    "object2": {
+        "name": "Bob",
+        "age": 53
+    }
+}

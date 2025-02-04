@@ -1,0 +1,35 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
+    "properties": {
+        "@context": {
+            "type": "string",
+            "format": "uri",
+            "description": "Linked Data context URL"
+        },
+        "@id": {
+            "type": "string",
+            "format": "uri",
+            "description": "Unique identifier for this resource"
+        },
+        "@type": {
+            "type": "string",
+            "enum": [
+                "Obj1"
+            ]
+        },
+        "name": {
+            "type": "string"
+        },
+        "age": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "@id",
+        "@type",
+        "name"
+    ],
+    "title": "Obj1"
+}

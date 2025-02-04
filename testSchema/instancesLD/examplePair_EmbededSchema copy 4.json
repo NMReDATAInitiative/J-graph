@@ -1,0 +1,15 @@
+{
+    "object1": {
+        "name": "Alice"
+    },
+    "object2": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
+        "name": "Bob",
+        "age": 53,
+        "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
+        "@id": "urn:uuid:ba6944da-9d1b-4f6a-8c23-5e6f734da05e",
+        "@type": "Obj2",
+        "timestamp": "2025-02-04T12:34:02.707Z",
+        "source": "Generated from schema conversion"
+    }
+}
