@@ -7,6 +7,21 @@ const instancesDir = process.argv[2] ? path.resolve(process.argv[2]) : path.join
 
 let failedFiles = []; // Store names of failed JSON files
 let schemas = {}; // Cache for fetched schemas
+function removeUnprocessedKeywords(schema) {
+    if (!schema || typeof schema !== "object") return;
+
+    for (const key in schema) {
+        if (typeof schema[key] === "object") {
+            removeUnprocessedKeywords(schema[key]); // Recursively clean nested properties
+        }
+    }
+
+    // Remove "$schema" since schemasafe does not process it
+    if ("$schema" in schema) {
+        console.log(`⚠️ Removing unprocessed keyword: "$schema" from ${schema["$id"] || "unknown schema"}`);
+        delete schema["$schema"];
+    }
+}
 
 function fixInvalidRegex(schema) {
     if (!schema || typeof schema !== "object") return;
@@ -51,7 +66,8 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
 
         const schema = await response.json();
 
-        // ✅ Fix invalid regex patterns before validation
+        // ✅ Remove "$schema" before validation
+        removeUnprocessedKeywords(schema);
         fixInvalidRegex(schema);
 
         schemaCache[url] = schema;
