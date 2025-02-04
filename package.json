@@ -51,7 +51,8 @@
     "ajv": "^8.17.1",
     "d3": "^7.5.0",
     "esm": "^3.2.25",
-    "nmredata-data-test": "^0.4.0"
+    "nmredata-data-test": "^0.4.0",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "jest": "^29.7.0",

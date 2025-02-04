@@ -3,7 +3,7 @@ const path = require("path");
 const fetch = require("node-fetch");
 const Ajv = require("ajv");
 
-const instancesDir = path.join(__dirname, "instances"); // Folder containing JSON files
+const instancesDir = path.join(__dirname, "instancesLD"); // Folder containing JSON files
 let schemas = {}; // Cache for fetched schemas
 const ajv = new Ajv({ schemas: true }); // Enable support for multiple schemas
 let failedFiles = []; // Store names of failed JSON files
