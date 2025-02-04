@@ -40,7 +40,7 @@ async function fetchSchema(url, ajvInstance, schemaCache) {
 
         return schema;
     } catch (error) {
-        console.error(`❌ Error loading schema from ${url}:`, error.message);
+        console.log(`❌ Error loading schema from ${url}:`, error.message);
         schemaCache[url] = null; // Mark as failed to prevent infinite loops
         return null;
     }
@@ -70,14 +70,14 @@ async function validateObject(obj, fileName, ajvInstance, schemaCache, path = "R
         const schema = await fetchSchema(schemaUrl, ajvInstance, schemaCache);
 
         if (!schema) {
-            console.error(`❌ ${path} - Schema "${schemaUrl}" not found.`);
+            console.log(`❌ ${path} - Schema "${schemaUrl}" not found.`);
             failedFiles.push(fileName);
             return;
         }
 
         const validate = ajvInstance.getSchema(schemaUrl);
         if (!validate) {
-            console.error(`❌ ${path} - No validator compiled for ${schemaUrl}`);
+            console.log(`❌ ${path} - No validator compiled for ${schemaUrl}`);
             failedFiles.push(fileName);
             return;
         }
@@ -85,7 +85,7 @@ async function validateObject(obj, fileName, ajvInstance, schemaCache, path = "R
         if (validate(obj)) {
             console.log(`✅ ${path} - ${schemaUrl} Valid`);
         } else {
-            console.error(`❌ ${path} - ${schemaUrl} Invalid:`, ajvInstance.errorsText(validate.errors));
+            console.log(`❌ ${path} - ${schemaUrl} Invalid:`, ajvInstance.errorsText(validate.errors));
             failedFiles.push(fileName);
         }
     }
@@ -114,7 +114,7 @@ async function validateJSONFiles() {
             const jsonData = JSON.parse(fs.readFileSync(filePath, "utf8"));
             await validateObject(jsonData, file, ajvInstance, schemaCache);
         } catch (error) {
-            console.error(`❌ Error reading ${file}:`, error.message);
+            console.log(`❌ Error reading ${file}:`, error.message);
             failedFiles.push(file);
         }
     }
