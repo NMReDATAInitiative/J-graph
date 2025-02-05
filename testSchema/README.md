@@ -17,7 +17,9 @@ echo "SCHEMA: derive obj1 into obj1size by adding a mandatory size property"
 node updateSchema.js
 echo "SCHEMA: generate linked data schema in folder schemaLinkData from folder schemaNoLinkData"
 node generateLinkedDataSchema.js
+echo "SCHEMA: make a resolved version (longer, but self-consistant)"
 
+  node resolveSchemas.js
 
 
 echo "INSTANCES: Creating instance pairObj1 from alice.json and obj1.json"

@@ -44,8 +44,8 @@ function resolveRefs(schema) {
         const refFile = path.basename(schema["$ref"]);
         if (schemaCache[refFile]) {
             resolvedSchema = {
-                ...resolveRefs(schemaCache[refFile]), // Expand the reference
-                ...resolvedSchema // Ensure additional properties stay
+                ...resolveRefs(schemaCache[refFile]), // Expands the reference
+                ...resolvedSchema // Ensures additional properties stay
             };
             delete resolvedSchema["$ref"];
         } else {
@@ -72,6 +72,11 @@ function resolveRefs(schema) {
         delete resolvedSchema["allOf"];
     }
 
+    // Fix the `$id` to the correct derived schema name
+    if (schema["$id"]) {
+        resolvedSchema["$id"] = schema["$id"];
+    }
+
     // Recursively resolve nested properties
     if (resolvedSchema.properties) {
         Object.keys(resolvedSchema.properties).forEach(key => {
@@ -81,6 +86,7 @@ function resolveRefs(schema) {
 
     return resolvedSchema;
 }
+
 
 // Process all schemas and generate effective versions
 function processSchemas() {
