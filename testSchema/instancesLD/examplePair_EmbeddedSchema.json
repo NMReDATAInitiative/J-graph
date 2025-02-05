@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:5bb5dad1-a3f7-460b-910f-41ac80502eb7",
+        "@id": "urn:uuid:6c8f6eb1-8a09-439c-893b-5c78418b455c",
         "@type": "Obj1",
-        "timestamp": "2025-02-05T19:49:29.952Z",
+        "timestamp": "2025-02-05T19:54:42.567Z",
         "source": "Generated from schema conversion",
-        "finalHash": "0394907aca3d0c46040b3348341a3faad514764aa704b3eaa44095e53dc74184"
+        "finalHash": "68fcf10379f7bc37478fe3428082f743483eb0898f2b62d6133f336bec72fa5a"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:20a84739-33de-4324-972c-5f4db65ab273",
+        "@id": "urn:uuid:9dd66665-a2bb-4d14-ac1f-2f3252a52d34",
         "@type": "Obj2",
-        "timestamp": "2025-02-05T19:49:29.952Z",
+        "timestamp": "2025-02-05T19:54:42.567Z",
         "source": "Generated from schema conversion",
-        "finalHash": "259e24cca3c6e4a6dd5d84db0e8f0af8108e68af52aeb319ea76c685c2158f7f"
+        "finalHash": "bb5653b474f4b3ad68a4aa94a258dc29ae4b779d1e96972201a95fb659a0bd00"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:f1820264-dff1-495f-ad53-7515ad498c19",
+    "@id": "urn:uuid:1dcb41d1-e70f-4802-ae08-aeb810b801e9",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T19:49:29.952Z",
+    "timestamp": "2025-02-05T19:54:42.567Z",
     "source": "Generated from schema conversion",
-    "finalHash": "07764bd6be6067fe0c78a6f5f3d85cf6f2266fa699d2e1638ac1e70f19c70a0a"
+    "finalHash": "4f13f933d681bea31dce83f89ee4c2b3d6a6bf8ca655cc9590f15dd1b6c11d72"
 }

@@ -1,0 +1,7 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json",
+    "name": "Bob",
+    "age" : 53,
+    "@id": "urn:uuid:63543b72-8431-4845-b5ab-ac043eb5851c",
+    "timestamp": "2025-02-05T18:00:44.422Z"
+}

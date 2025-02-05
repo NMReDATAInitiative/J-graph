@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:3c2aa938-82b9-4fc9-aa2b-936e5ec2fd58",
+        "@id": "urn:uuid:c8bbd477-3d0a-4d9f-811c-3557c13a8215",
         "@type": "Obj1",
-        "timestamp": "2025-02-05T19:49:29.952Z",
+        "timestamp": "2025-02-05T19:54:42.568Z",
         "source": "Generated from schema conversion",
-        "finalHash": "4e5ae384f3ad383c553d6077e4bd19fe63090e59ce9b86bae4c068323519314a"
+        "finalHash": "a6387ab9f2617c3aba86b884a5d72bbb534e31c4bbd7b1e03a5aa74901060d1a"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:847a69bd-e74c-43ab-9f29-a907a304273b",
+        "@id": "urn:uuid:59fa7f6a-798f-4fc2-a0ba-2af8157eb7d3",
         "@type": "Obj2",
-        "timestamp": "2025-02-05T19:49:29.952Z",
+        "timestamp": "2025-02-05T19:54:42.568Z",
         "source": "Generated from schema conversion",
-        "finalHash": "a89bb7e85be07eaff91185219ce9e8b68ec7e68de9466499d3f4f0dc4a2901f3"
+        "finalHash": "bbfedd1c5b43d0fe218b843a37dce34a8a997aad4480ba23031a7e0b5f57db14"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:a405268c-a320-4582-83bd-89a3e09548d0",
+    "@id": "urn:uuid:99337e69-ff36-44c7-a9a7-2551385f0852",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T19:49:29.952Z",
+    "timestamp": "2025-02-05T19:54:42.568Z",
     "source": "Generated from schema conversion",
-    "finalHash": "21da7572f24cc63a282d210dd5175b28a236aeff95d8b0381206a903077ecb15"
+    "finalHash": "2f3522fb5365c61fb76ba9f57d7b6896a06427159c97ef7e77c46e843a5f86ae"
 }

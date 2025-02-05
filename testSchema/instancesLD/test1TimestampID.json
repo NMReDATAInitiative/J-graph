@@ -1,0 +1,11 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
+    "name": "Bob",
+    "age": 53,
+    "@id": "urn:uuid:63543b72-8431-4845-b5ab-ac043eb5851c",
+    "timestamp": "2025-02-05T18:00:44.422Z",
+    "initialHash": "862ec2fcbb8dc88506a259576c8c486516ecc2a91416e4ac906cb25dc6a5f539",
+    "@type": "Obj2",
+    "source": "Generated from schema conversion",
+    "finalHash": "3ae2d46cdd79ecf054937873ae007db858702ae5ae55f083d82e6d672b921129"
+}
