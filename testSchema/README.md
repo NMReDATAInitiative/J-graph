@@ -1,19 +1,20 @@
  to test run:
 
 ```zsh
-jq -n '{ 
-    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json",
-    object1: (input),
-    object2: (input)
-}' ./instances/alice.json ./instances/test1.json > ./instances/examplePair_EmbededSchema.json
 
-echo "generate linked data schema in folder schemaLinkData from folder schemaNoLinkData"
+echo "SCHEMA: derive obj1 into obj1size by adding a size"
+node updateSchema.js
+
+echo "INSTANCES: Creating instance pairObj1 from alice.json and obj1.json"
+node updateInstances.js
+
+echo "SCHEMA: generate linked data schema in folder schemaLinkData from folder schemaNoLinkData"
 node generateLinkedDataSchema.js
-echo "generate linked data instances in folder instancesLD from folder instances"
+echo "INSTANCES: generate linked data instances in folder instancesLD from folder instances"
 node makeLindedDataInstances.js
-echo "test the schema of all json in instances ..."
+echo "SCHEMA: test the schema of all json in instances ..."
 node test.js instances > results_validation.txt
-echo "test the schema of all json in instancesLD ..."
+echo "INSTANCES: test the schema of all json in instancesLD ..."
 node test.js instancesLD > results_validationLD.txt
 ```
 

@@ -3,9 +3,16 @@
     "type": "object",
     "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json",
     "allOf": [
-        { "$ref": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json" }
+        {
+            "$ref": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json"
+        }
     ],
     "properties": {
-        "size": { "type": "number" }
-    }
+        "size": {
+            "type": "number"
+        }
+    },
+    "required": [
+        "size"
+    ]
 }

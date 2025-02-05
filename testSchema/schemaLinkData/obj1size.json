@@ -28,9 +28,10 @@
             "type": "number"
         }
     },
-    "title": "Obj1size",
     "required": [
         "@id",
-        "@type"
-    ]
+        "@type",
+        "size"
+    ],
+    "title": "Obj1size"
 }

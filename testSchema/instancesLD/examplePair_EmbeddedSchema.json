@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:3d862014-7013-45c0-acfc-051b2338bbb2",
+        "@id": "urn:uuid:5bb5dad1-a3f7-460b-910f-41ac80502eb7",
         "@type": "Obj1",
-        "timestamp": "2025-02-05T19:49:29.954Z",
+        "timestamp": "2025-02-05T19:49:29.952Z",
         "source": "Generated from schema conversion",
-        "finalHash": "a4b92b4061b9bdb0c500834b795ba4bc96f9e83236ef7e876143354f468bd677"
+        "finalHash": "0394907aca3d0c46040b3348341a3faad514764aa704b3eaa44095e53dc74184"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:9a551cd1-1990-4f1e-9ad6-f82a35a88278",
+        "@id": "urn:uuid:20a84739-33de-4324-972c-5f4db65ab273",
         "@type": "Obj2",
-        "timestamp": "2025-02-05T19:49:29.954Z",
+        "timestamp": "2025-02-05T19:49:29.952Z",
         "source": "Generated from schema conversion",
-        "finalHash": "daf19ef53fdfec0f8059ab3051368e472dd81ccf8da380b872c8f31b9212f015"
+        "finalHash": "259e24cca3c6e4a6dd5d84db0e8f0af8108e68af52aeb319ea76c685c2158f7f"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:b3775aad-1898-4362-9abb-d3e861249fc1",
+    "@id": "urn:uuid:f1820264-dff1-495f-ad53-7515ad498c19",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T19:49:29.954Z",
+    "timestamp": "2025-02-05T19:49:29.952Z",
     "source": "Generated from schema conversion",
-    "finalHash": "a1c01fed47fa96af83cdf9a4b4af4abc7b237d8cfdf594e79550421c589709fc"
+    "finalHash": "07764bd6be6067fe0c78a6f5f3d85cf6f2266fa699d2e1638ac1e70f19c70a0a"
 }
