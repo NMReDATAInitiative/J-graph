@@ -3,38 +3,53 @@ const path = require("path");
 
 // Directories
 const schemaDir = "./schemaNoLinkData";
-const instancesDir = "./instances";
 
-// File paths
-const obj1Path = path.join(schemaDir, "obj1.json");
-const obj1SizePath = path.join(schemaDir, "obj1size.json");
-const pairObj1Path = path.join(instancesDir, "examplePair_EmbeddedSchema.json");
+/**
+ * Function to derive a new schema from an existing one
+ * @param {string} sourceClass - The base schema filename (without `.json`)
+ * @param {string} derivedClass - The new schema filename (without `.json`)
+ * @param {Array} fieldsToAdd - Fields to add with properties { name, mandatory, type }
+ */
+function deriveSchema(sourceClass, derivedClass, fieldsToAdd) {
+    const sourcePath = path.join(schemaDir, `${sourceClass}.json`);
+    const derivedPath = path.join(schemaDir, `${derivedClass}.json`);
 
-// Instance files
-const alicePath = path.join(instancesDir, "alice.json");
-const test1Path = path.join(instancesDir, "test1.json");
+    console.log(`🛠️ Deriving ${sourceClass} into ${derivedClass}...`);
+    console.log(`   Adding fields:`, fieldsToAdd.map(f => `${f.name} (${f.type})${f.mandatory ? " [mandatory]" : ""}`).join(", "));
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+    // Load the source schema
+    const sourceSchema = JSON.parse(fs.readFileSync(sourcePath, "utf8"));
 
-console.log("🛠️ Deriving obj1 into obj1size...");
-console.log("   add 'size' as 'number' and require it");
+    // Create the new schema based on the source schema
+    const derivedSchema = {
+        "$schema": sourceSchema["$schema"],
+        "type": sourceSchema["type"],
+        "$id": `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${derivedClass}.json`,
+        "allOf": [{ "$ref": sourceSchema["$id"] }],
+        "properties": {}
+    };
 
-// Load obj1 schema
-const obj1Schema = JSON.parse(fs.readFileSync(obj1Path, "utf8"));
+    // Add new fields
+    const requiredFields = [];
+    fieldsToAdd.forEach(field => {
+        derivedSchema["properties"][field.name] = { "type": field.type };
+        if (field.mandatory) {
+            requiredFields.push(field.name);
+        }
+    });
 
-// Create obj1size schema based on obj1
-const obj1SizeSchema = {
-    "$schema": obj1Schema["$schema"],
-    "type": obj1Schema["type"],
-    "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json",
-    "allOf": [{ "$ref": obj1Schema["$id"] }],
-    "properties": {
-        "size": { "type": "number" }
-    },
-    "required": ["size"]
-};
+    // Add required fields if any
+    if (requiredFields.length > 0) {
+        derivedSchema["required"] = requiredFields;
+    }
 
-// Save obj1size schema
-fs.writeFileSync(obj1SizePath, JSON.stringify(obj1SizeSchema, null, 4));
-console.log("✅ obj1size schema created at:", obj1SizePath);
+    // Save the new schema
+    fs.writeFileSync(derivedPath, JSON.stringify(derivedSchema, null, 4));
+
+    console.log(`✅ ${derivedClass} schema created at:`, derivedPath);
+}
+
+// Example usage
+deriveSchema("obj1", "obj1size", [
+    { name: "size", mandatory: true, type: "number" }
+]);

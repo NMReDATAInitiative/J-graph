@@ -2,20 +2,15 @@ const fs = require("fs");
 const path = require("path");
 
 // Directories
-const schemaDir = "./schemaNoLinkData";
 const instancesDir = "./instances";
 
 // File paths
-const obj1Path = path.join(schemaDir, "obj1.json");
-const obj1SizePath = path.join(schemaDir, "obj1size.json");
 const pairObj1Path = path.join(instancesDir, "examplePair_EmbeddedSchema.json");
 
 // Instance files
 const alicePath = path.join(instancesDir, "alice.json");
 const test1Path = path.join(instancesDir, "test1.json");
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
 console.log("\n🛠️ Creating instance pairObj1...");
 
 // Load JSON instances

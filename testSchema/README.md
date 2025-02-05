@@ -1,3 +1,11 @@
+Schemas are built in the `./schemaNoLinkedData/` (and a script validates)
+
+Some are created directly in `./schemaNoLinkedData/` with `./updateSchema.js`
+`./generateLinkedDataSchema.js` makes linked data versions (and another script validates)
+`./resolveSchemas.js` makes the resolved version (no validation)
+
+For instances....
+
 
 A timestamp and random ID is added if not present in the original data in ./instances for the linked data version in ./instancesLD
 
