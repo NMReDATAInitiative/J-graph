@@ -1,9 +1,11 @@
 {
-    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
     "name": "Bob",
-    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:78863ba0-70b4-49d0-9f2d-e17745272157",
-    "@type": "Obj1",
-    "timestamp": "2025-02-05T16:49:30.669Z",
-    "source": "Generated from schema conversion"
+    "age": 53,
+    "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
+    "@id": "urn:uuid:1b155f85-7149-4711-b40b-1268b832fd78",
+    "@type": "Obj2",
+    "timestamp": "2025-02-05T18:00:44.421Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "8973abb369723b8743f33479c5c7e07b3a78411ecef72b9bb7f08fa5c4c7ac91"
 }

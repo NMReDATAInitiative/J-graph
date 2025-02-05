@@ -3,9 +3,16 @@
         "name": "Alice"
     },
     "object2": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
-        "@id": "urn:uuid:8e43a0df-bdfb-4f38-9d9a-6d6bede6b787",
-        "@type": "Obj2"
-    }
+        "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
+        "@id": "urn:uuid:4f03874f-7665-466b-97ff-82cf979945cc",
+        "@type": "Obj2",
+        "timestamp": "2025-02-05T18:00:44.418Z",
+        "source": "Generated from schema conversion",
+        "finalHash": "cb810acc07bedf7b7bd3bbd0de5d25ee2b46248ccfd7a6925b8357f8a1bbb6bc"
+    },
+    "initialHash": "dab53e53fc53fac20396b5e626c9e078f0bee06343dcc19ebd6e5cf6bf1cac38",
+    "finalHash": "465872de043cea1bbf5f35a3fdc43364c458d58389cc2f754762c63b8a4ffb03"
 }

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 
 const sourceDir = path.join(__dirname, 'instances');
@@ -21,70 +22,61 @@ function extractTypeFromSchema(schemaUrl) {
     return capitalizeFirstLetter(schemaName);
 }
 
-function convertToLD(instance, isRoot = true) {
-    if (!instance || typeof instance !== 'object') return instance;
+// Function to compute SHA-256 hash of a JSON object
+function computeHash(obj) {
+    const jsonString = JSON.stringify(obj, Object.keys(obj).sort()); // Canonicalize by sorting keys
+    return crypto.createHash('sha256').update(jsonString).digest('hex');
+}
 
-    const ldInstance = { ...instance };
+function processSchemaObject(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
 
-    // Process root object: Convert schema reference to Linked Data format
-    if (isRoot && ldInstance['$schema'] && ldInstance['$schema'].includes(schemaSource)) {
-        ldInstance['$schema'] = ldInstance['$schema'].replace(schemaSource, schemaTarget);
-        ldInstance['@context'] = `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/${schemaTarget}/`;
+    let processedObj = { ...obj };
 
-        if (!ldInstance['@id']) {
-            ldInstance['@id'] = `urn:uuid:${uuidv4()}`;
-            console.warn(`Added missing @id field for root.`);
+    // Compute initial hash before transformation
+    processedObj["initialHash"] = computeHash(processedObj);
+
+    // Process transformations
+    if (processedObj['$schema'] && processedObj['$schema'].includes(schemaSource)) {
+        processedObj['$schema'] = processedObj['$schema'].replace(schemaSource, schemaTarget);
+
+        if (!processedObj['@id']) {
+            processedObj['@id'] = `urn:uuid:${uuidv4()}`;
+            console.warn(`Added missing @id.`);
         }
 
-        if (!ldInstance['@type']) {
-            let inferredType = extractTypeFromSchema(ldInstance['$schema']);
-            ldInstance['@type'] = inferredType;
-            console.warn(`Inferred @type as ${inferredType} for root.`);
+        if (!processedObj['@type']) {
+            processedObj['@type'] = extractTypeFromSchema(processedObj['$schema']);
+            console.warn(`Inferred @type as ${processedObj['@type']}.`);
         }
 
-        if (!ldInstance['timestamp']) {
-            ldInstance['timestamp'] = new Date().toISOString();
-            console.warn(`Added missing timestamp field for root.`);
+        if (!processedObj['timestamp']) {
+            processedObj['timestamp'] = new Date().toISOString();
+            console.warn(`Added missing timestamp.`);
         }
 
-        if (!ldInstance['source']) {
-            ldInstance['source'] = "Generated from schema conversion";
-            console.warn(`Added missing source field for root.`);
+        if (!processedObj['source']) {
+            processedObj['source'] = "Generated from schema conversion";
+            console.warn(`Added missing source.`);
         }
     }
 
-    // Process nested objects
-    Object.keys(ldInstance).forEach(prop => {
-        if (typeof ldInstance[prop] === 'object' && ldInstance[prop] !== null) {
-            let subObject = ldInstance[prop];
+    // Recursively process nested objects
+    Object.keys(processedObj).forEach(prop => {
+        if (typeof processedObj[prop] === 'object' && processedObj[prop] !== null) {
+            let subObject = processedObj[prop];
 
-            // If a nested object has a `$schema`, treat it as a Linked Data entity
+            // If the nested object has a `$schema`, apply processing
             if (subObject['$schema'] && subObject['$schema'].includes(schemaSource)) {
-                subObject['$schema'] = subObject['$schema'].replace(schemaSource, schemaTarget);
-
-                if (!subObject['@id']) {
-                    subObject['@id'] = `urn:uuid:${uuidv4()}`;
-                    console.warn(`Added missing @id for nested object: ${prop}`);
-                }
-
-                if (!subObject['@type']) {
-                    subObject['@type'] = extractTypeFromSchema(subObject['$schema']);
-                    console.warn(`Inferred @type as ${subObject['@type']} for nested object: ${prop}`);
-                }
-
-                // Remove @context from nested objects (only keep at root)
-                delete subObject['@context'];
+                processedObj[prop] = processSchemaObject(subObject);
             }
-
-            // Remove $schema from nested objects (it should only be in the root)
-            delete subObject['$schema'];
-
-            // Recursively process nested objects
-            ldInstance[prop] = convertToLD(subObject, false);
         }
     });
 
-    return ldInstance;
+    // Compute final hash after transformation
+    processedObj["finalHash"] = computeHash(processedObj);
+
+    return processedObj;
 }
 
 fs.readdirSync(sourceDir).forEach(file => {
@@ -92,13 +84,15 @@ fs.readdirSync(sourceDir).forEach(file => {
         const instancePath = path.join(sourceDir, file);
         const instance = JSON.parse(fs.readFileSync(instancePath, 'utf8'));
 
-        const ldInstance = convertToLD(instance);
+        // Convert instance and add hashes
+        const ldInstance = processSchemaObject(instance);
 
         fs.writeFileSync(
             path.join(targetDir, file),
             JSON.stringify(ldInstance, null, 4),
             'utf8'
         );
-        console.log(`✅ Converted ${file} to Linked Data JSON.`);
+
+        console.log(`✅ Converted ${file} to Linked Data JSON with hashes for all schema objects.`);
     }
 });

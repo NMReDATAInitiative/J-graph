@@ -1,19 +1,30 @@
 {
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json",
     "object1": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
-        "@id": "urn:uuid:f994c460-d0be-4aac-b032-90b1b690bbb2",
-        "@type": "Obj1"
+        "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
+        "@id": "urn:uuid:5c03dcce-4ba1-4818-9e9c-d79aa96d07d8",
+        "@type": "Obj1",
+        "timestamp": "2025-02-05T18:00:44.417Z",
+        "source": "Generated from schema conversion",
+        "finalHash": "b17f0e4989b6dbc3215884b5dd311b5207b73511a4b79536248f2ebef8b06a42"
     },
     "object2": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
-        "@id": "urn:uuid:189ef5c3-9110-47ff-9555-9c2cf21497ca",
-        "@type": "Obj2"
+        "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
+        "@id": "urn:uuid:200998b3-697c-4199-a107-f8e31434a074",
+        "@type": "Obj2",
+        "timestamp": "2025-02-05T18:00:44.417Z",
+        "source": "Generated from schema conversion",
+        "finalHash": "e91edaf8854ecf237ab31d6071b98544fc625bf4a8d24d8e745e429cb4c0da86"
     },
-    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:c80d2d4a-53d4-47d4-bf13-8a1ee55dd26a",
+    "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
+    "@id": "urn:uuid:923c087f-17e9-4572-a281-b995ec351552",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T16:49:30.664Z",
-    "source": "Generated from schema conversion"
+    "timestamp": "2025-02-05T18:00:44.417Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "ed42f96fff8afacfcb0edf62d85b2d71d428695bce83ab93ed927992ad05bc52"
 }

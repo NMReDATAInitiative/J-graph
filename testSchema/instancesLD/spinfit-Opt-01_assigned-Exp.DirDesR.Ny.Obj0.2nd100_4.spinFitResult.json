@@ -14,25 +14,25 @@
         "sourceDataCS": "AssignedUserChemShift",
         "sourceDataJ": "AssignedCouplingMatchMiniNetwork",
         "network": {
-            "jGraphColumn": {
-                "0": {
-                    "atomIndex": {
-                        "0": 5
-                    },
+            "jGraphColumn": [
+                {
+                    "atomIndex": [
+                        5
+                    ],
                     "chemicalShift": 8.60008522,
                     "assigned": true,
                     "nameChemicalShift": "5",
                     "nameChemicalShiftWithMoleculeNumber": "5 (1)",
-                    "compoundIndex": {
-                        "0": 0
-                    },
+                    "compoundIndex": [
+                        0
+                    ],
                     "nbProton": 1,
                     "fQUuid": "{2c82111c-6221-4195-b59c-55f1c6780925}",
-                    "indexNetworkArray": {
-                        "0": 0
-                    },
-                    "jInColumnArray": {
-                        "0": {
+                    "indexNetworkArray": [
+                        0
+                    ],
+                    "jInColumnArray": [
+                        {
                             "fValue": 2.4958496,
                             "assigned": true,
                             "nameCoupling": "J(7-5)",
@@ -40,26 +40,26 @@
                             "indexPartnerJInColumn": 0,
                             "nodeNumber": 1
                         }
-                    }
+                    ]
                 },
-                "1": {
-                    "atomIndex": {
-                        "0": 7
-                    },
+                {
+                    "atomIndex": [
+                        7
+                    ],
                     "chemicalShift": 8.3502891,
                     "assigned": true,
                     "nameChemicalShift": "7",
                     "nameChemicalShiftWithMoleculeNumber": "7 (1)",
-                    "compoundIndex": {
-                        "0": 0
-                    },
+                    "compoundIndex": [
+                        0
+                    ],
                     "nbProton": 1,
                     "fQUuid": "{3e0152e5-f4a6-4624-a3f2-b10763011e19}",
-                    "indexNetworkArray": {
-                        "0": 1
-                    },
-                    "jInColumnArray": {
-                        "0": {
+                    "indexNetworkArray": [
+                        1
+                    ],
+                    "jInColumnArray": [
+                        {
                             "fValue": 2.50256347,
                             "assigned": true,
                             "nameCoupling": "J(7-5)",
@@ -67,7 +67,7 @@
                             "indexPartnerJInColumn": 0,
                             "nodeNumber": 1
                         },
-                        "1": {
+                        {
                             "fValue": 8.54504394,
                             "assigned": true,
                             "nameCoupling": "J(7-8)",
@@ -75,26 +75,26 @@
                             "indexPartnerJInColumn": 0,
                             "nodeNumber": 0
                         }
-                    }
+                    ]
                 },
-                "2": {
-                    "atomIndex": {
-                        "0": 8
-                    },
+                {
+                    "atomIndex": [
+                        8
+                    ],
                     "chemicalShift": 7.94980835,
                     "assigned": true,
                     "nameChemicalShift": "8",
                     "nameChemicalShiftWithMoleculeNumber": "8 (1)",
-                    "compoundIndex": {
-                        "0": 0
-                    },
+                    "compoundIndex": [
+                        0
+                    ],
                     "nbProton": 1,
                     "fQUuid": "{5070c71d-1174-430e-81af-c3bef5efae70}",
-                    "indexNetworkArray": {
-                        "0": 2
-                    },
-                    "jInColumnArray": {
-                        "0": {
+                    "indexNetworkArray": [
+                        2
+                    ],
+                    "jInColumnArray": [
+                        {
                             "fValue": 8.52636718,
                             "assigned": true,
                             "nameCoupling": "J(7-8)",
@@ -102,35 +102,35 @@
                             "indexPartnerJInColumn": 1,
                             "nodeNumber": 0
                         }
-                    }
+                    ]
                 },
-                "3": {
-                    "atomIndex": {
-                        "0": 14,
-                        "1": 14,
-                        "2": 14
-                    },
+                {
+                    "atomIndex": [
+                        14,
+                        14,
+                        14
+                    ],
                     "chemicalShift": 3.95000938,
                     "assigned": true,
                     "nameChemicalShift": "14,14,14",
                     "nameChemicalShiftWithMoleculeNumber": "14,14,14 (1)",
-                    "compoundIndex": {
-                        "0": 0,
-                        "1": 0,
-                        "2": 0
-                    },
+                    "compoundIndex": [
+                        0,
+                        0,
+                        0
+                    ],
                     "nbProton": 3,
                     "fQUuid": "{f5ccb730-a954-47a1-9e34-35256093c050}",
-                    "indexNetworkArray": {
-                        "0": 3,
-                        "1": 3,
-                        "2": 3
-                    },
-                    "jInColumnArray": {}
+                    "indexNetworkArray": [
+                        3,
+                        3,
+                        3
+                    ],
+                    "jInColumnArray": []
                 }
-            },
-            "jGraphEdges": {
-                "0": {
+            ],
+            "jGraphEdges": [
+                {
                     "edgeAssignmentType": 2,
                     "partner1jGraphColumn": 1,
                     "partner2jGraphColumn": 2,
@@ -142,7 +142,7 @@
                     "name": "J(7-8)",
                     "numberOfBonds": 3
                 },
-                "1": {
+                {
                     "edgeAssignmentType": 2,
                     "partner1jGraphColumn": 1,
                     "partner2jGraphColumn": 0,
@@ -154,24 +154,24 @@
                     "name": "J(7-5)",
                     "numberOfBonds": 4
                 }
-            },
+            ],
             "distanceMatrix": "Copy not implemented",
             "degenMatrix": "Copy not implemented",
             "limitDifferenceJforPair": 0.4,
             "limitDifferenceJforPair_info": "Maximum difference in coupling constants allowed for pairing."
         }
     },
-    "spinFitVariableArray": {
-        "0": {
-            "molAtomIndicesFull": {
-                "0": 5
-            },
-            "molAtomIndices": {
-                "0": 5
-            },
-            "spinSystemIndices": {
-                "0": 0
-            },
+    "spinFitVariableArray": [
+        {
+            "molAtomIndicesFull": [
+                5
+            ],
+            "molAtomIndices": [
+                5
+            ],
+            "spinSystemIndices": [
+                0
+            ],
             "typeVariableEnum": 1,
             "typeVariableString": "ChemicalShift",
             "checked": false,
@@ -206,7 +206,7 @@
             "stepNumber": 2,
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         },
-        "1": {
+        {
             "curQuality": {
                 "m5NScalPro": 0.99904704,
                 "proj2": 1.00045466,
@@ -233,15 +233,15 @@
             "satisfactory": true,
             "labelVarSet": "δ(7)",
             "stepNumber": 2,
-            "molAtomIndicesFull": {
-                "0": 7
-            },
-            "molAtomIndices": {
-                "0": 7
-            },
-            "spinSystemIndices": {
-                "0": 1
-            },
+            "molAtomIndicesFull": [
+                7
+            ],
+            "molAtomIndices": [
+                7
+            ],
+            "spinSystemIndices": [
+                1
+            ],
             "typeVariableEnum": 1,
             "typeVariableString": "ChemicalShift",
             "checked": false,
@@ -250,7 +250,7 @@
             "upperBound": 8.35854971,
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         },
-        "2": {
+        {
             "curQuality": {
                 "m5NScalPro": 0.99845244,
                 "proj2": 1.00010068,
@@ -277,15 +277,15 @@
             "satisfactory": true,
             "labelVarSet": "δ(8)",
             "stepNumber": 2,
-            "molAtomIndicesFull": {
-                "0": 8
-            },
-            "molAtomIndices": {
-                "0": 8
-            },
-            "spinSystemIndices": {
-                "0": 2
-            },
+            "molAtomIndicesFull": [
+                8
+            ],
+            "molAtomIndices": [
+                8
+            ],
+            "spinSystemIndices": [
+                2
+            ],
             "typeVariableEnum": 1,
             "typeVariableString": "ChemicalShift",
             "checked": false,
@@ -294,7 +294,7 @@
             "upperBound": 7.95895805,
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         },
-        "3": {
+        {
             "curQuality": {
                 "m5NScalPro": 0.99993682,
                 "proj2": 0.99985049,
@@ -321,17 +321,17 @@
             "satisfactory": true,
             "labelVarSet": "δ(14)",
             "stepNumber": 1,
-            "molAtomIndicesFull": {
-                "0": 14,
-                "1": 14,
-                "2": 14
-            },
-            "molAtomIndices": {
-                "0": 14
-            },
-            "spinSystemIndices": {
-                "0": 3
-            },
+            "molAtomIndicesFull": [
+                14,
+                14,
+                14
+            ],
+            "molAtomIndices": [
+                14
+            ],
+            "spinSystemIndices": [
+                3
+            ],
             "typeVariableEnum": 1,
             "typeVariableString": "ChemicalShift",
             "checked": false,
@@ -340,22 +340,22 @@
             "upperBound": 3.95875944,
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         },
-        "4": {
+        {
             "satisfactory": true,
             "labelVarSet": "J(5-7)",
             "stepNumber": 2,
-            "molAtomIndices": {
-                "0": {
-                    "0": 5,
-                    "1": 7
-                }
-            },
-            "spinSystemIndices": {
-                "0": {
-                    "0": 0,
-                    "1": 1
-                }
-            },
+            "molAtomIndices": [
+                [
+                    5,
+                    7
+                ]
+            ],
+            "spinSystemIndices": [
+                [
+                    0,
+                    1
+                ]
+            ],
             "typeVariableEnum": 2,
             "typeVariableString": "Jcoupling",
             "checked": false,
@@ -366,22 +366,22 @@
             "numberBondslabelVarSet": "4J(5-7)",
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         },
-        "5": {
+        {
             "satisfactory": true,
             "labelVarSet": "J(5-8)",
             "stepNumber": 2,
-            "molAtomIndices": {
-                "0": {
-                    "0": 5,
-                    "1": 8
-                }
-            },
-            "spinSystemIndices": {
-                "0": {
-                    "0": 0,
-                    "1": 2
-                }
-            },
+            "molAtomIndices": [
+                [
+                    5,
+                    8
+                ]
+            ],
+            "spinSystemIndices": [
+                [
+                    0,
+                    2
+                ]
+            ],
             "typeVariableEnum": 2,
             "typeVariableString": "Jcoupling",
             "checked": false,
@@ -392,22 +392,22 @@
             "numberBondslabelVarSet": "5J(5-8)",
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         },
-        "6": {
+        {
             "satisfactory": true,
             "labelVarSet": "J(7-8)",
             "stepNumber": 2,
-            "molAtomIndices": {
-                "0": {
-                    "0": 7,
-                    "1": 8
-                }
-            },
-            "spinSystemIndices": {
-                "0": {
-                    "0": 1,
-                    "1": 2
-                }
-            },
+            "molAtomIndices": [
+                [
+                    7,
+                    8
+                ]
+            ],
+            "spinSystemIndices": [
+                [
+                    1,
+                    2
+                ]
+            ],
             "typeVariableEnum": 2,
             "typeVariableString": "Jcoupling",
             "checked": false,
@@ -418,79 +418,79 @@
             "numberBondslabelVarSet": "3J(7-8)",
             "ALL_THIS_IS_DEPRICATED": "here only one molecule, look in array for each molecule with lineshape and quantity data"
         }
-    },
-    "spinFitVariableArrayOrigSeeIfCheckedAreSame": {
-        "0": {
+    ],
+    "spinFitVariableArrayOrigSeeIfCheckedAreSame": [
+        {
             "labelVarSet": "δ(5)",
             "value": 8.60004817,
             "lowerBound": 8.59129812,
             "upperBound": 8.60879822,
             "checked": true
         },
-        "1": {
+        {
             "labelVarSet": "δ(7)",
             "value": 8.34979966,
             "lowerBound": 8.34104961,
             "upperBound": 8.35854971,
             "checked": true
         },
-        "2": {
+        {
             "labelVarSet": "δ(8)",
             "value": 7.950208,
             "lowerBound": 7.94145794,
             "upperBound": 7.95895805,
             "checked": true
         },
-        "3": {
+        {
             "labelVarSet": "δ(14)",
             "value": 3.95000938,
             "lowerBound": 3.94125933,
             "upperBound": 3.95875944,
             "checked": true
         },
-        "4": {
+        {
             "labelVarSet": "J(5-7)",
             "value": 2.49920654,
             "lowerBound": 2.24920654,
             "upperBound": 2.74920654,
             "checked": true
         },
-        "5": {
+        {
             "labelVarSet": "J(5-8)",
             "value": 0.1,
             "lowerBound": 0,
             "upperBound": 0.2,
             "checked": true
         },
-        "6": {
+        {
             "labelVarSet": "J(7-8)",
             "value": 8.53570556,
             "lowerBound": 8.28570556,
             "upperBound": 8.78570556,
             "checked": true
         },
-        "7": {
+        {
             "labelVarSet": "Rel Amp.",
             "value": -1,
             "lowerBound": 0,
             "upperBound": 1000000000000,
             "checked": true
         },
-        "8": {
+        {
             "labelVarSet": "LineWidth",
             "value": 0.75,
             "lowerBound": 0,
             "upperBound": 2,
             "checked": true
         },
-        "9": {
+        {
             "labelVarSet": "Kurtosis",
             "value": 0,
             "lowerBound": -1,
             "upperBound": 1,
             "checked": true
         }
-    },
+    ],
     "MnovaDocumentShortName": "01_assigned",
     "algorithmJson000ForCrash": {
         "bobyqaFinalTrustRegionRadius": 0.001,
@@ -529,24 +529,24 @@
         "finalSpectrumType": "multipleShape"
     },
     "spinFitResults": {
-        "molecules": {
-            "0": {
+        "molecules": [
+            {
                 "compoundIndex": 0,
-                "optimizedVariables": {
-                    "0": {
+                "optimizedVariables": [
+                    {
                         "CHEMeDATAtype": "NMRvariableSet",
                         "version": "0.12",
-                        "spins": {
-                            "0": {
-                                "molAtomIndicesFull": {
-                                    "0": 5
-                                },
-                                "molAtomIndices": {
-                                    "0": 5
-                                },
-                                "spinSystemIndices": {
-                                    "0": 0
-                                },
+                        "spins": [
+                            {
+                                "molAtomIndicesFull": [
+                                    5
+                                ],
+                                "molAtomIndices": [
+                                    5
+                                ],
+                                "spinSystemIndices": [
+                                    0
+                                ],
                                 "typeVariableEnum": 1,
                                 "typeVariableString": "ChemicalShift",
                                 "checked": false,
@@ -580,7 +580,7 @@
                                 "labelVarSet": "δ(5)",
                                 "stepNumber": 2
                             },
-                            "1": {
+                            {
                                 "curQuality": {
                                     "m5NScalPro": 0.99904704,
                                     "proj2": 1.00045466,
@@ -607,15 +607,15 @@
                                 "satisfactory": true,
                                 "labelVarSet": "δ(7)",
                                 "stepNumber": 2,
-                                "molAtomIndicesFull": {
-                                    "0": 7
-                                },
-                                "molAtomIndices": {
-                                    "0": 7
-                                },
-                                "spinSystemIndices": {
-                                    "0": 1
-                                },
+                                "molAtomIndicesFull": [
+                                    7
+                                ],
+                                "molAtomIndices": [
+                                    7
+                                ],
+                                "spinSystemIndices": [
+                                    1
+                                ],
                                 "typeVariableEnum": 1,
                                 "typeVariableString": "ChemicalShift",
                                 "checked": false,
@@ -623,7 +623,7 @@
                                 "lowerBound": 8.34104961,
                                 "upperBound": 8.35854971
                             },
-                            "2": {
+                            {
                                 "curQuality": {
                                     "m5NScalPro": 0.99845244,
                                     "proj2": 1.00010068,
@@ -650,15 +650,15 @@
                                 "satisfactory": true,
                                 "labelVarSet": "δ(8)",
                                 "stepNumber": 2,
-                                "molAtomIndicesFull": {
-                                    "0": 8
-                                },
-                                "molAtomIndices": {
-                                    "0": 8
-                                },
-                                "spinSystemIndices": {
-                                    "0": 2
-                                },
+                                "molAtomIndicesFull": [
+                                    8
+                                ],
+                                "molAtomIndices": [
+                                    8
+                                ],
+                                "spinSystemIndices": [
+                                    2
+                                ],
                                 "typeVariableEnum": 1,
                                 "typeVariableString": "ChemicalShift",
                                 "checked": false,
@@ -666,7 +666,7 @@
                                 "lowerBound": 7.94145794,
                                 "upperBound": 7.95895805
                             },
-                            "3": {
+                            {
                                 "curQuality": {
                                     "m5NScalPro": 0.99993682,
                                     "proj2": 0.99985049,
@@ -693,17 +693,17 @@
                                 "satisfactory": true,
                                 "labelVarSet": "δ(14)",
                                 "stepNumber": 1,
-                                "molAtomIndicesFull": {
-                                    "0": 14,
-                                    "1": 14,
-                                    "2": 14
-                                },
-                                "molAtomIndices": {
-                                    "0": 14
-                                },
-                                "spinSystemIndices": {
-                                    "0": 3
-                                },
+                                "molAtomIndicesFull": [
+                                    14,
+                                    14,
+                                    14
+                                ],
+                                "molAtomIndices": [
+                                    14
+                                ],
+                                "spinSystemIndices": [
+                                    3
+                                ],
                                 "typeVariableEnum": 1,
                                 "typeVariableString": "ChemicalShift",
                                 "checked": false,
@@ -711,24 +711,24 @@
                                 "lowerBound": 3.94125933,
                                 "upperBound": 3.95875944
                             }
-                        },
-                        "interactions": {
-                            "0": {
+                        ],
+                        "interactions": [
+                            {
                                 "satisfactory": true,
                                 "labelVarSet": "J(5-7)",
                                 "stepNumber": 2,
-                                "molAtomIndices": {
-                                    "0": {
-                                        "0": 5,
-                                        "1": 7
-                                    }
-                                },
-                                "spinSystemIndices": {
-                                    "0": {
-                                        "0": 0,
-                                        "1": 1
-                                    }
-                                },
+                                "molAtomIndices": [
+                                    [
+                                        5,
+                                        7
+                                    ]
+                                ],
+                                "spinSystemIndices": [
+                                    [
+                                        0,
+                                        1
+                                    ]
+                                ],
                                 "typeVariableEnum": 2,
                                 "typeVariableString": "Jcoupling",
                                 "checked": false,
@@ -738,22 +738,22 @@
                                 "numberBonds": 4,
                                 "numberBondslabelVarSet": "4J(5-7)"
                             },
-                            "1": {
+                            {
                                 "satisfactory": true,
                                 "labelVarSet": "J(5-8)",
                                 "stepNumber": 2,
-                                "molAtomIndices": {
-                                    "0": {
-                                        "0": 5,
-                                        "1": 8
-                                    }
-                                },
-                                "spinSystemIndices": {
-                                    "0": {
-                                        "0": 0,
-                                        "1": 2
-                                    }
-                                },
+                                "molAtomIndices": [
+                                    [
+                                        5,
+                                        8
+                                    ]
+                                ],
+                                "spinSystemIndices": [
+                                    [
+                                        0,
+                                        2
+                                    ]
+                                ],
                                 "typeVariableEnum": 2,
                                 "typeVariableString": "Jcoupling",
                                 "checked": false,
@@ -763,22 +763,22 @@
                                 "numberBonds": 5,
                                 "numberBondslabelVarSet": "5J(5-8)"
                             },
-                            "2": {
+                            {
                                 "satisfactory": true,
                                 "labelVarSet": "J(7-8)",
                                 "stepNumber": 2,
-                                "molAtomIndices": {
-                                    "0": {
-                                        "0": 7,
-                                        "1": 8
-                                    }
-                                },
-                                "spinSystemIndices": {
-                                    "0": {
-                                        "0": 1,
-                                        "1": 2
-                                    }
-                                },
+                                "molAtomIndices": [
+                                    [
+                                        7,
+                                        8
+                                    ]
+                                ],
+                                "spinSystemIndices": [
+                                    [
+                                        1,
+                                        2
+                                    ]
+                                ],
                                 "typeVariableEnum": 2,
                                 "typeVariableString": "Jcoupling",
                                 "checked": false,
@@ -788,32 +788,32 @@
                                 "numberBonds": 3,
                                 "numberBondslabelVarSet": "3J(7-8)"
                             }
-                        },
+                        ],
                         "spinFitHashNetwork": "Not implemented hash for spins and interactions - may not be implemented",
-                        "lineshapeVariables": {
-                            "0": {
+                        "lineshapeVariables": [
+                            {
                                 "value": 0.35996091,
                                 "checked": true,
                                 "typeVariableString": "lineWidth",
                                 "name": "LW"
                             },
-                            "1": {
+                            {
                                 "value": 0.05,
                                 "checked": false,
                                 "typeVariableString": "kurtosis",
                                 "name": "MnovaLineShapeKurtosis"
                             }
-                        },
-                        "quantityVariables": {
-                            "0": {
+                        ],
+                        "quantityVariables": [
+                            {
                                 "value": 0.06169547,
                                 "checked": true,
                                 "typeVariableString": "factor",
                                 "name": "Magn"
                             }
-                        }
+                        ]
                     }
-                },
+                ],
                 "lineWidth": 0.35996091,
                 "lineWidthChecked": true,
                 "currfactorQuantity": 0.06169547,
@@ -824,22 +824,22 @@
                 "numberOfValuesAveraged": 4,
                 "whereComesFrom": "[1] δ(7):0.36 Hz K=0.05  quantity: 0.0616955 stdDev: 0.000266504 (4 values) rsd: 0.432%"
             }
-        },
+        ],
         "optimizedSpectrum": {
             "larmorFrequency": 399.99759999,
             "detectedIsotope": "1H",
-            "decoupledIsotopes": {},
+            "decoupledIsotopes": [],
             "spectrumType": "1D",
             "ID": "Not implemented",
             "hash": "Not implemented"
         },
         "version": "MestReNova BETA 15.2.0-38318"
     },
-    "stages": {
-        "0": {
+    "stages": [
+        {
             "StageText": "Preliminary",
-            "steps": {
-                "0": {
+            "steps": [
+                {
                     "StepNumber": "1 / 2",
                     "number": 1,
                     "listOfVariables": " 1δ : δ(14)",
@@ -859,7 +859,7 @@
                     "z_allcheckedvariablesOK_after": false,
                     "numberOfCalculationWorkLineWidth": 120
                 },
-                "1": {
+                {
                     "StepNumber": "2 / 2",
                     "number": 2,
                     "listOfVariables": " 3δ 3J : δ(5) δ(7) δ(8) J(5-7) J(5-8) J(7-8)",
@@ -883,17 +883,17 @@
                     "z_allcheckedvariablesOK_after": false,
                     "numberOfCalculationWorkLineWidth": 899
                 }
-            },
+            ],
             "allOK": false,
             "failedVariables": "Not satisfactory : δ(7) = 8.349799663, δ(8) = 7.950208 J(7-8) = 8.535705566",
             "z_log": "\nUZIO   CCCCJJJooo (type of variable: Chemical shift, J coupling or linewidth parameter)\nUZIO_F YnnYYYnnnn\nUZIO_F satisfactory CS : δ(5) = 8.600048175, δ(14) = 3.95000939\nUZIO_F satisfactory J : J(5-7) = 2.499206543, J(5-8) = 0.1\nUZIO_F Not satisfactory CS : δ(7) = 8.349799663, δ(8) = 7.950208\nUZIO_F Not satisfactory J : J(7-8) = 8.535705566\n",
             "timeStats": "    - Line width 1/1 (0.75 Hz) time: 0.189 s\n",
             "chemShiftAfterStep": " >1 δ(5) 8.600048175 ppm  assignmentStatusString : Assigned chemical shift.\n >2 δ(7) 8.349799663 ppm  assignmentStatusString : Assigned chemical shift.\n >3 δ(8) 7.950208 ppm  assignmentStatusString : Assigned chemical shift.\n >4 δ(14) 3.95000939 ppm  assignmentStatusString : Assigned chemical shift.\n >5 J(5-7) 2.499206543 Hz  assignmentStatusString : The coupling constants found in the multiplets of the spectrum matched uniquely.\n >6 J(5-8) 0.1 Hz  assignmentStatusString : FromPrediction\n >7 J(7-8) 8.535705566 Hz  assignmentStatusString : The coupling constants found in the multiplets of the spectrum matched uniquely.\n"
         },
-        "1": {
+        {
             "StageText": "0",
-            "steps": {
-                "0": {
+            "steps": [
+                {
                     "StepNumber": "1 / 2",
                     "number": 1,
                     "workOnLineWidthInMiliSec": 0,
@@ -904,7 +904,7 @@
                     "z_allcheckedvariablesOK_after": false,
                     "numberOfCalculationWorkLineWidth": 0
                 },
-                "1": {
+                {
                     "StepNumber": "2 / 2",
                     "number": 2,
                     "listOfVariables": " 2δ 1J : δ(7) δ(8) J(7-8)",
@@ -945,17 +945,17 @@
                     "z_allcheckedvariablesOK_after": false,
                     "numberOfCalculationWorkLineWidth": 444
                 }
-            },
+            ],
             "allOK": true,
             "failedVariables": "All OK",
             "z_log": "\nUZIO   CCCCJJJooo (type of variable: Chemical shift, J coupling or linewidth parameter)\nUZIO_F YYYYYYYnnn\nUZIO_F satisfactory CS : (all!) δ(5) = 8.600048175, δ(7) = 8.350022417, δ(8) = 7.950063989, δ(14) = 3.95000939\nUZIO_F satisfactory J : (all!) J(5-7) = 2.499206543, J(5-8) = 0.1, J(7-8) = 8.532209816\n",
             "timeStats": "    - Line width 1/1 (0.75 Hz) time: 0.189 s\n  - Algorithm 1 (Direct Descent) time: 0.189 s\n    - Line width 1/1 (0.36 Hz) time: 0.096 s\n",
             "chemShiftAfterStep": " >1 δ(5) 8.600048175 ppm  assignmentStatusString : Assigned chemical shift.\n >2 δ(7) 8.350022417 ppm  assignmentStatusString : Assigned chemical shift.\n >3 δ(8) 7.950063989 ppm  assignmentStatusString : Assigned chemical shift.\n >4 δ(14) 3.95000939 ppm  assignmentStatusString : Assigned chemical shift.\n >5 J(5-7) 2.499206543 Hz  assignmentStatusString : The coupling constants found in the multiplets of the spectrum matched uniquely.\n >6 J(5-8) 0.1 Hz  assignmentStatusString : FromPrediction\n >7 J(7-8) 8.532209816 Hz  assignmentStatusString : The coupling constants found in the multiplets of the spectrum matched uniquely.\n"
         },
-        "2": {
+        {
             "StageText": "last step",
-            "steps": {
-                "0": {
+            "steps": [
+                {
                     "StepNumber": "1 / 2",
                     "number": 1,
                     "workOnLineWidthInMiliSec": 0,
@@ -966,7 +966,7 @@
                     "z_allcheckedvariablesOK_after": true,
                     "numberOfCalculationWorkLineWidth": 0
                 },
-                "1": {
+                {
                     "StepNumber": "2 / 2",
                     "number": 2,
                     "workOnLineWidthInMiliSec": 0,
@@ -981,13 +981,13 @@
                     "z_allcheckedvariablesOK_after": true,
                     "numberOfCalculationWorkLineWidth": 0
                 }
-            },
+            ],
             "allOK": true,
             "failedVariables": "All OK",
             "z_log": "\nUZIO   CCCCJJJooo (type of variable: Chemical shift, J coupling or linewidth parameter)\nUZIO_F YYYYYYYnnn\nUZIO_F satisfactory CS : (all!) δ(5) = 8.600048175, δ(7) = 8.350022417, δ(8) = 7.950063989, δ(14) = 3.95000939\nUZIO_F satisfactory J : (all!) J(5-7) = 2.499206543, J(5-8) = 0.1, J(7-8) = 8.532209816\n",
             "timeStats": "    - Line width 1/1 (0.75 Hz) time: 0.189 s\n  - Algorithm 1 (Direct Descent) time: 0.189 s\n    - Line width 1/1 (0.36 Hz) time: 0.096 s\n  - Algorithm 1 (Direct Descent) time: 0.097 s\n    - Line width 1/1 (0.75 Hz) time: 0.009 s\n"
         }
-    },
+    ],
     "NotSureWhatItIsInMiliSec": 409,
     "algorithmJson0": {
         "bobyqaFinalTrustRegionRadius": 0.001,
@@ -1027,8 +1027,8 @@
     "info_productScalProd": 0.9970802,
     "algorithm": "Direct Descent 2ndOrdCrit:100 smallestCoup:0.1(T:10e-6 E:10e-6 I:10000 N:Y)\n",
     "totComputationTimeIncludingGraphicalInterfaceInMiliSec": 460,
-    "lineShapeAndIntensity_CompoundsData": {
-        "0": {
+    "lineShapeAndIntensity_CompoundsData": [
+        {
             "lineWidth": 0.35996091,
             "kurtosis": 0.05,
             "currfactorQuantity": 0.06169547,
@@ -1040,5 +1040,7 @@
             "numberOfValuesAveraged": 4,
             "kurtosisCorrection": 1.55978643
         }
-    }
+    ],
+    "initialHash": "5742c4f0be6b3bec0e78bf7e267ccd6d98d4ebafe243cce226fcb6bdc38170a1",
+    "finalHash": "c03b401189d8f0ec525d3c6da3eb979c4193903403544f954d1a6607700ad6c1"
 }

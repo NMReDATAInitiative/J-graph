@@ -2,9 +2,10 @@
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1size.json",
     "name": "Bob",
     "size": 180,
-    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:1ea63ee8-5136-406c-a790-8a267a70f70a",
+    "initialHash": "df1c0811b2c696715500303da88261f962cf30d7be47af3e5fba20e64c8fbfeb",
+    "@id": "urn:uuid:87c2069a-4f62-4ebb-8443-49a199ab6879",
     "@type": "Obj1size",
-    "timestamp": "2025-02-05T16:49:30.661Z",
-    "source": "Generated from schema conversion"
+    "timestamp": "2025-02-05T18:00:44.415Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "ad016f0f7f57cee90f94aba67fc390ef86f0fa4209c6688053ca4f5b104ad1e1"
 }

@@ -94,3 +94,13 @@ These fields are often used in structured datasets to describe provenance, autho
     "required": ["id", "timestamp", "source"]
 }
 ```
+
+Explanation of Fields:
+
+    id – A unique identifier (UUID or other reference).
+    name – An optional name for the entity.
+    timestamp – A date-time formatted string (ISO 8601) indicating creation/modification.
+    source – A URI linking to the data's provenance.
+    creator – An object providing metadata about the data author.
+    license – A URI referencing the license or usage rights.
+    context – Typically used in JSON-LD for defining linked data structure.

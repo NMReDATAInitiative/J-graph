@@ -1,19 +1,30 @@
 {
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/pairObj1.json",
     "object1": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
-        "@id": "urn:uuid:6219a9d2-76b1-46d6-ab8b-2eb92a1a58a8",
-        "@type": "Obj1"
+        "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
+        "@id": "urn:uuid:79be2a4a-6781-4d58-a0b0-8d3a32f7c541",
+        "@type": "Obj1",
+        "timestamp": "2025-02-05T18:00:44.419Z",
+        "source": "Generated from schema conversion",
+        "finalHash": "4118245c06e905fe7196e30498fd68e12b6253c38611f5d3d2c528b29d8449fa"
     },
     "object2": {
+        "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
-        "@id": "urn:uuid:4bddee1e-b3e6-492b-b9cd-7256d0d6fc3b",
-        "@type": "Obj2"
+        "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
+        "@id": "urn:uuid:3889d247-b1a2-4806-8640-e81468d0f6df",
+        "@type": "Obj2",
+        "timestamp": "2025-02-05T18:00:44.419Z",
+        "source": "Generated from schema conversion",
+        "finalHash": "c40f913995c7fffc73f885d4b0d594d9142508f7a6ffdb8fe6f9f94529a5f53b"
     },
-    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:7e2a44ca-ebaf-49e3-ad6a-06cead727731",
+    "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
+    "@id": "urn:uuid:0ef1262d-60da-44c8-9dc2-497c7dbcf2cb",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T16:49:30.666Z",
-    "source": "Generated from schema conversion"
+    "timestamp": "2025-02-05T18:00:44.419Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "bfc823a57d31cc78ca1f8628148383880c2e5f7acb1d5ebc2ea3fb05e36b6d98"
 }
