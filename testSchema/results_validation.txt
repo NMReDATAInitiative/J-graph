@@ -1,7 +1,16 @@
 
-🔍 Validating examplePair.json...
+********* Validating 01_assigned-Exp.DirDesR.Ny.Obj0.2nd100_spectra.json...
 
-🔍 Validating examplePair_EmbededSchema copy 2.json...
+********* Validating 01_assigned_molecule.json...
+
+********* Validating bob190.json...
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json
+❌ Error loading schema from https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json: Failed to fetch schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json
+❌ Root - Schema "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json" not found.
+
+********* Validating examplePair.json...
+
+********* Validating examplePair_EmbededSchema copy 2.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
@@ -12,7 +21,7 @@
 ✅ Root.object1 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json Valid
 ✅ Root.object2 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Valid
 
-🔍 Validating examplePair_EmbededSchema copy 3.json...
+********* Validating examplePair_EmbededSchema copy 3.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
@@ -21,12 +30,12 @@
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json
 ✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json Valid
 
-🔍 Validating examplePair_EmbededSchema copy 4.json...
+********* Validating examplePair_EmbededSchema copy 4.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json
 ✅ Root.object2 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Valid
 
-🔍 Validating examplePair_EmbededSchema copy.json...
+********* Validating examplePair_EmbededSchema copy.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Root.object1 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json Valid
@@ -34,7 +43,7 @@
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json
 ✅ Root.object2 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Valid
 
-🔍 Validating examplePair_EmbededSchema.json...
+********* Validating examplePair_EmbededSchema.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
@@ -45,20 +54,23 @@
 ✅ Root.object1 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json Valid
 ✅ Root.object2 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Valid
 
-🔍 Validating test1.json...
+********* Validating spinfit-Opt-01_assigned-Exp.DirDesR.Ny.Obj0.2nd100_4.spinFitResult.json...
+
+********* Validating test1.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json Valid
 
-🔍 Validating testEmbeddedSchema.json...
+********* Validating testEmbeddedSchema.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json Valid
 
-🔍 Validating testEmbeddedSchemaFailed.json...
+********* Validating testEmbeddedSchemaFailed.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json
 ❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Invalid: data must have required property 'age'
 
 🔴 Summary: Failed Files
+bob190.json
 testEmbeddedSchemaFailed.json

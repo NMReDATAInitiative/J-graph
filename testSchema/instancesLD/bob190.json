@@ -1,0 +1,10 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1size.json",
+    "name": "Bob",
+    "size": 180,
+    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
+    "@id": "urn:uuid:a5e85e60-fd8e-4e65-9f09-8cf875a1f518",
+    "@type": "Obj1size",
+    "timestamp": "2025-02-05T16:44:41.699Z",
+    "source": "Generated from schema conversion"
+}

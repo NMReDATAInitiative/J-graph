@@ -1,14 +1,10 @@
 {
-    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
+    "$mnova_schema": "https://mestrelab.com/json-schemas/mnova/2023-07/01/molecule/dataset",
     "molecule": {
+        "$mnova_schema": "https://mestrelab.com/json-schemas/mnova/2023-07/01/molecule/molecule",
         "parameters": {
             "label": "Document 18",
-            "name": "VID: 12032872",
-            "hackAdded": {
-                "name": "Bob",
-                "@id": "urn:uuid:b212c605-b699-4b39-a0c5-23e4738bfc79",
-                "@type": "Obj1"
-            }
+            "name": "VID: 12032872"
         },
         "atoms": {
             "0": {
@@ -407,10 +403,5 @@
                 }
             }
         }
-    },
-    "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:5362c505-ad7a-4cfc-8d8e-62630540eb50",
-    "@type": "Obj1",
-    "timestamp": "2025-02-04T19:48:37.069Z",
-    "source": "Generated from schema conversion"
+    }
 }

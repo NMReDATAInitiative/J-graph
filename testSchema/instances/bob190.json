@@ -1,0 +1,5 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1size.json",
+    "name": "Bob",
+	"size": 180
+}

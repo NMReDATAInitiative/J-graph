@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1size.json",
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json"
+        }
+    ],
+    "properties": {
+        "@context": {
+            "type": "string",
+            "format": "uri",
+            "description": "Linked Data context URL"
+        },
+        "@id": {
+            "type": "string",
+            "format": "uri",
+            "description": "Unique identifier for this resource"
+        },
+        "@type": {
+            "type": "string",
+            "enum": [
+                "Obj1size"
+            ]
+        },
+        "size": {
+            "type": "number"
+        }
+    },
+    "title": "Obj1size",
+    "required": [
+        "@id",
+        "@type"
+    ]
+}

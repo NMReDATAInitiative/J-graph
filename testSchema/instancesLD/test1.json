@@ -2,8 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
     "name": "Bob",
     "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:5d371ceb-e850-405c-a14c-160e9d8d6bc1",
+    "@id": "urn:uuid:5606a38b-ff22-477e-9ffb-68a77c47df9c",
     "@type": "Obj1",
-    "timestamp": "2025-02-04T19:48:37.079Z",
+    "timestamp": "2025-02-05T16:44:41.719Z",
     "source": "Generated from schema conversion"
 }
