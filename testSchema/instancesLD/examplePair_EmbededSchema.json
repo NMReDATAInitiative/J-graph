@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:9f20985b-c827-4b33-8b01-4a20d2b22999",
+        "@id": "urn:uuid:74632507-3757-4329-9d8e-ef10d79fe6d3",
         "@type": "Obj1",
-        "timestamp": "2025-02-05T19:54:42.570Z",
+        "timestamp": "2025-02-05T20:01:44.444Z",
         "source": "Generated from schema conversion",
-        "finalHash": "bcd806a642f5644d1bc56ecd814cc8682501c2d573c5cd52c697fa0da8beb937"
+        "finalHash": "d47e414fe16898a3dd2a21fcb6f7cc9b330317403651b270621372b2e17ef2d1"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:2b072d07-ec09-4e96-8084-97588c91eada",
+        "@id": "urn:uuid:d35a1472-8202-4a03-bdad-92dafd02137d",
         "@type": "Obj2",
-        "timestamp": "2025-02-05T19:54:42.570Z",
+        "timestamp": "2025-02-05T20:01:44.444Z",
         "source": "Generated from schema conversion",
-        "finalHash": "d3271245adccef37c3de92b4e3ed5cfe83a89b30d5c36e18b2813027c7393e69"
+        "finalHash": "df05a326cb09f30f4474891d1e1b21dc8d127ebea25c5744d9a4f51ddef7b17e"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:bbe4f069-1d97-4b11-ad27-a52bf6e4696e",
+    "@id": "urn:uuid:b4481cda-7b67-42b0-9519-65ac05871e12",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T19:54:42.570Z",
+    "timestamp": "2025-02-05T20:01:44.444Z",
     "source": "Generated from schema conversion",
-    "finalHash": "bce8276532f9a77a81f408e6fd19baa2d1f2122518605d5dc3106d39f8da6b32"
+    "finalHash": "9c9804e8a86820229c28dd07b901ae95247c2be80a3a3b2ab8eb066454dd53df"
 }

@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:6c8f6eb1-8a09-439c-893b-5c78418b455c",
+        "@id": "urn:uuid:969b6fbb-dad3-4f23-a2cb-d9a21745eee3",
         "@type": "Obj1",
-        "timestamp": "2025-02-05T19:54:42.567Z",
+        "timestamp": "2025-02-05T20:01:44.441Z",
         "source": "Generated from schema conversion",
-        "finalHash": "68fcf10379f7bc37478fe3428082f743483eb0898f2b62d6133f336bec72fa5a"
+        "finalHash": "baba54d86fa74d899d97f27f07bf1f6a7c53c22fdb259a4fe743bafb7c132c7d"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:9dd66665-a2bb-4d14-ac1f-2f3252a52d34",
+        "@id": "urn:uuid:bf623067-00bc-45f0-a643-608a75b9908b",
         "@type": "Obj2",
-        "timestamp": "2025-02-05T19:54:42.567Z",
+        "timestamp": "2025-02-05T20:01:44.441Z",
         "source": "Generated from schema conversion",
-        "finalHash": "bb5653b474f4b3ad68a4aa94a258dc29ae4b779d1e96972201a95fb659a0bd00"
+        "finalHash": "1a48c16681be736d5f9ddf184cdf2823308ca15976905a98648e0ef9d13e3b6e"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:1dcb41d1-e70f-4802-ae08-aeb810b801e9",
+    "@id": "urn:uuid:738d762c-109f-447e-bf80-ea3a6dc26c45",
     "@type": "PairObj1",
-    "timestamp": "2025-02-05T19:54:42.567Z",
+    "timestamp": "2025-02-05T20:01:44.441Z",
     "source": "Generated from schema conversion",
-    "finalHash": "4f13f933d681bea31dce83f89ee4c2b3d6a6bf8ca655cc9590f15dd1b6c11d72"
+    "finalHash": "0a146672ea397d4819611e369d77c5fe38b7181d8b4ee34d4324b5af56c43381"
 }
