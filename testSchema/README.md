@@ -9,3 +9,11 @@ echo "test the schema of all json in instances ..."
 node test.js instances > results_validation.txt
 echo "test the schema of all json in instancesLD ..."
 node test.js instancesLD > results_validationLD.txt
+
+
+
+The validation of mnova files fails:
+node testMn.js instances
+for the spectrum an error
+for the molecule the schema are not on-line
+

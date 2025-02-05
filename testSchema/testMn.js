@@ -72,27 +72,37 @@ async function fetchSchema(url, schemaCache, baseUrl = null) {
 
 
         schemaCache[url] = schema;
-        if (schema["$id"] && !schemaCache[schema["$id"]]) {
-            schemaCache[schema["$id"]] = schema;
-        }
+		if (schema["$id"]) {
+    let schemaId = schema["$id"].startsWith("http") ? schema["$id"] : new URL(schema["$id"], baseUrl).href;
+
+    console.log(`📌 Storing schema with ID: ${schemaId}`);
+    schemaCache[schemaId] = schema; // Store schema with resolved $id
+
+    if (!schemaCache[url]) {
+        schemaCache[url] = schema; // Ensure original URL is also stored
+    }
+}
+
 
         const newBaseUrl = schema["$id"] || url;
 
         // 🛠️ Store $defs separately to ensure correct resolution
-       if (schema["$defs"]) {
+   // Ensure all $defs schemas have a proper ID and are stored correctly
+// Ensure all $defs schemas have a proper ID and are stored correctly
+
+if (schema["$defs"]) {
     for (const key in schema["$defs"]) {
         let subSchema = schema["$defs"][key];
-        let subSchemaId = `${newBaseUrl}#/$defs/${key}`;
+        let subSchemaId = `${url}#/$defs/${key}`;
 
-        // ✅ If the sub-schema is missing $id, assign it
         if (!subSchema["$id"]) {
             console.log(`⚠️ Assigning missing $id to $defs schema: ${subSchemaId}`);
             subSchema["$id"] = subSchemaId;
         }
 
-        // ✅ Store the sub-schema in schemaCache
-        schemaCache[subSchemaId] = subSchema;
-        console.log(`📌 Stored $defs schema separately: ${subSchema["$id"]}`);
+        schemaCache[subSchemaId] = subSchema; // Store by constructed $id
+        schemaCache[subSchema["$id"]] = subSchema; // Store by schema's internal $id
+        console.log(`📌 Stored $defs schema: ${subSchema["$id"]}`);
     }
 }
 
@@ -145,46 +155,67 @@ async function resolveRefs(schema, schemaCache, baseUrl) {
 /** Validates a JSON object against its schema */
 async function validateObject(obj, fileName, schemaCache, path = "Root") {
 	if (!obj || typeof obj !== "object") return;
+	
 	const refSchema = "$mnova_schema";
 	//const refSchema = "$schema";
 	if (obj[refSchema]) {
 		let schemaUrl = obj[refSchema];
+		console.log(`🔎 Looking for schema in cache: ${schemaUrl}`);
+
 		console.log(`  >>>>>>>> validateObject path : ${path} `);
 
 		const schema = await fetchSchema(schemaUrl, schemaCache);
-		if (!schema) {
-			console.log(`❌ ${path} - Schema "${schemaUrl}" not found.`);
-			failedFiles.push(fileName);
-			return;
-		}
-		
-for (const key in schemaCache) {
-    if (schemaCache[key]?.$id && key !== schemaCache[key].$id) {
-        console.log(`⚠️ Removing duplicate $id: ${schemaCache[key].$id} from schema ${key}`);
-        delete schemaCache[key].$id;
-    }
+if (!schema) {
+    console.log(`❌ ${path} - Schema "${schemaUrl}" not found.`);
+    failedFiles.push(fileName);
+    return;
 }
 
-// Remove duplicate schemas before validation
-const uniqueSchemas2 = {};
+// ✅ Ensure all referenced schemas are resolved before proceeding
+console.log(`⏳ Waiting for all referenced schemas in ${schemaUrl} to load...`);
+await resolveRefs(schema, schemaCache, schemaUrl);
+console.log(`✅ All referenced schemas in ${schemaUrl} are loaded.`);
+
+		if (!schemaCache[schemaUrl]) {
+    console.log(`❌ Schema ${schemaUrl} NOT found in cache.`);
+} else {
+    console.log(`✅ Schema ${schemaUrl} found in cache.`);
+}
+
 for (const key in schemaCache) {
-    const schema = schemaCache[key];
-    if (schema?.$id) {
-        if (!uniqueSchemas2[schema.$id]) {
-            uniqueSchemas2[schema.$id] = schema;
+    if (key.includes("#") && !schemaCache[key]) {
+        let baseKey = key.split("#")[0]; // Extract base URL before #
+        if (schemaCache[baseKey]) {
+            schemaCache[key] = schemaCache[baseKey]; // Assign the base schema
+            console.log(`🔄 Resolving schema with # in $id: ${key} -> ${baseKey}`);
         } else {
-            console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
-            delete schemaCache[key];
+            console.log(`❌ Schema with # in $id is unresolved: ${key}`);
         }
     }
 }
-// Deduplicate schemas before validation
-const uniqueSchemas4 = {};
+
 for (const key in schemaCache) {
     const schema = schemaCache[key];
+    if (schema?.$id && key !== schema.$id) {
+        console.log(`⚠️ Keeping schema ${key} and ensuring correct $id resolution.`);
+    }
+}
+
+for (const key in schemaCache) {
+    if (key.includes("#") && !schemaCache[key]) {
+        let baseKey = key.split("#")[0]; // Extract base URL before #
+        schemaCache[key] = schemaCache[baseKey] || null;
+        console.log(`🔄 Resolving schema with # in $id: ${key} -> ${baseKey}`);
+    }
+}
+
+const uniqueSchemas = {};
+for (const key in schemaCache) {
+    const schema = schemaCache[key];
+
     if (schema?.$id) {
-        if (!uniqueSchemas4[schema.$id]) {
-            uniqueSchemas4[schema.$id] = schema;
+        if (!uniqueSchemas[schema.$id]) {
+            uniqueSchemas[schema.$id] = schema;
         } else {
             console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
         }
@@ -193,22 +224,6 @@ for (const key in schemaCache) {
     }
 }
 
-
-const uniqueSchemas = {};
-for (const key in schemaCache) {
-    const schema = schemaCache[key];
-
-    // Ignore schemas with `#` in $id to prevent conflicts
-    if (schema?.$id && !schema.$id.includes("#")) {
-        if (!uniqueSchemas[schema.$id]) {
-            uniqueSchemas[schema.$id] = schema;
-        } else {
-            console.log(`⚠️ Removing duplicate schema: ${key} (same $id as ${schema.$id})`);
-        }
-    } else {
-        console.log(`❌ Ignoring schema with # in $id: ${key}`);
-    }
-}
 
 // test missing $id...
 for (const key in uniqueSchemas) {
@@ -220,27 +235,96 @@ for (const key in uniqueSchemas) {
 }
 
 
-console.log("\n🔍 Final list of schemas before validation:");
+
 for (const key in uniqueSchemas) {
-    console.log(`   🔹 Schema: ${key}, ID: ${uniqueSchemas[key]?.$id || "(missing $id)"}`);
+    if (!uniqueSchemas[key]?.$id) {
+        console.log(`❌ Schema in cache missing $id: ${key}`);
+
+    } else {
+        console.log(`✅ Schema available: ${key}, ID: ${uniqueSchemas[key].$id}`);
+    }
+}
+console.log("\n🔍 Checking for missing or invalid $id in schemas...");
+for (const key in uniqueSchemas) {
+    const schema = uniqueSchemas[key];
+    if (!schema?.$id) {
+        console.log(`❌ Schema in cache is missing $id: ${key}`);
+    }
+}
+console.log("✅ Schema check completed.\n");
+
+
+for (let key in uniqueSchemas) {
+    if (key.startsWith("/json-schemas/")) {
+        let absoluteKey = "https://mestrelab.com" + key;
+        uniqueSchemas[absoluteKey] = uniqueSchemas[key];
+delete uniqueSchemas[key];
+        console.log(`🔄 Converted relative schema path: ${key} -> ${absoluteKey}`);
+    }
 }
 
+console.log("\n🔎 Final schema cache before validation:");
+for (const key in uniqueSchemas) {
+    console.log(`✅ Schema ID: ${key}`);
+}
+console.log("✅ Schema cache ready.\n");
 
 		//const validate = validator(schema, { mode: "default" }); // Uses Draft 2020-12 support
 		//const validate = validator(schema, {
 		//	mode: "default",
 		//	schemas: Object.values(uniqueSchemas), // Pass all schemas for reference resolution
 		//});
+
+
+		console.log(`🔍 Checking schema for validation: ${obj[refSchema]}`);
+if (!schemaCache[obj[refSchema]]) {
+    console.error(`❌ Schema ${obj[refSchema]} NOT found in cache!`);
+} else {
+    console.log(`✅ Schema ${obj[refSchema]} found in cache.`);
+}
+const schemarr = uniqueSchemas[obj[refSchema]];
+console.log(`🔎 Schema ID found in cache: ${schemarr["$id"] || "❌ Missing $id"}`);
+if ("$schema" in schema) {
+    console.log(`⚠️ Removing unprocessed keyword: "$schema" from ${schema["$id"] || "unknown schema"}`);
+    delete schema["$schema"];
+}
+console.log(`🔍 Schema being used for validation:\n`, JSON.stringify(schema, null, 2));
+
+
+
+console.log(`🔎 Checking referenced schema: https://mestrelab.com/json-schemas/mnova/2023-07/01/nmr/spec`);
+if (!uniqueSchemas["https://mestrelab.com/json-schemas/mnova/2023-07/01/nmr/spec"]) {
+    console.error(`❌ Schema https://mestrelab.com/json-schemas/mnova/2023-07/01/nmr/spec NOT found in cache!`);
+} else {
+    console.log(`✅ Schema https://mestrelab.com/json-schemas/mnova/2023-07/01/nmr/spec is in cache.`);
+}
+
+console.log(`🔍 Available schemas in cache:`);
+console.log(Object.keys(uniqueSchemas));
+
+if (schema["properties"] && schema["properties"]["spectra"] && schema["properties"]["spectra"]["items"]["$ref"]) {
+    let refUrl = schema["properties"]["spectra"]["items"]["$ref"];
+    if (schemaCache[refUrl]) {
+        console.log(`🔄 Replacing $ref "${refUrl}" with actual schema`);
+        schema["properties"]["spectra"]["items"] = uniqueSchemas[refUrl];  // Replace $ref with actual schema object
+    } else {
+        console.error(`❌ Reference ${refUrl} not found in cache!`);
+    }
+}
+	
+
 const validate = validator(schema, {
     mode: "default",
     schemas: Object.values(uniqueSchemas), // Pass all schemas for reference resolution
-    contentValidation: true // ✅ Enables "content*" keywords
+   contentValidation: true // ✅ Enables "content*" keywords
 });
+
 
 		if (validate(obj)) {
 			console.log(`✅ ${path} - ${schemaUrl} Valid`);
 		} else {
 			console.log(`❌ ${path} - ${schemaUrl} Invalid`);
+			console.log(`🔎 Validation errors:`, validate.errors);
 			failedFiles.push(fileName);
 		}
 	}
