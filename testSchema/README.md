@@ -17,4 +17,7 @@ node testMn.js instances
 for the spectrum an error
 for the molecule the schema are not on-line
 
-[Compare test1.json files in VS Code](vscode://vscode.diff/Users/djeanner/git/J-graph/testSchema/instances/test1.json,/Users/djeanner/git/J-graph/testSchema/instancesLD/test1.json)
+
+code --diff /Users/djeanner/git/J-graph/testSchema/instances/test1.json /Users/djeanner/git/J-graph/testSchema/instancesLD/test1.json
+code --diff /Users/djeanner/git/J-graph/testSchema/instances/examplePair_EmbededSchema.json /Users/djeanner/git/J-graph/testSchema/instancesLD/examplePair_EmbededSchema.json
+

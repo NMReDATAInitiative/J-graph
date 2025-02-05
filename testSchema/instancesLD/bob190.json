@@ -3,8 +3,8 @@
     "name": "Bob",
     "size": 180,
     "@context": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/",
-    "@id": "urn:uuid:a5e85e60-fd8e-4e65-9f09-8cf875a1f518",
+    "@id": "urn:uuid:1ea63ee8-5136-406c-a790-8a267a70f70a",
     "@type": "Obj1size",
-    "timestamp": "2025-02-05T16:44:41.699Z",
+    "timestamp": "2025-02-05T16:49:30.661Z",
     "source": "Generated from schema conversion"
 }
