@@ -101,7 +101,7 @@ function generateHtmlForSchema(fileName) {
         `<option value="${file}">${file}</option>`).join("\n");
 
     let instanceSelector = matchingInstances.length > 0 ? `
-        <h2>Load JSON Instance</h2>
+        <h2>Load JSON Instance ...</h2>
         <select id="instanceSelector" onchange="loadInstance()">
             <option value="">Select an instance...</option>
             ${instanceOptions}
@@ -157,27 +157,34 @@ function generateHtmlForSchema(fileName) {
 
     try {
         const jsonData = JSON.parse(text);
-
-        fetch(jsonData["$schema"])  // Fetch schema dynamically
+        
+        fetch(jsonData["$schema"])
             .then(response => response.json())
             .then(schema => {
-                const ajv = new Ajv({ strict: "log" });
+                const ajv = new Ajv({ allErrors: true });
                 addFormats(ajv);
                 const validate = ajv.compile(schema);
-                const valid = validate(jsonData);
 
-                if (valid) {
+                if (validate(jsonData)) {
                     validationMessage.style.color = "green";
-                    validationMessage.textContent = "✅ Valid JSON (Schema Matched)";
+                    validationMessage.textContent = "✅ Valid JSON";
                 } else {
                     validationMessage.style.color = "red";
-                    validationMessage.textContent = "❌ Invalid JSON: " + ajv.errorsText(validate.errors);
+                    validationMessage.innerHTML = "❌ Invalid JSON:<br>" + JSON.stringify(validate.errors, null, 4);
                 }
             })
-            .catch(() => {
-                validationMessage.style.color = "orange";
-                validationMessage.textContent = "⚠️ Could not fetch schema.";
+            .catch(error => {
+                validationMessage.style.color = "red";
+                validationMessage.textContent = "⚠️ Could not fetch schema. Check network & schema URL.";
+                console.error("Schema Fetch Error:", error);
             });
+    } catch (error) {
+        validationMessage.style.color = "red";
+        validationMessage.textContent = "❌ JSON Parsing Error";
+        console.error("JSON Parse Error:", error);
+    }
+}
+
 
     } catch (error) {
         validationMessage.style.color = "red";
