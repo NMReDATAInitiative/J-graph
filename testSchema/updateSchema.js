@@ -61,7 +61,7 @@ deriveSchema("obj1", "obj1size", [
  * @param {string} newSchemaName - The name of the new schema (without .json)
  * @param {Array} propertiesList - An array defining properties with attributes
  */
-function createGroupSchema(newSchemaName, propertiesList) {
+function createNewTypeSchema(newSchemaName, propertiesList) {
     const schemaPath = path.join(schemaDir, `${newSchemaName}.json`);
 
     console.log(`🛠️ Creating schema: ${newSchemaName}...`);
@@ -124,7 +124,7 @@ function createGroupSchema(newSchemaName, propertiesList) {
 
 
 // Example usage
-createGroupSchema("groupObject1", [
+createNewTypeSchema("groupObject1", [
     { name: "members", required: true, array: true, type: "object", ref: "obj1" } 
 ]);
 

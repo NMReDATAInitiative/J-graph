@@ -1,0 +1,101 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Schema: groupObject1.json</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { padding: 10px; border: 1px solid black; text-align: left; }
+                th { background-color: #f2f2f2; }
+                textarea { width: 100%; height: 200px; font-family: monospace; }
+                #validationMessage { font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <h1>Schema: groupObject1.json</h1>
+            <p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json</a></p>
+            <p><strong>Does filename match the schema ID?</strong> ✅ Yes</p>
+            <h2>Properties</h2>
+            
+        <table border="1">
+            <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Schema Reference</th>
+                <th>Required</th>
+            </tr>
+    
+                <tr>
+                    <td>members</td>
+                    <td>array</td>
+                    <td>-</td>
+                    <td>✅ Yes</td>
+                </tr>
+            </table>
+            
+        <h2>Load JSON Instance</h2>
+        <select id="instanceSelector" onchange="loadInstance()">
+            <option value="">Select an instance...</option>
+            <option value="exampleGroupObj1.json">exampleGroupObj1.json</option>
+        </select>
+    
+            <h2>Edit JSON Instance</h2>
+            <textarea id="jsonEditor" oninput="validateJson()"></textarea>
+            <p id="validationMessage"></p>
+            <p><a href="index.html">Back to Index</a></p>
+            
+            <script>
+                function loadInstance() {
+                    const fileName = document.getElementById("instanceSelector").value;
+                    if (!fileName) return;
+
+                    fetch("../instances/" + fileName)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
+                            validateJson();
+                        })
+                        .catch(err => console.error("Error loading instance:", err));
+                }
+
+                function validateJson() {
+    const text = document.getElementById("jsonEditor").value;
+    let validationMessage = document.getElementById("validationMessage");
+
+    try {
+        const jsonData = JSON.parse(text);
+
+        fetch(jsonData["$schema"])  // Fetch schema dynamically
+            .then(response => response.json())
+            .then(schema => {
+                const ajv = new Ajv({ strict: "log" });
+                addFormats(ajv);
+                const validate = ajv.compile(schema);
+                const valid = validate(jsonData);
+
+                if (valid) {
+                    validationMessage.style.color = "green";
+                    validationMessage.textContent = "✅ Valid JSON (Schema Matched)";
+                } else {
+                    validationMessage.style.color = "red";
+                    validationMessage.textContent = "❌ Invalid JSON: " + ajv.errorsText(validate.errors);
+                }
+            })
+            .catch(() => {
+                validationMessage.style.color = "orange";
+                validationMessage.textContent = "⚠️ Could not fetch schema.";
+            });
+
+    } catch (error) {
+        validationMessage.style.color = "red";
+        validationMessage.textContent = "❌ Invalid JSON (Parsing Error)";
+    }
+}
+
+            </script>
+        </body>
+        </html>
+    
