@@ -75,7 +75,7 @@ function createGroupSchema(baseSchema, groupSchemaName) {
                 }
             }
         },
-        "required": ["objects"]
+        "required": ["members"]
     };
 
     // Save the new schema
