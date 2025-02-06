@@ -1,14 +1,14 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 // Directories
-const schemaDir = "./schemaNoLinkData";
-const instanceDir = "./instances";
-const htmlDir = "./html";
+const schemaDir = './schemaNoLinkData';
+const instanceDir = './instances';
+const htmlDir = './html';
 
 // Ensure the HTML output directory exists
 if (!fs.existsSync(htmlDir)) {
-    fs.mkdirSync(htmlDir, { recursive: true });
+  fs.mkdirSync(htmlDir, { recursive: true });
 }
 
 // List to track generated HTML pages for index.html
@@ -20,9 +20,9 @@ let schemaList = [];
  * @returns {string} - The HTML file name (e.g., "schema.html") or original ref
  */
 function getHtmlLink(ref) {
-    if (!ref) return "-";
-    const fileName = path.basename(ref, ".json") + ".html";
-    return `<a href="${fileName}">${fileName}</a>`;
+  if (!ref) return '-';
+  const fileName = path.basename(ref, '.json') + '.html';
+  return `<a href="${fileName}">${fileName}</a>`;
 }
 
 /**
@@ -30,62 +30,87 @@ function getHtmlLink(ref) {
  * @param {string} fileName - Schema file name (e.g., "groupObject1.json")
  */
 function generateHtmlForSchema(fileName) {
-    const filePath = path.join(schemaDir, fileName);
-    const schema = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-    let propertiesTable = `
-        <table>
-            <tr>
-                <th>Property</th>
-                <th>Type</th>
-                <th>Schema Reference</th>
-                <th>Required</th>
-            </tr>
-    `;
-
-    if (schema.properties) {
-        Object.keys(schema.properties).forEach((key) => {
-            const property = schema.properties[key];
-            const type = property.type ? property.type : "Unknown";
-            const schemaRef = property["$ref"] ? getHtmlLink(property["$ref"]) : "-";
-            const isRequired = schema.required && schema.required.includes(key) ? "✅ Yes" : "❌ No";
-
-            propertiesTable += `
+  const filePath = path.join(schemaDir, fileName);
+  const schema = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  // Check if schema extends another schema using "allOf"
+  let baseSchemaRows = '';
+  if (schema['allOf'] && Array.isArray(schema['allOf'])) {
+    schema['allOf'].forEach((item) => {
+      if (item['$ref']) {
+        const baseSchemaLink = getHtmlLink(item['$ref']);
+        baseSchemaRows += `
                 <tr>
-                    <td>${key}</td>
-                    <td>${type}</td>
-                    <td>${schemaRef}</td>
-                    <td>${isRequired}</td>
+                    <td><strong>Derived from</strong></td>
+                    <td>Object</td>
+                    <td>${baseSchemaLink}</td>
+                    <td>✅ Yes</td>
                 </tr>
             `;
-        });
-    } else {
-        propertiesTable += `<tr><td colspan="4">No properties defined.</td></tr>`;
-    }
-
-    propertiesTable += `</table>`;
-
-    // Scan instances folder for matching instances
-    const instanceFiles = fs.existsSync(instanceDir) ? fs.readdirSync(instanceDir) : [];
-    const matchingInstances = instanceFiles.filter(instanceFile => {
-        const instancePath = path.join(instanceDir, instanceFile);
-        const instanceData = JSON.parse(fs.readFileSync(instancePath, "utf8"));
-        return instanceData["$schema"] === schema["$id"];
+      }
     });
+  }
 
-    let instanceOptions = matchingInstances.map(file =>
-        `<option value="${file}">${file}</option>`).join("\n");
+  let propertiesTable = `
+    <table>
+        <tr>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Schema Reference</th>
+            <th>Required</th>
+        </tr>
+        ${baseSchemaRows}
+`;
 
-    let instanceSelector = matchingInstances.length > 0 ? `
+  if (schema.properties) {
+    Object.keys(schema.properties).forEach((key) => {
+      const property = schema.properties[key];
+      const type = property.type ? property.type : 'Object';
+      const schemaRef = property['$ref'] ? getHtmlLink(property['$ref']) : '-';
+      const isRequired =
+        schema.required && schema.required.includes(key) ? '✅ Yes' : '❌ No';
+
+      propertiesTable += `
+            <tr>
+                <td>${key}</td>
+                <td>${type}</td>
+                <td>${schemaRef}</td>
+                <td>${isRequired}</td>
+            </tr>
+        `;
+    });
+  } else {
+    propertiesTable += `<tr><td colspan="4">No properties defined.</td></tr>`;
+  }
+
+  propertiesTable += `</table>`;
+
+  // Scan instances folder for matching instances
+  const instanceFiles = fs.existsSync(instanceDir)
+    ? fs.readdirSync(instanceDir)
+    : [];
+  const matchingInstances = instanceFiles.filter((instanceFile) => {
+    const instancePath = path.join(instanceDir, instanceFile);
+    const instanceData = JSON.parse(fs.readFileSync(instancePath, 'utf8'));
+    return instanceData['$schema'] === schema['$id'];
+  });
+
+  let instanceOptions = matchingInstances
+    .map((file) => `<option value="${file}">${file}</option>`)
+    .join('\n');
+
+  let instanceSelector =
+    matchingInstances.length > 0
+      ? `
         <h2>Load JSON Instance</h2>
         <select id="instanceSelector">
             <option value="">Select an instance...</option>
             ${instanceOptions}
         </select>
-    ` : `<p>No instances found for this schema.</p>`;
+    `
+      : `<p>No instances found for this schema.</p>`;
 
-    // Generate HTML content
-    const htmlContent = `
+  // Generate HTML content
+  const htmlContent = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -108,7 +133,7 @@ function generateHtmlForSchema(fileName) {
         <body>
             <h1>Schema: ${fileName}</h1>
             <p><strong>Schema ID:</strong> 
-                <a href="${schema["$id"]}" target="_blank">${schema["$id"]}</a>
+                <a href="${schema['$id']}" target="_blank">${schema['$id']}</a>
             </p>
 
             <h2>Properties</h2>
@@ -169,14 +194,21 @@ function generateHtmlForSchema(fileName) {
         </html>
     `;
 
-    fs.writeFileSync(path.join(htmlDir, `${path.basename(fileName, ".json")}.html`), htmlContent, "utf8");
-    schemaList.push({ name: fileName, link: path.basename(fileName, ".json") + ".html" });
+  fs.writeFileSync(
+    path.join(htmlDir, `${path.basename(fileName, '.json')}.html`),
+    htmlContent,
+    'utf8',
+  );
+  schemaList.push({
+    name: fileName,
+    link: path.basename(fileName, '.json') + '.html',
+  });
 }
 
 // Generate HTML for all schemas
 fs.readdirSync(schemaDir).forEach((file) => {
-    if (file.endsWith(".json")) {
-        console.log("Generating HTML for", file);
-        generateHtmlForSchema(file);
-    }
+  if (file.endsWith('.json')) {
+    console.log('Generating HTML for', file);
+    generateHtmlForSchema(file);
+  }
 });
