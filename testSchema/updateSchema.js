@@ -53,3 +53,35 @@ function deriveSchema(sourceClass, derivedClass, fieldsToAdd) {
 deriveSchema("obj1", "obj1size", [
     { name: "size", mandatory: true, type: "number" }
 ]);
+
+
+
+// Create a schema for an array of obj1.json
+function createGroupSchema(baseSchema, groupSchemaName) {
+    const groupSchemaPath = path.join(schemaDir, `${groupSchemaName}.json`);
+
+    console.log(`🛠️ Creating group schema: ${groupSchemaName}...`);
+
+    // Define the new schema
+    const groupSchema = {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "$id": `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${groupSchemaName}.json`,
+        "properties": {
+            "members": {
+                "type": "array",
+                "items": {
+                    "$ref": `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${baseSchema}.json` 
+                }
+            }
+        },
+        "required": ["objects"]
+    };
+
+    // Save the new schema
+    fs.writeFileSync(groupSchemaPath, JSON.stringify(groupSchema, null, 4));
+    console.log(`✅ ${groupSchemaName} schema created at:`, groupSchemaPath);
+}
+
+// Generate schema for groupObject1.json
+createGroupSchema("obj1", "groupObject1");

@@ -5,7 +5,7 @@ const path = require("path");
 const instancesDir = "./instances";
 
 // File paths
-const pairObj1Path = path.join(instancesDir, "examplePair_EmbeddedSchema.json");
+const pairObj1Path = path.join(instancesDir, "examplePair_EmbededSchema.json");
 
 // Instance files
 const alicePath = path.join(instancesDir, "alice.json");

@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/groupObject1.json",
+    "properties": {
+        "@context": {
+            "type": "string",
+            "format": "uri",
+            "description": "Linked Data context URL"
+        },
+        "@id": {
+            "type": "string",
+            "format": "uri",
+            "description": "Unique identifier for this resource"
+        },
+        "@type": {
+            "type": "string",
+            "enum": [
+                "GroupObject1"
+            ]
+        },
+        "members": {
+            "type": "array",
+            "items": {
+                "$ref": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json"
+            }
+        }
+    },
+    "required": [
+        "@id",
+        "@type",
+        "objects"
+    ],
+    "title": "GroupObject1"
+}

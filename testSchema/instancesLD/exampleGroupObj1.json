@@ -1,0 +1,20 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/groupObject1.json",
+    "members": [
+        {
+            "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json",
+            "name": "Alice"
+        },
+        {
+            "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json",
+            "name": "Bob",
+            "age": 53
+        }
+    ],
+    "initialHash": "2ed6f59795a5b32c573da5b73cf5b583f4001bb1e3689ca0468cbd667453de2a",
+    "@id": "urn:uuid:6d8fd467-b107-4944-905d-164ead0ab9e2",
+    "@type": "GroupObject1",
+    "timestamp": "2025-02-06T11:27:15.248Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "361cecb591ab4ceb396f21e12ff071c75c8f01ee47216b689296196c70c9e15e"
+}
