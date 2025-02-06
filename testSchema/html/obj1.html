@@ -12,8 +12,8 @@
         textarea { width: 100%; height: 200px; font-family: monospace; }
         #validationMessage { font-weight: bold; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv-formats/2.1.1/ajv-formats.min.js"></script>
+    <!-- ✅ Load Working Version of AJV 6.12.6 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
 </head>
 <body>
     <h1>Schema: obj1.json</h1>
@@ -64,35 +64,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     } else {
         console.warn("⚠️ No instance selector found.");
     }
-
-    // ✅ Ensure AJV is loaded before validation
-    await loadAjv();
 });
-
-async function loadAjv() {
-    if (typeof window.Ajv === "undefined") {
-        console.log("⏳ Loading AJV...");
-        await new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv.min.js";
-            script.onload = resolve;
-            document.head.appendChild(script);
-        });
-
-        await new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "https://cdnjs.cloudflare.com/ajax/libs/ajv-formats/2.1.1/ajv-formats.min.js";
-            script.onload = resolve;
-            document.head.appendChild(script);
-        });
-
-        console.log("✅ AJV loaded successfully.");
-    }
-}
 
 /** ✅ Function to Load JSON Instance */
 function loadInstance(fileName) {
-    if (!fileName) return; 
+    if (!fileName) return;
 
     console.log("Loading instance:", fileName);
 
@@ -112,12 +88,21 @@ function loadInstance(fileName) {
         });
 }
 
-/** ✅ Function to Fetch Schema */
-async function fetchSchema(url) {
+/** ✅ Function to Fetch and Cache Schemas */
+async function fetchSchema(url, schemas = {}) {
+    if (schemas[url]) return schemas[url]; // Return cached schema
+
     console.log(`⏳ Fetching schema: ${url}`);
     let response = await fetch(url);
     if (!response.ok) throw new Error(`❌ Failed to fetch schema: ${url}`);
-    return response.json();
+
+    schemas[url] = await response.json();
+    console.log(`✅ Loaded schema: ${url}`);
+
+    // Recursively resolve `$ref` references
+    await resolveRefs(schemas[url], schemas);
+
+    return schemas[url];
 }
 
 /** ✅ Function to Resolve `$ref` References */
@@ -126,10 +111,8 @@ async function resolveRefs(schema, schemas = {}) {
 
     for (let key in schema) {
         if (key === "$ref" && typeof schema[key] === "string") {
-            let refUrl = schema[key];
-            if (!schemas[refUrl]) {
-                schemas[refUrl] = await fetchSchema(refUrl);
-                await resolveRefs(schemas[refUrl], schemas);
+            if (!schemas[schema[key]]) {
+                schemas[schema[key]] = await fetchSchema(schema[key], schemas);
             }
         } else if (typeof schema[key] === "object") {
             await resolveRefs(schema[key], schemas);
@@ -150,13 +133,9 @@ async function validateJson() {
         const schemaUrl = jsonData["$schema"];
         if (!schemaUrl) throw new Error("No $schema found in JSON.");
 
-        // ✅ Wait for AJV to load
-        await loadAjv();
-
         // ✅ Fetch schema and resolve references
         let schemas = {};
-        schemas[schemaUrl] = await fetchSchema(schemaUrl);
-        await resolveRefs(schemas[schemaUrl], schemas);
+        schemas[schemaUrl] = await fetchSchema(schemaUrl, schemas);
 
         // ✅ Ensure AJV is available
         if (typeof window.Ajv === "undefined") {
@@ -165,7 +144,6 @@ async function validateJson() {
 
         // ✅ Initialize AJV and validate
         const ajv = new window.Ajv({ allErrors: true, schemas });
-        window.addFormats(ajv);
         const validate = ajv.compile(schemas[schemaUrl]);
 
         if (validate(jsonData)) {
