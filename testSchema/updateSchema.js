@@ -3,6 +3,7 @@ const path = require("path");
 
 // Directories
 const schemaDir = "./schemaNoLinkData";
+const schemaRoot = "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/";
 
 /**
  * Function to derive a new schema from an existing one
@@ -24,7 +25,7 @@ function deriveSchema(sourceClass, derivedClass, fieldsToAdd) {
     const derivedSchema = {
         "$schema": sourceSchema["$schema"],
         "type": sourceSchema["type"],
-        "$id": `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${derivedClass}.json`,
+        "$id": `${schemaRoot}${derivedClass}.json`,
         "allOf": [{ "$ref": sourceSchema["$id"] }],
         "properties": {}
     };
@@ -66,12 +67,12 @@ function createGroupSchema(baseSchema, groupSchemaName) {
     const groupSchema = {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "$id": `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${groupSchemaName}.json`,
+        "$id": `${schemaRoot}${groupSchemaName}.json`,
         "properties": {
             "members": {
                 "type": "array",
                 "items": {
-                    "$ref": `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${baseSchema}.json` 
+                    "$ref": `${schemaRoot}${baseSchema}.json` 
                 }
             }
         },

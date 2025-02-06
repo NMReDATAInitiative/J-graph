@@ -3,6 +3,7 @@ const path = require("path");
 
 // Directories
 const instancesDir = "./instances";
+const schemaRoot = "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/";
 
 // File paths
 const pairObj1Path = path.join(instancesDir, "examplePair_EmbededSchema.json");
@@ -19,7 +20,7 @@ const test1Data = JSON.parse(fs.readFileSync(test1Path, "utf8"));
 
 // Create pairObj1 instance
 const pairObj1Instance = {
-    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/pairObj1.json",
+    "$schema": `${schemaRoot}pairObj1.json`,
     "object1": aliceData,
     "object2": test1Data
 };
