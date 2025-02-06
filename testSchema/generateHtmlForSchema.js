@@ -212,3 +212,43 @@ fs.readdirSync(schemaDir).forEach((file) => {
     generateHtmlForSchema(file);
   }
 });
+
+/**
+ * Generates an index.html file listing all schemas
+ */
+function generateIndexPage() {
+    let indexContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Schema Index</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                ul { list-style-type: none; padding: 0; }
+                li { margin: 10px 0; }
+                a { text-decoration: none; color: #007BFF; font-weight: bold; }
+                a:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <h1>Schema Documentation</h1>
+            <ul>
+`;
+
+    schemaList.forEach((schema) => {
+        indexContent += `                <li><a href="${schema.link}">${schema.name.replace('.json', '')}</a></li>\n`;
+    });
+
+    indexContent += `            </ul>
+        </body>
+        </html>
+    `;
+
+    fs.writeFileSync(path.join(htmlDir, "index.html"), indexContent, "utf8");
+    console.log("✅ index.html generated successfully!");
+}
+
+// Call the function after generating all schema pages
+generateIndexPage();
