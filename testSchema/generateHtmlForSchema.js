@@ -101,6 +101,8 @@ function generateHtmlForSchema(fileName) {
                 th { background-color: #f2f2f2; }
                 textarea { width: 100%; height: 200px; font-family: monospace; }
                 #validationMessage { font-weight: bold; }
+                #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
+                color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
             </style>
         </head>
         <body>
@@ -115,7 +117,9 @@ function generateHtmlForSchema(fileName) {
             <h2>Edit JSON Instance</h2>
             <textarea id="jsonEditor"></textarea>
             <p id="validationMessage"></p>
-
+            <p>
+            <a href="index.html" id="returnButton">⬅ Return to Object List</a>
+            </p>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     const editor = document.getElementById("jsonEditor");
