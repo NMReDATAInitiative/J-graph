@@ -1,26 +1,26 @@
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Schema: obj2.json</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            table { border-collapse: collapse; width: 100%; }
-            th, td { padding: 10px; border: 1px solid black; text-align: left; }
-            th { background-color: #f2f2f2; }
-            textarea { width: 100%; height: 200px; font-family: monospace; }
-            #validationMessage { font-weight: bold; }
-        </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv-formats/2.1.1/ajv-formats.min.js"></script>
-    </head>
-    <body>
-        <h1>Schema: obj2.json</h1>
-        <p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json</a></p>
-        <h2>Properties</h2>
-        
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Schema: obj2.json</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { padding: 10px; border: 1px solid black; text-align: left; }
+                th { background-color: #f2f2f2; }
+                textarea { width: 100%; height: 200px; font-family: monospace; }
+                #validationMessage { font-weight: bold; }
+            </style>
+            <script defer src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv.min.js"></script>
+            <script defer src="https://cdnjs.cloudflare.com/ajax/libs/ajv-formats/2.1.1/ajv-formats.min.js"></script>
+        </head>
+        <body>
+            <h1>Schema: obj2.json</h1>
+            <p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json</a></p>
+            <h2>Properties</h2>
+            
         <table border="1">
             <tr>
                 <th>Property</th>
@@ -43,63 +43,82 @@
                     <td>✅ Yes</td>
                 </tr>
             </table>
-        
-        <h2>Load JSON Instance </h2>
-        <select id="instanceSelector" onchange="loadInstance()">
+            
+        <h2>Load JSON Instance</h2>
+        <select id="instanceSelector">
             <option value="">Select an instance...</option>
             <option value="test1.json">test1.json</option>
 <option value="test1TimestampID.json">test1TimestampID.json</option>
 <option value="testEmbeddedSchemaFailed.json">testEmbeddedSchemaFailed.json</option>
         </select>
     
-        <h2>Edit JSON Instance</h2>
-        <textarea id="jsonEditor"></textarea>
-        <p id="validationMessage"></p>
-        <p><a href="index.html">Back to Index</a></p>
+            <h2>Edit JSON Instance</h2>
+            <textarea id="jsonEditor"></textarea>
+            <p id="validationMessage"></p>
+            <p><a href="index.html">Back to Index</a></p>
 
-        <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function loadInstance() {
-                const fileName = document.getElementById("instanceSelector").value;
-                if (!fileName) return;
+            <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const editor = document.getElementById("jsonEditor");
+                const selector = document.getElementById("instanceSelector");
+                const validationMessage = document.getElementById("validationMessage");
+
+                if (editor) {
+                    editor.value = "";
+                } else {
+                    console.error("❌ Error: jsonEditor element not found!");
+                }
+
+                if (selector) {
+                    selector.addEventListener("change", function () {
+                        loadInstance(selector.value);
+                    });
+                } else {
+                    console.warn("⚠️ No instance selector found.");
+                }
+            });
+
+            function loadInstance(fileName) {
+                if (!fileName) return; // If no file is selected, do nothing
+
+                console.log("Loading instance:", fileName); // Debugging
 
                 fetch("../instances/" + fileName)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) throw new Error("Failed to fetch instance: " + response.status);
+                        return response.json();
+                    })
                     .then(data => {
                         document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
                         validateJson();
                     })
-                    .catch(err => console.error("Error loading instance:", err));
+                    .catch(err => {
+                        console.error("Error loading instance:", err);
+                        document.getElementById("jsonEditor").value = "";
+                        document.getElementById("validationMessage").textContent = "❌ Failed to load instance: " + err.message;
+                    });
             }
 
+            /** ✅ Function to Validate JSON */
             async function validateJson() {
                 const text = document.getElementById("jsonEditor").value;
                 let validationMessage = document.getElementById("validationMessage");
 
                 try {
+                    console.log("Validation running..."); // Debugging
+
+                    if (!text.trim()) throw new Error("Empty JSON input.");
                     const jsonData = JSON.parse(text);
 
-                    // Fetch the schema dynamically from its $schema reference
                     const schemaUrl = jsonData["$schema"];
-                    if (!schemaUrl) {
-                        validationMessage.style.color = "red";
-                        validationMessage.textContent = "⚠️ No $schema found in JSON.";
-                        return;
-                    }
+                    if (!schemaUrl) throw new Error("No $schema found in JSON.");
 
                     const response = await fetch(schemaUrl);
-                    if (!response.ok) {
-                        throw new Error("Could not fetch schema. HTTP Status: " + response.status);
-                    }
+                    if (!response.ok) throw new Error("Failed to fetch schema: " + response.status);
 
                     const schema = await response.json();
+                    if (!schema || typeof schema !== "object") throw new Error("Invalid JSON schema response.");
 
-                    // Ensure AJV is available
-                    if (typeof Ajv === "undefined") {
-                        throw new Error("AJV is not loaded correctly.");
-                    }
-
-                    // Initialize AJV
                     const ajv = new Ajv({ allErrors: true });
                     addFormats(ajv);
                     const validate = ajv.compile(schema);
@@ -117,12 +136,7 @@
                     console.error("Validation Error:", error);
                 }
             }
-
-            document.getElementById("jsonEditor").addEventListener("input", validateJson);
-            if (document.getElementById("instanceSelector")) {
-                document.getElementById("instanceSelector").addEventListener("change", loadInstance);
-            }
-        });
-        </script>
-    </body>
-    </html>
+            </script>
+        </body>
+        </html>
+    
