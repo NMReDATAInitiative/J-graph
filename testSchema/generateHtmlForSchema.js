@@ -101,106 +101,120 @@ function generateHtmlForSchema(fileName) {
         `<option value="${file}">${file}</option>`).join("\n");
 
     let instanceSelector = matchingInstances.length > 0 ? `
-        <h2>Load JSON Instance ...</h2>
+        <h2>Load JSON Instance </h2>
         <select id="instanceSelector" onchange="loadInstance()">
             <option value="">Select an instance...</option>
             ${instanceOptions}
         </select>
     ` : `<p>No instances found for this schema.</p>`;
 
-    // Generate HTML content
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Schema: ${fileName}</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                table { border-collapse: collapse; width: 100%; }
-                th, td { padding: 10px; border: 1px solid black; text-align: left; }
-                th { background-color: #f2f2f2; }
-                textarea { width: 100%; height: 200px; font-family: monospace; }
-                #validationMessage { font-weight: bold; }
-            </style>
-        </head>
-        <body>
-            <h1>Schema: ${fileName}</h1>
-            <p><strong>Schema ID:</strong> <a href="${schema["$id"]}" target="_blank">${schema["$id"]}</a></p>
-            <p><strong>Does filename match the schema ID?</strong> ${isFileNameCorrect}</p>
-            <h2>Properties</h2>
-            ${propertiesTable}
-            ${instanceSelector}
-            <h2>Edit JSON Instance</h2>
-            <textarea id="jsonEditor" oninput="validateJson()"></textarea>
-            <p id="validationMessage"></p>
-            <p><a href="index.html">Back to Index</a></p>
-            
-            <script>
-                function loadInstance() {
-                    const fileName = document.getElementById("instanceSelector").value;
-                    if (!fileName) return;
+// Generate HTML content
+const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schema: ${fileName}</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { padding: 10px; border: 1px solid black; text-align: left; }
+            th { background-color: #f2f2f2; }
+            textarea { width: 100%; height: 200px; font-family: monospace; }
+            #validationMessage { font-weight: bold; }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv-formats/2.1.1/ajv-formats.min.js"></script>
+    </head>
+    <body>
+        <h1>Schema: ${fileName}</h1>
+        <p><strong>Schema ID:</strong> <a href="${schema["$id"]}" target="_blank">${schema["$id"]}</a></p>
+        <h2>Properties</h2>
+        ${propertiesTable}
+        ${instanceSelector}
+        <h2>Edit JSON Instance</h2>
+        <textarea id="jsonEditor"></textarea>
+        <p id="validationMessage"></p>
+        <p><a href="index.html">Back to Index</a></p>
 
-                    fetch("../instances/" + fileName)
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
-                            validateJson();
-                        })
-                        .catch(err => console.error("Error loading instance:", err));
-                }
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function loadInstance() {
+                const fileName = document.getElementById("instanceSelector").value;
+                if (!fileName) return;
 
-                function validateJson() {
-    const text = document.getElementById("jsonEditor").value;
-    let validationMessage = document.getElementById("validationMessage");
+                fetch("../instances/" + fileName)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
+                        validateJson();
+                    })
+                    .catch(err => console.error("Error loading instance:", err));
+            }
 
-    try {
-        const jsonData = JSON.parse(text);
-        
-        fetch(jsonData["$schema"])
-            .then(response => response.json())
-            .then(schema => {
-                const ajv = new Ajv({ allErrors: true });
-                addFormats(ajv);
-                const validate = ajv.compile(schema);
+            async function validateJson() {
+                const text = document.getElementById("jsonEditor").value;
+                let validationMessage = document.getElementById("validationMessage");
 
-                if (validate(jsonData)) {
-                    validationMessage.style.color = "green";
-                    validationMessage.textContent = "✅ Valid JSON";
-                } else {
+                try {
+                    const jsonData = JSON.parse(text);
+
+                    // Fetch the schema dynamically from its $schema reference
+                    const schemaUrl = jsonData["$schema"];
+                    if (!schemaUrl) {
+                        validationMessage.style.color = "red";
+                        validationMessage.textContent = "⚠️ No $schema found in JSON.";
+                        return;
+                    }
+
+                    const response = await fetch(schemaUrl);
+                    if (!response.ok) {
+                        throw new Error("Could not fetch schema. HTTP Status: " + response.status);
+                    }
+
+                    const schema = await response.json();
+
+                    // Ensure AJV is available
+                    if (typeof Ajv === "undefined") {
+                        throw new Error("AJV is not loaded correctly.");
+                    }
+
+                    // Initialize AJV
+                    const ajv = new Ajv({ allErrors: true });
+                    addFormats(ajv);
+                    const validate = ajv.compile(schema);
+
+                    if (validate(jsonData)) {
+                        validationMessage.style.color = "green";
+                        validationMessage.textContent = "✅ Valid JSON";
+                    } else {
+                        validationMessage.style.color = "red";
+                        validationMessage.innerHTML = "❌ Invalid JSON:<br>" + JSON.stringify(validate.errors, null, 4);
+                    }
+                } catch (error) {
                     validationMessage.style.color = "red";
-                    validationMessage.innerHTML = "❌ Invalid JSON:<br>" + JSON.stringify(validate.errors, null, 4);
+                    validationMessage.textContent = "❌ Validation Error: " + error.message;
+                    console.error("Validation Error:", error);
                 }
-            })
-            .catch(error => {
-                validationMessage.style.color = "red";
-                validationMessage.textContent = "⚠️ Could not fetch schema. Check network & schema URL.";
-                console.error("Schema Fetch Error:", error);
-            });
-    } catch (error) {
-        validationMessage.style.color = "red";
-        validationMessage.textContent = "❌ JSON Parsing Error";
-        console.error("JSON Parse Error:", error);
-    }
-}
+            }
+
+            document.getElementById("jsonEditor").addEventListener("input", validateJson);
+            if (document.getElementById("instanceSelector")) {
+                document.getElementById("instanceSelector").addEventListener("change", loadInstance);
+            }
+        });
+        </script>
+    </body>
+    </html>
+`;
+
+// Save HTML file
+const outputFilePath = path.join(htmlDir, `${path.basename(fileName, ".json")}.html`);
+fs.writeFileSync(outputFilePath, htmlContent, "utf8");
+console.log(`✅ Generated: ${outputFilePath}`);
 
 
-    } catch (error) {
-        validationMessage.style.color = "red";
-        validationMessage.textContent = "❌ Invalid JSON (Parsing Error)";
-    }
-}
-
-            </script>
-        </body>
-        </html>
-    `;
-
-    // Save HTML file
-    const outputFilePath = path.join(htmlDir, `${path.basename(fileName, ".json")}.html`);
-    fs.writeFileSync(outputFilePath, htmlContent, "utf8");
-    console.log(`✅ Generated: ${outputFilePath}`);
 
     // Add to schema list for index
     schemaList.push({ name: fileName, link: path.basename(fileName, ".json") + ".html" });
