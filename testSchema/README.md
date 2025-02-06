@@ -1,3 +1,9 @@
+[schema validator for user-selected file](./html/checkSchemaFromFile.html) 
+
+
+[schema validator from object page](./html/index.html) 
+
+
 Schemas are built in the `./schemaNoLinkedData/` (and a script validates)
 
 Some are created directly in `./schemaNoLinkedData/` with `./updateSchema.js`
