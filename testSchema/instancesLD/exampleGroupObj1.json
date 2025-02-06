@@ -12,9 +12,9 @@
         }
     ],
     "initialHash": "2ed6f59795a5b32c573da5b73cf5b583f4001bb1e3689ca0468cbd667453de2a",
-    "@id": "urn:uuid:a8959c6c-1792-457f-991d-8d3c075fcaf5",
+    "@id": "urn:uuid:df5c8dd1-1257-4bb6-8365-da6b707ff764",
     "@type": "GroupObject1",
-    "timestamp": "2025-02-06T11:28:04.765Z",
+    "timestamp": "2025-02-06T11:29:33.649Z",
     "source": "Generated from schema conversion",
-    "finalHash": "d4caa342fdd3da0c9da69199504dcf8bbdf6447722e37f567584a30e62f313fa"
+    "finalHash": "782fdf67f180b58a1f993650de8a2af0486b52066d917b331d57535530e8c541"
 }
