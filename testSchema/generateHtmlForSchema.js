@@ -158,6 +158,8 @@ function generateHtmlForSchema(fileName) {
 
             /** ✅ Function to Validate JSON */
             async function validateJson() {
+             console.log("calling validation");
+                return;
                 const text = document.getElementById("jsonEditor").value;
                 let validationMessage = document.getElementById("validationMessage");
 

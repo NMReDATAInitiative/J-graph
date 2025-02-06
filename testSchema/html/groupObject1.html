@@ -1,133 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Schema: groupObject1.json</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
+		<script src="../validateSchema.js"></script>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 20px;
+			}
+			table {
+				border-collapse: collapse;
+				width: 100%;
+			}
+			th,
+			td {
+				padding: 10px;
+				border: 1px solid black;
+				text-align: left;
+			}
+			th {
+				background-color: #f2f2f2;
+			}
+			textarea {
+				width: 100%;
+				height: 200px;
+				font-family: monospace;
+			}
+			#validationMessage {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Schema: groupObject1.json</h1>
+		<p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json" target="_blank">View Schema</a></p>
 
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Schema: groupObject1.json</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                table { border-collapse: collapse; width: 100%; }
-                th, td { padding: 10px; border: 1px solid black; text-align: left; }
-                th { background-color: #f2f2f2; }
-                textarea { width: 100%; height: 200px; font-family: monospace; }
-                #validationMessage { font-weight: bold; }
-            </style>
-            <script defer src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv.min.js"></script>
-            <script defer src="https://cdnjs.cloudflare.com/ajax/libs/ajv-formats/2.1.1/ajv-formats.min.js"></script>
-        </head>
-        <body>
-            <h1>Schema: groupObject1.json</h1>
-            <p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json</a></p>
-            <h2>Properties</h2>
-            
-        <table border="1">
-            <tr>
-                <th>Property</th>
-                <th>Type</th>
-                <th>Schema Reference</th>
-                <th>Required</th>
-            </tr>
-    
-                <tr>
-                    <td>members</td>
-                    <td>array</td>
-                    <td>-</td>
-                    <td>✅ Yes</td>
-                </tr>
-            </table>
-            
-        <h2>Load JSON Instance</h2>
-        <select id="instanceSelector">
-            <option value="">Select an instance...</option>
-            <option value="exampleGroupObj1.json">exampleGroupObj1.json</option>
-        </select>
-    
-            <h2>Edit JSON Instance</h2>
-            <textarea id="jsonEditor"></textarea>
-            <p id="validationMessage"></p>
-            <p><a href="index.html">Back to Index</a></p>
+		<h2>Properties</h2>
+		<table>
+			<tr>
+				<th>Property</th>
+				<th>Type</th>
+				<th>Schema Reference</th>
+				<th>Required</th>
+			</tr>
+			<tr>
+				<td>members</td>
+				<td>array</td>
+				<td>-</td>
+				<td>✅ Yes</td>
+			</tr>
+		</table>
 
-            <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const editor = document.getElementById("jsonEditor");
-                const selector = document.getElementById("instanceSelector");
-                const validationMessage = document.getElementById("validationMessage");
+		<h2>Load JSON Instance</h2>
+		<select id="instanceSelector">
+			<option value="">Select an instance...</option>
+			<option value="exampleGroupObj1.json">exampleGroupObj1.json</option>
+		</select>
 
-                if (editor) {
-                    editor.value = "";
-                } else {
-                    console.error("❌ Error: jsonEditor element not found!");
-                }
+		<h2>Edit JSON Instance</h2>
+		<textarea id="jsonEditor"></textarea>
+		<p id="validationMessage"></p>
 
-                if (selector) {
-                    selector.addEventListener("change", function () {
-                        loadInstance(selector.value);
-                    });
-                } else {
-                    console.warn("⚠️ No instance selector found.");
-                }
-            });
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const editor = document.getElementById("jsonEditor");
+				const selector = document.getElementById("instanceSelector");
+				const validationMessage = document.getElementById("validationMessage");
 
-            function loadInstance(fileName) {
-                if (!fileName) return; // If no file is selected, do nothing
+				selector.addEventListener("change", function () {
+					loadInstance(selector.value);
+				});
 
-                console.log("Loading instance:", fileName); // Debugging
+				async function loadInstance(fileName) {
+					if (!fileName) return;
 
-                fetch("../instances/" + fileName)
-                    .then(response => {
-                        if (!response.ok) throw new Error("Failed to fetch instance: " + response.status);
-                        return response.json();
-                    })
-                    .then(data => {
-                        document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
-                        validateJson();
-                    })
-                    .catch(err => {
-                        console.error("Error loading instance:", err);
-                        document.getElementById("jsonEditor").value = "";
-                        document.getElementById("validationMessage").textContent = "❌ Failed to load instance: " + err.message;
-                    });
-            }
+					try {
+						const response = await fetch("../instances/" + fileName);
+						if (!response.ok) throw new Error("Failed to fetch instance: " + response.status);
 
-            /** ✅ Function to Validate JSON */
-            async function validateJson() {
-                const text = document.getElementById("jsonEditor").value;
-                let validationMessage = document.getElementById("validationMessage");
+						const data = await response.json();
+						editor.value = JSON.stringify(data, null, 4);
 
-                try {
-                    console.log("Validation running..."); // Debugging
-
-                    if (!text.trim()) throw new Error("Empty JSON input.");
-                    const jsonData = JSON.parse(text);
-
-                    const schemaUrl = jsonData["$schema"];
-                    if (!schemaUrl) throw new Error("No $schema found in JSON.");
-
-                    const response = await fetch(schemaUrl);
-                    if (!response.ok) throw new Error("Failed to fetch schema: " + response.status);
-
-                    const schema = await response.json();
-                    if (!schema || typeof schema !== "object") throw new Error("Invalid JSON schema response.");
-
-                    const ajv = new Ajv({ allErrors: true });
-                    addFormats(ajv);
-                    const validate = ajv.compile(schema);
-
-                    if (validate(jsonData)) {
-                        validationMessage.style.color = "green";
-                        validationMessage.textContent = "✅ Valid JSON";
-                    } else {
-                        validationMessage.style.color = "red";
-                        validationMessage.innerHTML = "❌ Invalid JSON:<br>" + JSON.stringify(validate.errors, null, 4);
-                    }
-                } catch (error) {
-                    validationMessage.style.color = "red";
-                    validationMessage.textContent = "❌ Validation Error: " + error.message;
-                    console.error("Validation Error:", error);
-                }
-            }
-            </script>
-        </body>
-        </html>
-    
+						const schemas = await fetchSchemas(data);
+						validateJSON(data, schemas, validationMessage);
+					} catch (err) {
+						editor.value = "";
+						validationMessage.textContent = "❌ Failed to load instance: " + err.message;
+						console.error("Error loading instance:", err);
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,165 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schema: obj1.json</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 10px; border: 1px solid black; text-align: left; }
-        th { background-color: #f2f2f2; }
-        textarea { width: 100%; height: 200px; font-family: monospace; }
-        #validationMessage { font-weight: bold; }
-    </style>
-    <!-- ✅ Load Working Version of AJV 6.12.6 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
-</head>
-<body>
-    <h1>Schema: obj1.json</h1>
-    <p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json" target="_blank">obj1.json</a></p>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schema: obj1.json</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { padding: 10px; border: 1px solid black; text-align: left; }
+            th { background-color: #f2f2f2; }
+            textarea { width: 100%; height: 200px; font-family: monospace; }
+            #validationMessage { font-weight: bold; }
+        </style>
+        <script src="Schema_%20obj1.json_files/ajv.min.js"></script>
+        <script src="Schema_%20obj1.json_files/ajv-formats.min.js"></script>
+    </head>
+    <body>
+        <h1>Schema: obj1.json</h1>
+        <p><strong>Schema ID:</strong> <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json</a></p>
+        <h2>Properties</h2>
+        
+        <table border="1">
+            <tbody><tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Schema Reference</th>
+                <th>Required</th>
+            </tr>
     
-    <h2>Properties</h2>
-    <table border="1">
-        <tr>
-            <th>Property</th>
-            <th>Type</th>
-            <th>Schema Reference</th>
-            <th>Required</th>
-        </tr>
-        <tr><td>name</td><td>string</td><td>-</td><td>✅ Yes</td></tr>
-        <tr><td>age</td><td>integer</td><td>-</td><td>❌ No</td></tr>
-    </table>
+                <tr>
+                    <td>name</td>
+                    <td>string</td>
+                    <td>-</td>
+                    <td>✅ Yes</td>
+                </tr>
+            
+                <tr>
+                    <td>age</td>
+                    <td>integer</td>
+                    <td>-</td>
+                    <td>❌ No</td>
+                </tr>
+            </tbody></table>
+        
+        <h2>Load JSON Instance </h2>
+        <select id="instanceSelector" onchange="loadInstance()">
+            <option value="">Select an instance...</option>
+            <option value="alice.json">alice.json</option>
+<option value="testEmbeddedSchema.json" selected="selected">testEmbeddedSchema.json</option>
+        </select>
+    
+        <h2>Edit JSON Instance</h2>
+        <textarea id="jsonEditor">{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json",
+    "name": "B  ob",
+    "age": 45
+}</textarea>
+        <p id="validationMessage" style="color: red;">❌ Validation Error: AJV is not loaded correctly.</p>
+        <p><a href="https://nmredatainitiative.github.io/J-graph/testSchema/html/index.html">Back to Index</a></p>
 
-    <h2>Load JSON Instance</h2>
-    <select id="instanceSelector">
-        <option value="">Select an instance...</option>
-        <option value="alice.json">alice.json</option>
-        <option value="testEmbeddedSchema.json">testEmbeddedSchema.json</option>
-    </select>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function loadInstance() {
+                const fileName = document.getElementById("instanceSelector").value;
+                if (!fileName) return;
 
-    <h2>Edit JSON Instance</h2>
-    <textarea id="jsonEditor"></textarea>
-    <p id="validationMessage"></p>
-    <p><a href="index.html">Back to Index</a></p>
-
-    <script>
-document.addEventListener("DOMContentLoaded", async function () {
-    const editor = document.getElementById("jsonEditor");
-    const selector = document.getElementById("instanceSelector");
-    const validationMessage = document.getElementById("validationMessage");
-
-    // ✅ Ensure the text box is cleared when the page loads
-    if (editor) {
-        editor.value = "";
-    } else {
-        console.error("❌ Error: jsonEditor element not found!");
-    }
-
-    // ✅ Attach event listener to dropdown
-    if (selector) {
-        selector.addEventListener("change", function () {
-            loadInstance(selector.value);
-        });
-    } else {
-        console.warn("⚠️ No instance selector found.");
-    }
-});
-
-/** ✅ Function to Load JSON Instance */
-function loadInstance(fileName) {
-    if (!fileName) return;
-
-    console.log("Loading instance:", fileName);
-
-    fetch("../instances/" + fileName)
-        .then(response => {
-            if (!response.ok) throw new Error("Failed to fetch instance: " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
-            validateJson();
-        })
-        .catch(err => {
-            console.error("Error loading instance:", err);
-            document.getElementById("jsonEditor").value = "";
-            document.getElementById("validationMessage").textContent = "❌ Failed to load instance: " + err.message;
-        });
-}
-
-/** ✅ Function to Fetch and Cache Schemas */
-async function fetchSchema(url, schemas = {}) {
-    if (schemas[url]) return schemas[url]; // Return cached schema
-
-    console.log(`⏳ Fetching schema: ${url}`);
-    let response = await fetch(url);
-    if (!response.ok) throw new Error(`❌ Failed to fetch schema: ${url}`);
-
-    schemas[url] = await response.json();
-    console.log(`✅ Loaded schema: ${url}`);
-
-    // Recursively resolve `$ref` references
-    await resolveRefs(schemas[url], schemas);
-
-    return schemas[url];
-}
-
-/** ✅ Function to Resolve `$ref` References */
-async function resolveRefs(schema, schemas = {}) {
-    if (!schema || typeof schema !== "object") return;
-
-    for (let key in schema) {
-        if (key === "$ref" && typeof schema[key] === "string") {
-            if (!schemas[schema[key]]) {
-                schemas[schema[key]] = await fetchSchema(schema[key], schemas);
+                fetch("../instances/" + fileName)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("jsonEditor").value = JSON.stringify(data, null, 4);
+                        validateJson();
+                    })
+                    .catch(err => console.error("Error loading instance:", err));
             }
-        } else if (typeof schema[key] === "object") {
-            await resolveRefs(schema[key], schemas);
-        }
-    }
-}
 
-/** ✅ Function to Validate JSON */
-async function validateJson() {
-    const text = document.getElementById("jsonEditor").value;
-    let validationMessage = document.getElementById("validationMessage");
+            async function validateJson() {
+                const text = document.getElementById("jsonEditor").value;
+                let validationMessage = document.getElementById("validationMessage");
 
-    try {
-        console.log("Validation running...");
-        if (!text.trim()) throw new Error("Empty JSON input.");
+                try {
+                    const jsonData = JSON.parse(text);
 
-        const jsonData = JSON.parse(text);
-        const schemaUrl = jsonData["$schema"];
-        if (!schemaUrl) throw new Error("No $schema found in JSON.");
+                    // Fetch the schema dynamically from its $schema reference
+                    const schemaUrl = jsonData["$schema"];
+                    if (!schemaUrl) {
+                        validationMessage.style.color = "red";
+                        validationMessage.textContent = "⚠️ No $schema found in JSON.";
+                        return;
+                    }
 
-        // ✅ Fetch schema and resolve references
-        let schemas = {};
-        schemas[schemaUrl] = await fetchSchema(schemaUrl, schemas);
+                    const response = await fetch(schemaUrl);
+                    if (!response.ok) {
+                        throw new Error("Could not fetch schema. HTTP Status: " + response.status);
+                    }
 
-        // ✅ Ensure AJV is available
-        if (typeof window.Ajv === "undefined") {
-            throw new Error("AJV is still not defined after loading.");
-        }
+                    const schema = await response.json();
 
-        // ✅ Initialize AJV and validate
-        const ajv = new window.Ajv({ allErrors: true, schemas });
-        const validate = ajv.compile(schemas[schemaUrl]);
+                    // Ensure AJV is available
+                    if (typeof Ajv === "undefined") {
+                        throw new Error("AJV is not loaded correctly.");
+                    }
 
-        if (validate(jsonData)) {
-            validationMessage.style.color = "green";
-            validationMessage.textContent = "✅ Valid JSON";
-        } else {
-            validationMessage.style.color = "red";
-            validationMessage.innerHTML = "❌ Invalid JSON:<br>" + JSON.stringify(validate.errors, null, 4);
-        }
-    } catch (error) {
-        validationMessage.style.color = "red";
-        validationMessage.textContent = "❌ Validation Error: " + error.message;
-        console.error("Validation Error:", error);
-    }
-}
-</script>
+                    // Initialize AJV
+                    const ajv = new Ajv({ allErrors: true });
+                    addFormats(ajv);
+                    const validate = ajv.compile(schema);
 
-</body>
-</html>
+                    if (validate(jsonData)) {
+                        validationMessage.style.color = "green";
+                        validationMessage.textContent = "✅ Valid JSON";
+                    } else {
+                        validationMessage.style.color = "red";
+                        validationMessage.innerHTML = "❌ Invalid JSON:<br>" + JSON.stringify(validate.errors, null, 4);
+                    }
+                } catch (error) {
+                    validationMessage.style.color = "red";
+                    validationMessage.textContent = "❌ Validation Error: " + error.message;
+                    console.error("Validation Error:", error);
+                }
+            }
+
+            document.getElementById("jsonEditor").addEventListener("input", validateJson);
+            if (document.getElementById("instanceSelector")) {
+                document.getElementById("instanceSelector").addEventListener("change", loadInstance);
+            }
+        });
+        </script>
+    
+    
+</body></html>
