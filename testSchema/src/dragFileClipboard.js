@@ -114,7 +114,7 @@ function handleFileDrop(event) {
 
     console.log(`📂 Dropped ${items.length} item(s).`);
 
-    let fileList = "📄 Files from folder:\n";
+    let fileListObj = { list: "" }; // Store file list as an object
     let validJsonFound = false;
 
     [...items].forEach(item => {
@@ -122,33 +122,33 @@ function handleFileDrop(event) {
         if (!entry) return;
 
         if (entry.isDirectory) {
-			fileList += `📁 Folder Detected: ${entry.name}\n`;
+			fileListObj.list += `📁 Folder Detected: ${entry.name}\n`;
             console.log(`📁 Folder Detected: ${entry.name}`);
             dropzoneText.innerText = `📁 Folder: ${entry.name} (Cannot read directly)`;
-			// only listing in console.log
+			// has list of files, not the files themselfs
             readDirectoryContents(entry);
         } else if (entry.isFile) {
-			fileList += `📄 File Detected: ${entry.name}\n`;
-            processFile(item.getAsFile(), fileList, dropzoneIcon, dropzoneText, jsonOutput, () => {
+            processFile(item.getAsFile(), fileListObj, dropzoneIcon, dropzoneText, jsonOutput, () => {
                 validJsonFound = true;
             });
         }
     });
 
-    if (!validJsonFound) {
-        jsonOutput.innerText = fileList;
-        dropzoneIcon.innerHTML = icons.fileDetected;
-    }
+    setTimeout(() => {
+        if (!validJsonFound) {
+            jsonOutput.innerText = fileListObj.list;
+            dropzoneIcon.innerHTML = icons.fileDetected;
+        }
+    }, 200); // Small delay to ensure files are processed
 }
 
+
 // Process individual files
-function processFile(file, fileList, dropzoneIcon, dropzoneText, jsonOutput, jsonCallback) {
+function processFile(file, fileListObj, dropzoneIcon, dropzoneText, jsonOutput, jsonCallback) {
     const reader = new FileReader();
     reader.onload = function (e) {
         console.log(`📄 File: ${file.name}, Size: ${file.size} bytes`);
         console.log(`📝 First 100 chars:\n${e.target.result.substring(0, 100)}`);
-            fileList += `📄 File: ${file.name}, Size: ${file.size} bytes\n`;
-
         if (file.name.endsWith(".json")) {
             try {
                 const jsonData = JSON.parse(e.target.result);
@@ -163,8 +163,9 @@ function processFile(file, fileList, dropzoneIcon, dropzoneText, jsonOutput, jso
                 dropzoneText.innerText = "❌ Invalid JSON File!";
             }
         } else {
-            fileList += `- ${file.name} (Type: ${file.type || "unknown"}, Size: ${file.size} bytes)\n`;
+            fileListObj.list += `📄 File: ${file.name} (Type: ${file.type || "unknown"}, Size: ${file.size} bytes)\n`;
         }
     };
     reader.readAsText(file);
 }
+
