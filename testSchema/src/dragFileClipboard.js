@@ -143,32 +143,64 @@ function handleFileDrop(event) {
     }, 200); // Small delay to ensure files are processed
 }
 
+function detectFileType(header) {
+    if (header.startsWith("FF D8 FF")) return "JPEG Image";
+    if (header.startsWith("89 50 4E 47")) return "PNG Image";
+    if (header.startsWith("25 50 44 46")) return "PDF Document";
+    if (header.startsWith("49 44 33")) return "MP3 Audio";
+    if (header.startsWith("50 4B 03 04")) return "ZIP Archive";
+    if (header.startsWith("7F 45 4C 46")) return "ELF Executable";
+    if (header.startsWith("42 4D")) return "BMP Image"; // Bitmap files start with "BM"
+    if (header.startsWith("47 49 46 38")) return "GIF Image"; // GIF files start with "GIF8"
+    if (header.startsWith("0 65 73 74 72 65 0 61 62 20 52 65 73 65 61 72")) return "Mnova document";
+    return "Unknown";
+}
 
 // Process individual files
 function processFile(file, fileListObj, dropzoneIcon, dropzoneText, jsonOutput, jsonCallback) {
     const reader = new FileReader();
-    reader.onload = function (e) {
-        console.log(`📄 File: ${file.name}, Size: ${file.size} bytes`);
-        console.log(`📝 First 100 chars:\n${e.target.result.substring(0, 100)}`);
-        if (file.name.endsWith(".json")) {
-            try {
-                const jsonData = JSON.parse(e.target.result);
-                console.log(`✅ ${file.name} is a valid JSON`);
-                dropzoneIcon.innerHTML = icons.validJson;
-                dropzoneText.innerText = "✅ Valid JSON File!";
-                jsonOutput.innerText = JSON.stringify(jsonData, null, 4);
-                jsonCallback();
-            } catch (err) {
-                console.error(`❌ ${file.name} is an invalid JSON`, err);
-                dropzoneIcon.innerHTML = icons.invalidJson;
-                dropzoneText.innerText = "❌ Invalid JSON File!";
-            }
-        } else {
-            fileListObj.list += `📄 File: ${file.name} (Type: ${file.type || "unknown"}, Size: ${file.size} bytes) :\n`;
-            fileListObj.list += ` First 100 chars:\n${e.target.result.substring(0, 100)}\n`;
 
-        }
+    reader.onload = function (e) {
+        const arr = new Uint8Array(e.target.result).subarray(0, 16); // Read first 16 bytes
+        const header = arr.map(byte => byte.toString(16).padStart(2, "0")).join(" ").toUpperCase();
+
+        console.log(`📄 File: ${file.name}, Size: ${file.size} bytes`);
+        console.log(`🔍 Magic Bytes: ${header}`);
+
+        let detectedType = detectFileType(header);
+        fileListObj.list += `📄 File: ${file.name} (Type: ${file.type || "unknown"}, Type(file magic number): ${detectedType}, Size: ${file.size} bytes)\n`;
+
+        // Now read the file as text to extract first 100 characters
+        const textReader = new FileReader();
+        textReader.onload = function (event) {
+            const textContent = event.target.result;
+			const numberChar = 210;
+            fileListObj.list += `First ${numberChar} chars ${file.name}:\n
+			*********************\n
+			${textContent.substring(0, numberChar)}
+			\n*********************\n`;
+
+            if (file.name.endsWith(".json")) {
+                try {
+                    const jsonData = JSON.parse(textContent);
+                    console.log(`✅ ${file.name} is a valid JSON`);
+                    dropzoneIcon.innerHTML = icons.validJson;
+                    dropzoneText.innerText = "✅ Valid JSON File!";
+                    jsonOutput.innerText = JSON.stringify(jsonData, null, 4);
+                    jsonCallback();
+                } catch (err) {
+                    console.error(`❌ ${file.name} is an invalid JSON`, err);
+                    dropzoneIcon.innerHTML = icons.invalidJson;
+                    dropzoneText.innerText = "❌ Invalid JSON File!";
+                }
+            }
+        };
+
+        textReader.readAsText(file); // Read full text to extract first 100 characters
     };
-    reader.readAsText(file);
+
+    reader.readAsArrayBuffer(file.slice(0, 16)); // Read first 16 bytes for better detection
 }
+
+
 
