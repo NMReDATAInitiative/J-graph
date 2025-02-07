@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop / Clipboard Paste</title>
+    <script src="dragFileClipboard.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        #dropzone { 
+            width: 80%; max-width: 500px; margin: auto; padding: 20px;
+            border: 2px dashed #aaa; text-align: center;
+            background: #f9f9f9; cursor: pointer;
+        }
+        #dropzone:hover { background: #e6e6e6; }
+        #clearButton {
+            margin-top: 10px; padding: 10px 15px; border: none; cursor: pointer;
+            background-color: red; color: white; font-size: 14px;
+            border-radius: 5px;
+        }
+        #jsonOutput {
+            width: 80%; max-width: 500px; margin: 20px auto; padding: 10px;
+            border: 1px solid #aaa; text-align: left; white-space: pre-wrap;
+            background: #f4f4f4; font-family: monospace;
+        }
+        #pasteInput { position: absolute; left: -9999px; } /* Hide input field */
+    </style>
+</head>
+<body>
+
+    <h1>Drag & Drop / Paste JSON</h1>
+    
+    <div id="dropzone" 
+    ondragover="event.preventDefault()"
+    ondrop="handleFileDrop(event)" 
+    onpaste="handlePaste(event)">
+        <div id="dropzoneIcon"></div>
+        <p id="dropzoneText">Paste / Drop File Here</p>
+    </div>
+
+    <button id="clearButton" onclick="resetDropzone()">Clear</button>
+
+    <h2>Paste JSON / Text</h2>
+    <button id="pasteButton">Tap to Paste</button>
+    <input type="text" id="pasteInput">
+
+    <h2>Output</h2>
+    <pre id="jsonOutput"><code>No JSON loaded yet.</code></pre>
+
+    <script>
+        // Ensure default SVG is shown
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("dropzoneIcon").innerHTML = icons.default;
+        });
+
+        // iOS workaround: Use a button to trigger paste
+        document.getElementById("pasteButton").addEventListener("click", function () {
+            const pasteInput = document.getElementById("pasteInput");
+            pasteInput.value = ""; // Clear previous value
+            pasteInput.focus(); // Focus input (required for iOS paste)
+            document.execCommand("paste"); // Attempt to paste (may require user action)
+        });
+
+        // Detect paste in input field
+        document.getElementById("pasteInput").addEventListener("input", function () {
+            handlePaste({ clipboardData: { getData: () => this.value }, preventDefault: () => {} });
+        });
+    </script>
+
+</body>
+</html>
