@@ -235,6 +235,7 @@ function generateIndexPage() {
     });
 
     indexContent += `            </ul>
+        <a href="https://nmredatainitiative.github.io/J-graph/testSchema/html/index.html">On-line list</a>
         </body>
         </html>
     `;
