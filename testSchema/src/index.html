@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag & Drop + Clipboard Paste</title>
+    <title>Drag & Drop / Clipboard Paste</title>
     <script src="dragFileClipboard.js" defer></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
@@ -30,10 +30,20 @@
          onpaste="handlePaste(event)">
         <div id="dropzoneIcon">
             <svg width="50" height="50" viewBox="0 0 24 24" fill="none" 
-                 stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                 <path d="M3 9L12 2l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
-             </svg>
+                 stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <path d="M3 9L12 2l9 7v11a2 2 0 0 1-2 2H5a2 2 0 1-2-2z">
+            <animateTransform attributeType="XML" attributeName="transform" type="translate" 
+                values="0 0; 0 -2; 0 0" dur="0.6s" repeatCount="indefinite"/>
+        </path>
+        <polyline points="9 22 9 12 15 12 15 22">
+            <animateTransform attributeType="XML" attributeName="transform" type="translate" 
+                values="0 0; 0 -2; 0 0" dur="0.6s" repeatCount="indefinite"/>
+        </polyline>
+    </g>
+</svg>
+
         </div>
         <p id="dropzoneText">Paste / Drop File Here</p>
     </div>
