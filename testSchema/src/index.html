@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop + Clipboard Paste</title>
+    <script src="dragFileClipboard.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        #dropzone { 
+            width: 80%; max-width: 500px; margin: auto; padding: 20px;
+            border: 2px dashed #aaa; text-align: center;
+            background: #f9f9f9; cursor: pointer;
+        }
+        #dropzone:hover { background: #e6e6e6; }
+        #clearButton {
+            margin-top: 10px; padding: 10px 15px; border: none; cursor: pointer;
+            background-color: red; color: white; font-size: 14px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Drag & Drop / Paste JSON</h1>
+    
+    <div id="dropzone" 
+         ondragover="event.preventDefault()" 
+         ondrop="handleFileDrop(event)" 
+         onpaste="handlePaste(event)">
+        <div id="dropzoneIcon">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" 
+                 stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <path d="M3 9L12 2l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
+             </svg>
+        </div>
+        <p id="dropzoneText">Paste / Drop File Here</p>
+    </div>
+
+    <button id="clearButton" onclick="resetDropzone()">Clear</button>
+
+</body>
+</html>
