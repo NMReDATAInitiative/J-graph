@@ -4,11 +4,12 @@ const icons = {
                     stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     onmouseover="this.querySelector('polyline').setAttribute('stroke', 'blue')"
                     onmouseout="this.querySelector('polyline').setAttribute('stroke', 'black')">
-                    <path d="M3 9L12 2l9 7v11a2 2 0 0 1-2 2H5a2 2 0 1-2-2z">
-                    <animateTransform attributeType="XML" attributeName="transform" type="translate" 
-                    values="0 0; 0 -2; 0 0" dur="0.6s" repeatCount="indefinite"/>
+                    <polyline stroke="black" points="9 22 9 12 15 12 15 22">
+					 <animateTransform attributeType="XML" attributeName="transform" type="translate" 
+                    values="0 0; 0 -1; 0 -2; 0 0" dur="5.6s" repeatCount="indefinite"/>
+					</polyline>
+					<path d="M3 9L12 2L21 9V22H3Z"/>
                     </path>
-                    <polyline stroke="black" points="9 22 9 12 15 12 15 22"></polyline>
               </svg>`,
     fileDetected: `<svg width="50" height="50" viewBox="0 0 24 24" fill="none"
                            stroke="blue" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -163,7 +164,9 @@ function processFile(file, fileListObj, dropzoneIcon, dropzoneText, jsonOutput, 
                 dropzoneText.innerText = "❌ Invalid JSON File!";
             }
         } else {
-            fileListObj.list += `📄 File: ${file.name} (Type: ${file.type || "unknown"}, Size: ${file.size} bytes)\n`;
+            fileListObj.list += `📄 File: ${file.name} (Type: ${file.type || "unknown"}, Size: ${file.size} bytes) :\n`;
+            fileListObj.list += ` First 100 chars:\n${e.target.result.substring(0, 100)}\n`;
+
         }
     };
     reader.readAsText(file);
