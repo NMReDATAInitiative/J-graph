@@ -1,29 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schema: obj1.json</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
-    <script src="./validateSchema.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 10px; border: 1px solid black; text-align: left; }
-        th { background-color: #f2f2f2; }
-        textarea { width: 100%; height: 200px; font-family: monospace; }
-        #validationMessage { font-weight: bold; }
-        #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
-        color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
-    </style>
-</head>
-<body>
-    <h1>Schema: obj1.json</h1>
-    <p><strong>Schema ID:</strong> 
-        <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json</a>
-    </p>
 
-    <h2>Properties</h2>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Schema: obj1.json</title>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
+            <script src="./validateSchema.js"></script>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { padding: 10px; border: 1px solid black; text-align: left; }
+                th { background-color: #f2f2f2; }
+                textarea { width: 100%; height: 200px; font-family: monospace; }
+                #validationMessage { font-weight: bold; }
+                #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
+                color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+            </style>
+        </head>
+        <body>
+            <h1>Schema: obj1.json</h1>
+            <p><strong>Schema ID:</strong> 
+                <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json</a>
+            </p>
+
+            <h2>Properties</h2>
+            
     <table>
         <tr>
             <th>Property</th>
@@ -31,106 +33,106 @@
             <th>Schema Reference</th>
             <th>Required</th>
         </tr>
-        <tr>
-            <td>name</td>
-            <td>string</td>
-            <td>-</td>
-            <td>✅ Yes</td>
-        </tr>
-        <tr>
-            <td>age</td>
-            <td>integer</td>
-            <td>-</td>
-            <td>❌ No</td>
-        </tr>
-    </table>
+        
 
-    <h2>Load JSON Instance</h2>
-    <select id="instanceSelector">
-        <option value="">Select an instance...</option>
-        <option value="alice.json">alice.json</option>
-        <option value="testEmbeddedSchema.json">testEmbeddedSchema.json</option>
-    </select>
-
-    <h2>Edit JSON Instance</h2>
-    <textarea id="jsonEditor"></textarea>
-    <p id="validationMessage"></p>
-    <p>
-        <a href="index.html" id="returnButton">⬅ Return to Object List</a>
-    </p>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const editor = document.getElementById("jsonEditor");
-            const selector = document.getElementById("instanceSelector");
-            const validationMessage = document.getElementById("validationMessage");
-
-            function getQueryParam(name) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(name);
-            }
-
-            async function loadFromURL() {
-                const dataParam = getQueryParam("data");
-                if (dataParam) {
-                    try {
-                        const parsedData = JSON.parse(decodeURIComponent(dataParam));
-                        if (parsedData.content) {
-                            editor.value = JSON.stringify(parsedData.content, null, 4);
-
-                            const schemas = await fetchSchemas(parsedData.content);
-                            validateJSON(parsedData.content, schemas, validationMessage);
-                            editor.dataset.schema = JSON.stringify(schemas);
-                        } else {
-                            validationMessage.textContent = "⚠ No 'content' field found in URL data";
-                        }
-                    } catch (error) {
-                        validationMessage.textContent = "❌ Invalid JSON in URL";
-                        console.error("Error parsing URL data:", error);
+            <tr>
+                <td>name</td>
+                <td>string</td>
+                <td>-</td>
+                <td>✅ Yes</td>
+            </tr>
+        
+            <tr>
+                <td>age</td>
+                <td>integer</td>
+                <td>-</td>
+                <td>❌ No</td>
+            </tr>
+        </table>
+            
+        <h2>Load JSON Instance</h2>
+        <select id="instanceSelector">
+            <option value="">Select an instance...</option>
+            <option value="alice.json">alice.json</option>
+<option value="testEmbeddedSchema.json">testEmbeddedSchema.json</option>
+        </select>
+    
+            <h2>Edit JSON Instance</h2>
+            <textarea id="jsonEditor"></textarea>
+            <p id="validationMessage"></p>
+            <p>
+            <a href="index.html" id="returnButton">⬅ Return to Object List</a>
+            </p>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const editor = document.getElementById("jsonEditor");
+                    const selector = document.getElementById("instanceSelector");
+                    const validationMessage = document.getElementById("validationMessage");
+                function getQueryParam(name) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        return urlParams.get(name);
                     }
-                }
-            }
 
-            selector.addEventListener("change", function () {
-                loadInstance(selector.value);
-            });
+                    async function loadFromURL() {
+                        const dataParam = getQueryParam("data");
+                        if (dataParam) {
+                            try {
+                                const parsedData = JSON.parse(decodeURIComponent(dataParam));
+                                if (parsedData.content) {
+                                    editor.value = JSON.stringify(parsedData.content, null, 4);
 
-            async function loadInstance(fileName) {
-                if (!fileName) return;
+                                    const schemas = await fetchSchemas(parsedData.content);
+                                    validateJSON(parsedData.content, schemas, validationMessage);
+                                    editor.dataset.schema = JSON.stringify(schemas);
+                                } else {
+                                    validationMessage.textContent = "⚠ No 'content' field found in URL data";
+                                }
+                            } catch (error) {
+                                validationMessage.textContent = "❌ Invalid JSON in URL";
+                                console.error("Error parsing URL data:", error);
+                            }
+                        }
+                    }
+                    selector.addEventListener("change", function () {
+                        loadInstance(selector.value);
+                    });
 
-                try {
-                    const response = await fetch("../instances/" + fileName);
-                    if (!response.ok) throw new Error("Failed to fetch instance: " + response.status);
+                    async function loadInstance(fileName) {
+                        if (!fileName) return;
 
-                    const data = await response.json();
-                    editor.value = JSON.stringify(data, null, 4);
+                        try {
+                            const response = await fetch("../instances/" + fileName);
+                            if (!response.ok) throw new Error("Failed to fetch instance: " + response.status);
 
-                    const schemas = await fetchSchemas(data);
-                    validateJSON(data, schemas, validationMessage);
-                    
-                    // Store schemas for live validation
-                    editor.dataset.schema = JSON.stringify(schemas);
-                } catch (err) {
-                    editor.value = "";
-                    validationMessage.textContent = "❌ Failed to load instance: " + err.message;
-                    console.error("Error loading instance:", err);
-                }
-            }
+                            const data = await response.json();
+                            editor.value = JSON.stringify(data, null, 4);
 
-            // Live validation on user input
-            editor.addEventListener("input", function () {
-                try {
-                    const jsonData = JSON.parse(editor.value);
-                    const schemas = JSON.parse(editor.dataset.schema || "{}");
-                    validateJSON(jsonData, schemas, validationMessage);
-                } catch (error) {
-                    validationMessage.textContent = "❌ Invalid JSON format";
-                    validationMessage.style.color = "red";
-                }
-            });
+                            const schemas = await fetchSchemas(data);
+                            validateJSON(data, schemas, validationMessage);
+                            
+                            // Store schemas in dataset for live validation
+                            editor.dataset.schema = JSON.stringify(schemas);
+                        } catch (err) {
+                            editor.value = "";
+                            validationMessage.textContent = "❌ Failed to load instance: " + err.message;
+                            console.error("Error loading instance:", err);
+                        }
+                    }
 
-            loadFromURL();
-        });
-    </script>
-</body>
-</html>
+                    // Live validation on user input
+                    editor.addEventListener("input", function () {
+                        try {
+                            const jsonData = JSON.parse(editor.value);
+                            const schemas = JSON.parse(editor.dataset.schema || "{}");
+                            validateJSON(jsonData, schemas, validationMessage);
+                        } catch (error) {
+                            validationMessage.textContent = "❌ Invalid JSON format";
+                            validationMessage.style.color = "red";
+                        }
+                    });
+                    loadFromURL();
+                });
+            </script>
+        </body>
+        </html>
+    

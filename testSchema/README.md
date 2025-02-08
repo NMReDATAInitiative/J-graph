@@ -1,5 +1,11 @@
 [schema validator for user-selected file](./html/checkSchemaFromFile.html) 
 
+[example of call with valid  embedded data githubusercontent](https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%20%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}})
+
+[example of call with valid  embedded data nmredatainitiative](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%20%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}})
+
+
+
 
 [schema validator from object page](./html/index.html) 
 
@@ -26,6 +32,8 @@ node generateLinkedDataSchema.js
 echo "SCHEMA: make a resolved version (longer, but self-consistant)"
 node resolveSchemas.js
 
+echo "SCHEMA: generate html page"
+node ./generateHtmlForSchema.js
 
 echo "INSTANCES: Creating instance pairObj1 from alice.json and obj1.json"
 node updateInstances.js

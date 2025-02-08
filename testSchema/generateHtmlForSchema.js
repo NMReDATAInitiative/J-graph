@@ -150,7 +150,31 @@ function generateHtmlForSchema(fileName) {
                     const editor = document.getElementById("jsonEditor");
                     const selector = document.getElementById("instanceSelector");
                     const validationMessage = document.getElementById("validationMessage");
+                function getQueryParam(name) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        return urlParams.get(name);
+                    }
 
+                    async function loadFromURL() {
+                        const dataParam = getQueryParam("data");
+                        if (dataParam) {
+                            try {
+                                const parsedData = JSON.parse(decodeURIComponent(dataParam));
+                                if (parsedData.content) {
+                                    editor.value = JSON.stringify(parsedData.content, null, 4);
+
+                                    const schemas = await fetchSchemas(parsedData.content);
+                                    validateJSON(parsedData.content, schemas, validationMessage);
+                                    editor.dataset.schema = JSON.stringify(schemas);
+                                } else {
+                                    validationMessage.textContent = "⚠ No 'content' field found in URL data";
+                                }
+                            } catch (error) {
+                                validationMessage.textContent = "❌ Invalid JSON in URL";
+                                console.error("Error parsing URL data:", error);
+                            }
+                        }
+                    }
                     selector.addEventListener("change", function () {
                         loadInstance(selector.value);
                     });
@@ -188,6 +212,7 @@ function generateHtmlForSchema(fileName) {
                             validationMessage.style.color = "red";
                         }
                     });
+                    loadFromURL();
                 });
             </script>
         </body>
