@@ -190,7 +190,7 @@ function generateHtmlForSchema(fileName) {
                                     const schemas = await fetchSchemas(parsedData.content);
                                     validateJSON(parsedData.content, schemas, validationMessage);
                                     editor.dataset.schema = JSON.stringify(schemas);
-             console.log("found in URL data);
+             console.log("found in URL data");
 
                                 } else {
                                     validationMessage.textContent = "⚠ No 'content' field found in URL data";
