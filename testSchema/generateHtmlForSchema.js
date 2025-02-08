@@ -178,9 +178,8 @@ function generateHtmlForSchema(fileName) {
                     }
 
                     async function loadFromURL() {
-                    console.log("load from url", dataParam);
                         const dataParam = getQueryParam("data");
-             console.log("load from url", dataParam);
+             console.log("dataParam", dataParam);
                         if (dataParam) {
                             try {
                                 const parsedData = JSON.parse(decodeURIComponent(dataParam));

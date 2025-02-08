@@ -8,7 +8,7 @@
 
 [example of call with valid  embedded data ](http://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}}
 )
-
+	
 
 [example of call with valid  embedded data ](http://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
