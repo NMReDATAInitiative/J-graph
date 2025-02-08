@@ -24,13 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
         let dataParam = urlParams.get("data");
 
         if (!dataParam) {
-					            console.log("try get fragment identifier (#data=...) ");
 
             // try fragment identifier (#data=...)
             const hash = window.location.hash.substring(1); // Remove the "#" symbol
             if (hash.startsWith("data=")) {
                 dataParam = hash.substring(5); // Remove "data=" from the beginning
-						            console.log("got fragment identifier (#data=...) ");
 
             }
         }
