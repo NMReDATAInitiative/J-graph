@@ -23,30 +23,57 @@
             border: 1px solid #aaa; text-align: left; white-space: pre-wrap;
             background: #f4f4f4; font-family: monospace;
         }
+        .hidden { display: none; } /* Hide elements dynamically */
     </style>
 </head>
 <body>
 
     <h1>Drag & Drop / Paste JSON</h1>
     
-    <div id="dropzone" 
-         ondragover="event.preventDefault()" 
-         ondrop="handleFileDrop(event)" 
-         onpaste="handlePaste(event)"
-     >
+    <div id="dropzone" ondragover="event.preventDefault()" ondrop="handleFileDrop(event)" onpaste="handlePaste(event)">
         <div id="dropzoneIcon"></div>
         <p id="dropzoneText">Paste / Drop File Here</p>
     </div>
 
     <button id="clearButton" onclick="resetDropzone()">Clear</button>
 
+    <div id="iosPasteSection" class="hidden">  <!-- Initially Hidden -->
+        <h2>Paste JSON / Text</h2>
+        <button id="pasteButton">Tap to Paste</button>
+        <input type="text" id="pasteInput" style="position: absolute; left: -9999px;">
+    </div>
+
     <h2>Output</h2>
-    <pre id="jsonOutput">No JSON loaded yet.</pre>
+    <pre id="jsonOutput"><code>No JSON loaded yet.</code></pre>
 
     <script>
+        // Ensure default SVG is shown
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("dropzoneIcon").innerHTML = icons.default;
         });
+
+        // 🔹 Detect iOS & Enable Paste Button if Needed
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        if (isIOS()) {
+            console.log("📱 iOS detected, enabling paste button.");
+            document.getElementById("iosPasteSection").classList.remove("hidden");
+
+            // iOS workaround: Use a button to trigger paste
+            document.getElementById("pasteButton").addEventListener("click", function () {
+                const pasteInput = document.getElementById("pasteInput");
+                pasteInput.value = ""; // Clear previous value
+                pasteInput.focus(); // Focus input (required for iOS paste)
+                document.execCommand("paste"); // Attempt to paste (may require user action)
+            });
+
+            // Detect paste in input field
+            document.getElementById("pasteInput").addEventListener("input", function () {
+                handlePaste({ clipboardData: { getData: () => this.value }, preventDefault: () => {} });
+            });
+        }
     </script>
 
 </body>

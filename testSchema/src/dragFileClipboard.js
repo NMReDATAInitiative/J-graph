@@ -144,14 +144,37 @@ function handleFileDrop(event) {
 }
 
 function detectFileType(header) {
+    if (header.startsWith("50 4B 03 04")) return "ZIP Archive or OpenDocument Format";
+    if (header.startsWith("1F 8B 08")) return "GZIP Archive";
+    if (header.startsWith("42 5A 68")) return "BZIP2 Archive";
+    if (header.startsWith("37 7A BC AF 27 1C")) return "7z Archive";
+    if (header.startsWith("52 61 72 21 1A 07 00")) return "RAR Archive";
+
+    if (header.startsWith("FF FE") || header.startsWith("FE FF")) return "UTF-16 Text File";
+    if (header.startsWith("EF BB BF")) return "UTF-8 Text File with BOM";
+
     if (header.startsWith("FF D8 FF")) return "JPEG Image";
     if (header.startsWith("89 50 4E 47")) return "PNG Image";
-    if (header.startsWith("25 50 44 46")) return "PDF Document";
-    if (header.startsWith("49 44 33")) return "MP3 Audio";
-    if (header.startsWith("50 4B 03 04")) return "ZIP Archive";
+    if (header.startsWith("89 50 4E 47 0D 0A 1A 0A")) return "PNG Image";
     if (header.startsWith("7F 45 4C 46")) return "ELF Executable";
-    if (header.startsWith("42 4D")) return "BMP Image"; // Bitmap files start with "BM"
-    if (header.startsWith("47 49 46 38")) return "GIF Image"; // GIF files start with "GIF8"
+    if (header.startsWith("47 49 46 38 37 61") || header.startsWith("47 49 46 38 39 61")) return "GIF Image";
+    if (header.startsWith("42 4D")) return "BMP Image";
+    if (header.startsWith("49 49 2A 00") || header.startsWith("4D 4D 00 2A")) return "TIFF Image";
+    if (header.startsWith("46 4F 52 4D")) return "WebP Image";
+    if (header.startsWith("25 50 44 46")) return "PDF Document";
+    if (header.startsWith("D0 CF 11 E0 A1 B1 1A E1")) return "Microsoft Office Document (Old Format)";
+
+    if (header.startsWith("49 44 33")) return "MP3 Audio (with ID3)";
+    if (header.startsWith("FF FB") || header.startsWith("FF F3")) return "MP3 Audio (without ID3)";
+    if (header.startsWith("4F 67 67 53")) return "OGG Audio";
+    if (header.startsWith("52 49 46 46") && header.contains("57 41 56 45")) return "WAV Audio";
+    if (header.startsWith("66 4C 61 43")) return "FLAC Audio";
+    if (header.startsWith("00 00 01 BA")) return "MPEG Video";
+    if (header.startsWith("1A 45 DF A3")) return "MKV Video";
+
+    if (header.startsWith("52 49 46 46") && header.contains("41 56 49 20")) return "AVI Video";
+    if (header.startsWith("66 74 79 70 69 73 6F 6D")) return "MP4 Video";
+
     if (header.startsWith("0 65 73 74 72 65 0 61 62 20 52 65 73 65 61 72")) return "Mnova document";
     return "Unknown";
 }
