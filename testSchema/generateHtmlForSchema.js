@@ -238,24 +238,7 @@ function generateHtmlForSchema(fileName) {
                             validationMessage.style.color = "red";
                         }
                     });
-                    loadFromURL();
-window.addEventListener('DOMContentLoaded', async function () {
-    try {
-        const dataParam = new URLSearchParams(window.location.search).get("data");
-        if (dataParam) {
-            const restoredData = decodeURIComponent(dataParam);
-            const parsedData = JSON.parse(restoredData);
-            document.getElementById("jsonEditor").value = JSON.stringify(parsedData.content, null, 4);
-
-            const schemas = await fetchSchemas(parsedData.content);
-            validateJSON(parsedData.content, schemas, document.getElementById("validationMessage"));
-        }
-    } catch (error) {
-        console.error("Error parsing JSON from URL:", error);
-    }
-});
-
-                    
+                    loadFromURL();        
                 });
             </script>
         </body>
