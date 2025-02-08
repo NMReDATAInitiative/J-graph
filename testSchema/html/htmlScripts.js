@@ -19,8 +19,6 @@
                     }
 
                     function getQueryParam(name) {
-        console.log("getQueryParam", name);
-
                         const urlParams = new URLSearchParams(window.location.search);
                         const paramValue = urlParams.get(name);
                         if (paramValue) {
@@ -31,7 +29,6 @@
 
                     async function loadFromURL() {
                         const dataParam = getQueryParam("data");
-             console.log("dataParam", dataParam);
                         if (dataParam) {
                             try {
                                 const parsedData = JSON.parse(decodeURIComponent(dataParam));
@@ -41,8 +38,6 @@
                                     const schemas = await fetchSchemas(parsedData.content);
                                     validateJSON(parsedData.content, schemas, validationMessage);
                                     editor.dataset.schema = JSON.stringify(schemas);
-             console.log("found in URL data");
-
                                 } else {
                                     validationMessage.textContent = "⚠ No 'content' field found in URL data";
                                 }
@@ -91,4 +86,3 @@
                     });
                     loadFromURL();        
                 });
-				

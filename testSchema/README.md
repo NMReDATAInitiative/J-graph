@@ -8,7 +8,7 @@
 [ >>      example of call with valid  embedded data ](http://127.0.0.1:5501/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
 
-[ >>      example of call with valid  embedded data ](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
+[ >>      example of call with valid  embedded data ](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice233","age":30}})
 
 Schemas are built in the `./schemaNoLinkedData/` (and a script validates)
 
