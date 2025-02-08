@@ -10,6 +10,13 @@
 
 [ >>      example of call with valid  embedded data ](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice233","age":30}})
 
+
+
+[ >>      example of call with valid  embedded data for group obj1](https://nmredatainitiative.github.io/J-graph/testSchema/html/groupObject1.html?data={"content":{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json","members": [{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name": "Alice"},{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name": "Bob","age": 53}]}})
+
+
+
+
 Schemas are built in the `./schemaNoLinkedData/` (and a script validates)
 
 Some are created directly in `./schemaNoLinkedData/` with `./updateSchema.js`
