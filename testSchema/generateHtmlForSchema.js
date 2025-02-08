@@ -167,6 +167,8 @@ function generateHtmlForSchema(fileName) {
                     }
 
                     function getQueryParam(name) {
+        console.log("getQueryParam", name);
+
                         const urlParams = new URLSearchParams(window.location.search);
                         const paramValue = urlParams.get(name);
                         if (paramValue) {
