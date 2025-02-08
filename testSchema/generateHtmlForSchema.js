@@ -129,6 +129,7 @@ function generateHtmlForSchema(fileName) {
                 #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
                 color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
             </style>
+
         </head>
         <body>
             <h1>Schema: ${fileName}</h1>
@@ -238,6 +239,23 @@ function generateHtmlForSchema(fileName) {
                         }
                     });
                     loadFromURL();
+window.addEventListener('DOMContentLoaded', async function () {
+    try {
+        const dataParam = new URLSearchParams(window.location.search).get("data");
+        if (dataParam) {
+            const restoredData = decodeURIComponent(dataParam);
+            const parsedData = JSON.parse(restoredData);
+            document.getElementById("jsonEditor").value = JSON.stringify(parsedData.content, null, 4);
+
+            const schemas = await fetchSchemas(parsedData.content);
+            validateJSON(parsedData.content, schemas, document.getElementById("validationMessage"));
+        }
+    } catch (error) {
+        console.error("Error parsing JSON from URL:", error);
+    }
+});
+
+                    
                 });
             </script>
         </body>
