@@ -63,21 +63,29 @@ function generateHtmlForSchema(fileName) {
 
   if (schema.properties) {
     Object.keys(schema.properties).forEach((key) => {
-      const property = schema.properties[key];
-      const type = property.type ? property.type : 'Object';
-      const schemaRef = property['$ref'] ? getHtmlLink(property['$ref']) : '-';
-      const isRequired =
-        schema.required && schema.required.includes(key) ? '✅ Yes' : '❌ No';
+    const property = schema.properties[key];
+    let type = property.type ? property.type : 'Object';
+    let schemaRef = property['$ref'] ? getHtmlLink(property['$ref']) : '-';
+    const isRequired = schema.required && schema.required.includes(key) ? '✅ Yes' : '❌ No';
 
-      propertiesTable += `
-            <tr>
-                <td>${key}</td>
-                <td>${type}</td>
-                <td>${schemaRef}</td>
-                <td>${isRequired}</td>
-            </tr>
-        `;
-    });
+    if (type === 'array' && property.items) {
+        if (property.items.type) {
+            schemaRef = property.items.type; // Use the type of array items
+        } else if (property.items['$ref']) {
+            schemaRef = getHtmlLink(property.items['$ref']); // Use the reference of array items
+        }
+    }
+
+    propertiesTable += `
+        <tr>
+            <td>${key}</td>
+            <td>${type}</td>
+            <td>${schemaRef}</td>
+            <td>${isRequired}</td>
+        </tr>
+    `;
+});
+
   } else {
     propertiesTable += `<tr><td colspan="4">No properties defined.</td></tr>`;
   }
