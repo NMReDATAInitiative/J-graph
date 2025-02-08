@@ -60,9 +60,29 @@
                     const editor = document.getElementById("jsonEditor");
                     const selector = document.getElementById("instanceSelector");
                     const validationMessage = document.getElementById("validationMessage");
-                function getQueryParam(name) {
+                
+                    function restoreSpecialCharacters(encodedString) {
+                        try {
+                            // First, decode URI component
+                            let decoded = decodeURIComponent(encodedString);
+
+                            // Second, replace incorrectly escaped double quotes
+                            decoded = decoded.replace(/%22/g, '"');
+                            console.log("Restored special characters:", decoded);
+                            return decoded;
+                        } catch (error) {
+                            console.error("Error restoring special characters:", error);
+                            return null;
+                        }
+                    }
+
+                    function getQueryParam(name) {
                         const urlParams = new URLSearchParams(window.location.search);
-                        return urlParams.get(name);
+                        const paramValue = urlParams.get(name);
+                        if (paramValue) {
+                            return restoreSpecialCharacters(paramValue);
+                        }
+                        return null;
                     }
 
                     async function loadFromURL() {
