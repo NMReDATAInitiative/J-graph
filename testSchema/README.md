@@ -3,17 +3,19 @@
 
 
 [schema validator from object page](./html/index.html) 
+[ >>      example of call with valid  embedded obj1.html?data](http://127.0.0.1:5501/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
+
+[ >>      example of call with valid  embedded obj1.html#data](http://127.0.0.1:5501/testSchema/html/obj1.html#data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
 
-[ >>      example of call with valid  embedded data ](http://127.0.0.1:5501/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
+[ >>      example of call with valid  embedded obj1.html?data](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice233","age":30}})
 
 
-[ >>      example of call with valid  embedded data ](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice233","age":30}})
+[ >>      example of call with valid  embedded obj1.html#data](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html#data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice233","age":30}})
 
 
 
 [ >>      example of call with valid  embedded data for group obj1](https://nmredatainitiative.github.io/J-graph/testSchema/html/groupObject1.html?data={"content":{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/groupObject1.json","members": [{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name": "Alice"},{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name": "Bob","age": 53}]}})
-
 
 
 
