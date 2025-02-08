@@ -8,7 +8,7 @@
 
 [example of call with valid  embedded data ](http://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}}
 )
-	
+
 
 [example of call with valid  embedded data ](http://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
@@ -17,7 +17,7 @@
 
 [example of call with valid  embedded data ](http://127.0.0.1:5501/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
-[example of call with valid  embedded data ](http://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%20%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age:30}})
+[example of call with valid  embedded data ](http://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%20%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}})
 
 [example of call with valid  embedded data ](http://127.0.0.1:5501/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%20%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}})
 

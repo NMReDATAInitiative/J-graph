@@ -136,7 +136,7 @@ function generateHtmlForSchema(fileName) {
                 <a href="${schema['$id']}" target="_blank">${schema['$id']}</a>
             </p>
 
-            <h2>Properties</h2>
+            <h2>Properties:</h2>
             ${propertiesTable}
             ${instanceSelector}
             <h2>Edit JSON Instance</h2>
