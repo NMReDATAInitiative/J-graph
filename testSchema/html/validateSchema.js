@@ -71,7 +71,7 @@ function validateJSON(data, schemas, resultList) {
                 if (path == "Root") {
                     resultList.innerHTML += `<li class="valid-schema">✅  ${path} - ${objName}  Valid </li>`;
                 } else {
-                    resultList.innerHTML += `<li class="valid-schema">✅  <a href='${linkToSchemaPages}?#data={"content":${urlSafeData}}' target="_blank">${path}</a>- ${objName}  Valid </li>`;
+                    resultList.innerHTML += `<li class="valid-schema">✅  <a href='${linkToSchemaPages}#data={"content":${urlSafeData}}' target="_blank">${path}</a>- ${objName}  Valid </li>`;
                 }
             } else {
                 resultList.innerHTML += `<li class="invalid-schema">❌ ${path} - ${schemaName} Invalid: ${ajv.errorsText(validate.errors)}</li>`;
