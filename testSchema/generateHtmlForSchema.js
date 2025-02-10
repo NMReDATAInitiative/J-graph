@@ -103,7 +103,7 @@ function generateHtmlForSchema(fileName) {
   });
 
   let instanceOptions = matchingInstances
-    .map((file) => `<option value="${file}">${file}</option>`)
+    .map((file) => `            <option value="${file}">${file}</option>`)
     .join('\n');
 
   let instanceSelector =
@@ -112,7 +112,7 @@ function generateHtmlForSchema(fileName) {
         <h2>Load JSON Instance</h2>
         <select id="instanceSelector">
             <option value="">Select an instance...</option>
-            ${instanceOptions}
+${instanceOptions}
         </select>
     `
       : `<p>No instances found for this schema.</p>`;
