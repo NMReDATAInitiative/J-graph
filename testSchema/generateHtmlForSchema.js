@@ -5,7 +5,7 @@ const path = require('path');
 const schemaDir = './schemaNoLinkData';
 const instanceDir = './instances';
 const htmlDir = './html';
-
+const displayTableProperties = true;
 // Ensure the HTML output directory exists
 if (!fs.existsSync(htmlDir)) {
   fs.mkdirSync(htmlDir, { recursive: true });
@@ -32,6 +32,12 @@ function getHtmlLink(ref) {
 function generateHtmlForSchema(fileName) {
   const filePath = path.join(schemaDir, fileName);
   const schema = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+
+  // Generate table of components
+  let propertiesTable = ``;
+  if (displayTableProperties) {
+  
   // Check if schema extends another schema using "allOf"
   let baseSchemaRows = '';
   if (schema['allOf'] && Array.isArray(schema['allOf'])) {
@@ -39,28 +45,13 @@ function generateHtmlForSchema(fileName) {
       if (item['$ref']) {
         const baseSchemaLink = getHtmlLink(item['$ref']);
         baseSchemaRows += `
-                <tr>
-                    <td><strong>Derived from</strong></td>
-                    <td>Object</td>
-                    <td>${baseSchemaLink}</td>
-                    <td>✅ Yes</td>
-                </tr>
-            `;
+                <tr>  <td><strong>Derived from</strong></td>  <td>Object</td>  <td>${baseSchemaLink}</td>  <td>✅ Yes</td>  </tr>`;
       }
     });
   }
-
-  let propertiesTable = `
-    <table>
-        <tr>
-            <th>Property</th>
-            <th>Type</th>
-            <th>Schema Reference</th>
-            <th>Required</th>
-        </tr>
-        ${baseSchemaRows}
-`;
-
+  propertiesTable = `<h2>Properties:</h2>
+            <table>
+                <tr>  <th>Property</th>  <th>Type</th>  <th>Schema Reference</th>  <th>Required</th>  </tr>${baseSchemaRows}`;
   if (schema.properties) {
     Object.keys(schema.properties).forEach((key) => {
     const property = schema.properties[key];
@@ -77,20 +68,15 @@ function generateHtmlForSchema(fileName) {
     }
 
     propertiesTable += `
-        <tr>
-            <td>${key}</td>
-            <td>${type}</td>
-            <td>${schemaRef}</td>
-            <td>${isRequired}</td>
-        </tr>
-    `;
-});
-
+                <tr>  <td>${key}</td>  <td>${type}</td>  <td>${schemaRef}</td>  <td>${isRequired}</td>  </tr>`;
+    });
   } else {
-    propertiesTable += `<tr><td colspan="4">No properties defined.</td></tr>`;
+    propertiesTable += `
+                <tr><td colspan="4">No properties defined.</td></tr>`;
   }
-
-  propertiesTable += `</table>`;
+  propertiesTable += `
+            </table>`;
+  } 
 
   // Scan instances folder for matching instances
   const instanceFiles = fs.existsSync(instanceDir)
@@ -103,19 +89,19 @@ function generateHtmlForSchema(fileName) {
   });
 
   let instanceOptions = matchingInstances
-    .map((file) => `            <option value="${file}">${file}</option>`)
+    .map((file) => `                <option value="${file}">${file}</option>`)
     .join('\n');
 
   let instanceSelector =
     matchingInstances.length > 0
       ? `
-        <h2>Load JSON Instance</h2>
-        <select id="instanceSelector">
-            <option value="">Select an instance...</option>
+            <h2>Load JSON Instance</h2>
+            <select id="instanceSelector">
+                <option value="">Select an instance...</option>
 ${instanceOptions}
-        </select>
+            </select>
     `
-      : `<p>No instances found for this schema.</p>`;
+      : `            <p>No instances found for this schema.</p>`;
 
   // Generate HTML content
   const htmlContent = `
@@ -146,14 +132,13 @@ ${instanceOptions}
                 <a href="${schema['$id']}" target="_blank">${schema['$id']}</a>
             </p>
 
-            <h2>Properties:</h2>
             ${propertiesTable}
             ${instanceSelector}
             <h2>Edit JSON Instance</h2>
             <textarea id="jsonEditor"></textarea>
             <p id="validationMessage"></p>
             <p>
-            <a href="index.html" id="returnButton">⬅ Return to Object List</a>
+                <a href="index.html" id="returnButton">⬅ Return to Object List</a>
             </p>
             <script src="./htmlScripts.js" defer></script>
         </body>

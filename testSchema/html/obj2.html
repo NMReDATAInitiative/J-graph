@@ -27,44 +27,25 @@
             </p>
 
             <h2>Properties:</h2>
+            <table>
+                <tr>  <th>Property</th>  <th>Type</th>  <th>Schema Reference</th>  <th>Required</th>  </tr>
+                <tr>  <td>name</td>  <td>string</td>  <td>-</td>  <td>✅ Yes</td>  </tr>
+                <tr>  <td>age</td>  <td>integer</td>  <td>-</td>  <td>✅ Yes</td>  </tr>
+            </table>
             
-    <table>
-        <tr>
-            <th>Property</th>
-            <th>Type</th>
-            <th>Schema Reference</th>
-            <th>Required</th>
-        </tr>
-        
-
-        <tr>
-            <td>name</td>
-            <td>string</td>
-            <td>-</td>
-            <td>✅ Yes</td>
-        </tr>
-    
-        <tr>
-            <td>age</td>
-            <td>integer</td>
-            <td>-</td>
-            <td>✅ Yes</td>
-        </tr>
-    </table>
-            
-        <h2>Load JSON Instance</h2>
-        <select id="instanceSelector">
-            <option value="">Select an instance...</option>
-            <option value="test1.json">test1.json</option>
-            <option value="test1TimestampID.json">test1TimestampID.json</option>
-            <option value="testEmbeddedSchemaFailed.json">testEmbeddedSchemaFailed.json</option>
-        </select>
+            <h2>Load JSON Instance</h2>
+            <select id="instanceSelector">
+                <option value="">Select an instance...</option>
+                <option value="test1.json">test1.json</option>
+                <option value="test1TimestampID.json">test1TimestampID.json</option>
+                <option value="testEmbeddedSchemaFailed.json">testEmbeddedSchemaFailed.json</option>
+            </select>
     
             <h2>Edit JSON Instance</h2>
             <textarea id="jsonEditor"></textarea>
             <p id="validationMessage"></p>
             <p>
-            <a href="index.html" id="returnButton">⬅ Return to Object List</a>
+                <a href="index.html" id="returnButton">⬅ Return to Object List</a>
             </p>
             <script src="./htmlScripts.js" defer></script>
         </body>
