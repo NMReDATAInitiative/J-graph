@@ -3,9 +3,9 @@
     "name": "Bob",
     "size": 180,
     "initialHash": "df1c0811b2c696715500303da88261f962cf30d7be47af3e5fba20e64c8fbfeb",
-    "@id": "urn:uuid:613342bc-2798-43cd-abc8-0119a0f36733",
+    "@id": "urn:uuid:77831ee3-f88f-42f0-ac03-adb91e15fb67",
     "@type": "Obj1size",
-    "timestamp": "2025-02-13T12:23:50.535Z",
+    "timestamp": "2025-02-13T12:24:58.083Z",
     "source": "Generated from schema conversion",
-    "finalHash": "845a13b2a08d2ad7a092b488f16851cbbe9ca4646e70cd187cf3abdfcc27c13f"
+    "finalHash": "75af8b115eabdc4a65c32efc7d99504c47bcaa01eba4cd567697701394d10b29"
 }

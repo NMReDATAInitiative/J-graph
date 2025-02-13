@@ -7,11 +7,11 @@
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:fbe8c4de-da50-454a-a231-2a61341f4580",
+        "@id": "urn:uuid:173555e5-3e31-47cd-b3ae-1d8ceb82bfc7",
         "@type": "Obj2",
-        "timestamp": "2025-02-13T12:23:50.537Z",
+        "timestamp": "2025-02-13T12:24:58.085Z",
         "source": "Generated from schema conversion",
-        "finalHash": "002287545159a75836ad8bb5ffc465bd13c753906f54b2cb98f5ac724c575cce"
+        "finalHash": "2278cefd1c589ec4a12fa208e9405ff437af34b59c062c8cf7893a7851090ca0"
     },
     "initialHash": "dab53e53fc53fac20396b5e626c9e078f0bee06343dcc19ebd6e5cf6bf1cac38",
     "finalHash": "465872de043cea1bbf5f35a3fdc43364c458d58389cc2f754762c63b8a4ffb03"

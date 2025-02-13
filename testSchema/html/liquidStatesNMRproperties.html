@@ -1,0 +1,51 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Schema: liquidStatesNMRproperties.json</title>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
+            <script src="./validateSchema.js"></script>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { padding: 10px; border: 1px solid black; text-align: left; }
+                th { background-color: #f2f2f2; }
+                textarea { width: 100%; height: 200px; font-family: monospace; }
+                #validationMessage { font-weight: bold; }
+                #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
+                color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+            </style>
+
+        </head>
+        <body>
+
+            <h1>Schema: liquidStatesNMRproperties.json</h1>
+            <p><strong>Schema ID:</strong> 
+                <a href="https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json" target="_blank">https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json</a>
+            </p>
+
+            <h2>Properties:</h2>
+            <table>
+                <tr>  <th>Property</th>  <th>Type</th>  <th>Schema Reference</th>  <th>Required</th>  </tr>
+                <tr>  <td>spins</td>  <td>array</td>  <td>-</td>  <td>✅ Yes</td>  </tr>
+                <tr>  <td>interactions</td>  <td>array</td>  <td>-</td>  <td>✅ Yes</td>  </tr>
+            </table>
+            
+            <h2>Load JSON Instance</h2>
+            <select id="instanceSelector">
+                <option value="">Select an instance...</option>
+                <option value="liquidStatesNMRmodelExample1.json">liquidStatesNMRmodelExample1.json</option>
+            </select>
+    
+            <h2>Edit JSON Instance</h2>
+            <textarea id="jsonEditor"></textarea>
+            <p id="validationMessage"></p>
+            <p>
+                <a href="index.html" id="returnButton">⬅ Return to Object List</a>
+            </p>
+            <script src="./htmlScripts.js" defer></script>
+        </body>
+        </html>
+    

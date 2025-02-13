@@ -1,0 +1,40 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json",
+    "spins": [
+        {
+            "index": [
+                0
+            ],
+            "name": "H1",
+            "valueIso": 2,
+            "valueType": "chemicalShift"
+        },
+        {
+            "index": [
+                1
+            ],
+            "name": "H2",
+            "valueIso": 1.05,
+            "valueType": "chemicalShift"
+        }
+    ],
+    "interactions": [
+        {
+            "indicesPair": [
+                [
+                    0,
+                    1
+                ]
+            ],
+            "name": "H1",
+            "valueIso": 7.2,
+            "valueType": "Jcoupling"
+        }
+    ],
+    "initialHash": "e4a251b917aaeba579e690a300682180206bc24ca7e8115b5454fd2cade52db4",
+    "@id": "urn:uuid:262154a7-8aff-4f61-b64e-ddce1e1665e5",
+    "@type": "LiquidStatesNMRproperties",
+    "timestamp": "2025-02-13T12:24:58.086Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "e486973072b5ff5085ff53e52997ff596420409cfff563b2683de19c69596e73"
+}

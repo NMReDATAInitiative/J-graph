@@ -1,0 +1,40 @@
+{
+    "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json",
+    "spins": [
+        {
+            "index": [
+                0
+            ],
+            "name": "H1",
+            "valueIso": 2,
+            "valueType": "chemicalShift"
+        },
+        {
+            "index": [
+                1
+            ],
+            "name": "H2",
+            "valueIso": 1.05,
+            "valueType": "chemicalShift"
+        }
+    ],
+    "interactions": [
+        {
+            "indicesPair": [
+                [
+                    0,
+                    1
+                ]
+            ],
+            "name": "H1",
+            "valueIso": 7.2,
+            "valueType": "Jcoupling"
+        }
+    ],
+    "initialHash": "b11aff2efff85d632631cda559bae76bbc68db1b1bcb0a47b42ad4d133b985c0",
+    "@id": "urn:uuid:7a29e4b8-6a72-4a74-b5d6-9e3a24c23183",
+    "@type": "NmrProp",
+    "timestamp": "2025-02-13T12:24:58.087Z",
+    "source": "Generated from schema conversion",
+    "finalHash": "7ef80a8f9133be8f3d07a515861f56302b279b85d520e2e7e9243d4f7d46f48a"
+}
