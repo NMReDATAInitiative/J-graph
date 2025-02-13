@@ -414,7 +414,8 @@
                 "optimizedVariables": [{
                         "CHEMeDATAtype": "NMRvariableSet",
                         "version": "0.12",
-                        "spins": [{
+                        "spins": [
+                            {
                                 "molAtomIndicesFull": [5],
                                 "molAtomIndices": [5],
                                 "spinSystemIndices": [0],
@@ -558,8 +559,10 @@
                                 "value": 3.95000938,
                                 "lowerBound": 3.94125933,
                                 "upperBound": 3.95875944
-                            }],
-                        "interactions": [{
+                            }
+                            ],
+                        "interactions": [
+                            {
                                 "satisfactory": true,
                                 "labelVarSet": "J(5-7)",
                                 "stepNumber": 2,
@@ -601,9 +604,11 @@
                                 "upperBound": 8.78570556,
                                 "numberBonds": 3,
                                 "numberBondslabelVarSet": "3J(7-8)"
-                            }],
+                            }
+                            ],
                         "spinFitHashNetwork": "Not implemented hash for spins and interactions - may not be implemented",
-                        "lineshapeVariables": [{
+                        "lineshapeVariables": [
+                            {
                                 "value": 0.35996091,
                                 "checked": true,
                                 "typeVariableString": "lineWidth",
@@ -613,8 +618,10 @@
                                 "checked": false,
                                 "typeVariableString": "kurtosis",
                                 "name": "MnovaLineShapeKurtosis"
-                            }],
-                        "quantityVariables": [{
+                            }
+                            ],
+                        "quantityVariables": [
+                            {
                                 "value": 0.06169547,
                                 "checked": true,
                                 "typeVariableString": "factor",
