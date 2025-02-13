@@ -38,6 +38,6 @@
             }
         }
     },
-    "required": ["spins", "properties"]
+    "required": ["spins", "interactions"]
 }
 
