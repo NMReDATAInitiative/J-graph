@@ -50,10 +50,17 @@
 ✅ Root.object1 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json Valid
 ✅ Root.object2 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Valid
 
-********* Validating liquidStatesNMRmodel.json...
+********* Validating liquidStatesNMRmodelExample1.json...
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
-❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json Invalid: data must have required property 'name'
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
+❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json Invalid: data must have required property 'properties'
+
+********* Validating liquidStatesNMRmodelExample_fromNMRprop.json...
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json Valid
 
 ********* Validating spinfit-Opt-01_assigned-Exp.DirDesR.Ny.Obj0.2nd100_4.spinFitResult.json...
 
@@ -78,5 +85,5 @@
 ❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Invalid: data must have required property 'age'
 
 🔴 Summary: Failed Files
-liquidStatesNMRmodel.json
+liquidStatesNMRmodelExample1.json
 testEmbeddedSchemaFailed.json
