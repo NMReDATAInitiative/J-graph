@@ -3,9 +3,9 @@
     "name": "Bob",
     "age": 53,
     "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-    "@id": "urn:uuid:ffa925dd-a4f3-4d25-85c4-5ca14f47bc1e",
+    "@id": "urn:uuid:a0a17343-f97f-48e3-b7ff-6288c8dd598b",
     "@type": "Obj2",
-    "timestamp": "2025-02-13T12:16:41.810Z",
+    "timestamp": "2025-02-13T12:23:50.541Z",
     "source": "Generated from schema conversion",
-    "finalHash": "dab5385eff3a2c61fc783a32b1c558d9565fc981bec4b9625be124a6849014f5"
+    "finalHash": "d11b2e61a7d6265291aea10366c401cd20266b37f827c0a76007b8345c19e983"
 }

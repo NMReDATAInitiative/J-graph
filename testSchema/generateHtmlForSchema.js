@@ -80,10 +80,12 @@ function generateHtmlForSchema(fileName) {
 
   // Scan instances folder for matching instances
   const instanceFiles = fs.existsSync(instanceDir)
-    ? fs.readdirSync(instanceDir)
+    ? fs.readdirSync(instanceDir).filter(file => file.endsWith('.json'))
     : [];
+
   const matchingInstances = instanceFiles.filter((instanceFile) => {
     const instancePath = path.join(instanceDir, instanceFile);
+    console.log("reading : ", instancePath)
     const instanceData = JSON.parse(fs.readFileSync(instancePath, 'utf8'));
     return instanceData['$schema'] === schema['$id'];
   });
