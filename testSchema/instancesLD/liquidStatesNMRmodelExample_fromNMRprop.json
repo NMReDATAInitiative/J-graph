@@ -2,39 +2,39 @@
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json",
     "spins": [
         {
-            "index": [
+            "spinSystemIndices": [
                 0
             ],
             "name": "H1",
-            "valueIso": 2,
-            "valueType": "chemicalShift"
+            "value": 2,
+            "typeVariableString": "chemicalShift"
         },
         {
-            "index": [
+            "spinSystemIndices": [
                 1
             ],
             "name": "H2",
-            "valueIso": 1.05,
-            "valueType": "chemicalShift"
+            "value": 1.05,
+            "typeVariableString": "chemicalShift"
         }
     ],
     "interactions": [
         {
-            "indicesPair": [
+            "spinSystemIndices": [
                 [
                     0,
                     1
                 ]
             ],
             "name": "H1",
-            "valueIso": 7.2,
-            "valueType": "Jcoupling"
+            "value": 7.2,
+            "typeVariableString": "Jcoupling"
         }
     ],
     "initialHash": "b11aff2efff85d632631cda559bae76bbc68db1b1bcb0a47b42ad4d133b985c0",
-    "@id": "urn:uuid:2e856db3-a9bb-464e-84cd-33f2de309c59",
+    "@id": "urn:uuid:24bfd107-26de-4e0c-a4df-6cb334ffe255",
     "@type": "NmrProp",
-    "timestamp": "2025-02-13T12:41:47.883Z",
+    "timestamp": "2025-02-13T12:44:20.031Z",
     "source": "Generated from schema conversion",
-    "finalHash": "8be9cae9f2be7f2d2391ed52f1c70137538efcc68749da1c6c08a55c885f2d74"
+    "finalHash": "99e9df8b739366b0a614acbc1eb6f89fa0cca072b268ec17252f59fd67565eba"
 }

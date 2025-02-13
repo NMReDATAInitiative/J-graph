@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:f8432699-c416-4ebc-becc-e8c339a129db",
+        "@id": "urn:uuid:58a76510-c440-4730-a1ff-45aa41535410",
         "@type": "Obj1",
-        "timestamp": "2025-02-13T12:41:47.882Z",
+        "timestamp": "2025-02-13T12:44:20.030Z",
         "source": "Generated from schema conversion",
-        "finalHash": "7be0ebe507dd5367bc47707082ce6f9a0809377758b346e219deca1f3392d812"
+        "finalHash": "2502b42dbbd1f3870599e1cebb3cb0d08f1f805b0b3757f8128a6b9c9de98115"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:e66c2569-ef9d-4752-bf47-f83bb814866c",
+        "@id": "urn:uuid:76622aef-f26a-4f95-af02-55e947b08893",
         "@type": "Obj2",
-        "timestamp": "2025-02-13T12:41:47.882Z",
+        "timestamp": "2025-02-13T12:44:20.030Z",
         "source": "Generated from schema conversion",
-        "finalHash": "12c8debe484210467dc882d2ee07842ae201959747712d38749d840b498c2182"
+        "finalHash": "3598e3a20e15dea4d1b907b510f69b8d7d80efa307df18aa34a2e22c67f7da40"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:cc74a626-fc9d-45cf-a848-b8657d433a81",
+    "@id": "urn:uuid:6196b0c5-3410-445b-bbfc-41dfbc64317a",
     "@type": "PairObj1",
-    "timestamp": "2025-02-13T12:41:47.882Z",
+    "timestamp": "2025-02-13T12:44:20.030Z",
     "source": "Generated from schema conversion",
-    "finalHash": "ddc52da07dc570cff9dae05bcf620c21c1678ff8ff5ccb8ed5dba9f60cf9536a"
+    "finalHash": "69be8f07067d2f4454bcbae3e9ea6d33cde939fc95e08c976a2d95df99b2e586"
 }

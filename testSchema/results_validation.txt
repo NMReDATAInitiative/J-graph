@@ -55,7 +55,7 @@
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
-✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json Valid
+❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json Invalid: data/spins/0 must have required property 'valueIso'
 
 ********* Validating liquidStatesNMRmodelExample_fromNMRprop.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
@@ -85,4 +85,5 @@
 ❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj2.json Invalid: data must have required property 'age'
 
 🔴 Summary: Failed Files
+liquidStatesNMRmodelExample1.json
 testEmbeddedSchemaFailed.json

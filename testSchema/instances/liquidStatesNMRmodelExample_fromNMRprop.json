@@ -2,24 +2,24 @@
 	"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json",
     "spins": [
         {
-			"index" : [0],
+			"spinSystemIndices" : [0],
             "name": "H1",
-            "valueIso": 2.0,
-            "valueType": "chemicalShift"
+            "value": 2.0,
+            "typeVariableString": "chemicalShift"
         },
 		{
-			"index" : [1],
+			"spinSystemIndices" : [1],
             "name": "H2",
-            "valueIso": 1.05,
-            "valueType": "chemicalShift"
+            "value": 1.05,
+            "typeVariableString": "chemicalShift"
         }
     ],
     "interactions": [
         {
-			"indicesPair" : [[0, 1]],
+			"spinSystemIndices" : [[0, 1]],
             "name": "H1",
-            "valueIso": 7.2,
-            "valueType": "Jcoupling"
+            "value": 7.2,
+            "typeVariableString": "Jcoupling"
         }
     ]
 }

@@ -6,7 +6,7 @@
                 0
             ],
             "name": "H1",
-            "valueIso": 2,
+            "value": 2,
             "valueType": "chemicalShift"
         },
         {
@@ -14,7 +14,7 @@
                 1
             ],
             "name": "H2",
-            "valueIso": 1.05,
+            "value": 1.05,
             "valueType": "chemicalShift"
         }
     ],
@@ -27,14 +27,14 @@
                 ]
             ],
             "name": "H1",
-            "valueIso": 7.2,
+            "value": 7.2,
             "valueType": "Jcoupling"
         }
     ],
     "initialHash": "e4a251b917aaeba579e690a300682180206bc24ca7e8115b5454fd2cade52db4",
-    "@id": "urn:uuid:ebe4fecc-5551-43a8-ace4-1d2a971199d0",
+    "@id": "urn:uuid:8b42c03a-878f-44f7-a994-bcb5c2bfafee",
     "@type": "LiquidStatesNMRproperties",
-    "timestamp": "2025-02-13T12:41:47.882Z",
+    "timestamp": "2025-02-13T12:44:20.030Z",
     "source": "Generated from schema conversion",
-    "finalHash": "09039f05967bce5f7163cc66bb2928a3e6198d0664665816d377b3390fca8caf"
+    "finalHash": "41bbfd21e1040ad078908514bd87d9b3e572425bc292f529d5503a97295933ed"
 }
