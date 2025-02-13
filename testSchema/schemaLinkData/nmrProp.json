@@ -27,7 +27,7 @@
             "minItems": 3,
             "maxItems": 3
         },
-        "valueType": {
+        "typeVariableString": {
             "type": "string",
             "enum": [
                 "chemicalShift",
@@ -39,7 +39,10 @@
             "items": {
                 "type": "number"
             }
-        }
+        },
+        "required": [
+            "typeVariableString"
+        ]
     },
     "interactions": {
         "valueIso": {
@@ -66,7 +69,7 @@
             "minItems": 3,
             "maxItems": 3
         },
-        "valueType": {
+        "typeVariableString": {
             "type": "string",
             "enum": [
                 "Jcoupling",
@@ -83,7 +86,10 @@
                 "minItems": 2,
                 "maxItems": 2
             }
-        }
+        },
+        "required": [
+            "typeVariableString"
+        ]
     },
     "required": [
         "@id",

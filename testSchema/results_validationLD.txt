@@ -52,13 +52,15 @@
 
 ********* Validating liquidStatesNMRmodelExample1.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json
-❌ Error loading schema from https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json: Failed to fetch schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json
-❌ Root - Schema "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json" not found.
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json Valid
 
 ********* Validating liquidStatesNMRmodelExample_fromNMRprop.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json
-❌ Error loading schema from https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json: Failed to fetch schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json
-❌ Root - Schema "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json" not found.
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json
+✅ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json Valid
 
 ********* Validating spinfit-Opt-01_assigned-Exp.DirDesR.Ny.Obj0.2nd100_4.spinFitResult.json...
 
@@ -83,6 +85,4 @@
 ❌ Root - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json Invalid: data must have required property 'age'
 
 🔴 Summary: Failed Files
-liquidStatesNMRmodelExample1.json
-liquidStatesNMRmodelExample_fromNMRprop.json
 testEmbeddedSchemaFailed.json

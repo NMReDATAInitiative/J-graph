@@ -32,9 +32,9 @@
         }
     ],
     "initialHash": "e4a251b917aaeba579e690a300682180206bc24ca7e8115b5454fd2cade52db4",
-    "@id": "urn:uuid:262154a7-8aff-4f61-b64e-ddce1e1665e5",
+    "@id": "urn:uuid:873a62de-cf68-495a-9b89-a345e545d2ca",
     "@type": "LiquidStatesNMRproperties",
-    "timestamp": "2025-02-13T12:24:58.086Z",
+    "timestamp": "2025-02-13T12:37:53.063Z",
     "source": "Generated from schema conversion",
-    "finalHash": "e486973072b5ff5085ff53e52997ff596420409cfff563b2683de19c69596e73"
+    "finalHash": "2751486acd668186434678db2c5e34f3ec8d8a070e0bdff87def9ca3871226aa"
 }

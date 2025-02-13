@@ -25,7 +25,7 @@
                             "minItems": 3,
                             "maxItems": 3
                         },
-        "valueType":    {
+        "typeVariableString":    {
                     "type": "string",
                     "enum": ["chemicalShift", "quadrupole"]
                         },
@@ -34,7 +34,8 @@
                             "items": {
                                 "type": "number"
                             }
-                        }
+                        },
+        "required": ["typeVariableString"]
     },
     "interactions": {
         "valueIso": { "type": "number" },
@@ -59,7 +60,7 @@
                             "minItems": 3,
                             "maxItems": 3
                         },
-        "valueType":    {
+        "typeVariableString":    {
                     "type": "string",
                     "enum": ["Jcoupling", "Dcoupling"]
                         },
@@ -73,7 +74,8 @@
                                 "minItems": 2,
                                 "maxItems": 2
                             }
-                        }
+                        },
+        "required": ["typeVariableString"]
     },
     "required": []
 }
