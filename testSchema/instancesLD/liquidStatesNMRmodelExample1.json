@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/liquidStatesNMRproperties.json",
     "spins": [
         {
-            "index": [
+            "spinSystemIndices": [
                 0
             ],
             "name": "H1",
@@ -10,7 +10,7 @@
             "valueType": "chemicalShift"
         },
         {
-            "index": [
+            "spinSystemIndices": [
                 1
             ],
             "name": "H2",
@@ -20,7 +20,7 @@
     ],
     "interactions": [
         {
-            "indicesPair": [
+            "spinSystemIndices": [
                 [
                     0,
                     1
@@ -32,9 +32,9 @@
         }
     ],
     "initialHash": "e4a251b917aaeba579e690a300682180206bc24ca7e8115b5454fd2cade52db4",
-    "@id": "urn:uuid:54a95b42-522b-4980-b56e-9dcba25a3e61",
+    "@id": "urn:uuid:ebe4fecc-5551-43a8-ace4-1d2a971199d0",
     "@type": "LiquidStatesNMRproperties",
-    "timestamp": "2025-02-13T12:40:44.820Z",
+    "timestamp": "2025-02-13T12:41:47.882Z",
     "source": "Generated from schema conversion",
-    "finalHash": "b31b17ae3988b53bf6e389a3188abdaf7abcdb3ce48e24b9714e2510426450c4"
+    "finalHash": "09039f05967bce5f7163cc66bb2928a3e6198d0664665816d377b3390fca8caf"
 }

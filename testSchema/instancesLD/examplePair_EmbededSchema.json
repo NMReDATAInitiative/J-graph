@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:b6b252b5-0028-4f03-81c5-de0560d5b04b",
+        "@id": "urn:uuid:f8432699-c416-4ebc-becc-e8c339a129db",
         "@type": "Obj1",
-        "timestamp": "2025-02-13T12:40:44.819Z",
+        "timestamp": "2025-02-13T12:41:47.882Z",
         "source": "Generated from schema conversion",
-        "finalHash": "52cd07d02c7799ead9bf3d9f212df6220006942557561d7a04c7f07622f71d72"
+        "finalHash": "7be0ebe507dd5367bc47707082ce6f9a0809377758b346e219deca1f3392d812"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:0336936d-5f36-427f-adb9-9e3e039ceeaf",
+        "@id": "urn:uuid:e66c2569-ef9d-4752-bf47-f83bb814866c",
         "@type": "Obj2",
-        "timestamp": "2025-02-13T12:40:44.820Z",
+        "timestamp": "2025-02-13T12:41:47.882Z",
         "source": "Generated from schema conversion",
-        "finalHash": "93269fd02d6234b4d4c6b1613de286b1218316bf199552bb4af2a06f3f5d6422"
+        "finalHash": "12c8debe484210467dc882d2ee07842ae201959747712d38749d840b498c2182"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:2f637b4b-1c80-4807-968c-a025d0d0bb81",
+    "@id": "urn:uuid:cc74a626-fc9d-45cf-a848-b8657d433a81",
     "@type": "PairObj1",
-    "timestamp": "2025-02-13T12:40:44.819Z",
+    "timestamp": "2025-02-13T12:41:47.882Z",
     "source": "Generated from schema conversion",
-    "finalHash": "c4bdd1adbe3599316137585681f2a28e8fe5f72a41580aa9399cd33c93f21869"
+    "finalHash": "ddc52da07dc570cff9dae05bcf620c21c1678ff8ff5ccb8ed5dba9f60cf9536a"
 }

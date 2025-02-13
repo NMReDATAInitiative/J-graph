@@ -2,13 +2,13 @@
 	"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json",
     "spins": [
         {
-			"index" : [0],
+			"spinSystemIndices" : [0],
             "name": "H1",
             "valueIso": 2.0,
             "valueType": "chemicalShift"
         },
 		{
-			"index" : [1],
+			"spinSystemIndices" : [1],
             "name": "H2",
             "valueIso": 1.05,
             "valueType": "chemicalShift"
@@ -16,7 +16,7 @@
     ],
     "interactions": [
         {
-			"indicesPair" : [[0, 1]],
+			"spinSystemIndices" : [[0, 1]],
             "name": "H1",
             "valueIso": 7.2,
             "valueType": "Jcoupling"

@@ -2,9 +2,9 @@
     "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
     "name": "Fred",
     "initialHash": "56302c1f5d0daa7e563fbeae1f208c101d798511978c5acc1626e924010ed25e",
-    "@id": "urn:uuid:8d266747-e52d-41e8-8db2-cdc1006a1ccb",
+    "@id": "urn:uuid:dd6caaa4-6ae6-4189-a961-dcfb609dba24",
     "@type": "Obj2",
-    "timestamp": "2025-02-13T12:40:44.823Z",
+    "timestamp": "2025-02-13T12:41:47.884Z",
     "source": "Generated from schema conversion",
-    "finalHash": "0bbb465dc4388c878e1e4355d141447e118eeab369d2f165fbc6233c4978c2ec"
+    "finalHash": "b109d4297645e85eb522f0cd6adf8de9f3ea907927af86e366fc3fc3c40b0aaf"
 }

@@ -3,22 +3,22 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:96521fc1-12b8-4034-9d1a-14486ca71b7d",
+        "@id": "urn:uuid:7a10d259-b825-42ca-b5d0-803cc0a2685f",
         "@type": "Obj1",
-        "timestamp": "2025-02-13T12:40:44.818Z",
+        "timestamp": "2025-02-13T12:41:47.881Z",
         "source": "Generated from schema conversion",
-        "finalHash": "5ffabccfe29ab1d1350a8ccd5e473fe7eaaf741cb9d029c064ccd12c8f7d25ec"
+        "finalHash": "130f629121c03f48b8854bf52b7fb2bf4a3d302306f805b79f004e5cfeeff78d"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:43af2fff-64f3-4ff5-b040-545aa2c40747",
+        "@id": "urn:uuid:a3be2de8-5720-4c11-8d79-41a7e102f5d2",
         "@type": "Obj2",
-        "timestamp": "2025-02-13T12:40:44.819Z",
+        "timestamp": "2025-02-13T12:41:47.881Z",
         "source": "Generated from schema conversion",
-        "finalHash": "2a8b03a91d8923d544839b9872016df9c0b3a93a0fd3b8adee91dfdea9383ece"
+        "finalHash": "2858aa61197988d5c0991a3e96b504c5ea6ebf1d9b517a2d56a681a9b204ed9a"
     },
     "initialHash": "dab53e53fc53fac20396b5e626c9e078f0bee06343dcc19ebd6e5cf6bf1cac38",
     "finalHash": "7e49aa6d65268a673c7892575b85d91044c2209094951b8306131a7983a39198"
