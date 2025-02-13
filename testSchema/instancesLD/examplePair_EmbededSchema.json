@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:514ab0d9-65d5-4e7e-aaf1-433d02280655",
+        "@id": "urn:uuid:b6b252b5-0028-4f03-81c5-de0560d5b04b",
         "@type": "Obj1",
-        "timestamp": "2025-02-13T12:37:53.063Z",
+        "timestamp": "2025-02-13T12:40:44.819Z",
         "source": "Generated from schema conversion",
-        "finalHash": "857cb084b91ed22cbb15ff517ac4daac08f6841658e971476ad6c13b096c2abb"
+        "finalHash": "52cd07d02c7799ead9bf3d9f212df6220006942557561d7a04c7f07622f71d72"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:6ea9d3ba-4da5-4e89-b064-1a1962c6ac8e",
+        "@id": "urn:uuid:0336936d-5f36-427f-adb9-9e3e039ceeaf",
         "@type": "Obj2",
-        "timestamp": "2025-02-13T12:37:53.063Z",
+        "timestamp": "2025-02-13T12:40:44.820Z",
         "source": "Generated from schema conversion",
-        "finalHash": "4f6041f8afe087e27953c8bee9e512c4e3b31ba5457756bfbf73f60a45f90d78"
+        "finalHash": "93269fd02d6234b4d4c6b1613de286b1218316bf199552bb4af2a06f3f5d6422"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:03e5faa4-3bf3-4f57-b167-4f6dddc9a2e0",
+    "@id": "urn:uuid:2f637b4b-1c80-4807-968c-a025d0d0bb81",
     "@type": "PairObj1",
-    "timestamp": "2025-02-13T12:37:53.062Z",
+    "timestamp": "2025-02-13T12:40:44.819Z",
     "source": "Generated from schema conversion",
-    "finalHash": "a6d8b455f67831439204b994aab28af3fe5828b0d3c1c42c4c9b7982cd7eb840"
+    "finalHash": "c4bdd1adbe3599316137585681f2a28e8fe5f72a41580aa9399cd33c93f21869"
 }

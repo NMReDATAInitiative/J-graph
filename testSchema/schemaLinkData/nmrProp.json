@@ -3,7 +3,7 @@
     "type": "object",
     "$id": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/nmrProp.json",
     "spins": {
-        "valueIso": {
+        "value": {
             "type": "number"
         },
         "valueDiag": {
@@ -34,7 +34,7 @@
                 "quadrupole"
             ]
         },
-        "index": {
+        "spinSystemIndices": {
             "type": "array",
             "items": {
                 "type": "number"
@@ -76,7 +76,7 @@
                 "Dcoupling"
             ]
         },
-        "indices": {
+        "spinSystemIndices": {
             "type": "array",
             "items": {
                 "type": "array",
