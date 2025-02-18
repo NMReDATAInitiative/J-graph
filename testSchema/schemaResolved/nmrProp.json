@@ -45,7 +45,7 @@
         ]
     },
     "interactions": {
-        "valueIso": {
+        "value": {
             "type": "number"
         },
         "valueDiag": {

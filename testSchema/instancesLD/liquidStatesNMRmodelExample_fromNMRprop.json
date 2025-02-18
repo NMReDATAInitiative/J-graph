@@ -32,9 +32,9 @@
         }
     ],
     "initialHash": "b11aff2efff85d632631cda559bae76bbc68db1b1bcb0a47b42ad4d133b985c0",
-    "@id": "urn:uuid:24bfd107-26de-4e0c-a4df-6cb334ffe255",
+    "@id": "urn:uuid:c364d410-cc32-4d94-9c6e-09a9c70060c2",
     "@type": "NmrProp",
-    "timestamp": "2025-02-13T12:44:20.031Z",
+    "timestamp": "2025-02-18T14:06:19.348Z",
     "source": "Generated from schema conversion",
-    "finalHash": "99e9df8b739366b0a614acbc1eb6f89fa0cca072b268ec17252f59fd67565eba"
+    "finalHash": "8e31c20ad67e09545dae1b44b621a04992763e86424d70df58cd4bec924578c6"
 }

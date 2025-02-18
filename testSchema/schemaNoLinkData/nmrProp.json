@@ -38,7 +38,7 @@
         "required": ["typeVariableString"]
     },
     "interactions": {
-        "valueIso": { "type": "number" },
+        "value": { "type": "number" },
         "valueDiag" : {
                             "type": "array",
                             "items": {

@@ -37,7 +37,7 @@
                         },
                         "required": [
                             "valueType",
-                            "valueIso"
+                            "value"
                         ]
                     }
                 ]
@@ -61,7 +61,7 @@
                         },
                         "required": [
                             "valueType",
-                            "valueIso"
+                            "value"
                         ]
                     }
                 ]

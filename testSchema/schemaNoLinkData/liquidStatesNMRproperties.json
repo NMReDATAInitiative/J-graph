@@ -15,7 +15,7 @@
                                 "enum": ["chemicalShift"]
                             }
                         },
-                        "required": ["valueType", "valueIso"]
+                        "required": ["valueType", "value"]
                     }
                 ]
             }
@@ -32,7 +32,7 @@
                                 "enum": ["Jcoupling"]
                             }
                         },
-                        "required": ["valueType", "valueIso"]
+                        "required": ["valueType", "value"]
                     }
                 ]
             }
