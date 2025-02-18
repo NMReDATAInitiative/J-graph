@@ -1,0 +1,22 @@
+{"spinSystems": [{
+"version": "0.1", 
+"$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json", 
+"spins": [
+{"name": "FreqM", "spinSystemIndices": [1, 2], "valueType": "chemicalShift", "value": 7.523407, "checked": true},
+{"name": "FreqO", "spinSystemIndices": [3, 4], "valueType": "chemicalShift", "value": 7.313497, "checked": true}
+], "interactions": [
+{"name": "5J12", "spinSystemIndices": [[1, 2]], "valueType": "Jcoupling", "value": 0.500000, "checked": true},
+{"name": "3J13", "spinSystemIndices": [[1, 3], [2, 4]], "valueType": "Jcoupling", "value": 7.500000, "checked": true},
+{"name": "4J14", "spinSystemIndices": [[1, 4], [2, 3]], "valueType": "Jcoupling", "value": 2.500000, "checked": true},
+{"name": "3J34", "spinSystemIndices": [[3, 4]], "valueType": "Jcoupling", "value": 7.500000, "checked": true}
+], 
+"AnatoliaHashNetwork": "B9838-565-A52-FF5", 
+"lineshapeVariables": [
+{"lw": 0.100000, "checked": true}],
+"quantityVariables": [
+{"factor": 213647988.000000, "checked": true}],
+"ErrorMessage1": "Errors are not calculated due to singularity of normal equations matrix!", 
+"Title": "Analysis of ODCB 1H NMR spectrum", 
+"CheckBroadSequence": " no implemented", 
+"isOutput": false
+}]}

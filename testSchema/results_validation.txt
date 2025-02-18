@@ -3,6 +3,20 @@
 
 ********* Validating 01_assigned_molecule.json...
 
+********* Validating CHEMeDATA_results3.json...
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
+✅ Root.spinSystems.0 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json Valid
+
+********* Validating CHEMeDATA_starting3.json...
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
+⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/nmrProp.json
+✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json
+✅ Root.spinSystems.0 - https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/liquidStatesNMRproperties.json Valid
+
 ********* Validating alice.json...
 ⏳ Fetching schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
 ✅ Loaded schema: https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json
