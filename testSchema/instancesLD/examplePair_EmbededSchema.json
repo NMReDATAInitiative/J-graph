@@ -4,27 +4,27 @@
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj1.json",
         "name": "Alice",
         "initialHash": "bd1dada991494dc618fc6ca21c75896fa3aa37fd46c79be24ea392268bd3b2e2",
-        "@id": "urn:uuid:030532de-e8d3-423b-8bfd-b551d992f204",
+        "@id": "urn:uuid:d78506eb-38e4-4070-97f8-516d4ad06aff",
         "@type": "Obj1",
-        "timestamp": "2025-02-18T14:06:19.347Z",
+        "timestamp": "2025-02-18T14:12:23.788Z",
         "source": "Generated from schema conversion",
-        "finalHash": "7d83bda9aeb6aa0f30d7a56cc320008650481c6764ff564f305cb064c96e5f8e"
+        "finalHash": "30e13e41b34b8fe77fa6236ee36fd5bedfc06ed29138d0926e6070ee5f39516d"
     },
     "object2": {
         "$schema": "https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaLinkData/obj2.json",
         "name": "Bob",
         "age": 53,
         "initialHash": "477d29d34be3040250ef22a3f27ec769d7ee3b80e7a7b7a15003be55a60bdf4a",
-        "@id": "urn:uuid:ed69c37d-d911-458f-86e0-1dc3661e8103",
+        "@id": "urn:uuid:49918abf-c14b-46f0-96e8-cbce7cc564f1",
         "@type": "Obj2",
-        "timestamp": "2025-02-18T14:06:19.347Z",
+        "timestamp": "2025-02-18T14:12:23.789Z",
         "source": "Generated from schema conversion",
-        "finalHash": "e44c83189bf868dd489b56c391d23b6b97bcbb9aa0b07028c8759b5555c1329d"
+        "finalHash": "a1a8c747b8cd18db3164017634d5d0f9543641833ceb9792dcc2be52e63d56f1"
     },
     "initialHash": "274ea4237b76c6a61c83c1c86295e38f62d259db6de86ae4c9176470bbc00fd2",
-    "@id": "urn:uuid:26753be0-ac98-4262-9a51-639bb9002045",
+    "@id": "urn:uuid:cf24cec0-d216-4ab6-8dbd-679992241ea6",
     "@type": "PairObj1",
-    "timestamp": "2025-02-18T14:06:19.347Z",
+    "timestamp": "2025-02-18T14:12:23.788Z",
     "source": "Generated from schema conversion",
-    "finalHash": "b8f4615abfa4cfe4c11ba90c71ce8ec236590e6ed6aadd1e4e322bfba6580039"
+    "finalHash": "3a1396df4efbb1a2cd3e0010778175f118bb909604ad3e926545120e08bbc5cd"
 }
