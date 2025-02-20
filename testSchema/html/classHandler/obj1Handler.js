@@ -4,6 +4,7 @@ class Obj1Handler {
   }
 
   showAllOptionsInHTML(container) {
+    console.log("starts showAllOptionsInHTML");
     container.innerHTML = ''; // Clear existing content before adding new elements
     this.showViewer();
     this.showUpdate();
