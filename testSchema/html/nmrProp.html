@@ -6,7 +6,10 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Schema: nmrProp.json</title>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
-            <script src="./validateSchema.js"></script>
+            <script src="./src/validateSchema.js"></script>
+            <script src="./src/htmlScripts.js" defer></script>
+            <script src="./classHandler/NmrPropHandler.js" defer></script>
+            <script src="https://d3js.org/d3.v7.min.js"></script>
             <style>
                 body { font-family: Arial, sans-serif; margin: 20px; }
                 table { border-collapse: collapse; width: 100%; }
@@ -14,6 +17,10 @@
                 th { background-color: #f2f2f2; }
                 textarea { width: 100%; height: 200px; font-family: monospace; }
                 #validationMessage { font-weight: bold; }
+                .frame { padding: 20px; margin: 10px 0; border-radius: 5px; }
+                .blue-frame { background-color: #cce5ff; border: 1px solid #007bff; }
+                .red-frame { background-color: #f8d7da; border: 1px solid #dc3545; }
+                .green-frame { background-color: #d4edda; border: 1px solid #28a745; }
                 #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
                 color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
             </style>
@@ -41,10 +48,23 @@
             <h2>Edit JSON Instance</h2>
             <textarea id="jsonEditor"></textarea>
             <p id="validationMessage"></p>
+            <div id="dynamicContent"></div>
             <p>
                 <a href="index.html" id="returnButton">⬅ Return to Object List</a>
             </p>
-            <script src="./htmlScripts.js" defer></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    window.mainObject = new NmrPropHandler({});
+                    console.log("✅ mainObject initialized.");
+
+                    if (window.mainObject) {
+                        console.log("✅ mainObject exists.");
+                    } else {
+                        console.error("❌ mainObject not there.");
+                    }
+                });
+            </script>
+
         </body>
         </html>
     

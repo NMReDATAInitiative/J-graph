@@ -5,6 +5,10 @@ const path = require('path');
 const schemaDir = './schemaNoLinkData';
 const instanceDir = './instances';
 const htmlDir = './html';
+const classHandlerFolderRelativeToRootHTML = './classHandler'; // could be absolute path
+const locationsJavascript = './src'; // could be absolute path
+
+
 const displayTableProperties = true;
 // Ensure the HTML output directory exists
 if (!fs.existsSync(htmlDir)) {
@@ -29,7 +33,7 @@ function getHtmlLink(ref) {
  * Generates an HTML page for a given schema
  * @param {string} fileName - Schema file name (e.g., "groupObject1.json")
  */
-function generateHtmlForSchema(fileName) {
+function generateHtmlForSchema(fileName, ref) {
   const filePath = path.join(schemaDir, fileName);
   const schema = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
@@ -105,6 +109,7 @@ ${instanceOptions}
     `
       : `            <p>No instances found for this schema.</p>`;
 
+
   // Generate HTML content
   const htmlContent = `
         <!DOCTYPE html>
@@ -114,7 +119,10 @@ ${instanceOptions}
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Schema: ${fileName}</title>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.6/ajv.min.js"></script>
-            <script src="./validateSchema.js"></script>
+            <script src="${locationsJavascript}/validateSchema.js"></script>
+            <script src="${locationsJavascript}/htmlScripts.js" defer></script>
+            <script src="${classHandlerFolderRelativeToRootHTML}/${ref}Handler.js" defer></script>
+            <script src="https://d3js.org/d3.v7.min.js"></script>
             <style>
                 body { font-family: Arial, sans-serif; margin: 20px; }
                 table { border-collapse: collapse; width: 100%; }
@@ -122,6 +130,10 @@ ${instanceOptions}
                 th { background-color: #f2f2f2; }
                 textarea { width: 100%; height: 200px; font-family: monospace; }
                 #validationMessage { font-weight: bold; }
+                .frame { padding: 20px; margin: 10px 0; border-radius: 5px; }
+                .blue-frame { background-color: #cce5ff; border: 1px solid #007bff; }
+                .red-frame { background-color: #f8d7da; border: 1px solid #dc3545; }
+                .green-frame { background-color: #d4edda; border: 1px solid #28a745; }
                 #returnButton { display: inline-block; padding: 10px 15px; background-color: #007BFF; 
                 color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
             </style>
@@ -139,10 +151,23 @@ ${instanceOptions}
             <h2>Edit JSON Instance</h2>
             <textarea id="jsonEditor"></textarea>
             <p id="validationMessage"></p>
+            <div id="dynamicContent"></div>
             <p>
                 <a href="index.html" id="returnButton">⬅ Return to Object List</a>
             </p>
-            <script src="./htmlScripts.js" defer></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    window.mainObject = new ${ref}Handler({});
+                    console.log("✅ mainObject initialized.");
+
+                    if (window.mainObject) {
+                        console.log("✅ mainObject exists.");
+                    } else {
+                        console.error("❌ mainObject not there.");
+                    }
+                });
+            </script>
+
         </body>
         </html>
     `;
@@ -162,7 +187,9 @@ ${instanceOptions}
 fs.readdirSync(schemaDir).forEach((file) => {
   if (file.endsWith('.json')) {
     console.log('Generating HTML for', file);
-    generateHtmlForSchema(file);
+    let ref = path.basename(file, '.json');//file.replace(".json","");
+    ref = ref.charAt(0).toUpperCase() + ref.slice(1);
+    generateHtmlForSchema(file, ref);
   }
 });
 
@@ -188,7 +215,8 @@ function generateIndexPage() {
     });
 
     indexContent += `            </ul>
-        <a href="https://nmredatainitiative.github.io/J-graph/testSchema/html/index.html">On-line list</a>
+        <a href="./index.html">On-line list</a>
+        
         </body>
         </html>
     `;

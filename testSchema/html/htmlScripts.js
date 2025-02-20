@@ -3,6 +3,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const selector = document.getElementById("instanceSelector");
     const validationMessage = document.getElementById("validationMessage");
 
+    function updateFeatureOfObject(data) {
+      if (!data || typeof data !== 'object') return;
+      if (data['$schema']) {
+        let schemaName = data['$schema'];
+        const objName = schemaName.match(/([^/]+)\.json$/)[1];
+        if (window.mainObject) {
+          window.mainObject.updateContent(data);
+            const container = document.getElementById("dynamicContent");
+            if(container) {
+                window.mainObject.showAllOptionsInHTML(container);
+            } else {
+                console.log("no element 'dynamicContent' in document. It is the part of the HTML where we try to show what can be done with the object type")
+            }
+        } else {
+                console.log("no 'window.mainObject' in window - is an instance of the type of object the page is handling");
+        }
+      }
+    }
+
     function restoreSpecialCharacters(encodedString) {
         try {
             // First, decode URI component
@@ -49,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const schemas = await fetchSchemas(parsedData.content);
                     validateJSON(parsedData.content, schemas, validationMessage);
+                    updateFeatureOfObject(parsedData.content);
                     editor.dataset.schema = JSON.stringify(schemas);
                 } else {
                     validationMessage.textContent = "⚠ No 'content' field found in URL data";
@@ -76,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const schemas = await fetchSchemas(data);
             validateJSON(data, schemas, validationMessage);
-
+            updateFeatureOfObject(data);
             // Store schemas in dataset for live validation
             editor.dataset.schema = JSON.stringify(schemas);
         } catch (err) {
@@ -92,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const jsonData = JSON.parse(editor.value);
             const schemas = JSON.parse(editor.dataset.schema || "{}");
             validateJSON(jsonData, schemas, validationMessage);
+            updateFeatureOfObject(jsonData);
         } catch (error) {
             validationMessage.textContent = "❌ Invalid JSON format";
             validationMessage.style.color = "red";
