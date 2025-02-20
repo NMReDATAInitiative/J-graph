@@ -58,23 +58,22 @@ function validateJSON(data, schemas, resultList) {
             let schemaName = obj["$schema"];
             if (!(schemaName in schemas)) {
                 console.error(`❌ Schema "${schemaName}" is missing.`);
-                resultList.innerHTML += `<li class="invalid-schema">❌ ${path} - Schema "${schemaName}" not found. Validation failed.</li>`;
+                resultList.innerHTML += `<li class="invalid-schema" style="color: black;">❌ ${path} - Schema "${schemaName}" not found. Validation failed.</li>`;
                 return;
             }
 
             const validate = ajv.compile(schemas[schemaName]);
             if (validate(obj)) {
                 const objName = schemaName.match(/([^/]+)\.json$/)[1];
-                //    resultList.innerHTML += `<li class="valid-schema">✅ ${path} - ${schemaName}  <a href="${schemaName}?${data}" target="_blank">${path}</a> Valid </li>`;
                 const urlSafeData = encodeURIComponent(JSON.stringify(obj));
                 const linkToSchemaPages = linkToSchemaBase + objName + ".html";
                 if (path == "Root") {
-                    resultList.innerHTML += `<li class="valid-schema">✅  ${path} - ${objName}  Valid </li>`;
+                    resultList.innerHTML += `<li class="valid-schema" style="color: black;">✅ ${path} - ${objName} Valid</li>`;
                 } else {
-                    resultList.innerHTML += `<li class="valid-schema">✅  <a href='${linkToSchemaPages}#data={"content":${urlSafeData}}' target="_blank">${path}</a>- ${objName}  Valid </li>`;
+                    resultList.innerHTML += `<li class="valid-schema" style="color: black;">✅  <a href='${linkToSchemaPages}#data={"content":${urlSafeData}}' target="_blank">${path}</a>- ${objName}  Valid </li>`;
                 }
             } else {
-                resultList.innerHTML += `<li class="invalid-schema">❌ ${path} - ${schemaName} Invalid: ${ajv.errorsText(validate.errors)}</li>`;
+                resultList.innerHTML += `<li class="invalid-schema" style="color: black;">❌ ${path} - ${schemaName} Invalid: ${ajv.errorsText(validate.errors)}</li>`;
             }
         }
 

@@ -7,7 +7,7 @@ class Obj1Handler {
     container.innerHTML = ''; // Clear existing content before adding new elements
     this.showViewer();
     this.showUpdate();
-    this.showConvert();
+    this.showConvertTo('pairObj1');
     this.showViewer2();
   }
 
@@ -24,30 +24,35 @@ class Obj1Handler {
     container.appendChild(frame);
   }
 
-  showConvert() {
+  showConvertTo(targetObjType) {
     const container = document.getElementById('dynamicContent');
+    if (targetObjType == 'pairObj1') {
+      // Create the container for the file input and button
+      const frame = document.createElement('div');
+      frame.className = 'frame red-frame';
 
-    // Create the container for the file input and button
-    const frame = document.createElement('div');
-    frame.className = 'frame red-frame';
+      // Set the inner HTML without using an inline onclick
+      frame.innerHTML = `<p>Drop two JSON files to merge:</p>
+          <input type="file" id="input1" accept="application/json">
+          <input type="file" id="input2" accept="application/json">
+          <button id="mergeButton">Create ${targetObjType}</button>
+          <pre id="mergeOutput"></pre>`;
 
-    // Set the inner HTML without using an inline onclick
-    frame.innerHTML = `<p>Drop two JSON files to merge:</p>
-        <input type="file" id="input1" accept="application/json">
-        <input type="file" id="input2" accept="application/json">
-        <button id="mergeButton">Merge</button>
-        <pre id="mergeOutput"></pre>`;
+      container.appendChild(frame);
 
-    container.appendChild(frame);
+      // Add event listeners properly
+      document
+        .getElementById('input1')
+        .addEventListener('change', this.loadFile);
+      document
+        .getElementById('input2')
+        .addEventListener('change', this.loadFile);
 
-    // Add event listeners properly
-    document.getElementById('input1').addEventListener('change', this.loadFile);
-    document.getElementById('input2').addEventListener('change', this.loadFile);
-
-    // Correctly bind "this" for combineFiles
-    document
-      .getElementById('mergeButton')
-      .addEventListener('click', () => this.combineFiles());
+      // Correctly bind "this" for combineFiles
+      document
+        .getElementById('mergeButton')
+        .addEventListener('click', () => this.combineFiles(targetObjType));
+    }
   }
 
   async loadFile(event) {
@@ -60,19 +65,31 @@ class Obj1Handler {
     reader.readAsText(file);
   }
 
-  combineFiles() {
-    const content1 = document.getElementById('input1').dataset.content;
-    const content2 = document.getElementById('input2').dataset.content;
-    if (!content1 || !content2) return;
+  combineFiles(targetObjType) {
+    if (targetObjType == 'pairObj1') {
+      const content1 = document.getElementById('input1').dataset.content;
+      const content2 = document.getElementById('input2').dataset.content;
+      if (!content1 || !content2) return;
+      const obj1 = JSON.parse(content1);
+      const obj2 = JSON.parse(content2);
+      const pairObj = {
+        $schema:
+          `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${targetObjType}.json`,
+        object1: obj1,
+        object2: obj2,
+      };
 
-    const obj1 = JSON.parse(content1);
-    const obj2 = JSON.parse(content2);
-    const array = [obj1, obj2];
-    document.getElementById('mergeOutput').textContent = JSON.stringify(
-      array,
-      null,
-      2,
-    );
+      const content = { content: pairObj };
+      const encodedContent = JSON.stringify(content);
+      const linkUrl = `https://nmredatainitiative.github.io/J-graph/testSchema/html/${targetObjType}.html#data=${encodedContent}`;
+
+      document.getElementById('mergeOutput').textContent = JSON.stringify(
+        pairObj,
+        null,
+        2,
+      );
+      window.open(linkUrl, '_blank');
+    }
   }
 
   showViewer() {

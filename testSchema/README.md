@@ -13,7 +13,7 @@
 </script>
 [test with views obj1](http://127.0.0.1:5501/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}}) 
 
-[test with views obj1demoHandler](http://127.0.0.1:5501/testSchema/html/obj1demoHandler.html?data={%22content%22:{%22$schema%22:%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}}) 
+[test with views obj1](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={%22content%22:{%22$schema%22:%22https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json%22,%22name%22:%22Alice2%22,%22age%22:30}}) 
 
 
 
@@ -23,7 +23,6 @@
 [schema validator from object page](./html/index.html) 
 [ >>      example of call with valid  embedded obj1.html?data](http://127.0.0.1:5501/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
-[ >>      example of call with valid  embedded obj1.html#data](http://127.0.0.1:5501/testSchema/html/obj1.html#data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice2","age":30}})
 
 
 [ >>      example of call with valid  embedded obj1.html?data](https://nmredatainitiative.github.io/J-graph/testSchema/html/obj1.html?data={"content":{"$schema":"https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/obj1.json","name":"Alice233","age":30}})
