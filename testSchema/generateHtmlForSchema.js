@@ -156,19 +156,21 @@ ${instanceOptions}
             <p>
                 <a href="index.html" id="returnButton">⬅ Return to Object List</a>
             </p>
+            
             <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    window.mainObject = new ${refCap}Handler({});
-                    console.log("✅ mainObject initialized.");
-
-                    if (window.mainObject) {
-                        console.log("✅ mainObject exists.");
+            document.addEventListener("DOMContentLoaded", function () {
+                try {
+                    if (typeof ${refCap}Handler !== "function") {
+                        console.log("❌ ${refCap}Handler is not found. Probably ${classHandlerFolderRelativeToRootHTML}/${ref}Handler.js does not exist. This may be normal if not implemented.");
                     } else {
-                        console.error("❌ mainObject not there.");
-                    }
-                });
+                      window.mainObject = new ${refCap}Handler({});
+                      console.log("✅ mainObject initialized.");
+                    }  
+                } catch (error) {
+                    console.error(error.message);
+                }
+            });
             </script>
-
         </body>
         </html>
     `;
