@@ -99,8 +99,8 @@ class Obj1Handler {
       const pairObj = {
         $schema:
           `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${targetObjType}.json`,
-        object1: obj1,
-        object2: this.obj,
+        object1: this.obj,
+        object2: obj1,
       };
 
       const content = { content: pairObj };
