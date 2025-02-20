@@ -37,6 +37,7 @@ function generateHtmlForSchema(fileName, ref) {
   const filePath = path.join(schemaDir, fileName);
   const schema = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
+  const refCap = ref.charAt(0).toUpperCase() + ref.slice(1);
 
   // Generate table of components
   let propertiesTable = ``;
@@ -157,7 +158,7 @@ ${instanceOptions}
             </p>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    window.mainObject = new ${ref}Handler({});
+                    window.mainObject = new ${refCap}Handler({});
                     console.log("✅ mainObject initialized.");
 
                     if (window.mainObject) {
@@ -188,7 +189,6 @@ fs.readdirSync(schemaDir).forEach((file) => {
   if (file.endsWith('.json')) {
     console.log('Generating HTML for', file);
     let ref = path.basename(file, '.json');//file.replace(".json","");
-    ref = ref.charAt(0).toUpperCase() + ref.slice(1);
     generateHtmlForSchema(file, ref);
   }
 });
