@@ -1,31 +1,27 @@
 class Obj1Handler {
+
   constructor(obj = {}) {
     this.obj = obj;
   }
 
-  
   showAllOptionsInHTML(container) {
     console.log("starts showAllOptionsInHTML");
     container.innerHTML = ''; // Clear existing content before adding new elements
     this.showViewer();
     this.showUpdate();
-
-    const methods = this.listNonStaticMethods("_Elevator"); // get all elevator methods
+    const methods = this.listNonStaticMethods("_DataEnrichment"); // get all elevator methods
     methods.forEach(method => {
-      this.showConvertTo(method.info); // Call showConvertTo for each elevator
+      this.showDataEnrichmentMethods(method.info); // Call showDataEnrichmentMethods for each elevator
     });
 
     this.showViewer2();
   }
 
 
-listNonStaticMethods(include) {
-    const prototype = Object.getPrototypeOf(this);
-    const className = this.constructor.name;
-    
-    console.log(`Class: ${className}`);
-    console.log("Instance Methods:");
-
+  listNonStaticMethods(include) {
+    const prototype = Object.getPrototypeOf(this);    
+    // console.log(`listNonStaticMethods Class: ${this.constructor.name}`);
+    // console.log("listNonStaticMethods Instance Methods:");
     const methodNames = Object.getOwnPropertyNames(prototype).filter(
       (prop) => typeof prototype[prop] === "function" && prop !== "constructor"
     );
@@ -38,9 +34,8 @@ listNonStaticMethods(include) {
         const result = method.call(this, "info"); // Call the method with "info"
         results.push({ method: methodName, info: result });
       }
-
-      //console.log(`- ${methodName}`);
-      //console.log(`  - Parameter count: ${prototype[methodName].length}`);
+      // console.log(`listNonStaticMethods - ${methodName}`);
+      // console.log(`listNonStaticMethods - Parameter count: ${prototype[methodName].length}`);
     });
 
     return results;
@@ -51,10 +46,10 @@ listNonStaticMethods(include) {
     return item ? item.defaultValue : {}; // Return undefined if not found
   }
 
-  getValOrDefault(dataObj, input) {
+  getValOrDefault(dataObj, input) {
         const content1 = document.getElementById(`${input}${dataObj.uniqueHTMLcode}`).dataset.content;
         return content1 ? JSON.parse(content1) : this.getDefaultValue(dataObj, input);// here add default value
-}
+  }
   
 
   updateContent(data) {
@@ -70,7 +65,7 @@ listNonStaticMethods(include) {
     container.appendChild(frame);
   }
 
-  generateTableOfInput(frame, dataObj) {
+  generateTableOfInputForEnrichment(frame, dataObj) {
     const dataArray = dataObj.arrayOfItems;
       frame.innerHTML = ""; // Clear previous content
       const table = document.createElement("table");
@@ -148,42 +143,35 @@ listNonStaticMethods(include) {
     });
   }
     
-  showConvertTo(dataObj) {
+  showDataEnrichmentMethods(dataObj) {
     const container = document.getElementById('dynamicContent');
     const targetObjType = dataObj.targetObjType;
     const uniqueHTMLcode = dataObj.uniqueHTMLcode;
 
     
-      // Create the container for the file input and button
-      const frame = document.createElement('div');
-      frame.className = 'frame red-frame';
+    // Create the container for the file input and button
+    const frame = document.createElement('div');
+    frame.className = 'frame red-frame';
 
+    this.generateTableOfInputForEnrichment(frame, dataObj);
+  
+    frame.innerHTML += `          <button id="mergeButton${uniqueHTMLcode}">Create ${dataObj.targetObjType}</button>`;
+    frame.innerHTML += `          <pre id="mergeOutput${uniqueHTMLcode}"></pre>`;
 
-      this.generateTableOfInput(frame, dataObj);
-    
-      frame.innerHTML += `          <button id="mergeButton${uniqueHTMLcode}">Create ${dataObj.targetObjType}</button>
-          <pre id="mergeOutput${uniqueHTMLcode}"></pre>`;
+    container.appendChild(frame);
 
+    this.addFileInputListeners(dataObj, this.loadFile, this.handleInputChange);
 
-
-      container.appendChild(frame);
-
-      this.addFileInputListeners(dataObj, this.loadFile, this.handleInputChange);
-
-
-      // Correctly bind "this" for combineFiles
-      
-    
     document
-  .getElementById(`mergeButton${uniqueHTMLcode}`)
-  .addEventListener("click", () => {
-    const methodName = dataObj.elevatorMethod;// "combineFiles"; // Dynamic method name
-    if (typeof this[methodName] === "function") {
-      this[methodName](targetObjType, dataObj);
-    } else {
-      console.error(`Method "${methodName}" does not exist.`);
-    }
-  });
+      .getElementById(`mergeButton${uniqueHTMLcode}`)
+      .addEventListener("click", () => {
+        const methodName = dataObj.elevatorMethod;// "combineFiles"; // Dynamic method name
+        if (typeof this[methodName] === "function") {
+          this[methodName](targetObjType, dataObj);
+        } else {
+          console.error(`Method "${methodName}" does not exist.`);
+        }
+      });
 
   }
 
@@ -201,85 +189,6 @@ listNonStaticMethods(include) {
       event.target.dataset.content = event.target.value;
   }
 
-  combineFiles(targetObjType, dataObj) {
-
-    if (targetObjType == 'pairObj1') {
-      const objm = this.getValOrDefault(dataObj, "input1");
-      const obj1 = this.getValOrDefault(dataObj, "param1");
-      
-     
-      // optional escape
-     if(!document.getElementById(`input1${dataObj.uniqueHTMLcode}`).dataset.content) {
-        const errorMessage = "Failed because of missing input1"
-        document.getElementById(`mergeOutput${dataObj.uniqueHTMLcode}`).textContent = errorMessage;
-        return;
-      }
-     
-
-      const pairObj = {
-        $schema:
-          `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${targetObjType}.json`,
-        object1: this.obj,
-        object2: objm,
-        "param1" : obj1,
-       
-      };
-
-      const content = { content: pairObj };
-      const encodedContent = JSON.stringify(content);
-      const linkUrl = `https://nmredatainitiative.github.io/J-graph/testSchema/html/${targetObjType}.html#data=${encodedContent}`;
-
-      document.getElementById(`mergeOutput${dataObj.uniqueHTMLcode}`).textContent = JSON.stringify(
-        pairObj,
-        null,
-        2,
-      );
-      window.open(linkUrl, '_blank');
-    }
-    if (targetObjType == 'groupObject1') {
-      const content1 = document.getElementById(`input1${dataObj.uniqueHTMLcode}`).dataset.content;
-      const content2 = document.getElementById(`input2${dataObj.uniqueHTMLcode}`).dataset.content;
-      const content3 = document.getElementById(`param1${dataObj.uniqueHTMLcode}`).dataset.content;
-     
-      const obj11 = content1 ? JSON.parse(content1) : {}; // here add default value
-      const obj22 = content2 ? JSON.parse(content2) : {};// here add default value
-      const obj33 = content3 ? JSON.parse(content3) : {};// here add default value
-    
-       // optional escape
-     if(!document.getElementById(`input1${dataObj.uniqueHTMLcode}`).dataset.content) {
-        const errorMessage = "Failed because of missing input1"
-        document.getElementById(`mergeOutput${dataObj.uniqueHTMLcode}`).textContent = errorMessage;
-    //    return;
-      }
-
-      const objm1 = this.getValOrDefault(dataObj, "input1");
-      const objm2 = this.getValOrDefault(dataObj, "input2");
-      const obj1 = this.getValOrDefault(dataObj, "param1");
-      const obj2 = this.getValOrDefault(dataObj, "param2");
-      const obj3 = this.getValOrDefault(dataObj, "param3");
-      const groupObj = {
-        $schema:
-          `https://raw.githubusercontent.com/NMReDATAInitiative/J-graph/main/testSchema/schemaNoLinkData/${targetObjType}.json`,
-        "members": [this.obj, objm1, objm2],
-        "param1" : obj1,
-        "param2" : obj2,
-        "param3" : obj3,
-      };
-
-      const content = { content: groupObj };
-      const encodedContent = JSON.stringify(content);
-      const linkUrl = `https://nmredatainitiative.github.io/J-graph/testSchema/html/${targetObjType}.html#data=${encodedContent}`;
-
-      document.getElementById(`mergeOutput${dataObj.uniqueHTMLcode}`).textContent = JSON.stringify(
-        groupObj,
-        null,
-        2,
-      );
-      window.open(linkUrl, '_blank');
-    }
-    
-  }
-
   showViewer() {
     const container = document.getElementById('dynamicContent');
     const frame = document.createElement('div');
@@ -295,6 +204,7 @@ listNonStaticMethods(include) {
       .attr('r', this.obj.age)
       .style('fill', 'green');
   }
+
   showViewer2() {
     const container = document.getElementById('dynamicContent');
     const frame = document.createElement('div');
@@ -311,10 +221,10 @@ listNonStaticMethods(include) {
       .style('fill', 'blue');
   }
 
-  myElevator1_Elevator(targetObjType, dataObj = {}) {
-    const nyName = "myElevator1_Elevator"; // dont automatize in case use strict
+  myDataEnrichment1_DataEnrichment(targetObjType, dataObj = {}) {
+    const nyName = "myDataEnrichment1_DataEnrichment"; // dont automatize in case use strict
     if (targetObjType =="info") {
-      return { 
+      return { "sourceObjType" :"obj1" , 
         "targetObjType" :"groupObject1" ,
         "uniqueHTMLcode" : nyName, // avoid name conflicts
         "elevatorMethod": nyName,
@@ -362,10 +272,10 @@ listNonStaticMethods(include) {
     
   }
 
-  myElevator2_Elevator(targetObjType, dataObj = {}) {
-    const nyName = "myElevator2_Elevator"; // dont automatize in case use strict
+  myDataEnrichment2_DataEnrichment(targetObjType, dataObj = {}) {
+    const nyName = "myDataEnrichment2_DataEnrichment"; // dont automatize in case use strict
     if (targetObjType =="info") {
-      return { "targetObjType" :"pairObj1" ,
+      return {"targetObjType" :"pairObj1" ,
         "uniqueHTMLcode" : nyName,// avoid name conflicts use different names
         "elevatorMethod": nyName, // this is the name of the methods
         "arrayOfItems": [
