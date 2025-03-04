@@ -67,7 +67,7 @@ class Obj1Handler {
 
   generateTableOfInputForEnrichment(frame, dataObj) {
     const dataArray = dataObj.arrayOfItems;
-      frame.innerHTML = ""; // Clear previous content
+      frame.innerHTML = "<h4>Data Enrichment</h4>"; // Clear previous content
       const table = document.createElement("table");
       table.style.borderCollapse = "collapse";
       table.style.width = "100%";
@@ -103,20 +103,11 @@ class Obj1Handler {
               if (item.baseType === "int") {
                   inputElement.type = "number";
                   inputElement.step = "1"; // Only integers
-                  if (item.defaultValue !== undefined) {
-                      inputElement.value = parseInt(item.defaultValue, 10);
-                  }
               } else if (item.baseType === "float") {
                   inputElement.type = "number";
                   inputElement.step = "any"; // Allow floating point numbers
-                  if (item.defaultValue !== undefined) {
-                      inputElement.value = parseFloat(item.defaultValue);
-                  }
               } else if (item.baseType === "string") {
                   inputElement.type = "text";
-                  if (item.defaultValue !== undefined) {
-                      inputElement.value = item.defaultValue;
-                  }
               }
           }
           if (inputElement) {
@@ -142,28 +133,46 @@ class Obj1Handler {
         }
     });
   }
-    
+
+  updateValuesInputDataEnrichment(dataObj) {
+    dataObj.arrayOfItems.forEach(item => {
+        const inputElement = document.getElementById(`${item.htmlID}${dataObj.uniqueHTMLcode}`);
+        if (inputElement) {
+            // Check if this.obj has a property matching item.htmlID
+            if (this.obj.hasOwnProperty(item.htmlID)) {
+                inputElement.value = this.obj[item.htmlID]; // Use the object's value
+                inputElement.style.color = "blue"; // Change text color
+                // inputElement.style.backgroundColor = "#e0f7fa"; // Light blue background
+            } else if (item.defaultValue !== undefined) {
+                inputElement.value = item.defaultValue; // Fallback to defaultValue
+                inputElement.style.color = "black"; // Default text color
+                //inputElement.style.backgroundColor = "#f0f0f0"; // Light gray background
+            }
+        }
+    });
+  }
+
   showDataEnrichmentMethods(dataObj) {
     const container = document.getElementById('dynamicContent');
     const targetObjType = dataObj.targetObjType;
-    const uniqueHTMLcode = dataObj.uniqueHTMLcode;
-
     
-    // Create the container for the file input and button
+    // Create the container for the file input and input
     const frame = document.createElement('div');
     frame.className = 'frame red-frame';
 
     this.generateTableOfInputForEnrichment(frame, dataObj);
   
-    frame.innerHTML += `          <button id="mergeButton${uniqueHTMLcode}">Create ${dataObj.targetObjType}</button>`;
-    frame.innerHTML += `          <pre id="mergeOutput${uniqueHTMLcode}"></pre>`;
+    frame.innerHTML += `          <button id="mergeButton${dataObj.uniqueHTMLcode}">Create ${dataObj.targetObjType}</button>`;
+    frame.innerHTML += `          <pre id="mergeOutput${dataObj.uniqueHTMLcode}"></pre>`;
 
     container.appendChild(frame);
 
     this.addFileInputListeners(dataObj, this.loadFile, this.handleInputChange);
 
+    this.updateValuesInputDataEnrichment(dataObj);
+
     document
-      .getElementById(`mergeButton${uniqueHTMLcode}`)
+      .getElementById(`mergeButton${dataObj.uniqueHTMLcode}`)
       .addEventListener("click", () => {
         const methodName = dataObj.elevatorMethod;// "combineFiles"; // Dynamic method name
         if (typeof this[methodName] === "function") {
